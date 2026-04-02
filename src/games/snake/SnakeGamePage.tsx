@@ -100,7 +100,7 @@ export const SnakeGamePage = () => {
       )}
 
       {state && (
-        <section className="game-layout" key={tick}>
+        <section className="game-layout">
           <div className="panel">
             <SnakeCanvas snapshot={state} />
             <div className="hud">

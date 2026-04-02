@@ -46,5 +46,5 @@ export const SnakeCanvas = ({ snapshot }: Props) => {
     });
   }, [snapshot]);
 
-  return <canvas ref={canvasRef} className="snake-canvas" aria-label="Snake game board" />;
+  return <canvas ref={canvasRef} className="snake-canvas" aria-label="Snake game board" style={{ aspectRatio: "1 / 1", height: "auto" }} />;
 };
