@@ -75,7 +75,7 @@ export const SnakeGamePage = () => {
   return (
     <main className="page">
       <div className="top-bar">
-        <button onClick={() => navigate('/')} className="ghost-btn">← Portal</button>
+        <button className="ghost-btn" onClick={() => navigate('/')}>← Portal</button>
       </div>
 
       {!state && (
@@ -95,13 +95,13 @@ export const SnakeGamePage = () => {
             </select>
           </label>
           {error && <p className="error">{error}</p>}
-          <button type="submit">Play</button>
+          <button className="pixel-btn" type="submit">Play</button>
         </form>
       )}
 
       {state && (
         <section className="game-layout" key={tick}>
-          <div>
+          <div className="panel">
             <SnakeCanvas snapshot={state} />
             <div className="hud">
               <span>Score: {state.score}</span>
@@ -110,16 +110,19 @@ export const SnakeGamePage = () => {
               <span>Status: {state.status}</span>
               {state.arrowToFood && <span>Food → x:{state.arrowToFood.x} y:{state.arrowToFood.y}</span>}
             </div>
+            {(state.status === 'game-over' || state.status === 'level-complete') && (
+              <div className="game-state-banner">{state.status === 'game-over' ? 'Game Over' : 'Level Complete'}</div>
+            )}
             <div className="controls-row">
-              <button onClick={() => engineRef.current?.togglePause()}>Pause/Resume</button>
-              {state.status === 'level-complete' && <button onClick={() => engineRef.current?.nextLevel()}>Next Level</button>}
-              <button onClick={() => { engineRef.current = null; setTick((x) => x + 1); }}>Restart</button>
+              <button className="pixel-btn secondary" onClick={() => engineRef.current?.togglePause()}>Pause/Resume</button>
+              {state.status === 'level-complete' && <button className="pixel-btn" onClick={() => engineRef.current?.nextLevel()}>Next Level</button>}
+              <button className="pixel-btn secondary" onClick={() => { engineRef.current = null; setTick((x) => x + 1); }}>Restart</button>
             </div>
             <div className="touch-controls" role="group" aria-label="Touch controls">
-              <button onClick={() => engineRef.current?.setDirection('up')}>↑</button>
-              <button onClick={() => engineRef.current?.setDirection('left')}>←</button>
-              <button onClick={() => engineRef.current?.setDirection('down')}>↓</button>
-              <button onClick={() => engineRef.current?.setDirection('right')}>→</button>
+              <button className="pixel-btn" onClick={() => engineRef.current?.setDirection('up')}>↑</button>
+              <button className="pixel-btn" onClick={() => engineRef.current?.setDirection('left')}>←</button>
+              <button className="pixel-btn" onClick={() => engineRef.current?.setDirection('down')}>↓</button>
+              <button className="pixel-btn" onClick={() => engineRef.current?.setDirection('right')}>→</button>
             </div>
           </div>
           <aside className="panel">

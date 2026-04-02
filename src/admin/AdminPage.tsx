@@ -25,7 +25,7 @@ export const AdminPage = () => {
         <p>Dev-only passcode gate. Not secure for production.</p>
         <form onSubmit={submit} className="row">
           <input type="password" value={code} onChange={(e) => setCode(e.target.value)} placeholder="Passcode" />
-          <button type="submit">Unlock</button>
+          <button className="pixel-btn" type="submit">Unlock</button>
         </form>
       </main>
     );
@@ -50,13 +50,13 @@ export const AdminPage = () => {
         <label>Lives<input type="number" value={config.lives} onChange={(e) => update('lives', Number(e.target.value))} /></label>
       </div>
       <div className="row">
-        <button onClick={() => {
+        <button className="pixel-btn" onClick={() => {
           const parsed = snakeConfigSchema.safeParse(config);
           if (!parsed.success) return alert(parsed.error.issues[0].message);
           saveSnakeConfig(parsed.data);
           alert('Saved');
         }}>Save</button>
-        <button onClick={() => { resetSnakeConfig(); setConfig(defaultSnakeConfig); }}>Reset defaults</button>
+        <button className="pixel-btn secondary" onClick={() => { resetSnakeConfig(); setConfig(defaultSnakeConfig); }}>Reset defaults</button>
       </div>
     </main>
   );

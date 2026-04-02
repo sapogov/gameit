@@ -15,16 +15,16 @@ export const LeaderboardModal = ({ onClose }: { onClose: () => void }) => {
       <div className="modal panel">
         <header className="row">
           <h2>Leaderboards</h2>
-          <button onClick={onClose}>✕</button>
+          <button className="pixel-btn secondary" onClick={onClose}>✕</button>
         </header>
         <div className="row wrap">
           {gameRegistry.map((game) => (
-            <button key={game.id} className={gameId === game.id ? 'active' : ''} onClick={() => setGameId(game.id)}>{game.name}</button>
+            <button key={game.id} className={`pixel-btn ${gameId === game.id ? 'active' : ''}`} onClick={() => setGameId(game.id)}>{game.name}</button>
           ))}
         </div>
         <div className="row wrap">
           {(['daily', 'weekly', 'all-time'] as LeaderboardRange[]).map((r) => (
-            <button key={r} className={range === r ? 'active' : ''} onClick={() => setRange(r)}>{r}</button>
+            <button key={r} className={`pixel-btn secondary ${range === r ? 'active' : ''}`} onClick={() => setRange(r)}>{r}</button>
           ))}
         </div>
         {rows.length === 0 ? (

@@ -17,14 +17,14 @@ const Home = () => {
 
   return (
     <main className="page">
-      <header className="portal-header">
+      <header className="portal-header arcade-panel">
         <div>
-          <h1>🎮 GameIt Portal</h1>
+          <h1 className="brand-title">🎮 GameIt Portal</h1>
           <p>Arcade games for desktop + mobile.</p>
         </div>
-        <div className="row">
-          <button onClick={toggleTheme}>Theme: {theme}</button>
-          <button onClick={() => setShowLeaderboard(true)}>🏆 Leaderboard</button>
+        <div className="row wrap">
+          <button className="pixel-btn secondary" onClick={toggleTheme}>Theme: {theme}</button>
+          <button className="pixel-btn" onClick={() => setShowLeaderboard(true)}>🏆 Leaderboard</button>
           <Link to="/admin" className="ghost-btn">Admin</Link>
         </div>
       </header>

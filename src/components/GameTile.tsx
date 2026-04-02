@@ -6,5 +6,6 @@ export const GameTile = ({ game }: { game: GameDefinition }) => (
     <div className="badge">{game.status === 'playable' ? 'Play now' : 'Coming soon'}</div>
     <h3>{game.name}</h3>
     <p>{game.description}</p>
+    <span className={`pixel-btn ${game.status === 'playable' ? '' : 'secondary'}`}>{game.status === 'playable' ? 'Enter' : 'Soon'}</span>
   </Link>
 );
