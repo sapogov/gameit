@@ -102,7 +102,7 @@ export const SnakeGamePage = () => {
       {state && (
         <section className="game-layout">
           <div className="panel">
-            <SnakeCanvas snapshot={state} />
+            <SnakeCanvas snapshot={state} frame={tick} />
             <div className="hud">
               <span>Score: {state.score}</span>
               <span>Lives: {state.lives}</span>

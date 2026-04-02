@@ -3,6 +3,7 @@ import { SnakeSnapshot } from './engine';
 
 interface Props {
   snapshot: SnakeSnapshot;
+  frame: number;
 }
 
 const colors: Record<string, string> = {
@@ -14,7 +15,7 @@ const colors: Record<string, string> = {
   magnet: '#38bdf8',
 };
 
-export const SnakeCanvas = ({ snapshot }: Props) => {
+export const SnakeCanvas = ({ snapshot, frame }: Props) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -44,7 +45,7 @@ export const SnakeCanvas = ({ snapshot }: Props) => {
       ctx.fillStyle = i === 0 ? '#14b8a6' : '#2dd4bf';
       ctx.fillRect(s.x * tile + 1, s.y * tile + 1, tile - 2, tile - 2);
     });
-  }, [snapshot]);
+  }, [snapshot, frame]);
 
   return <canvas ref={canvasRef} className="snake-canvas" aria-label="Snake game board" style={{ aspectRatio: "1 / 1", height: "auto" }} />;
 };
