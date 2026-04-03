@@ -68,3 +68,10 @@ The Snake engine isolates deterministic updates, item rules, and collision logic
 - More exhaustive engine tests and replay harness.
 - Full admin controls for every nested spawn/powerup parameter.
 - Remote leaderboard provider (Supabase/Firebase/API).
+
+
+## UI Asset Integration
+- Place logo sheet at `public/assets/logos.png`.
+- Place UI sprite sheet at `public/assets/assets.png`.
+- Logo crop coordinates are configured in `src/config/uiAssets.ts` (`logoSpriteSheet.logos`).
+- Sprite mapping placeholders for buttons/frames are also centralized in `src/config/uiAssets.ts` for quick updates.
