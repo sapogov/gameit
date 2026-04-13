@@ -1,0 +1,179 @@
+:root {
+  font-family: Inter, Manrope, system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #16052a;
+  color: #f1dfff;
+}
+
+body[data-theme='light'] {
+  background: #f8f5ff;
+  color: #231533;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: rgba(36, 14, 59, 0.85);
+  backdrop-filter: blur(10px);
+}
+
+body[data-theme='light'] .topbar {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.brand {
+  color: #b89fff;
+  font-size: 1.8rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.actions {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.actions button,
+.play-btn,
+.tabs button,
+.admin-form button {
+  border: none;
+  background: #32194e;
+  color: #f1dfff;
+  padding: 0.55rem 0.8rem;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+body[data-theme='light'] .actions button,
+body[data-theme='light'] .play-btn,
+body[data-theme='light'] .tabs button,
+body[data-theme='light'] .admin-form button {
+  background: #e8ddff;
+  color: #32194e;
+}
+
+.hero {
+  padding: 3.5rem 1.5rem;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(184, 159, 255, 0.2), transparent);
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: 4rem;
+}
+
+.grid {
+  padding: 1rem 1.5rem 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  overflow: hidden;
+  background: #240e3b;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(184, 159, 255, 0.25);
+}
+
+body[data-theme='light'] .card {
+  background: #fff;
+  border-color: #d8c4ff;
+}
+
+.card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 0.8rem;
+}
+
+.card-content h3 {
+  margin: 0;
+}
+
+.page {
+  padding: 1.4rem;
+}
+
+.mock-game-area {
+  margin: 1rem 0;
+  padding: 2rem;
+  border: 1px dashed #b89fff;
+  border-radius: 0.8rem;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.tabs .active {
+  background: #b89fff;
+  color: #250f3d;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #240e3b;
+  border-radius: 0.8rem;
+  overflow: hidden;
+}
+
+body[data-theme='light'] table {
+  background: #fff;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.7rem;
+  border-bottom: 1px solid rgba(184, 159, 255, 0.2);
+}
+
+.admin-form {
+  display: grid;
+  gap: 0.6rem;
+  margin-bottom: 1.2rem;
+}
+
+.admin-form input {
+  padding: 0.65rem;
+  border-radius: 0.55rem;
+  border: 1px solid #826d98;
+  background: #1f0d34;
+  color: #f1dfff;
+}
+
+body[data-theme='light'] .admin-form input {
+  background: #fff;
+  color: #231533;
+}
+
+.checkbox-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
