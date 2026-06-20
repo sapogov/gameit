@@ -1,4 +1,5 @@
 import { Server } from 'colyseus';
+import { BattleRoom } from './rooms/BattleRoom';
 import { LocationRoom } from './rooms/LocationRoom';
 
 const port = Number(process.env.MONSTER_RPG_SERVER_PORT ?? 2567);
@@ -7,6 +8,7 @@ const gameServer = new Server();
 
 gameServer.define('location', LocationRoom).filterBy(['mapId']);
 gameServer.define('home_village', LocationRoom).filterBy(['mapId']);
+gameServer.define('battle', BattleRoom).filterBy(['battleId']);
 
 await gameServer.listen(port, host);
 

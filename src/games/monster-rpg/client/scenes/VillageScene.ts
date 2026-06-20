@@ -478,7 +478,8 @@ export class VillageScene extends Phaser.Scene {
       local: {
         profile: this.saveState.profile,
         position: this.saveState.position,
-        connected: true
+        connected: true,
+        inBattle: false
       }
     };
   }
@@ -540,6 +541,7 @@ export class VillageScene extends Phaser.Scene {
     const { tileSize } = this.map;
     const metrics = this.getRenderMetrics();
     view.container.setPosition(player.position.x * tileSize + tileSize / 2, player.position.y * tileSize + tileSize / 2);
+    view.container.setAlpha(player.inBattle ? 0.52 : 1);
     view.body.setSize(metrics.playerBodyWidth, metrics.playerBodyHeight);
     view.body.setFillStyle(avatarColors[player.profile.avatar], 1);
     view.body.setStrokeStyle(isLocal ? 3 : 2, isLocal ? 0xffffff : 0x1b1c24);
@@ -547,7 +549,10 @@ export class VillageScene extends Phaser.Scene {
     view.facing.setScale(metrics.playerFacingScale);
     view.label.setY(metrics.labelOffsetY);
     view.label.setFontSize(metrics.labelFontSize);
-    view.label.setText(isLocal ? player.profile.name : `${player.profile.name} ${player.position.facing.slice(0, 1)}`);
+    const battleMarker = player.inBattle ? ' *' : '';
+    view.label.setText(
+      isLocal ? `${player.profile.name}${battleMarker}` : `${player.profile.name} ${player.position.facing.slice(0, 1)}${battleMarker}`
+    );
 
     const angleByDirection = {
       north: 0,

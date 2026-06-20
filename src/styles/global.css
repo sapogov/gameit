@@ -428,7 +428,8 @@ input,select {
 
 .monster-journal-panel,
 .monster-creature-panel,
-.monster-settings-panel {
+.monster-settings-panel,
+.monster-battle-panel {
   width: min(420px, calc(100vw - 8rem));
   max-height: min(360px, calc(100vh - 12rem));
   overflow: auto;
@@ -437,6 +438,84 @@ input,select {
   color: #26351f;
   border: 3px solid #26351f;
   pointer-events: auto;
+}
+
+.monster-battle-panel {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.monster-battle-heading,
+.monster-battle-health,
+.monster-battle-actions,
+.monster-battle-log {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.monster-battle-heading {
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  font-size: 0.82rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.monster-battle-meter {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.35rem;
+  background: #fff8d6;
+  border: 2px solid #5c6b3a;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.monster-battle-bar {
+  height: 0.55rem;
+  overflow: hidden;
+  background: #d7c884;
+  border: 2px solid #26351f;
+}
+
+.monster-battle-bar i {
+  display: block;
+  height: 100%;
+  background: #4f9b54;
+}
+
+.monster-battle-bar.fatigue i {
+  background: #d95f3d;
+}
+
+.monster-battle-actions {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.monster-battle-actions button {
+  min-height: 46px;
+  display: grid;
+  gap: 0.1rem;
+  place-items: center;
+  border: 3px solid #26351f;
+  background: #fff8d6;
+  color: #26351f;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.monster-battle-actions button span,
+.monster-battle-log small {
+  font-size: 0.65rem;
+}
+
+.monster-battle-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 
 .monster-journal-panel summary,
@@ -777,7 +856,8 @@ input,select {
 
   .monster-journal-panel,
   .monster-creature-panel,
-  .monster-settings-panel {
+  .monster-settings-panel,
+  .monster-battle-panel {
     width: calc(100vw - 7.5rem);
     max-height: 220px;
     padding: 0.45rem;

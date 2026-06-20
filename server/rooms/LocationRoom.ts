@@ -5,21 +5,28 @@ import {
   WILD_ENCOUNTER_RESPAWN_MS,
   canTargetEncounter,
   canEnterTile,
+  canCreatureUseRole,
   createInitialSave,
+  createCreatureLifecycleRng,
   createWildEncounterSpawn,
   getGameMap,
+  getSpeciesById,
   getWildEncounterZonesForMap,
   isSameWorldPosition,
   isValidSpawnPosition,
   MONSTER_RPG_SCHEMA_VERSION,
   movePlayer,
   normalizeMapId,
+  rollStats,
   rollSpawnDelayMs,
-  validateGameMapRegistry
+  selectCreatureAttacks,
+  validateGameMapRegistry,
+  type BattleResolution
 } from '../../src/games/monster-rpg/sim';
 import type {
   AvatarId,
   ClaimWildEncounterMessage,
+  CreatureSaveRecord,
   Direction,
   JoinLocationOptions,
   MapId,
@@ -29,6 +36,7 @@ import type {
   ResolveWildEncounterMessage,
   WorldPosition
 } from '../../src/games/monster-rpg/sim/types';
+import { createBattleClaim, getResolvedBattleOutcome, onBattleClaimResolved, removeBattleClaim } from '../battleRegistry';
 import { LocationPlayerSchema, LocationStateSchema, WildEncounterSchema } from '../schema/LocationState';
 
 const avatarIds = new Set<AvatarId>(['scout', 'ranger', 'keeper']);
@@ -53,6 +61,8 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
   private mapId: MapId = 'world-map';
   private encounterCooldowns = new Map<string, number>();
   private encounterTimerVersions = new Map<string, number>();
+  private battleResultCleanups = new Map<string, () => void>();
+  private finalizedBattleIds = new Set<string>();
 
   async onCreate(options?: Partial<JoinLocationOptions>) {
     const mapId = normalizeMapId(options?.mapId);
@@ -104,6 +114,8 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
     player.position.y = position.y;
     player.position.facing = position.facing;
     player.connected = true;
+    player.inBattle = false;
+    player.battleId = '';
 
     this.state.players.set(client.sessionId, player);
     console.log(`[location:${this.mapId}] join ${client.sessionId} ${profile.name}`);
@@ -119,6 +131,7 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
 
     const player = this.state.players.get(client.sessionId);
     if (!player) return;
+    if (player.inBattle) return;
 
     const map = getGameMap(this.mapId);
     const profile = schemaToProfile(player);
@@ -157,6 +170,11 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
       return;
     }
 
+    if (player.inBattle) {
+      client.send('wildEncounterClaimRejected', { encounterId, reason: 'in-battle' });
+      return;
+    }
+
     if (encounter.status !== 'available') {
       client.send('wildEncounterClaimRejected', { encounterId, reason: 'unavailable' });
       return;
@@ -174,42 +192,63 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
       return;
     }
 
+    const activeCreature = sanitizeBattleCreature(payload?.activeCreature, player.profile.id, encounter.speciesId);
+    if (!activeCreature) {
+      client.send('wildEncounterClaimRejected', { encounterId, reason: 'no-ready-creature' });
+      return;
+    }
+
+    const battleClaim = createBattleClaim({
+      encounterId: encounter.id,
+      locationRoomId: this.roomId,
+      mapId: this.mapId,
+      playerProfile: schemaToProfile(player),
+      playerCreature: activeCreature,
+      wildSpeciesId: encounter.speciesId
+    });
+    this.battleResultCleanups.set(
+      battleClaim.battleId,
+      onBattleClaimResolved(battleClaim.battleId, (result) => {
+        this.finalizeBattleResult(result);
+      })
+    );
+
     encounter.status = 'claimed';
     encounter.claimedByPlayerId = player.profile.id;
     encounter.respawnAt = new Date(Date.now() + WILD_ENCOUNTER_RESPAWN_MS).toISOString();
+    player.inBattle = true;
+    player.battleId = battleClaim.battleId;
     this.scheduleEncounterTimer(encounter.id, WILD_ENCOUNTER_RESPAWN_MS, () => this.respawnWildEncounter(encounter.id));
     client.send('wildEncounterClaimed', {
       encounterId: encounter.id,
       speciesId: encounter.speciesId,
-      battleToken: `${encounter.id}:${client.sessionId}:${Date.now()}`
+      battleId: battleClaim.battleId,
+      battleToken: battleClaim.battleToken
     });
   }
 
   private handleResolveWildEncounter(client: Client, payload: ResolveWildEncounterMessage) {
     const encounterId = typeof payload?.encounterId === 'string' ? payload.encounterId : '';
     const outcome = payload?.outcome;
-    const encounter = this.state.encounters.get(encounterId);
     const player = this.state.players.get(client.sessionId);
+    if (!player) return;
 
-    if (!encounter || !player || encounter.claimedByPlayerId !== player.profile.id) return;
-
-    if (outcome === 'lost' || outcome === 'ran') {
-      this.encounterCooldowns.set(
-        getEncounterCooldownKey(player.profile.id, encounter.id),
-        Date.now() + WILD_ENCOUNTER_LOSS_COOLDOWN_MS
-      );
-      encounter.status = 'available';
-      encounter.claimedByPlayerId = '';
-      encounter.respawnAt = '';
-      this.scheduleNaturalWildEncounterRespawn(encounter.id);
-      client.send('wildEncounterReleased', { encounterId: encounter.id, outcome });
+    const battleId = typeof payload?.battleId === 'string' ? payload.battleId : '';
+    const battleToken = typeof payload?.battleToken === 'string' ? payload.battleToken : '';
+    const resolved = getResolvedBattleOutcome(battleId, battleToken, player.profile.id);
+    if (!resolved || resolved.outcome !== outcome) {
+      client.send('wildEncounterResolveRejected', { encounterId, reason: 'unresolved-battle' });
       return;
     }
 
-    if (outcome === 'defeated') {
-      encounter.respawnAt = new Date(Date.now() + WILD_ENCOUNTER_RESPAWN_MS).toISOString();
-      this.scheduleEncounterTimer(encounter.id, WILD_ENCOUNTER_RESPAWN_MS, () => this.respawnWildEncounter(encounter.id));
+    const encounter = this.state.encounters.get(resolved.result.encounterId);
+    if (!encounter || (encounter.claimedByPlayerId && encounter.claimedByPlayerId !== player.profile.id)) return;
+
+    this.finalizeBattleResult(resolved.result);
+    if (outcome === 'lost' || outcome === 'ran') {
+      client.send('wildEncounterReleased', { encounterId: encounter.id, outcome });
     }
+    removeBattleClaim(battleId);
   }
 
   private spawnInitialWildEncounters() {
@@ -271,6 +310,41 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
       if (this.encounterTimerVersions.get(encounterId) !== version) return;
       callback();
     }, delayMs);
+  }
+
+  private finalizeBattleResult(result: BattleResolution) {
+    if (this.finalizedBattleIds.has(result.battleId)) return;
+
+    const encounter = this.state.encounters.get(result.encounterId);
+    const player = Array.from(this.state.players.values()).find((candidate) => candidate.battleId === result.battleId);
+    if (!encounter) return;
+
+    if (result.outcome === 'lost' || result.outcome === 'ran') {
+      if (player) {
+        this.encounterCooldowns.set(
+          getEncounterCooldownKey(player.profile.id, encounter.id),
+          Date.now() + WILD_ENCOUNTER_LOSS_COOLDOWN_MS
+        );
+      }
+      encounter.status = 'available';
+      encounter.claimedByPlayerId = '';
+      encounter.respawnAt = '';
+      this.scheduleNaturalWildEncounterRespawn(encounter.id);
+    }
+
+    if (result.outcome === 'defeated') {
+      encounter.respawnAt = new Date(Date.now() + WILD_ENCOUNTER_RESPAWN_MS).toISOString();
+      this.scheduleEncounterTimer(encounter.id, WILD_ENCOUNTER_RESPAWN_MS, () => this.respawnWildEncounter(encounter.id));
+    }
+
+    if (player) {
+      player.inBattle = false;
+      player.battleId = '';
+    }
+
+    this.finalizedBattleIds.add(result.battleId);
+    this.battleResultCleanups.get(result.battleId)?.();
+    this.battleResultCleanups.delete(result.battleId);
   }
 }
 
@@ -358,6 +432,42 @@ function getEncounterCooldownKey(playerId: string, encounterId: string): string 
   return `${playerId}:${encounterId}`;
 }
 
+function sanitizeBattleCreature(
+  creature: CreatureSaveRecord | undefined,
+  ownerPlayerId: string,
+  fallbackSpeciesId: number
+): CreatureSaveRecord | null {
+  if (creature && creature.ownerPlayerId === ownerPlayerId && canCreatureUseRole(creature, 'battle')) {
+    return {
+      ...creature,
+      stats: { ...creature.stats },
+      attacks: creature.attacks.slice(0, 4).map((attack) => ({ ...attack })),
+      cooldowns: { ...creature.cooldowns }
+    };
+  }
+
+  if (creature) return null;
+
+  const species = getSpeciesById(fallbackSpeciesId) ?? getSpeciesById(1);
+  if (!species) return null;
+
+  const rng = createCreatureLifecycleRng(hashString(`${ownerPlayerId}:${fallbackSpeciesId}:fallback-battle`));
+  const stats = rollStats(species, rng);
+  return {
+    id: `guest-creature-${species.slug}`,
+    ownerPlayerId,
+    speciesId: species.id,
+    level: 1,
+    experience: 0,
+    stats,
+    attacks: selectCreatureAttacks(species, species.rarity, stats, 4, rng),
+    hp: stats.hp,
+    maxHp: stats.hp,
+    fainted: false,
+    cooldowns: {}
+  };
+}
+
 function createDeterministicRng(seed: string): () => number {
   let hash = 2_166_136_261;
   for (let index = 0; index < seed.length; index += 1) {
@@ -372,4 +482,13 @@ function createDeterministicRng(seed: string): () => number {
     value ^= value + Math.imul(value ^ (value >>> 7), value | 61);
     return ((value ^ (value >>> 14)) >>> 0) / 4_294_967_296;
   };
+}
+
+function hashString(value: string): number {
+  let hash = 2_166_136_261;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 16_777_619);
+  }
+  return hash >>> 0;
 }

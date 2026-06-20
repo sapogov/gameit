@@ -1,6 +1,7 @@
 import { strict as assert } from 'node:assert';
 import { Client, Room } from '@colyseus/sdk';
 import { Server } from 'colyseus';
+import { BattleRoom } from '../server/rooms/BattleRoom';
 import { LocationRoom } from '../server/rooms/LocationRoom';
 import {
   buildingDefinitions,
@@ -181,6 +182,7 @@ async function checkSdkMultiplayerFlow(): Promise<void> {
   const port = 26_700 + Math.floor(Math.random() * 200);
   const server = new Server({ greet: false });
   server.define('location', LocationRoom).filterBy(['mapId']);
+  server.define('battle', BattleRoom).filterBy(['battleId']);
   await server.listen(port, '127.0.0.1');
 
   try {
@@ -256,15 +258,17 @@ async function checkTwoClientsShareBuildingInterior(endpoint: string): Promise<v
 async function checkSharedWildEncounterClaimFlow(endpoint: string): Promise<void> {
   const clientA = new Client(endpoint);
   const clientB = new Client(endpoint);
-  const roomA = await joinLocation(clientA, 'home-village', createProfile('encounter-a'));
-  const roomB = await joinLocation(clientB, 'home-village', createProfile('encounter-b'));
+  const profileA = createProfile('encounter-a');
+  const profileB = createProfile('encounter-b');
+  const roomA = await joinLocation(clientA, 'home-village', profileA);
+  const roomB = await joinLocation(clientB, 'home-village', profileB);
   const encounter = await waitForEncounter(roomA);
   const path = findPathToAdjacentFacing('home-village', getLocalPosition(roomA), encounter);
 
   assert.ok(path, `missing path to encounter ${encounter.id}`);
   await sendMoves(roomA, path.directions);
 
-  const claimed = new Promise<{ encounterId: string; speciesId: number }>((resolve) => {
+  const claimed = new Promise<{ encounterId: string; speciesId: number; battleId: string; battleToken: string }>((resolve) => {
     roomA.onMessage('wildEncounterClaimed', resolve);
   });
   roomA.send('claimWildEncounter', { encounterId: encounter.id });
@@ -272,16 +276,54 @@ async function checkSharedWildEncounterClaimFlow(endpoint: string): Promise<void
 
   assert.equal(claimedMessage.encounterId, encounter.id);
   assert.equal(typeof claimedMessage.speciesId, 'number');
+  assert.equal(typeof claimedMessage.battleId, 'string');
+  assert.equal(typeof claimedMessage.battleToken, 'string');
   await waitFor(() => roomB.state.encounters.get(encounter.id)?.status === 'claimed', 'shared encounter claimed');
+  assert.equal(roomA.state.players.get(roomA.sessionId)?.inBattle, true);
+
+  const beforeBattleMove = getLocalPosition(roomA);
+  roomA.send('moveIntent', nextMoveMessage('north'));
+  await new Promise((resolve) => setTimeout(resolve, 75));
+  assert.deepEqual(getLocalPosition(roomA), beforeBattleMove);
+
+  await assert.rejects(
+    () =>
+      clientB.joinOrCreate('battle', {
+        battleId: claimedMessage.battleId,
+        battleToken: claimedMessage.battleToken,
+        profile: profileB
+      }),
+    /Spectating disabled|Failed to|forbidden/i
+  );
+
+  const battleRoom = (await clientA.joinOrCreate('battle', {
+    battleId: claimedMessage.battleId,
+    battleToken: claimedMessage.battleToken,
+    profile: profileA
+  })) as SdkRoom;
+  await waitFor(() => battleRoom.state.status === 'active', 'battle room active');
+
+  const battleResult = new Promise<{ battleId: string; encounterId: string; outcome: string }>((resolve) => {
+    battleRoom.onMessage('battleResult', resolve);
+  });
+  battleRoom.send('run');
+  const battleResultMessage = await withTimeout(battleResult, 'battle run result');
+  assert.equal(battleResultMessage.outcome, 'ran');
 
   const released = new Promise<{ encounterId: string; outcome: string }>((resolve) => {
     roomA.onMessage('wildEncounterReleased', resolve);
   });
-  roomA.send('resolveWildEncounter', { encounterId: encounter.id, outcome: 'lost' });
+  roomA.send('resolveWildEncounter', {
+    encounterId: encounter.id,
+    outcome: 'ran',
+    battleId: claimedMessage.battleId,
+    battleToken: claimedMessage.battleToken
+  });
   const releasedMessage = await withTimeout(released, 'wild encounter released');
 
-  assert.equal(releasedMessage.outcome, 'lost');
+  assert.equal(releasedMessage.outcome, 'ran');
   await waitFor(() => roomA.state.encounters.get(encounter.id)?.status === 'available', 'encounter released after loss');
+  assert.equal(roomA.state.players.get(roomA.sessionId)?.inBattle, false);
 
   const rejected = new Promise<{ encounterId: string; reason: string }>((resolve) => {
     roomA.onMessage('wildEncounterClaimRejected', resolve);
@@ -291,6 +333,7 @@ async function checkSharedWildEncounterClaimFlow(endpoint: string): Promise<void
 
   assert.equal(rejectedMessage.reason, 'cooldown');
 
+  await leaveRoom(battleRoom);
   await leaveRoom(roomA);
   await leaveRoom(roomB);
 }

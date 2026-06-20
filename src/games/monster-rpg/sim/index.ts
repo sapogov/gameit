@@ -4,6 +4,14 @@ export type {
   BuildingType,
   CardBuffType,
   CardRarity,
+  BattleAttackIntentMessage,
+  BattleCreatureState,
+  BattleParticipantKind,
+  BattleParticipantState,
+  BattleResultMessage,
+  BattleRoomState,
+  BattleStatus,
+  BattleTurnLogEntry,
   CardType,
   CreationRequirement,
   CreationRequirementScope,
@@ -38,6 +46,7 @@ export type {
   CreatureType,
   JournalSpeciesState,
   JournalSpeciesViewState,
+  JoinBattleOptions,
   PlayerProfile,
   ProgressionSaveContainer,
   RoomPlayerId,
@@ -47,6 +56,7 @@ export type {
   VillageSaveContainer,
   VillageId,
   VillageMap,
+  WildEncounterClaimedMessage,
   ResolveWildEncounterMessage,
   WildEncounterOutcome,
   WildEncounterState,
@@ -183,6 +193,24 @@ export {
   type CreatureUseRole
 } from './creatureParty';
 export { getJournalSpeciesViewState, recordCreatureDiscovered, recordWildCreatureSeen } from './creatureJournal';
+export {
+  BATTLE_DISCONNECT_GRACE_MS,
+  BATTLE_FATIGUE_RECOVERY_FLOOR,
+  BATTLE_TICK_RATE,
+  abandonDisconnectedBattle,
+  canUseBattleAttack,
+  choosePlayerBattleAttack,
+  createBattleRoomState,
+  getBattleAttackFatigueCost,
+  getFirstBattleReadyCreature,
+  getValidBattleAttackIds,
+  markBattleDisconnected,
+  resumeDisconnectedBattle,
+  runFromBattle,
+  toBattleResult,
+  type BattleActionResult,
+  type BattleResolution
+} from './battles';
 export {
   buildStarterMagicDustFarm,
   completeVillageElderDialog,

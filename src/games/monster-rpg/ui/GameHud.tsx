@@ -2,12 +2,14 @@ import {
   ACTIVE_PARTY_LIMIT,
   REVIVE_ITEM_ID,
   canCreatureUseRole,
+  getBattleAttackFatigueCost,
   gen1SpeciesCatalog,
   getCardDefinition,
   getEggDescription,
   getJournalSpeciesViewState,
   getSpeciesById,
   type CardDefinition,
+  type BattleRoomState,
   type CreatureLabelMode,
   type CreatureSaveRecord,
   type CreatureSpeciesRecord,
@@ -30,6 +32,7 @@ interface GameHudProps {
   saveState: MonsterRpgSaveState;
   creatureLabelMode: CreatureLabelMode;
   packOpenTrace: PackOpenTrace | null;
+  battleState: BattleRoomState | null;
   onExport: () => void;
   onImport: (file: File) => void;
   onReset: () => void;
@@ -41,6 +44,8 @@ interface GameHudProps {
   onMoveCreatureToActive: (creatureId: string) => void;
   onMoveCreatureToStorage: (creatureId: string) => void;
   onCreatureLabelModeChange: (mode: CreatureLabelMode) => void;
+  onBattleAttack: (attackId: string) => void;
+  onRunBattle: () => void;
   onReviveCreature: (creatureId: string) => void;
 }
 
@@ -55,6 +60,7 @@ export function GameHud({
   saveState,
   creatureLabelMode,
   packOpenTrace,
+  battleState,
   onExport,
   onImport,
   onReset,
@@ -66,6 +72,8 @@ export function GameHud({
   onMoveCreatureToActive,
   onMoveCreatureToStorage,
   onCreatureLabelModeChange,
+  onBattleAttack,
+  onRunBattle,
   onReviveCreature
 }: GameHudProps) {
   const status = getStatusText(multiplayerStatus, playerCount, lastMove);
@@ -87,6 +95,50 @@ export function GameHud({
           <small>{locationHint}</small>
           {importStatus ? <small>{importStatus}</small> : null}
         </section>
+        {battleState ? (
+          <section className="monster-battle-panel">
+            <div className="monster-battle-heading">
+              <span>Battle</span>
+              <strong>{formatBattleStatus(battleState.status)}</strong>
+            </div>
+            <div className="monster-battle-health">
+              <BattleMeter
+                label={battleState.player.name}
+                hp={battleState.player.activeCreature.hp}
+                maxHp={battleState.player.activeCreature.maxHp}
+                fatigue={battleState.player.activeCreature.fatigue}
+                maxFatigue={battleState.player.activeCreature.maxFatigue}
+              />
+              <BattleMeter
+                label={battleState.enemy.name}
+                hp={battleState.enemy.activeCreature.hp}
+                maxHp={battleState.enemy.activeCreature.maxHp}
+                fatigue={battleState.enemy.activeCreature.fatigue}
+                maxFatigue={battleState.enemy.activeCreature.maxFatigue}
+              />
+            </div>
+            <div className="monster-battle-actions">
+              {battleState.player.activeCreature.attacks.map((attack) => {
+                const canUse =
+                  battleState.status === 'active' && battleState.validPlayerAttackIds.includes(attack.id);
+                return (
+                  <button disabled={!canUse} key={attack.id} onClick={() => onBattleAttack(attack.id)} type="button">
+                    {attack.name}
+                    <span>{getBattleAttackFatigueCost(attack)} fatigue</span>
+                  </button>
+                );
+              })}
+              <button disabled={battleState.status !== 'active'} onClick={onRunBattle} type="button">
+                Run
+              </button>
+            </div>
+            <div className="monster-battle-log">
+              {battleState.lastLog.map((entry) => (
+                <small key={entry.id}>{entry.message}</small>
+              ))}
+            </div>
+          </section>
+        ) : null}
         <details className="monster-creature-panel" open>
           <summary>
             Creatures <span>{activeCount}/{ACTIVE_PARTY_LIMIT} active</span> <span>{reviveCount} revives</span>
@@ -255,6 +307,48 @@ export function GameHud({
       </div>
     </div>
   );
+}
+
+function BattleMeter({
+  fatigue,
+  hp,
+  label,
+  maxFatigue,
+  maxHp
+}: {
+  fatigue: number;
+  hp: number;
+  label: string;
+  maxFatigue: number;
+  maxHp: number;
+}) {
+  const hpPercent = maxHp > 0 ? Math.max(0, Math.min(100, (hp / maxHp) * 100)) : 0;
+  const fatiguePercent = maxFatigue > 0 ? Math.max(0, Math.min(100, (fatigue / maxFatigue) * 100)) : 0;
+
+  return (
+    <div className="monster-battle-meter">
+      <strong>{label}</strong>
+      <span>
+        HP {hp}/{maxHp}
+      </span>
+      <div className="monster-battle-bar">
+        <i style={{ width: `${hpPercent}%` }} />
+      </div>
+      <span>
+        Fatigue {fatigue}/{maxFatigue}
+      </span>
+      <div className="monster-battle-bar fatigue">
+        <i style={{ width: `${fatiguePercent}%` }} />
+      </div>
+    </div>
+  );
+}
+
+function formatBattleStatus(status: BattleRoomState['status']): string {
+  if (status === 'player-won') return 'Won';
+  if (status === 'player-lost') return 'Lost';
+  if (status === 'disconnected-grace') return 'Reconnecting';
+  return status.charAt(0).toUpperCase() + status.slice(1);
 }
 
 function JournalSpeciesRow({
