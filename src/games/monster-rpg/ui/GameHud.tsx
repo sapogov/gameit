@@ -1,16 +1,30 @@
 import type { MapKind, MonsterRpgSaveState, MovementResult, MultiplayerStatus } from '../sim';
 
 interface GameHudProps {
+  importStatus: string | null;
   lastMove: MovementResult | null;
   mapKind: MapKind;
   mapName: string;
   multiplayerStatus: MultiplayerStatus;
   playerCount: number;
   saveState: MonsterRpgSaveState;
+  onExport: () => void;
+  onImport: (file: File) => void;
   onReset: () => void;
 }
 
-export function GameHud({ lastMove, mapKind, mapName, multiplayerStatus, playerCount, saveState, onReset }: GameHudProps) {
+export function GameHud({
+  importStatus,
+  lastMove,
+  mapKind,
+  mapName,
+  multiplayerStatus,
+  playerCount,
+  saveState,
+  onExport,
+  onImport,
+  onReset
+}: GameHudProps) {
   const status = getStatusText(multiplayerStatus, playerCount, lastMove);
   const locationHint = `${formatMapKind(mapKind)} - ${saveState.position.x}, ${saveState.position.y}`;
 
@@ -21,10 +35,28 @@ export function GameHud({ lastMove, mapKind, mapName, multiplayerStatus, playerC
         <h2>{saveState.profile.name}</h2>
         <span>{status}</span>
         <small>{locationHint}</small>
+        {importStatus ? <small>{importStatus}</small> : null}
       </section>
-      <button className="monster-reset-button" onClick={onReset} title="Reset local profile" type="button">
-        Reset
-      </button>
+      <div className="monster-save-actions" aria-label="Save actions">
+        <button onClick={onExport} title="Export local save" type="button">
+          Export
+        </button>
+        <label title="Import local save">
+          Import
+          <input
+            accept="application/json,.json"
+            onChange={(event) => {
+              const file = event.currentTarget.files?.[0];
+              event.currentTarget.value = '';
+              if (file) onImport(file);
+            }}
+            type="file"
+          />
+        </label>
+        <button onClick={onReset} title="Reset local profile" type="button">
+          Reset
+        </button>
+      </div>
     </div>
   );
 }

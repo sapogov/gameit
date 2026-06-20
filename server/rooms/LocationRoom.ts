@@ -2,6 +2,7 @@ import { Client, Room, ServerError } from 'colyseus';
 import { randomUUID } from 'node:crypto';
 import {
   canEnterTile,
+  createInitialSave,
   getGameMap,
   isSameWorldPosition,
   isValidSpawnPosition,
@@ -76,7 +77,7 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
     const profile = sanitizeProfile(options?.profile);
     const position = resolveJoinPosition(options, profile, this.mapId);
 
-    player.profile.id = profile.id;
+    player.profile.id = profile.playerId;
     player.profile.schemaVersion = profile.schemaVersion;
     player.profile.name = profile.name;
     player.profile.avatar = profile.avatar;
@@ -105,8 +106,7 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
     const map = getGameMap(this.mapId);
     const profile = schemaToProfile(player);
     const state: MonsterRpgSaveState = {
-      schemaVersion: MONSTER_RPG_SCHEMA_VERSION,
-      profile,
+      ...createInitialSave(profile),
       mapId: map.id,
       position: {
         mapId: player.position.mapId,
@@ -119,7 +119,7 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
     const result = movePlayer(state, { type: 'move', direction: payload.direction }, map);
 
     if (result.transition) {
-      const transitionId = createPendingTransition(profile.id, result.transition.toMapId, result.transition.spawn);
+      const transitionId = createPendingTransition(profile.playerId, result.transition.toMapId, result.transition.spawn);
       client.send('locationTransition', { ...result.transition, transitionId });
       return;
     }
@@ -139,7 +139,8 @@ function sanitizeProfile(profile?: PlayerProfile): PlayerProfile {
 
   return {
     schemaVersion: MONSTER_RPG_SCHEMA_VERSION,
-    id: typeof profile?.id === 'string' && profile.id ? profile.id.slice(0, 80) : `guest-${Date.now()}`,
+    playerId:
+      typeof profile?.playerId === 'string' && profile.playerId ? profile.playerId.slice(0, 80) : `guest-${Date.now()}`,
     name,
     avatar,
     homeVillageId: 'home-village'
@@ -150,7 +151,7 @@ function resolveJoinPosition(options: JoinLocationOptions | undefined, profile: 
   const map = getGameMap(roomMapId);
 
   if (options?.transitionId) {
-    return consumePendingTransition(options.transitionId, profile.id, roomMapId);
+    return consumePendingTransition(options.transitionId, profile.playerId, roomMapId);
   }
 
   if (options?.position && !isSameWorldPosition(options.position, map.spawn)) {
@@ -167,7 +168,7 @@ function resolveJoinPosition(options: JoinLocationOptions | undefined, profile: 
 function schemaToProfile(player: LocationPlayerSchema): PlayerProfile {
   return {
     schemaVersion: MONSTER_RPG_SCHEMA_VERSION,
-    id: player.profile.id,
+    playerId: player.profile.id,
     name: player.profile.name,
     avatar: player.profile.avatar,
     homeVillageId: 'home-village'

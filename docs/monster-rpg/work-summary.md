@@ -207,6 +207,10 @@
 - Added local-first save export/import requirement before public testing.
 - Consolidated `PLAN.md` into an implementation roadmap with current baseline, ADR references, architecture rules, phases, acceptance checks, and test plan.
 - Published the GameIt Monsters MVP PRD to GitHub issue #4 with the `ready-for-agent` label and saved the PRD text in `docs/monster-rpg/prd-gameit-monsters-mvp.md`.
+- Published the approved MVP implementation breakdown to GitHub issues #5-#22, all linked to parent issue #4 and labeled `ready-for-agent`.
+- Completed the first TDD tracer for issue #5: added explicit `playerId` ownership to the Monster RPG profile domain, introduced save export/import round-trip behavior, kept Colyseus profile `id` as an internal wire adapter field, and covered the behavior with a public-interface Vitest.
+- Continued issue #5 TDD with import failure behavior: invalid JSON imports now preserve the current save, and unsupported save schema versions return a clear `unsupported-schema` failure reason.
+- Finished issue #5 save foundation: added repository-style local persistence, owned save containers for inventory, creatures, village, farms, journal, and progression, strict import validation for ownership/IDs/quantities/cooldowns, and manual HUD export/import controls.
 - Resolved PR #2 conflicts against `main` by keeping the current Snake portal shell, wiring GameIt Monsters into the active registry and routes, preserving Monster RPG styles/docs/server pieces, and validating build/tests/phase checks.
 
 ## Next Work

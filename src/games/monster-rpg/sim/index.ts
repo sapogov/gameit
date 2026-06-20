@@ -18,9 +18,12 @@ export type {
   MoveIntentMessage,
   MovementResult,
   PlayerProfile,
+  ProgressionSaveContainer,
   RoomPlayerId,
+  SaveStack,
   TileType,
   VillageDefinition,
+  VillageSaveContainer,
   VillageId,
   VillageMap,
   WorldPosition
@@ -51,10 +54,15 @@ export {
   clearProgress,
   createInitialSave,
   createPlayerProfile,
+  exportSave,
+  importSavePayload,
+  localMonsterRpgSaveRepository,
   loadProfile,
   loadSave,
   MONSTER_RPG_SCHEMA_VERSION,
   MONSTER_RPG_PROFILE_KEY,
   MONSTER_RPG_SAVE_KEY,
-  saveProgress
+  saveProgress,
+  type MonsterRpgSaveRepository,
+  type SaveImportResult
 } from './saveState';
