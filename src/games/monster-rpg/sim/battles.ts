@@ -15,10 +15,12 @@ import { getSpeciesById } from './speciesCatalog';
 export const BATTLE_TICK_RATE = 10;
 export const BATTLE_DISCONNECT_GRACE_MS = 15_000;
 export const BATTLE_FATIGUE_RECOVERY_FLOOR = 4;
+export const BATTLE_BASE_RUN_CHANCE = 0.5;
+export const BATTLE_RUN_ATTEMPT_BONUS = 0.25;
 
 export type BattleActionResult =
   | { ok: true; state: BattleRoomState; result?: BattleResolution }
-  | { ok: false; state: BattleRoomState; reason: 'battle-ended' | 'invalid-attack' | 'fatigued' };
+  | { ok: false; state: BattleRoomState; reason: 'battle-ended' | 'invalid-attack' | 'fatigued' | 'run-unavailable' };
 
 export interface BattleResolution {
   battleId: string;
@@ -60,6 +62,8 @@ export function createBattleRoomState({
     wildSpeciesId,
     status: 'active',
     turn: 1,
+    canRun: true,
+    runAttempts: 0,
     player: {
       kind: 'player',
       playerId: playerProfile.playerId,
@@ -102,19 +106,7 @@ export function choosePlayerBattleAttack(
     return completeBattle(next, 'defeated', true, now);
   }
 
-  const enemyAttack = chooseEnemyAttack(next);
-  if (enemyAttack) {
-    next = appendBattleLog(next, `${next.enemy.name} used ${enemyAttack.name}.`, now);
-    next = applyAttack(next, 'enemy', enemyAttack);
-  } else {
-    next = appendBattleLog(next, `${next.enemy.name} is too tired to attack.`, now);
-  }
-
-  next = recoverFatigue(next);
-  next = {
-    ...next,
-    turn: next.turn + 1
-  };
+  next = advanceAfterEnemyAction(next, now);
 
   if (next.player.activeCreature.fainted) {
     return completeBattle(next, 'lost', false, now);
@@ -123,9 +115,38 @@ export function choosePlayerBattleAttack(
   return { ok: true, state: withValidAttackIds(next) };
 }
 
-export function runFromBattle(state: BattleRoomState, now: Date = new Date()): BattleActionResult {
+export function runFromBattle(
+  state: BattleRoomState,
+  now: Date = new Date(),
+  rng: () => number = Math.random
+): BattleActionResult {
   if (state.status !== 'active') return { ok: false, state, reason: 'battle-ended' };
-  return completeBattle(appendBattleLog(state, 'You ran from battle.', now), 'ran', false, now);
+  if (!state.canRun) return { ok: false, state, reason: 'run-unavailable' };
+
+  const runChance = getBattleRunChance(state);
+  if (rng() < runChance) {
+    return completeBattle(appendBattleLog(state, 'You ran from battle.', now), 'ran', false, now);
+  }
+
+  let next = appendBattleLog(state, 'Could not get away.', now);
+  next = advanceAfterEnemyAction({ ...next, runAttempts: next.runAttempts + 1 }, now);
+
+  if (next.player.activeCreature.fainted) {
+    return completeBattle(next, 'lost', false, now);
+  }
+
+  return { ok: true, state: withValidAttackIds(next) };
+}
+
+export function getBattleRunChance(state: BattleRoomState): number {
+  if (!state.canRun || state.status !== 'active') return 0;
+
+  const playerSpeed = Math.max(1, state.player.activeCreature.stats.speed);
+  const enemySpeed = Math.max(1, state.enemy.activeCreature.stats.speed);
+  const speedAdjustment = Math.max(-0.2, Math.min(0.25, (playerSpeed - enemySpeed) * 0.01));
+  const attemptBonus = state.runAttempts * BATTLE_RUN_ATTEMPT_BONUS;
+
+  return Math.max(0.15, Math.min(1, BATTLE_BASE_RUN_CHANCE + speedAdjustment + attemptBonus));
 }
 
 export function canUseBattleAttack(creature: BattleCreatureState, attack: CreatureAttackRecord): boolean {
@@ -231,6 +252,22 @@ function applyAttack(state: BattleRoomState, attacker: 'player' | 'enemy', attac
     ...state,
     player: { ...state.player, activeCreature: nextTarget },
     enemy: { ...state.enemy, activeCreature: nextSource }
+  };
+}
+
+function advanceAfterEnemyAction(state: BattleRoomState, now: Date): BattleRoomState {
+  let next = state;
+  const enemyAttack = chooseEnemyAttack(next);
+  if (enemyAttack) {
+    next = appendBattleLog(next, `${next.enemy.name} used ${enemyAttack.name}.`, now);
+    next = applyAttack(next, 'enemy', enemyAttack);
+  } else {
+    next = appendBattleLog(next, `${next.enemy.name} is too tired to attack.`, now);
+  }
+
+  return {
+    ...recoverFatigue(next),
+    turn: next.turn + 1
   };
 }
 

@@ -84,6 +84,7 @@ export function GameHud({
   const creatureRows = getCreatureRows(saveState);
   const activeCount = saveState.creatures.activePartyCreatureIds.length;
   const reviveCount = saveState.inventory.items[REVIVE_ITEM_ID]?.quantity ?? 0;
+  const canRunFromBattle = battleState?.status === 'active' && battleState.canRun;
 
   return (
     <div className="monster-hud">
@@ -128,9 +129,11 @@ export function GameHud({
                   </button>
                 );
               })}
-              <button disabled={battleState.status !== 'active'} onClick={onRunBattle} type="button">
-                Run
-              </button>
+              {battleState.canRun ? (
+                <button disabled={!canRunFromBattle} onClick={onRunBattle} type="button">
+                  Run
+                </button>
+              ) : null}
             </div>
             <div className="monster-battle-log">
               {battleState.lastLog.map((entry) => (

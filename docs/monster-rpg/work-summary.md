@@ -265,6 +265,13 @@
 - Added a DOM battle panel with HP/fatigue meters, attack buttons, Run, and battle log, plus client wiring to apply server HP/Fainted results back into the local save.
 - Added focused battle simulation tests and expanded Monster RPG SDK checks for battle room join, no-spectator rejection, in-battle movement blocking, run resolution, location release, and cooldown rejection.
 
+## 2026-06-20 - Issue #14: Run Away And Wild Battle Exit Outcomes
+
+- Added server-owned Run Away attempt rules for wild Battle Rooms, including first-turn attempts, failed attempts that keep the battle active, enemy response turns, retry scaling, and successful exits with no rewards.
+- Added explicit `canRun` and `runAttempts` battle state so the DOM battle panel only exposes Run for supported battle types.
+- Preserved existing wild encounter cleanup: successful run releases the encounter, clears in-battle player state, and applies the same per-player encounter cooldown as a loss.
+- Added focused simulation coverage for failed run, retry, successful run, unsupported run rejection, and expanded SDK checks to retry until a run resolves.
+
 ## Next Work
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.

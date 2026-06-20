@@ -4,6 +4,7 @@ import {
   createBattleRoomState,
   getBattleAttackFatigueCost,
   getFirstBattleReadyCreature,
+  getBattleRunChance,
   runFromBattle
 } from '.';
 import type { CreatureSaveRecord, MonsterRpgSaveState } from './types';
@@ -80,7 +81,52 @@ describe('battle simulation', () => {
     expect(result.reason).toBe('fatigued');
   });
 
-  it('marks run away as resolved without granting rewards', () => {
+  it('lets a failed run attempt keep the wild battle active for another action', () => {
+    const profile = createPlayerProfile('Battle Tester', 'scout');
+    const state = createBattleRoomState({
+      battleId: 'battle-run-fail',
+      encounterId: 'encounter-run-fail',
+      playerProfile: profile,
+      playerCreature: createCreature(profile.playerId, 'runner', 1, 60, false),
+      wildSpeciesId: 3,
+      now: new Date('2026-06-20T12:00:00.000Z')
+    });
+
+    const result = runFromBattle(state, new Date('2026-06-20T12:00:01.000Z'), () => 0.99);
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error(result.reason);
+    expect(result.result).toBeUndefined();
+    expect(result.state.status).toBe('active');
+    expect(result.state.runAttempts).toBe(1);
+    expect(result.state.turn).toBe(2);
+    expect(result.state.player.activeCreature.hp).toBeLessThan(state.player.activeCreature.hp);
+    expect(result.state.lastLog.some((entry) => entry.message.includes('Could not get away'))).toBe(true);
+  });
+
+  it('increases run chance after failed attempts so the player can retry', () => {
+    const profile = createPlayerProfile('Battle Tester', 'scout');
+    const state = createBattleRoomState({
+      battleId: 'battle-run-retry',
+      encounterId: 'encounter-run-retry',
+      playerProfile: profile,
+      playerCreature: createCreature(profile.playerId, 'runner', 1, 60, false),
+      wildSpeciesId: 3
+    });
+
+    const failed = runFromBattle(state, new Date('2026-06-20T12:00:01.000Z'), () => 0.99);
+
+    expect(failed.ok).toBe(true);
+    if (!failed.ok) throw new Error(failed.reason);
+    expect(getBattleRunChance(failed.state)).toBeGreaterThan(getBattleRunChance(state));
+
+    const retried = runFromBattle(failed.state, new Date('2026-06-20T12:00:02.000Z'), () => 0);
+    expect(retried.ok).toBe(true);
+    if (!retried.ok) throw new Error(retried.reason);
+    expect(retried.result?.outcome).toBe('ran');
+  });
+
+  it('marks successful run away as resolved without granting rewards', () => {
     const profile = createPlayerProfile('Battle Tester', 'scout');
     const state = createBattleRoomState({
       battleId: 'battle-run',
@@ -90,13 +136,33 @@ describe('battle simulation', () => {
       wildSpeciesId: 3
     });
 
-    const result = runFromBattle(state);
+    const result = runFromBattle(state, new Date('2026-06-20T12:00:01.000Z'), () => 0);
 
     expect(result.ok).toBe(true);
     if (!result.ok) throw new Error(result.reason);
     if (!result.result) throw new Error('expected run result');
     expect(result.result.outcome).toBe('ran');
     expect(result.result.rewardGranted).toBe(false);
+  });
+
+  it('rejects running when the battle type does not support escape', () => {
+    const profile = createPlayerProfile('Battle Tester', 'scout');
+    const state = {
+      ...createBattleRoomState({
+        battleId: 'battle-no-run',
+        encounterId: 'encounter-no-run',
+        playerProfile: profile,
+        playerCreature: createCreature(profile.playerId, 'runner', 1, 60, false),
+        wildSpeciesId: 3
+      }),
+      canRun: false
+    };
+
+    const result = runFromBattle(state, new Date('2026-06-20T12:00:01.000Z'), () => 0);
+
+    expect(result.ok).toBe(false);
+    if (result.ok) throw new Error('expected run rejection');
+    expect(result.reason).toBe('run-unavailable');
   });
 });
 

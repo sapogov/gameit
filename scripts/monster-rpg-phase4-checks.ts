@@ -306,7 +306,12 @@ async function checkSharedWildEncounterClaimFlow(endpoint: string): Promise<void
   const battleResult = new Promise<{ battleId: string; encounterId: string; outcome: string }>((resolve) => {
     battleRoom.onMessage('battleResult', resolve);
   });
-  battleRoom.send('run');
+  assert.equal(battleRoom.state.canRun, true);
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    battleRoom.send('run');
+    await new Promise((resolve) => setTimeout(resolve, 75));
+    if (battleRoom.state.status === 'ran') break;
+  }
   const battleResultMessage = await withTimeout(battleResult, 'battle run result');
   assert.equal(battleResultMessage.outcome, 'ran');
 
