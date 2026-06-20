@@ -10,7 +10,7 @@ export class PlayerProfileSchema extends Schema {
 
   constructor() {
     super();
-    this.schemaVersion = 4;
+    this.schemaVersion = 7;
     this.id = '';
     this.name = '';
     this.avatar = 'scout';

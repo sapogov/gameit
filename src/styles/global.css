@@ -377,6 +377,7 @@ input,select {
 
 .monster-hud-panel p,
 .monster-hud-panel h2,
+.monster-farm-panel h3,
 .monster-card-panel h3 {
   margin: 0;
 }
@@ -403,6 +404,28 @@ input,select {
 .monster-card-panel {
   min-width: min(320px, calc(100vw - 8rem));
   pointer-events: auto;
+}
+
+.monster-farm-panel {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.monster-farm-grid {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.monster-farm-row {
+  display: grid;
+  gap: 0.12rem;
+  padding-top: 0.25rem;
+  border-top: 1px solid rgba(38, 53, 31, 0.24);
+}
+
+.monster-farm-row:first-child {
+  border-top: 0;
+  padding-top: 0;
 }
 
 .monster-card-actions {

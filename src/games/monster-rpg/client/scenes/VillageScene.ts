@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import type {
   AvatarId,
   CreatureLabelMode,
+  FarmSaveRecord,
   GameMap,
   InputAction,
   LocationPlayerState,
@@ -105,6 +106,13 @@ interface EncounterView {
   label: Phaser.GameObjects.Text;
 }
 
+interface FarmView {
+  container: Phaser.GameObjects.Container;
+  base: Phaser.GameObjects.Rectangle;
+  field: Phaser.GameObjects.Rectangle;
+  dust: Phaser.GameObjects.Arc;
+}
+
 export class VillageScene extends Phaser.Scene {
   private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
   private creatureLabelMode: CreatureLabelMode;
@@ -114,6 +122,7 @@ export class VillageScene extends Phaser.Scene {
   private mapSprites?: Phaser.GameObjects.Container;
   private onAction: (action: InputAction) => void;
   private encounters = new Map<string, EncounterView>();
+  private farms = new Map<string, FarmView>();
   private players = new Map<RoomPlayerId, PlayerView>();
   private readyToRender = false;
   private roomState: LocationRoomState | null = null;
@@ -139,6 +148,7 @@ export class VillageScene extends Phaser.Scene {
     this.drawMap();
     this.configureInput();
     this.readyToRender = true;
+    this.renderFarms();
     this.renderEncounters();
     this.renderPlayers();
     this.configureCamera();
@@ -173,6 +183,7 @@ export class VillageScene extends Phaser.Scene {
       this.setActiveMap(getGameMap(state.mapId));
     }
     this.saveState = state;
+    this.renderFarms();
     this.renderPlayers();
   }
 
@@ -209,6 +220,8 @@ export class VillageScene extends Phaser.Scene {
     this.mapSprites?.destroy();
     this.players.forEach((view) => view.container.destroy());
     this.players.clear();
+    this.farms.forEach((view) => view.container.destroy());
+    this.farms.clear();
     this.encounters.forEach((view) => view.container.destroy());
     this.encounters.clear();
     this.drawMap();
@@ -232,7 +245,8 @@ export class VillageScene extends Phaser.Scene {
     if (!localPlayer) return;
 
     const encounter = this.getEncounterAt(targetX, targetY);
-    const path = encounter
+    const farm = this.getFarmAt(targetX, targetY);
+    const path = encounter || farm
       ? findWalkPathToInteractionDistance(this.map, localPlayer.position, targetX, targetY)
       : findWalkPath(this.map, localPlayer.position, targetX, targetY);
 
@@ -436,6 +450,25 @@ export class VillageScene extends Phaser.Scene {
     this.updateEncounterLabelVisibility();
   }
 
+  private renderFarms() {
+    if (!this.readyToRender) return;
+
+    const farms = this.getRenderableFarms();
+    const activeIds = new Set(Object.keys(farms));
+
+    this.farms.forEach((view, id) => {
+      if (!activeIds.has(id)) {
+        view.container.destroy();
+        this.farms.delete(id);
+      }
+    });
+
+    Object.entries(farms).forEach(([id, farm]) => {
+      const view = this.farms.get(id) ?? this.createFarmView(id);
+      this.syncFarmView(view, farm);
+    });
+  }
+
   private renderPlayers() {
     if (!this.readyToRender) return;
 
@@ -464,6 +497,12 @@ export class VillageScene extends Phaser.Scene {
       Object.entries(this.roomState.encounters).filter(
         ([, encounter]) => encounter.mapId === this.map.id && encounter.status === 'available'
       )
+    );
+  }
+
+  private getRenderableFarms(): Record<string, FarmSaveRecord> {
+    return Object.fromEntries(
+      Object.entries(this.saveState.farms.farms).filter(([, farm]) => farm.position.mapId === this.map.id)
     );
   }
 
@@ -514,6 +553,33 @@ export class VillageScene extends Phaser.Scene {
     view.label.setY(radius + 2);
     view.label.setFontSize(this.map.kind === 'world-map' ? '6px' : '7px');
     view.label.setText(getSpeciesById(encounter.speciesId)?.displayName ?? `Species #${encounter.speciesId}`);
+  }
+
+  private createFarmView(id: string): FarmView {
+    const container = this.add.container(0, 0);
+    const base = this.add.rectangle(0, 0, 18, 16, 0x8c5b2a).setStrokeStyle(2, 0x26351f);
+    const field = this.add.rectangle(0, 4, 16, 7, 0x6f9f48);
+    const dust = this.add.circle(5, -5, 3, 0xf8df64, 0.95).setStrokeStyle(1, 0xfff8d6);
+
+    container.add([base, field, dust]);
+    container.setDepth(3);
+    this.farms.set(id, { container, base, field, dust });
+    return { container, base, field, dust };
+  }
+
+  private syncFarmView(view: FarmView, farm: FarmSaveRecord) {
+    const { tileSize } = this.map;
+    const width = tileSize * 0.86;
+    const height = tileSize * 0.78;
+
+    view.container.setPosition(farm.position.x * tileSize + tileSize / 2, farm.position.y * tileSize + tileSize / 2);
+    view.base.setSize(width, height);
+    view.base.setFillStyle(0x8c5b2a, 1);
+    view.base.setStrokeStyle(Math.max(1, tileSize * 0.08), 0x26351f);
+    view.field.setSize(width * 0.86, height * 0.38);
+    view.field.setY(height * 0.18);
+    view.dust.setPosition(width * 0.28, -height * 0.32);
+    view.dust.setRadius(Math.max(2, tileSize * 0.14));
   }
 
   private createPlayerView(id: RoomPlayerId, player: LocationPlayerState): PlayerView {
@@ -609,6 +675,10 @@ export class VillageScene extends Phaser.Scene {
 
   private getEncounterAt(x: number, y: number): WildEncounterState | null {
     return Object.values(this.getRenderableEncounters()).find((encounter) => encounter.x === x && encounter.y === y) ?? null;
+  }
+
+  private getFarmAt(x: number, y: number): FarmSaveRecord | null {
+    return Object.values(this.getRenderableFarms()).find((farm) => farm.position.x === x && farm.position.y === y) ?? null;
   }
 
   private updateEncounterLabelVisibility() {

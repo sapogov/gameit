@@ -10,6 +10,7 @@ import {
   activateBuffCard,
   activateCreatureCardViaElder,
   activateMaterialCard,
+  collectFacingFarm,
   completeVillageElderDialog,
   completeVillageElderOnboarding,
   createInitialSave,
@@ -83,6 +84,7 @@ export function MonsterRpgGame() {
   const [packTrace, setPackTrace] = useState<PackOpenTrace | null>(null);
   const [multiplayerStatus, setMultiplayerStatus] = useState<MultiplayerStatus>('offline');
   const [settings, setSettings] = useState(loadMonsterRpgSettings);
+  const [farmStatusNow, setFarmStatusNow] = useState(Date.now());
 
   const updateMultiplayerStatus = useCallback((status: MultiplayerStatus) => {
     multiplayerStatusRef.current = status;
@@ -113,6 +115,24 @@ export function MonsterRpgGame() {
         sequence: moveSequenceRef.current
       });
       return;
+    }
+
+    if (action.type === 'interact' && currentState) {
+      const collection = collectFacingFarm(currentState);
+      if (collection.ok) {
+        saveProgress(collection.state);
+        saveStateRef.current = collection.state;
+        setSaveState(collection.state);
+        setLastMove(null);
+        setPackTrace(null);
+        setImportStatus(`Collected ${collection.collectedQuantity} Magic Dust`);
+        return;
+      }
+
+      if (collection.reason === 'empty' || collection.reason === 'not-owner') {
+        setImportStatus(formatFarmCollectionFailure(collection.reason));
+        return;
+      }
     }
 
     if (action.type === 'interact' && connectionRef.current && multiplayerStatusRef.current === 'online') {
@@ -468,6 +488,14 @@ export function MonsterRpgGame() {
   }, [saveState]);
 
   useEffect(() => {
+    const interval = window.setInterval(() => {
+      setFarmStatusNow(Date.now());
+    }, 10_000);
+
+    return () => window.clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
     if (!saveState || !canvasHostRef.current || runtimeRef.current) return;
 
     runtimeRef.current = bootGame(canvasHostRef.current, {
@@ -714,6 +742,7 @@ export function MonsterRpgGame() {
           multiplayerStatus={multiplayerStatus}
           playerCount={roomState ? Object.keys(roomState.players).length : 1}
           saveState={saveState}
+          farmStatusNow={farmStatusNow}
           creatureLabelMode={settings.creatureLabelMode}
           packOpenTrace={packTrace}
           battleState={battleState}
@@ -794,6 +823,12 @@ function formatWildEncounterClaimFailure(reason: string | undefined): string {
   if (reason === 'range') return 'Face the wild Creature first';
   if (reason === 'no-ready-creature') return 'No ready Creature for battle';
   return `Wild claim failed${reason ? `: ${reason}` : ''}`;
+}
+
+function formatFarmCollectionFailure(reason: string | undefined): string {
+  if (reason === 'empty') return 'Farm storage empty';
+  if (reason === 'not-owner') return 'Only the village owner can collect';
+  return `Farm collection failed${reason ? `: ${reason}` : ''}`;
 }
 
 function formatBattleOutcome(result: BattleResultMessage): string {

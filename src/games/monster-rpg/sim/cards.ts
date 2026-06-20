@@ -1,5 +1,6 @@
 import type { CardBuffType, CardRarity, MonsterRpgSaveState, SaveStack } from './types';
 import { createCreatureCardInstance, convertCreatureCardViaElder, MAGIC_DUST_MATERIAL_ID } from './creatureLifecycle';
+import { createFarmSaveRecord } from './farms';
 
 export const CARD_PACK_SIZE = 5;
 export const cardRarities = ['common', 'uncommon', 'rare', 'legendary', 'mythical'] as const;
@@ -386,16 +387,12 @@ export function buildFarmCardViaElder(state: MonsterRpgSaveState, cardId: string
         ...state.farms,
         farms: {
           ...state.farms.farms,
-          [farmId]: {
+          [farmId]: createFarmSaveRecord({
             id: farmId,
             ownerPlayerId: state.profile.playerId,
             farmType: definition.farmType,
-            level: 1,
-            storedResources: {
-              [MAGIC_DUST_CURRENCY_ID]: 0
-            },
-            theftCooldowns: {}
-          }
+            villageId: state.profile.homeVillageId
+          })
         }
       },
       updatedAt: new Date().toISOString()

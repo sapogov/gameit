@@ -21,6 +21,9 @@ export type {
   Direction,
   EggOrigin,
   EggSaveRecord,
+  FarmPosition,
+  FarmSaveContainer,
+  FarmSaveRecord,
   GameMap,
   ClaimWildEncounterMessage,
   InputAction,
@@ -159,6 +162,20 @@ export {
 } from './cards';
 export type { CardDefinition, PackOpenTrace } from './cards';
 export {
+  MAGIC_DUST_FARM_ID,
+  MAGIC_DUST_FARM_TYPE,
+  MAGIC_DUST_RESOURCE_ID,
+  collectFacingFarm,
+  createFarmSaveRecord,
+  getAccruedFarmRecord,
+  getFacingFarm,
+  getFarmDefinition,
+  getFarmStoredQuantity,
+  type FarmDefinition,
+  type FarmCollectionFailureReason,
+  type FarmCollectionResult
+} from './farms';
+export {
   CREATURE_ATTACK_COUNT,
   CREATURE_CARD_KNOWN_ATTACK_COUNT,
   MAGIC_DUST_MATERIAL_ID,
@@ -235,8 +252,6 @@ export {
   hasConvertedStarterCreatureCards,
   isVillageElderDialogComplete,
   isVillageElderOnboardingComplete,
-  MAGIC_DUST_FARM_ID,
-  MAGIC_DUST_FARM_TYPE,
   STARTER_CREATURE_MAGIC_DUST_COST,
   STARTER_PACK_MAGIC_DUST_GRANT,
   STARTER_PACK_ONBOARDING_TEXT,

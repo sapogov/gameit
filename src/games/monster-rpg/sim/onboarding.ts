@@ -1,8 +1,8 @@
 import type { MonsterRpgSaveState, SaveStack } from './types';
 import { getCreatureCardById, MAGIC_DUST_CURRENCY_ID, STARTER_FARM_CARD_ID, STARTER_CREATURE_CARD_IDS } from './cards';
 import { convertCreatureCardViaElder, createCreatureCardInstance } from './creatureLifecycle';
+import { createFarmSaveRecord, MAGIC_DUST_FARM_ID, MAGIC_DUST_FARM_TYPE } from './farms';
 
-export const MAGIC_DUST_FARM_TYPE = 'magic-dust';
 export const STARTER_CREATURE_MAGIC_DUST_COST = 1;
 export const STARTER_PACK_MAGIC_DUST_GRANT = 3;
 export const STARTER_PACK_ONBOARDING_TEXT =
@@ -16,7 +16,6 @@ export const villageElderFlags = {
   onboardingComplete: 'villageElder.onboardingComplete'
 } as const;
 
-export const MAGIC_DUST_FARM_ID = 'home-magic-dust-farm';
 export const starterCreatureCards = STARTER_CREATURE_CARD_IDS.map((cardId) => {
   const definition = getCreatureCardById(cardId);
   if (!definition) throw new Error(`Missing creature card definition for starter card ${cardId}`);
@@ -139,16 +138,12 @@ export function buildStarterMagicDustFarm(state: MonsterRpgSaveState): StarterFa
       ...state.farms,
       farms: {
         ...state.farms.farms,
-        [MAGIC_DUST_FARM_ID]: {
+        [MAGIC_DUST_FARM_ID]: createFarmSaveRecord({
           id: MAGIC_DUST_FARM_ID,
           ownerPlayerId,
           farmType: MAGIC_DUST_FARM_TYPE,
-          level: 1,
-          storedResources: {
-            [MAGIC_DUST_CURRENCY_ID]: 0
-          },
-          theftCooldowns: {}
-        }
+          villageId: state.profile.homeVillageId
+        })
       }
     }
   };

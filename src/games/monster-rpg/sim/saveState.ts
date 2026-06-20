@@ -7,6 +7,7 @@ import type {
   CreatureSaveRecord,
   CreatureStatKey,
   EggSaveRecord,
+  FarmPosition,
   FarmSaveContainer,
   FarmSaveRecord,
   InventorySaveContainer,
@@ -25,7 +26,7 @@ import { isValidCreatureContainerLayout, REVIVE_ITEM_ID, STARTING_REVIVE_ITEM_QU
 
 export const MONSTER_RPG_PROFILE_KEY = 'gameit.monsterRpg.profile';
 export const MONSTER_RPG_SAVE_KEY = 'gameit.monsterRpg.save';
-export const MONSTER_RPG_SCHEMA_VERSION = 6;
+export const MONSTER_RPG_SCHEMA_VERSION = 7;
 
 export type SaveImportResult =
   | { ok: true; state: MonsterRpgSaveState }
@@ -364,11 +365,33 @@ function isValidFarmRecord(record: unknown, playerId: string): record is FarmSav
     isNonEmptyString(candidate.id) &&
     candidate.ownerPlayerId === playerId &&
     isNonEmptyString(candidate.farmType) &&
+    isNonEmptyString(candidate.resourceId) &&
     isNonNegativeInteger(candidate.level) &&
     candidate.level > 0 &&
+    validVillageIds.has(candidate.mapId) &&
+    isValidFarmPosition(candidate.position, candidate.mapId) &&
+    isPositiveFiniteNumber(candidate.productionRatePerMinute) &&
+    isNonNegativeInteger(candidate.storageCap) &&
+    candidate.storageCap > 0 &&
     isQuantityRecord(candidate.storedResources) &&
+    Object.prototype.hasOwnProperty.call(candidate.storedResources, candidate.resourceId) &&
+    candidate.storedResources[candidate.resourceId] <= candidate.storageCap &&
+    isIsoDate(candidate.lastProductionAt) &&
     (candidate.collectCooldownUntil === undefined || isIsoDate(candidate.collectCooldownUntil)) &&
     isCooldownRecord(candidate.theftCooldowns)
+  );
+}
+
+function isValidFarmPosition(position: unknown, mapId: FarmSaveRecord['mapId']): position is FarmPosition {
+  if (!position || typeof position !== 'object') return false;
+  const candidate = position as FarmPosition;
+
+  return (
+    candidate.mapId === mapId &&
+    Number.isInteger(candidate.x) &&
+    Number.isInteger(candidate.y) &&
+    candidate.x >= 0 &&
+    candidate.y >= 0
   );
 }
 
@@ -515,6 +538,10 @@ function isNumericRecordKey(value: string): boolean {
 
 function isNonNegativeInteger(value: unknown): value is number {
   return typeof value === 'number' && Number.isSafeInteger(value) && value >= 0;
+}
+
+function isPositiveFiniteNumber(value: unknown): value is number {
+  return typeof value === 'number' && Number.isFinite(value) && value > 0;
 }
 
 function isIsoDate(value: unknown): value is string {
