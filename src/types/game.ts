@@ -1,4 +1,4 @@
-export type GameId = 'snake' | 'flappy-bird' | 'stickman-fight';
+export type GameId = 'snake' | 'gameit-monsters' | 'flappy-bird' | 'stickman-fight';
 
 export interface GameDefinition {
   id: GameId;

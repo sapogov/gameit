@@ -1,0 +1,492 @@
+:root {
+  font-family: Inter, Manrope, system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #16052a;
+  color: #f1dfff;
+}
+
+body[data-theme='light'] {
+  background: #f8f5ff;
+  color: #231533;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: rgba(36, 14, 59, 0.85);
+  backdrop-filter: blur(10px);
+}
+
+body[data-theme='light'] .topbar {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.brand {
+  color: #b89fff;
+  font-size: 1.8rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.actions {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.actions button,
+.play-btn,
+.tabs button,
+.admin-form button {
+  border: none;
+  background: #32194e;
+  color: #f1dfff;
+  padding: 0.55rem 0.8rem;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+body[data-theme='light'] .actions button,
+body[data-theme='light'] .play-btn,
+body[data-theme='light'] .tabs button,
+body[data-theme='light'] .admin-form button {
+  background: #e8ddff;
+  color: #32194e;
+}
+
+.hero {
+  padding: 3.5rem 1.5rem;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(184, 159, 255, 0.2), transparent);
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: 4rem;
+}
+
+.grid {
+  padding: 1rem 1.5rem 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  overflow: hidden;
+  background: #240e3b;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(184, 159, 255, 0.25);
+}
+
+body[data-theme='light'] .card {
+  background: #fff;
+  border-color: #d8c4ff;
+}
+
+.card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 0.8rem;
+}
+
+.card-content h3 {
+  margin: 0;
+}
+
+.page {
+  padding: 1.4rem;
+}
+
+.mock-game-area {
+  margin: 1rem 0;
+  padding: 2rem;
+  border: 1px dashed #b89fff;
+  border-radius: 0.8rem;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.tabs .active {
+  background: #b89fff;
+  color: #250f3d;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #240e3b;
+  border-radius: 0.8rem;
+  overflow: hidden;
+}
+
+body[data-theme='light'] table {
+  background: #fff;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.7rem;
+  border-bottom: 1px solid rgba(184, 159, 255, 0.2);
+}
+
+.admin-form {
+  display: grid;
+  gap: 0.6rem;
+  margin-bottom: 1.2rem;
+}
+
+.admin-form input {
+  padding: 0.65rem;
+  border-radius: 0.55rem;
+  border: 1px solid #826d98;
+  background: #1f0d34;
+  color: #f1dfff;
+}
+
+body[data-theme='light'] .admin-form input {
+  background: #fff;
+  color: #231533;
+}
+
+.checkbox-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.monster-creator-shell,
+.monster-game-shell {
+  min-height: calc(100vh - 72px);
+  background:
+    linear-gradient(180deg, rgba(35, 72, 44, 0.92), rgba(31, 39, 35, 0.96)),
+    #1f2723;
+}
+
+.monster-creator-shell {
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+}
+
+.monster-creator-panel {
+  width: min(680px, 100%);
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: #f2e6b8;
+  color: #26351f;
+  border: 4px solid #26351f;
+  box-shadow: 0 16px 0 rgba(0, 0, 0, 0.28);
+}
+
+.monster-kicker {
+  margin: 0;
+  color: #87632d;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.monster-creator-panel h1 {
+  margin: 0;
+  font-size: clamp(2rem, 8vw, 3.25rem);
+}
+
+.monster-field {
+  display: grid;
+  gap: 0.45rem;
+  font-weight: 800;
+}
+
+.monster-field input {
+  width: 100%;
+  min-height: 48px;
+  border: 3px solid #26351f;
+  background: #fff8d6;
+  color: #26351f;
+  padding: 0.7rem 0.8rem;
+  font: inherit;
+}
+
+.monster-avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.monster-avatar-option {
+  min-height: 150px;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 0.45rem;
+  border: 3px solid #26351f;
+  background: #e7d792;
+  color: #26351f;
+  cursor: pointer;
+  font: inherit;
+}
+
+.monster-avatar-option.selected {
+  background: #95c46d;
+  box-shadow: inset 0 0 0 4px #fff8d6;
+}
+
+.monster-avatar-sprite {
+  width: 42px;
+  height: 52px;
+  border: 3px solid #1b1c24;
+  box-shadow: inset 0 -10px 0 rgba(0, 0, 0, 0.18);
+}
+
+.avatar-scout .monster-avatar-sprite {
+  background: #ffd166;
+}
+
+.avatar-ranger .monster-avatar-sprite {
+  background: #5cc8a7;
+}
+
+.avatar-keeper .monster-avatar-sprite {
+  background: #f26d6d;
+}
+
+.monster-avatar-option span:last-child {
+  max-width: 12ch;
+  min-height: 2.4em;
+  font-size: 0.85rem;
+}
+
+.monster-primary-action {
+  min-height: 52px;
+  border: 3px solid #26351f;
+  background: #d95f3d;
+  color: #fff8d6;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+}
+
+.monster-game-shell {
+  display: grid;
+  grid-template-rows: minmax(360px, 1fr) auto;
+  gap: 0.75rem;
+  padding: 0.75rem;
+}
+
+.monster-game-stage {
+  position: relative;
+  min-height: min(720px, calc(100vh - 150px));
+  overflow: hidden;
+  border: 4px solid #101d16;
+  background: #1d2b23;
+}
+
+.monster-canvas-host {
+  position: absolute;
+  inset: 0;
+}
+
+.monster-canvas-host canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+.monster-hud {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  right: 0.75rem;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  pointer-events: none;
+}
+
+.monster-hud-panel {
+  min-width: min(270px, calc(100vw - 8rem));
+  max-width: min(340px, calc(100vw - 8rem));
+  padding: 0.65rem 0.75rem;
+  background: rgba(255, 248, 214, 0.92);
+  color: #26351f;
+  border: 3px solid #26351f;
+}
+
+.monster-hud-panel p,
+.monster-hud-panel h2 {
+  margin: 0;
+}
+
+.monster-hud-panel p,
+.monster-hud-panel span,
+.monster-hud-panel small {
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.monster-hud-panel small {
+  display: block;
+  margin-top: 0.15rem;
+  color: #5a6b35;
+}
+
+.monster-hud-panel h2 {
+  font-size: 1.4rem;
+  line-height: 1.1;
+}
+
+.monster-reset-button,
+.monster-back-link {
+  border: 3px solid #26351f;
+  background: #fff8d6;
+  color: #26351f;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.monster-reset-button {
+  min-width: 80px;
+  min-height: 42px;
+  padding: 0.4rem 0.65rem;
+  pointer-events: auto;
+}
+
+.monster-back-link {
+  justify-self: start;
+  padding: 0.55rem 0.8rem;
+}
+
+.monster-dpad {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 2;
+  display: none;
+  grid-template-columns: repeat(3, 50px);
+  grid-template-rows: repeat(3, 50px);
+  gap: 0.25rem;
+}
+
+.monster-dpad button {
+  width: 50px;
+  height: 50px;
+  border: 3px solid #26351f;
+  background: rgba(255, 248, 214, 0.9);
+  color: #26351f;
+  cursor: pointer;
+  font: inherit;
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+.monster-dpad .up {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.monster-dpad .left {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.monster-dpad .right {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.monster-dpad .down {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+@media (hover: none), (max-width: 760px) {
+  .monster-dpad {
+    display: grid;
+  }
+}
+
+@media (max-width: 680px) {
+  .monster-avatar-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .monster-game-shell {
+    padding: 0.45rem;
+  }
+
+  .monster-game-stage {
+    min-height: calc(100vh - 132px);
+  }
+
+  .monster-hud {
+    top: 0.5rem;
+    left: 0.5rem;
+    right: 0.5rem;
+  }
+
+  .monster-hud-panel {
+    min-width: 0;
+    max-width: calc(100vw - 7.5rem);
+    padding: 0.5rem 0.6rem;
+  }
+
+  .monster-hud-panel h2 {
+    font-size: 1.05rem;
+  }
+
+  .monster-hud-panel p,
+  .monster-hud-panel span,
+  .monster-hud-panel small {
+    font-size: 0.68rem;
+  }
+
+  .monster-reset-button {
+    min-width: 68px;
+    min-height: 38px;
+    padding: 0.3rem 0.45rem;
+  }
+
+  .monster-dpad {
+    right: 0.6rem;
+    bottom: 0.6rem;
+    grid-template-columns: repeat(3, 46px);
+    grid-template-rows: repeat(3, 46px);
+  }
+
+  .monster-dpad button {
+    width: 46px;
+    height: 46px;
+    font-size: 1.2rem;
+  }
+}

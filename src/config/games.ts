@@ -10,6 +10,14 @@ export const gameRegistry: GameDefinition[] = [
     route: '/games/snake',
   },
   {
+    id: 'gameit-monsters',
+    name: 'GameIt Monsters',
+    description: 'Retro monster collecting with village exploration and online presence.',
+    status: 'playable',
+    accent: '#95c46d',
+    route: '/games/gameit-monsters',
+  },
+  {
     id: 'flappy-bird',
     name: 'Flappy Bird',
     description: 'Coming soon',

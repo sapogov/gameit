@@ -9,6 +9,9 @@ import { PortalLogo } from '../components/PortalLogo';
 import { IconCircleButton } from '../components/IconCircleButton';
 
 const SnakeGamePage = lazy(() => import('../games/snake/SnakeGamePage').then((m) => ({ default: m.SnakeGamePage })));
+const MonsterRpgGame = lazy(() =>
+  import('../games/monster-rpg/MonsterRpgGame').then((m) => ({ default: m.MonsterRpgGame })),
+);
 const ComingSoonPage = lazy(() =>
   import('../games/placeholders/ComingSoonGamePage').then((m) => ({ default: m.ComingSoonGamePage })),
 );
@@ -56,6 +59,7 @@ export const App = () => (
       <Route path="/" element={<Home />} />
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/games/snake" element={<SnakeGamePage />} />
+      <Route path="/games/gameit-monsters" element={<MonsterRpgGame />} />
       <Route path="/games/:gameId" element={<ComingSoonPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
