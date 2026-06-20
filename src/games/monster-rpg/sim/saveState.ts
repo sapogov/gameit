@@ -231,7 +231,7 @@ function isValidSaveState(state: unknown): state is MonsterRpgSaveState {
     isValidInventory(candidate.inventory, playerId) &&
     isValidCreatures(candidate.creatures, playerId) &&
     isValidVillage(candidate.village, candidate.profile) &&
-    isValidFarms(candidate.farms, playerId) &&
+    isValidFarms(candidate.farms, playerId, candidate.creatures) &&
     isValidJournal(candidate.journal, playerId) &&
     isValidProgression(candidate.progression, playerId) &&
     isIsoDate(candidate.updatedAt)
@@ -348,16 +348,26 @@ function isValidVillage(village: unknown, profile: PlayerProfile): village is Vi
   );
 }
 
-function isValidFarms(farms: unknown, playerId: string): farms is FarmSaveContainer {
+function isValidFarms(
+  farms: unknown,
+  playerId: string,
+  creatures: CreatureSaveContainer
+): farms is FarmSaveContainer {
   if (!farms || typeof farms !== 'object') return false;
   const candidate = farms as FarmSaveContainer;
   if (candidate.ownerPlayerId !== playerId) return false;
   if (!candidate.farms || typeof candidate.farms !== 'object' || Array.isArray(candidate.farms)) return false;
 
-  return Object.entries(candidate.farms).every(([id, farm]) => id === farm.id && isValidFarmRecord(farm, playerId));
+  return Object.entries(candidate.farms).every(
+    ([id, farm]) => id === farm.id && isValidFarmRecord(farm, playerId, creatures)
+  );
 }
 
-function isValidFarmRecord(record: unknown, playerId: string): record is FarmSaveRecord {
+function isValidFarmRecord(
+  record: unknown,
+  playerId: string,
+  creatures: CreatureSaveContainer
+): record is FarmSaveRecord {
   if (!record || typeof record !== 'object') return false;
   const candidate = record as FarmSaveRecord;
 
@@ -377,6 +387,9 @@ function isValidFarmRecord(record: unknown, playerId: string): record is FarmSav
     Object.prototype.hasOwnProperty.call(candidate.storedResources, candidate.resourceId) &&
     candidate.storedResources[candidate.resourceId] <= candidate.storageCap &&
     isIsoDate(candidate.lastProductionAt) &&
+    (candidate.guardCreatureId === undefined ||
+      (isNonEmptyString(candidate.guardCreatureId) &&
+        creatures.creatures[candidate.guardCreatureId]?.ownerPlayerId === playerId)) &&
     (candidate.collectCooldownUntil === undefined || isIsoDate(candidate.collectCooldownUntil)) &&
     isCooldownRecord(candidate.theftCooldowns)
   );

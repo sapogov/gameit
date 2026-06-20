@@ -8,13 +8,16 @@ import {
   getCardDefinition,
   getEggDescription,
   getFarmDefinition,
+  getFarmUpgradePreview,
   getJournalSpeciesViewState,
   getSpeciesById,
+  isFarmGuardActive,
   type CardDefinition,
   type BattleRoomState,
   type CreatureLabelMode,
   type CreatureSaveRecord,
   type FarmSaveRecord,
+  type FarmUpgradePlan,
   type CreatureSpeciesRecord,
   type JournalSpeciesViewState,
   type PackOpenTrace,
@@ -47,6 +50,8 @@ interface GameHudProps {
   onHospitalHeal: () => void;
   onMoveCreatureToActive: (creatureId: string) => void;
   onMoveCreatureToStorage: (creatureId: string) => void;
+  onUpgradeFarm: (farmId: string) => void;
+  onAssignFarmGuard: (farmId: string, creatureId: string | null) => void;
   onCreatureLabelModeChange: (mode: CreatureLabelMode) => void;
   onBattleAttack: (attackId: string) => void;
   onRunBattle: () => void;
@@ -76,6 +81,8 @@ export function GameHud({
   onHospitalHeal,
   onMoveCreatureToActive,
   onMoveCreatureToStorage,
+  onUpgradeFarm,
+  onAssignFarmGuard,
   onCreatureLabelModeChange,
   onBattleAttack,
   onRunBattle,
@@ -88,6 +95,11 @@ export function GameHud({
   const cardRows = getCardRows(saveState);
   const creatureRows = getCreatureRows(saveState);
   const farmRows = getFarmRows(saveState, new Date(farmStatusNow));
+  const guardOptions = creatureRows.map((row) => ({
+    id: row.id,
+    label: `${row.species?.displayName ?? `Species #${row.creature.speciesId}`} (${row.container})`,
+    disabled: !canCreatureUseRole(row.creature, 'guard')
+  }));
   const activeCount = saveState.creatures.activePartyCreatureIds.length;
   const reviveCount = saveState.inventory.items[REVIVE_ITEM_ID]?.quantity ?? 0;
   const currencySummary = formatCurrencySummary(saveState.inventory.currencies);
@@ -157,13 +169,39 @@ export function GameHud({
             <div className="monster-farm-grid">
               {farmRows.map((farm) => (
                 <article className="monster-farm-row" key={farm.id}>
-                  <strong>{farm.name}</strong>
+                  <strong>
+                    {farm.name} <span>Lv {farm.level}</span>
+                  </strong>
                   <small>
                     Stored {farm.stored}/{farm.cap} {farm.resourceName}
                   </small>
                   <small>
                     Produces {farm.rate}/min · {farm.status}
                   </small>
+                  <small>{farm.guardStatus}</small>
+                  <small>{farm.upgradeRequirementText}</small>
+                  <div className="monster-farm-actions">
+                    <button disabled={!farm.canUpgrade} onClick={() => onUpgradeFarm(farm.id)} type="button">
+                      Upgrade
+                    </button>
+                    <label>
+                      Guard
+                      <select
+                        value={farm.guardCreatureId ?? ''}
+                        onChange={(event) => {
+                          const value = event.currentTarget.value;
+                          onAssignFarmGuard(farm.id, value.length > 0 ? value : null);
+                        }}
+                      >
+                        <option value="">None</option>
+                        {guardOptions.map((option) => (
+                          <option disabled={option.disabled} key={option.id} value={option.id}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
                 </article>
               ))}
             </div>
@@ -484,34 +522,62 @@ type CreatureRow = {
 type FarmRow = {
   id: string;
   name: string;
+  level: number;
   resourceName: string;
   stored: number;
   cap: number;
   rate: number;
   status: string;
+  canUpgrade: boolean;
+  guardCreatureId?: string;
+  guardStatus: string;
+  upgradeRequirementText: string;
 };
 
 function getFarmRows(saveState: MonsterRpgSaveState, now: Date): FarmRow[] {
   return Object.values(saveState.farms.farms)
-    .map((farm) => toFarmRow(farm, now))
+    .map((farm) => toFarmRow(saveState, farm, now))
     .sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
 }
 
-function toFarmRow(farm: FarmSaveRecord, now: Date): FarmRow {
+function toFarmRow(saveState: MonsterRpgSaveState, farm: FarmSaveRecord, now: Date): FarmRow {
   const definition = getFarmDefinition(farm.farmType);
   const accrued = getAccruedFarmRecord(farm, now);
+  const preview = getFarmUpgradePreview(saveState, farm.id);
   const stored = accrued.storedResources[accrued.resourceId] ?? 0;
   const cap = accrued.storageCap;
+  const guard = farm.guardCreatureId ? saveState.creatures.creatures[farm.guardCreatureId] : undefined;
+  const guardSpecies = guard ? getSpeciesById(guard.speciesId) : undefined;
 
   return {
     id: farm.id,
     name: definition?.displayName ?? farm.farmType,
+    level: farm.level,
     resourceName: definition?.resourceName ?? formatMaterialId(accrued.resourceId),
     stored,
     cap,
     rate: accrued.productionRatePerMinute,
-    status: stored >= cap ? 'Full' : stored > 0 ? 'Ready' : 'Producing'
+    status: stored >= cap ? 'Full' : stored > 0 ? 'Ready' : 'Producing',
+    canUpgrade: Boolean(preview?.canUpgrade),
+    guardCreatureId: farm.guardCreatureId,
+    guardStatus: farm.guardCreatureId
+      ? `Guard ${guardSpecies?.displayName ?? farm.guardCreatureId} · ${
+          isFarmGuardActive(saveState, farm) ? 'active' : 'inactive'
+        }`
+      : 'Guard unassigned',
+    upgradeRequirementText: formatFarmUpgradeRequirement(preview?.plan)
   };
+}
+
+function formatFarmUpgradeRequirement(plan: FarmUpgradePlan | undefined): string {
+  if (!plan) return 'Max level';
+  const materialText = plan.requirements.materials
+    .map((requirement) => `${requirement.quantity} ${formatMaterialId(requirement.materialId)}`)
+    .join(', ');
+  const cardText = plan.requirements.farmCards
+    .map((requirement) => `${requirement.quantity} Farm Card${requirement.quantity === 1 ? '' : 's'}`)
+    .join(', ');
+  return `Upgrade to Lv ${plan.toLevel}: ${[cardText, materialText].filter(Boolean).join(' + ')}`;
 }
 
 function getCreatureRows(saveState: MonsterRpgSaveState): CreatureRow[] {

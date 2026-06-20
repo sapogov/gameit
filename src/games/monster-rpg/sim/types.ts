@@ -289,6 +289,7 @@ export interface FarmSaveRecord {
   storageCap: number;
   storedResources: Record<string, number>;
   lastProductionAt: string;
+  guardCreatureId?: string;
   collectCooldownUntil?: string;
   theftCooldowns: Record<string, string>;
 }

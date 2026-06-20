@@ -288,6 +288,13 @@
 - Added a compact Farm HUD panel showing stored amount, cap, production rate, and readiness/full/producing status.
 - Added focused farm simulation tests, updated save validation coverage, and verified with full tests, production build, Monster RPG phase checks, and browser smoke.
 
+## 2026-06-20 - Issue #17: Farm Upgrades And Guard Assignment
+
+- Added Farm upgrade plans with visible requirements, matching Farm Card consumption, Magic Dust costs, higher production rates, and higher storage caps.
+- Added persisted Farm guard assignment to owned non-Fainted Creatures, plus inactive-guard checks when assigned guards later become Fainted.
+- Wired Farm HUD upgrade controls and guard selection while keeping Farm simulation, React UI, and save validation separate.
+- Added focused Farm upgrade/guard tests and save import coverage for persisted guard references.
+
 ## Next Work
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.
