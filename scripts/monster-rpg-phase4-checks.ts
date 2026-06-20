@@ -4,6 +4,7 @@ import { Server } from 'colyseus';
 import { LocationRoom } from '../server/rooms/LocationRoom';
 import {
   buildingDefinitions,
+  canEnterTile,
   createInitialSave,
   getGameMap,
   getVillageDefinition,
@@ -170,6 +171,7 @@ async function checkSdkMultiplayerFlow(): Promise<void> {
     await checkTwoClientsShareWorldMap(endpoint);
     await checkWorldToVillageRoomHandoff(endpoint);
     await checkTwoClientsShareBuildingInterior(endpoint);
+    await checkSharedWildEncounterClaimFlow(endpoint);
     await checkInvalidMapIdRejected(endpoint);
     await checkBlockedTerrainRejectedOnline(endpoint);
   } finally {
@@ -234,12 +236,65 @@ async function checkTwoClientsShareBuildingInterior(endpoint: string): Promise<v
   await leaveRoom(interiorB);
 }
 
+async function checkSharedWildEncounterClaimFlow(endpoint: string): Promise<void> {
+  const clientA = new Client(endpoint);
+  const clientB = new Client(endpoint);
+  const roomA = await joinLocation(clientA, 'home-village', createProfile('encounter-a'));
+  const roomB = await joinLocation(clientB, 'home-village', createProfile('encounter-b'));
+  const encounter = await waitForEncounter(roomA);
+  const path = findPathToAdjacentFacing('home-village', getLocalPosition(roomA), encounter);
+
+  assert.ok(path, `missing path to encounter ${encounter.id}`);
+  await sendMoves(roomA, path.directions);
+
+  const claimed = new Promise<{ encounterId: string; speciesId: number }>((resolve) => {
+    roomA.onMessage('wildEncounterClaimed', resolve);
+  });
+  roomA.send('claimWildEncounter', { encounterId: encounter.id });
+  const claimedMessage = await withTimeout(claimed, 'wild encounter claimed');
+
+  assert.equal(claimedMessage.encounterId, encounter.id);
+  assert.equal(typeof claimedMessage.speciesId, 'number');
+  await waitFor(() => roomB.state.encounters.get(encounter.id)?.status === 'claimed', 'shared encounter claimed');
+
+  const released = new Promise<{ encounterId: string; outcome: string }>((resolve) => {
+    roomA.onMessage('wildEncounterReleased', resolve);
+  });
+  roomA.send('resolveWildEncounter', { encounterId: encounter.id, outcome: 'lost' });
+  const releasedMessage = await withTimeout(released, 'wild encounter released');
+
+  assert.equal(releasedMessage.outcome, 'lost');
+  await waitFor(() => roomA.state.encounters.get(encounter.id)?.status === 'available', 'encounter released after loss');
+
+  const rejected = new Promise<{ encounterId: string; reason: string }>((resolve) => {
+    roomA.onMessage('wildEncounterClaimRejected', resolve);
+  });
+  roomA.send('claimWildEncounter', { encounterId: encounter.id });
+  const rejectedMessage = await withTimeout(rejected, 'wild encounter cooldown reject');
+
+  assert.equal(rejectedMessage.reason, 'cooldown');
+
+  await leaveRoom(roomA);
+  await leaveRoom(roomB);
+}
+
 async function checkInvalidMapIdRejected(endpoint: string): Promise<void> {
   const client = new Client(endpoint);
   await assert.rejects(
     () => client.joinOrCreate('location', { mapId: 'greenway-route', profile: createProfile('invalid-map') }),
     /Invalid map id|no available handler|Failed to/
   );
+}
+
+async function waitForEncounter(room: SdkRoom): Promise<EncounterTarget> {
+  await waitFor(() => room.state.encounters.size > 0, 'wild encounter state');
+  const encounter = Array.from(room.state.encounters.values()).find((candidate: any) => candidate.status === 'available');
+  assert.ok(encounter, 'missing available encounter');
+  return {
+    id: encounter.id,
+    x: encounter.x,
+    y: encounter.y
+  };
 }
 
 async function checkBlockedTerrainRejectedOnline(endpoint: string): Promise<void> {
@@ -324,6 +379,78 @@ function getPlayerCount(room: SdkRoom): number {
   return room.state.players.size;
 }
 
+function findPathToAdjacentFacing(
+  mapId: MapId,
+  start: WorldPosition,
+  encounter: EncounterTarget
+): { directions: Direction[]; facing: Direction } | null {
+  const map = getGameMap(mapId);
+  const steps: Array<{ direction: Direction; dx: number; dy: number }> = [
+    { direction: 'north', dx: 0, dy: -1 },
+    { direction: 'east', dx: 1, dy: 0 },
+    { direction: 'south', dx: 0, dy: 1 },
+    { direction: 'west', dx: -1, dy: 0 }
+  ];
+  const candidates = steps.map((step) => ({
+    x: encounter.x - step.dx,
+    y: encounter.y - step.dy,
+    previousX: encounter.x - step.dx * 2,
+    previousY: encounter.y - step.dy * 2,
+    facing: step.direction
+  }));
+
+  for (const candidate of candidates) {
+    if (!canEnterTile(map, candidate.x, candidate.y)) continue;
+    if (start.x === candidate.x && start.y === candidate.y && start.facing === candidate.facing) {
+      return { directions: [], facing: candidate.facing };
+    }
+    if (!canEnterTile(map, candidate.previousX, candidate.previousY)) continue;
+
+    const directions = findPath(mapId, start, candidate.previousX, candidate.previousY);
+    if (!directions) continue;
+    return { directions: [...directions, candidate.facing], facing: candidate.facing };
+  }
+
+  return null;
+}
+
+function findPath(mapId: MapId, start: WorldPosition, targetX: number, targetY: number): Direction[] | null {
+  const map = getGameMap(mapId);
+  const queue: Array<{ x: number; y: number; directions: Direction[] }> = [
+    { x: start.x, y: start.y, directions: [] }
+  ];
+  const visited = new Set<string>([`${start.x},${start.y}`]);
+  const steps: Array<{ direction: Direction; dx: number; dy: number }> = [
+    { direction: 'north', dx: 0, dy: -1 },
+    { direction: 'east', dx: 1, dy: 0 },
+    { direction: 'south', dx: 0, dy: 1 },
+    { direction: 'west', dx: -1, dy: 0 }
+  ];
+
+  while (queue.length > 0) {
+    const current = queue.shift();
+    if (!current) break;
+
+    if (current.x === targetX && current.y === targetY) {
+      return current.directions;
+    }
+
+    for (const step of steps) {
+      const nextX = current.x + step.dx;
+      const nextY = current.y + step.dy;
+      const key = `${nextX},${nextY}`;
+      if (visited.has(key)) continue;
+      if (nextX < 0 || nextY < 0 || nextX >= map.width || nextY >= map.height) continue;
+      if (!canEnterTile(map, nextX, nextY)) continue;
+
+      visited.add(key);
+      queue.push({ x: nextX, y: nextY, directions: [...current.directions, step.direction] });
+    }
+  }
+
+  return null;
+}
+
 async function leaveRoom(room: SdkRoom): Promise<void> {
   await room.leave();
 }
@@ -358,6 +485,12 @@ interface LocationTransition {
   toMapId: MapId;
   spawn: WorldPosition;
   transitionId: string;
+}
+
+interface EncounterTarget {
+  id: string;
+  x: number;
+  y: number;
 }
 
 function createState(

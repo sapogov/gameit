@@ -8,7 +8,8 @@ import type {
   MapKind,
   MonsterRpgSaveState,
   RoomPlayerId,
-  TileType
+  TileType,
+  WildEncounterState
 } from '../../sim';
 import { getGameMap } from '../../sim';
 import { monsterRpgAssetKeys, monsterRpgAssetManifest, type MonsterRpgAssetKey } from '../assets/monsterRpgAssets';
@@ -24,6 +25,8 @@ type MovementKeyMap = {
   A: Phaser.Input.Keyboard.Key;
   S: Phaser.Input.Keyboard.Key;
   D: Phaser.Input.Keyboard.Key;
+  E: Phaser.Input.Keyboard.Key;
+  SPACE: Phaser.Input.Keyboard.Key;
 };
 
 const tileColors: Record<TileType, number> = {
@@ -93,6 +96,12 @@ interface PlayerView {
   label: Phaser.GameObjects.Text;
 }
 
+interface EncounterView {
+  container: Phaser.GameObjects.Container;
+  body: Phaser.GameObjects.Arc;
+  shine: Phaser.GameObjects.Arc;
+}
+
 export class VillageScene extends Phaser.Scene {
   private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
   private keys?: MovementKeyMap;
@@ -100,6 +109,7 @@ export class VillageScene extends Phaser.Scene {
   private mapGraphics?: Phaser.GameObjects.Graphics;
   private mapSprites?: Phaser.GameObjects.Container;
   private onAction: (action: InputAction) => void;
+  private encounters = new Map<string, EncounterView>();
   private players = new Map<RoomPlayerId, PlayerView>();
   private readyToRender = false;
   private roomState: LocationRoomState | null = null;
@@ -124,6 +134,7 @@ export class VillageScene extends Phaser.Scene {
     this.drawMap();
     this.configureInput();
     this.readyToRender = true;
+    this.renderEncounters();
     this.renderPlayers();
     this.configureCamera();
     this.scale.on('resize', this.handleResize, this);
@@ -140,6 +151,8 @@ export class VillageScene extends Phaser.Scene {
       this.onAction({ type: 'move', direction: 'north' });
     } else if (Phaser.Input.Keyboard.JustDown(this.cursors.down) || Phaser.Input.Keyboard.JustDown(this.keys.S)) {
       this.onAction({ type: 'move', direction: 'south' });
+    } else if (Phaser.Input.Keyboard.JustDown(this.keys.E) || Phaser.Input.Keyboard.JustDown(this.keys.SPACE)) {
+      this.onAction({ type: 'interact' });
     }
   }
 
@@ -156,13 +169,14 @@ export class VillageScene extends Phaser.Scene {
       this.setActiveMap(getGameMap(state.mapId));
     }
     this.roomState = state;
+    this.renderEncounters();
     this.renderPlayers();
   }
 
   private configureInput() {
     if (!this.input.keyboard) return;
     this.cursors = this.input.keyboard.createCursorKeys();
-    this.keys = this.input.keyboard.addKeys('W,A,S,D') as MovementKeyMap;
+    this.keys = this.input.keyboard.addKeys('W,A,S,D,E,SPACE') as MovementKeyMap;
   }
 
   private configureCamera() {
@@ -182,6 +196,8 @@ export class VillageScene extends Phaser.Scene {
     this.mapSprites?.destroy();
     this.players.forEach((view) => view.container.destroy());
     this.players.clear();
+    this.encounters.forEach((view) => view.container.destroy());
+    this.encounters.clear();
     this.drawMap();
     this.configureCamera();
   }
@@ -365,6 +381,25 @@ export class VillageScene extends Phaser.Scene {
     return true;
   }
 
+  private renderEncounters() {
+    if (!this.readyToRender) return;
+
+    const encounters = this.getRenderableEncounters();
+    const activeIds = new Set(Object.keys(encounters));
+
+    this.encounters.forEach((view, id) => {
+      if (!activeIds.has(id)) {
+        view.container.destroy();
+        this.encounters.delete(id);
+      }
+    });
+
+    Object.entries(encounters).forEach(([id, encounter]) => {
+      const view = this.encounters.get(id) ?? this.createEncounterView(id);
+      this.syncEncounterView(view, encounter);
+    });
+  }
+
   private renderPlayers() {
     if (!this.readyToRender) return;
 
@@ -386,6 +421,16 @@ export class VillageScene extends Phaser.Scene {
     this.followLocalPlayer();
   }
 
+  private getRenderableEncounters(): Record<string, WildEncounterState> {
+    if (!this.roomState) return {};
+
+    return Object.fromEntries(
+      Object.entries(this.roomState.encounters).filter(
+        ([, encounter]) => encounter.mapId === this.map.id && encounter.status === 'available'
+      )
+    );
+  }
+
   private getRenderablePlayers(): Record<RoomPlayerId, LocationPlayerState> {
     if (this.roomState) {
       return Object.fromEntries(
@@ -400,6 +445,26 @@ export class VillageScene extends Phaser.Scene {
         connected: true
       }
     };
+  }
+
+  private createEncounterView(id: string): EncounterView {
+    const container = this.add.container(0, 0);
+    const body = this.add.circle(0, 0, 7, 0x7ddf8a).setStrokeStyle(2, 0x17351f);
+    const shine = this.add.circle(-2, -3, 2, 0xf7ffd8, 0.85);
+    container.add([body, shine]);
+    container.setDepth(4);
+    this.encounters.set(id, { container, body, shine });
+    return { container, body, shine };
+  }
+
+  private syncEncounterView(view: EncounterView, encounter: WildEncounterState) {
+    const { tileSize } = this.map;
+    const radius = this.map.kind === 'world-map' ? tileSize * 0.34 : tileSize * 0.3;
+    view.container.setPosition(encounter.x * tileSize + tileSize / 2, encounter.y * tileSize + tileSize / 2);
+    view.body.setRadius(radius);
+    view.body.setFillStyle(getSpeciesIconColor(encounter.speciesId), 1);
+    view.shine.setRadius(Math.max(2, radius * 0.24));
+    view.shine.setPosition(-radius * 0.26, -radius * 0.38);
   }
 
   private createPlayerView(id: RoomPlayerId, player: LocationPlayerState): PlayerView {
@@ -510,4 +575,9 @@ export class VillageScene extends Phaser.Scene {
   private getTerrainAssetKey(tile: TileType): MonsterRpgAssetKey | undefined {
     return terrainAssetKeys[tile as keyof typeof terrainAssetKeys];
   }
+}
+
+function getSpeciesIconColor(speciesId: number): number {
+  const colors = [0x7ddf8a, 0xff9f5f, 0x69c6ff, 0xb9a37a, 0xf7dc6f, 0xb987ff];
+  return colors[Math.abs(speciesId) % colors.length];
 }

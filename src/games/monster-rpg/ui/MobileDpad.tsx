@@ -25,6 +25,9 @@ export function MobileDpad({ onAction }: MobileDpadProps) {
           {control.label}
         </button>
       ))}
+      <button aria-label="Interact" className="interact" onClick={() => onAction({ type: 'interact' })} type="button">
+        !
+      </button>
     </div>
   );
 }

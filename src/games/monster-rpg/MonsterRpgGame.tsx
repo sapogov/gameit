@@ -93,6 +93,17 @@ export function MonsterRpgGame() {
       return;
     }
 
+    if (action.type === 'interact' && connectionRef.current && multiplayerStatusRef.current === 'online') {
+      const encounter = getFacingEncounter(roomState, currentState);
+      if (encounter) {
+        connectionRef.current.sendClaimWildEncounter({ encounterId: encounter.id });
+        setImportStatus(`Claiming wild Creature #${encounter.speciesId}`);
+      } else {
+        setImportStatus('No wild Creature ahead');
+      }
+      return;
+    }
+
     setSaveState((current) => {
       if (!current) return current;
 
@@ -101,7 +112,7 @@ export function MonsterRpgGame() {
       saveProgress(result.state);
       return result.state;
     });
-  }, []);
+  }, [roomState]);
 
   const handleCreateProfile = (name: string, avatar: AvatarId) => {
     const profile = createPlayerProfile(name, avatar);
@@ -629,4 +640,28 @@ function formatCreaturePartyFailure(reason: string | undefined): string {
   if (reason === 'not-fainted') return 'Creature is not Fainted';
   if (reason === 'not-at-hospital') return 'Visit a Village Hospital first';
   return `Creature action failed${reason ? `: ${reason}` : ''}`;
+}
+
+function getFacingEncounter(roomState: LocationRoomState | null, saveState: MonsterRpgSaveState | null) {
+  if (!roomState || !saveState) return null;
+
+  const deltaByDirection = {
+    north: { x: 0, y: -1 },
+    east: { x: 1, y: 0 },
+    south: { x: 0, y: 1 },
+    west: { x: -1, y: 0 }
+  } as const;
+  const delta = deltaByDirection[saveState.position.facing];
+  const targetX = saveState.position.x + delta.x;
+  const targetY = saveState.position.y + delta.y;
+
+  return (
+    Object.values(roomState.encounters).find(
+      (encounter) =>
+        encounter.status === 'available' &&
+        encounter.mapId === saveState.mapId &&
+        encounter.x === targetX &&
+        encounter.y === targetY
+    ) ?? null
+  );
 }

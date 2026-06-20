@@ -309,6 +309,7 @@ export type NetworkEvent =
   | { type: 'joinLocation'; playerId: string; mapId: MapId }
   | { type: 'leaveLocation'; playerId: string; mapId: MapId }
   | { type: 'moveIntent'; playerId: string; direction: Direction; sequence: number }
+  | { type: 'claimWildEncounter'; playerId: string; encounterId: string }
   | { type: 'statePatch'; state: LocationRoomState }
   | { type: 'locationTransition'; toMapId: MapId; spawn: WorldPosition; transitionId: string };
 
@@ -318,11 +319,37 @@ export interface LocationPlayerState {
   connected: boolean;
 }
 
+export type WildEncounterStatus = 'available' | 'claimed';
+
+export type WildEncounterOutcome = 'defeated' | 'lost' | 'ran';
+
+export interface WildEncounterState {
+  id: string;
+  zoneId: string;
+  mapId: MapId;
+  speciesId: number;
+  x: number;
+  y: number;
+  status: WildEncounterStatus;
+  claimedByPlayerId?: string;
+  respawnAt?: string;
+}
+
+export interface ClaimWildEncounterMessage {
+  encounterId: string;
+}
+
+export interface ResolveWildEncounterMessage {
+  encounterId: string;
+  outcome: WildEncounterOutcome;
+}
+
 export interface LocationRoomState {
   mapId: MapId;
   mapName: string;
   mapKind: MapKind;
   players: Record<RoomPlayerId, LocationPlayerState>;
+  encounters: Record<string, WildEncounterState>;
   tileWidth: number;
   tileHeight: number;
   localPlayerId?: RoomPlayerId;

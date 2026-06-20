@@ -6,6 +6,7 @@ import type {
   MapId,
   MoveIntentMessage,
   MultiplayerStatus,
+  ClaimWildEncounterMessage,
   WorldPosition
 } from '../sim';
 import { getGameMap, isMapId, MONSTER_RPG_SCHEMA_VERSION } from '../sim';
@@ -24,6 +25,7 @@ interface ConnectionHandlers {
 export interface MultiplayerConnection {
   sessionId: string;
   sendMoveIntent: (message: MoveIntentMessage) => void;
+  sendClaimWildEncounter: (message: ClaimWildEncounterMessage) => void;
   leave: (options?: { silent?: boolean }) => void;
 }
 
@@ -66,6 +68,9 @@ export async function connectToLocation(
     sendMoveIntent: (message) => {
       room.send('moveIntent', message);
     },
+    sendClaimWildEncounter: (message) => {
+      room.send('claimWildEncounter', message);
+    },
     leave: (options) => {
       if (options?.silent) {
         room.onLeave.clear();
@@ -81,6 +86,7 @@ function getServerUrl(): string {
 
 function toLocationRoomState(state: any, localPlayerId: string): LocationRoomState {
   const players: Record<string, LocationPlayerState> = {};
+  const encounters: LocationRoomState['encounters'] = {};
   const mapId: MapId = isMapId(state.mapId) ? state.mapId : 'world-map';
   const map = getGameMap(mapId);
 
@@ -103,6 +109,21 @@ function toLocationRoomState(state: any, localPlayerId: string): LocationRoomSta
       connected: player.connected
     };
   });
+  state.encounters?.forEach((encounter: any, encounterId: string) => {
+    encounters[encounterId] = {
+      id: typeof encounter.id === 'string' && encounter.id ? encounter.id : encounterId,
+      zoneId: typeof encounter.zoneId === 'string' ? encounter.zoneId : '',
+      mapId: isMapId(encounter.mapId) ? encounter.mapId : mapId,
+      speciesId: typeof encounter.speciesId === 'number' ? encounter.speciesId : 1,
+      x: typeof encounter.x === 'number' ? encounter.x : map.spawn.x,
+      y: typeof encounter.y === 'number' ? encounter.y : map.spawn.y,
+      status: encounter.status === 'claimed' ? 'claimed' : 'available',
+      claimedByPlayerId: typeof encounter.claimedByPlayerId === 'string' && encounter.claimedByPlayerId
+        ? encounter.claimedByPlayerId
+        : undefined,
+      respawnAt: typeof encounter.respawnAt === 'string' && encounter.respawnAt ? encounter.respawnAt : undefined
+    };
+  });
 
   return {
     mapId,
@@ -112,6 +133,7 @@ function toLocationRoomState(state: any, localPlayerId: string): LocationRoomSta
         ? state.mapKind
         : map.kind,
     players,
+    encounters,
     tileWidth: state.tileWidth,
     tileHeight: state.tileHeight,
     localPlayerId
