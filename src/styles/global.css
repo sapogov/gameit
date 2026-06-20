@@ -398,7 +398,34 @@ input,select {
   line-height: 1.1;
 }
 
-.monster-journal-panel {
+.monster-card-panel {
+  min-width: min(320px, calc(100vw - 8rem));
+  pointer-events: auto;
+}
+
+.monster-card-actions {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+
+.monster-card-grid {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+}
+
+.monster-card-row {
+  display: grid;
+  gap: 0.12rem;
+}
+
+.monster-card-row button {
+  margin-top: 0.12rem;
+}
+
+.monster-journal-panel,
+.monster-creature-panel {
   width: min(420px, calc(100vw - 8rem));
   max-height: min(360px, calc(100vh - 12rem));
   overflow: auto;
@@ -409,7 +436,8 @@ input,select {
   pointer-events: auto;
 }
 
-.monster-journal-panel summary {
+.monster-journal-panel summary,
+.monster-creature-panel summary {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -419,17 +447,48 @@ input,select {
   text-transform: uppercase;
 }
 
-.monster-journal-panel summary span {
+.monster-journal-panel summary span,
+.monster-creature-panel summary span {
   padding: 0.12rem 0.35rem;
   background: #d7c884;
   border: 2px solid #26351f;
   font-size: 0.68rem;
 }
 
-.monster-journal-grid {
+.monster-journal-grid,
+.monster-creature-grid {
   display: grid;
   gap: 0.25rem;
   margin-top: 0.55rem;
+}
+
+.monster-creature-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.45rem;
+}
+
+.monster-creature-row {
+  display: grid;
+  gap: 0.2rem;
+  min-height: 2rem;
+  padding: 0.4rem;
+  background: #fff8d6;
+  border: 2px solid #5c6b3a;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.monster-creature-row.fainted {
+  background: #ead4c8;
+}
+
+.monster-creature-row strong,
+.monster-creature-row small {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .monster-journal-row {
@@ -480,6 +539,10 @@ input,select {
 
 .monster-save-actions button,
 .monster-save-actions label,
+.monster-card-actions button,
+.monster-card-row button,
+.monster-card-panel button,
+.monster-creature-actions button,
 .monster-back-link {
   border: 3px solid #26351f;
   background: #fff8d6;
@@ -490,6 +553,11 @@ input,select {
   text-decoration: none;
 }
 
+.monster-creature-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
 .monster-save-actions {
   display: flex;
   gap: 0.4rem;
@@ -497,13 +565,21 @@ input,select {
 }
 
 .monster-save-actions button,
-.monster-save-actions label {
+.monster-save-actions label,
+.monster-card-actions button,
+.monster-card-row button,
+.monster-card-panel button {
   display: grid;
   place-items: center;
   min-width: 74px;
   min-height: 42px;
   margin-bottom: 0;
   padding: 0.4rem 0.65rem;
+}
+
+.monster-creature-actions button {
+  min-height: 34px;
+  padding: 0.25rem 0.5rem;
 }
 
 .monster-save-actions input {
@@ -658,13 +734,15 @@ input,select {
     padding: 0.5rem 0.6rem;
   }
 
-  .monster-journal-panel {
+  .monster-journal-panel,
+  .monster-creature-panel {
     width: calc(100vw - 7.5rem);
     max-height: 220px;
     padding: 0.45rem;
   }
 
-  .monster-journal-panel summary {
+  .monster-journal-panel summary,
+  .monster-creature-panel summary {
     align-items: flex-start;
     flex-direction: column;
     gap: 0.25rem;

@@ -1,10 +1,14 @@
 import {
+  ACTIVE_PARTY_LIMIT,
+  REVIVE_ITEM_ID,
+  canCreatureUseRole,
   gen1SpeciesCatalog,
   getCardDefinition,
   getEggDescription,
   getJournalSpeciesViewState,
   getSpeciesById,
   type CardDefinition,
+  type CreatureSaveRecord,
   type CreatureSpeciesRecord,
   type JournalSpeciesViewState,
   type PackOpenTrace,
@@ -15,6 +19,7 @@ import {
 } from '../sim';
 
 interface GameHudProps {
+  canUseHospital: boolean;
   importStatus: string | null;
   lastMove: MovementResult | null;
   mapKind: MapKind;
@@ -30,9 +35,14 @@ interface GameHudProps {
   onActivateCard: (cardId: string) => void;
   onRouteCardToElder: (cardId: string) => void;
   onHatchEgg: (eggId: string) => void;
+  onHospitalHeal: () => void;
+  onMoveCreatureToActive: (creatureId: string) => void;
+  onMoveCreatureToStorage: (creatureId: string) => void;
+  onReviveCreature: (creatureId: string) => void;
 }
 
 export function GameHud({
+  canUseHospital,
   importStatus,
   lastMove,
   mapKind,
@@ -47,13 +57,20 @@ export function GameHud({
   onOpenPack,
   onActivateCard,
   onRouteCardToElder,
-  onHatchEgg
+  onHatchEgg,
+  onHospitalHeal,
+  onMoveCreatureToActive,
+  onMoveCreatureToStorage,
+  onReviveCreature
 }: GameHudProps) {
   const status = getStatusText(multiplayerStatus, playerCount, lastMove);
   const locationHint = `${formatMapKind(mapKind)} - ${saveState.position.x}, ${saveState.position.y}`;
   const discoveredCount = Object.values(saveState.journal.species).filter((state) => state === 'discovered').length;
   const silhouetteCount = Object.values(saveState.journal.species).filter((state) => state === 'silhouette').length;
   const cardRows = getCardRows(saveState);
+  const creatureRows = getCreatureRows(saveState);
+  const activeCount = saveState.creatures.activePartyCreatureIds.length;
+  const reviveCount = saveState.inventory.items[REVIVE_ITEM_ID]?.quantity ?? 0;
 
   return (
     <div className="monster-hud">
@@ -65,6 +82,67 @@ export function GameHud({
           <small>{locationHint}</small>
           {importStatus ? <small>{importStatus}</small> : null}
         </section>
+        <details className="monster-creature-panel" open>
+          <summary>
+            Creatures <span>{activeCount}/{ACTIVE_PARTY_LIMIT} active</span> <span>{reviveCount} revives</span>
+          </summary>
+          <div className="monster-creature-actions">
+            <button disabled={!canUseHospital} onClick={onHospitalHeal} type="button">
+              Hospital Heal
+            </button>
+          </div>
+          <div className="monster-creature-grid">
+            {creatureRows.length > 0 ? (
+              creatureRows.map((row) => {
+                const canActivate = row.container === 'storage' && activeCount < ACTIVE_PARTY_LIMIT;
+                const canBattle = row.container === 'active' && canCreatureUseRole(row.creature, 'battle');
+                const canGuard = canCreatureUseRole(row.creature, 'guard');
+                const canMount = row.container === 'active' && canCreatureUseRole(row.creature, 'mount');
+                return (
+                  <article className={`monster-creature-row ${row.creature.fainted ? 'fainted' : ''}`} key={row.id}>
+                    <div>
+                      <strong>{row.species?.displayName ?? `Species #${row.creature.speciesId}`}</strong>
+                      <small>
+                        {row.container} · {row.species?.rarity ?? 'unknown'} · {row.species?.type ?? 'unknown'}
+                      </small>
+                    </div>
+                    <small>
+                      HP {row.creature.hp}/{row.creature.maxHp} · {row.creature.fainted ? 'Fainted' : 'Ready'}
+                    </small>
+                    <small>
+                      Stats HP {row.creature.stats.hp} / ATK {row.creature.stats.attack} / DEF{' '}
+                      {row.creature.stats.defense} / SPD {row.creature.stats.speed} / STA {row.creature.stats.stamina}
+                    </small>
+                    <small>Attacks: {row.creature.attacks.map((attack) => attack.name).join(', ')}</small>
+                    <small>
+                      Uses:{' '}
+                      {canBattle ? 'battle' : 'no battle'} · {canGuard ? 'guard' : 'no guard'} ·{' '}
+                      {canMount ? 'mount' : 'no mount'}
+                    </small>
+                    <div className="monster-creature-actions">
+                      {row.container === 'active' ? (
+                        <button onClick={() => onMoveCreatureToStorage(row.id)} type="button">
+                          Store
+                        </button>
+                      ) : (
+                        <button disabled={!canActivate} onClick={() => onMoveCreatureToActive(row.id)} type="button">
+                          Activate
+                        </button>
+                      )}
+                      {row.creature.fainted ? (
+                        <button disabled={reviveCount < 1} onClick={() => onReviveCreature(row.id)} type="button">
+                          Revive
+                        </button>
+                      ) : null}
+                    </div>
+                  </article>
+                );
+              })
+            ) : (
+              <small>No Creatures owned</small>
+            )}
+          </div>
+        </details>
         <section className="monster-hud-panel monster-card-panel">
           <h3>Inventory Cards</h3>
           <div className="monster-card-actions">
@@ -233,6 +311,28 @@ function getCardRows(saveState: MonsterRpgSaveState): CardRow[] {
     const kindSort = a.kind.localeCompare(b.kind);
     return kindSort || a.id.localeCompare(b.id);
   });
+}
+
+type CreatureRow = {
+  id: string;
+  container: 'active' | 'storage';
+  creature: CreatureSaveRecord;
+  species: CreatureSpeciesRecord | undefined;
+};
+
+function getCreatureRows(saveState: MonsterRpgSaveState): CreatureRow[] {
+  const activeRows = saveState.creatures.activePartyCreatureIds.flatMap((id): CreatureRow[] => {
+    const creature = saveState.creatures.creatures[id];
+    if (!creature) return [];
+    return [{ id, container: 'active', creature, species: getSpeciesById(creature.speciesId) }];
+  });
+  const storedRows = saveState.creatures.storedCreatureIds.flatMap((id): CreatureRow[] => {
+    const creature = saveState.creatures.creatures[id];
+    if (!creature) return [];
+    return [{ id, container: 'storage', creature, species: getSpeciesById(creature.speciesId) }];
+  });
+
+  return [...activeRows, ...storedRows];
 }
 
 function getCardAction(card: CardRow): string | null {

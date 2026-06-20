@@ -235,6 +235,13 @@
 - Updated the HUD inventory panel to show Creature Card stat/Attack details, card-made Egg inherited Attacks, direct-drop Egg descriptions, and Egg hatching actions.
 - Added deterministic domain tests for Creature Card conversion, card-made Eggs, direct-drop Egg hatching, and scoped Magic Dust requirements.
 
+## 2026-06-20 - Issue #10: Active Party, Storage, Fainted, Hospital, And Revive Item
+
+- Added active party/storage simulation with a five-Creature active cap, storage fallback for overflow creation/hatching, party transfer helpers, and strict save import validation.
+- Added Fainted and recovery rules: 0 HP marks Fainted, Fainted Creatures cannot battle/guard/mount, new saves start with a Revive Item, Hospital full-heals for free, and Revive Items restore small HP.
+- Added Creature HUD detail rows showing species, rarity, HP, Fainted status, stats, attacks, active/storage location, and recovery/transfer actions.
+- Verified with focused party tests, full Vitest suite, production build, and Monster RPG phase checks.
+
 ## Next Work
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.
