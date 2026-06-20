@@ -3,3 +3,7 @@ dist
 .vite
 .DS_Store
 *.tsbuildinfo
+.codex/
+AGENTS.md
+CONTEXT.md
+PLAN.md
