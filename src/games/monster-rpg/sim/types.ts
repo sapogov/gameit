@@ -271,12 +271,24 @@ export interface VillageSaveContainer {
   discoveredVillageIds: VillageId[];
 }
 
+export interface FarmPosition {
+  mapId: VillageId;
+  x: number;
+  y: number;
+}
+
 export interface FarmSaveRecord {
   id: string;
   ownerPlayerId: string;
   farmType: string;
+  resourceId: string;
   level: number;
+  mapId: VillageId;
+  position: FarmPosition;
+  productionRatePerMinute: number;
+  storageCap: number;
   storedResources: Record<string, number>;
+  lastProductionAt: string;
   collectCooldownUntil?: string;
   theftCooldowns: Record<string, string>;
 }

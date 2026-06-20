@@ -4,14 +4,17 @@ import {
   canCreatureUseRole,
   getBattleAttackFatigueCost,
   gen1SpeciesCatalog,
+  getAccruedFarmRecord,
   getCardDefinition,
   getEggDescription,
+  getFarmDefinition,
   getJournalSpeciesViewState,
   getSpeciesById,
   type CardDefinition,
   type BattleRoomState,
   type CreatureLabelMode,
   type CreatureSaveRecord,
+  type FarmSaveRecord,
   type CreatureSpeciesRecord,
   type JournalSpeciesViewState,
   type PackOpenTrace,
@@ -30,6 +33,7 @@ interface GameHudProps {
   multiplayerStatus: MultiplayerStatus;
   playerCount: number;
   saveState: MonsterRpgSaveState;
+  farmStatusNow: number;
   creatureLabelMode: CreatureLabelMode;
   packOpenTrace: PackOpenTrace | null;
   battleState: BattleRoomState | null;
@@ -58,6 +62,7 @@ export function GameHud({
   multiplayerStatus,
   playerCount,
   saveState,
+  farmStatusNow,
   creatureLabelMode,
   packOpenTrace,
   battleState,
@@ -82,6 +87,7 @@ export function GameHud({
   const silhouetteCount = Object.values(saveState.journal.species).filter((state) => state === 'silhouette').length;
   const cardRows = getCardRows(saveState);
   const creatureRows = getCreatureRows(saveState);
+  const farmRows = getFarmRows(saveState, new Date(farmStatusNow));
   const activeCount = saveState.creatures.activePartyCreatureIds.length;
   const reviveCount = saveState.inventory.items[REVIVE_ITEM_ID]?.quantity ?? 0;
   const currencySummary = formatCurrencySummary(saveState.inventory.currencies);
@@ -141,6 +147,24 @@ export function GameHud({
             <div className="monster-battle-log">
               {battleState.lastLog.map((entry) => (
                 <small key={entry.id}>{entry.message}</small>
+              ))}
+            </div>
+          </section>
+        ) : null}
+        {farmRows.length > 0 ? (
+          <section className="monster-hud-panel monster-farm-panel">
+            <h3>Farms</h3>
+            <div className="monster-farm-grid">
+              {farmRows.map((farm) => (
+                <article className="monster-farm-row" key={farm.id}>
+                  <strong>{farm.name}</strong>
+                  <small>
+                    Stored {farm.stored}/{farm.cap} {farm.resourceName}
+                  </small>
+                  <small>
+                    Produces {farm.rate}/min · {farm.status}
+                  </small>
+                </article>
               ))}
             </div>
           </section>
@@ -456,6 +480,39 @@ type CreatureRow = {
   creature: CreatureSaveRecord;
   species: CreatureSpeciesRecord | undefined;
 };
+
+type FarmRow = {
+  id: string;
+  name: string;
+  resourceName: string;
+  stored: number;
+  cap: number;
+  rate: number;
+  status: string;
+};
+
+function getFarmRows(saveState: MonsterRpgSaveState, now: Date): FarmRow[] {
+  return Object.values(saveState.farms.farms)
+    .map((farm) => toFarmRow(farm, now))
+    .sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
+}
+
+function toFarmRow(farm: FarmSaveRecord, now: Date): FarmRow {
+  const definition = getFarmDefinition(farm.farmType);
+  const accrued = getAccruedFarmRecord(farm, now);
+  const stored = accrued.storedResources[accrued.resourceId] ?? 0;
+  const cap = accrued.storageCap;
+
+  return {
+    id: farm.id,
+    name: definition?.displayName ?? farm.farmType,
+    resourceName: definition?.resourceName ?? formatMaterialId(accrued.resourceId),
+    stored,
+    cap,
+    rate: accrued.productionRatePerMinute,
+    status: stored >= cap ? 'Full' : stored > 0 ? 'Ready' : 'Producing'
+  };
+}
 
 function getCreatureRows(saveState: MonsterRpgSaveState): CreatureRow[] {
   const activeRows = saveState.creatures.activePartyCreatureIds.flatMap((id): CreatureRow[] => {

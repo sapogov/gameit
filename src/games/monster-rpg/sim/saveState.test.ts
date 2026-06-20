@@ -99,8 +99,14 @@ describe('Monster RPG save import and export', () => {
             id: 'dust-farm',
             ownerPlayerId: save.profile.playerId,
             farmType: 'magic-dust',
+            resourceId: 'magicDust',
             level: 1,
+            mapId: 'home-village',
+            position: { mapId: 'home-village', x: 24, y: 16 },
+            productionRatePerMinute: 1,
+            storageCap: 24,
             storedResources: { magicDust: 4 },
+            lastProductionAt: '2026-06-20T12:00:00.000Z',
             collectCooldownUntil: 'soon',
             theftCooldowns: {}
           }

@@ -128,7 +128,7 @@ describe('Village Elder onboarding', () => {
 
 function createProfile(): PlayerProfile {
   return {
-    schemaVersion: 6,
+    schemaVersion: 7,
     playerId: 'player-1',
     name: 'Mika',
     avatar: 'scout',

@@ -279,6 +279,15 @@
 - Wired reward payloads through Battle Room results and the React save path, with HUD readouts for player XP, Creature XP, and material currencies.
 - Added focused reward generation/application coverage and verified with full tests, production build, and Monster RPG phase checks.
 
+## 2026-06-20 - Issue #16: Magic Dust Farm Production And Owner Collection
+
+- Added persisted Farm records with owner, village plot, produced resource, production rate, storage cap, stored amount, and production timestamp under save schema version 7.
+- Added Magic Dust Farm production helpers that accrue capped resources over elapsed time and keep the model generic for future farm resource types.
+- Wired adjacent facing Interact collection so the owner can collect stored Magic Dust, reset farm storage, and persist the updated wallet/farm state.
+- Rendered built farms as Phaser village overlays and added tap-to-walk interaction-distance targeting for farm plots.
+- Added a compact Farm HUD panel showing stored amount, cap, production rate, and readiness/full/producing status.
+- Added focused farm simulation tests, updated save validation coverage, and verified with full tests, production build, Monster RPG phase checks, and browser smoke.
+
 ## Next Work
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.
