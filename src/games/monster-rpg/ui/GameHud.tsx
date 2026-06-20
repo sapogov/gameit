@@ -1,8 +1,11 @@
 import {
   gen1SpeciesCatalog,
+  getCardDefinition,
   getJournalSpeciesViewState,
+  type CardDefinition,
   type CreatureSpeciesRecord,
   type JournalSpeciesViewState,
+  type PackOpenTrace,
   type MapKind,
   type MonsterRpgSaveState,
   type MovementResult,
@@ -17,9 +20,13 @@ interface GameHudProps {
   multiplayerStatus: MultiplayerStatus;
   playerCount: number;
   saveState: MonsterRpgSaveState;
+  packOpenTrace: PackOpenTrace | null;
   onExport: () => void;
   onImport: (file: File) => void;
   onReset: () => void;
+  onOpenPack: () => void;
+  onActivateCard: (cardId: string) => void;
+  onRouteCardToElder: (cardId: string) => void;
 }
 
 export function GameHud({
@@ -30,14 +37,19 @@ export function GameHud({
   multiplayerStatus,
   playerCount,
   saveState,
+  packOpenTrace,
   onExport,
   onImport,
-  onReset
+  onReset,
+  onOpenPack,
+  onActivateCard,
+  onRouteCardToElder
 }: GameHudProps) {
   const status = getStatusText(multiplayerStatus, playerCount, lastMove);
   const locationHint = `${formatMapKind(mapKind)} - ${saveState.position.x}, ${saveState.position.y}`;
   const discoveredCount = Object.values(saveState.journal.species).filter((state) => state === 'discovered').length;
   const silhouetteCount = Object.values(saveState.journal.species).filter((state) => state === 'silhouette').length;
+  const cardRows = getCardRows(saveState);
 
   return (
     <div className="monster-hud">
@@ -48,6 +60,52 @@ export function GameHud({
           <span>{status}</span>
           <small>{locationHint}</small>
           {importStatus ? <small>{importStatus}</small> : null}
+        </section>
+        <section className="monster-hud-panel monster-card-panel">
+          <h3>Inventory Cards</h3>
+          <div className="monster-card-actions">
+            <button onClick={onOpenPack} type="button">
+              Open Pack
+            </button>
+          </div>
+          {packOpenTrace ? (
+            <small>
+              Last pack: {packOpenTrace.cards.length} cards at {new Date(packOpenTrace.openedAt).toLocaleTimeString()}
+            </small>
+          ) : null}
+          <div className="monster-card-grid">
+            {cardRows.length > 0 ? (
+              cardRows.map((card) => {
+                const allowedAction = getCardAction(card);
+                return (
+                  <article className="monster-card-row" key={card.id}>
+                    <span>
+                      <strong>{card.definition?.name ?? card.id}</strong>
+                    </span>
+                    <small>
+                      {card.definition?.type ?? 'unknown'} · {card.definition?.rarity ?? 'unknown'} · qty {card.quantity}
+                    </small>
+                    {allowedAction ? (
+                      <button
+                        onClick={() => {
+                          if (card.definition?.type === 'material' || card.definition?.type === 'buff') {
+                            onActivateCard(card.id);
+                          } else {
+                            onRouteCardToElder(card.id);
+                          }
+                        }}
+                        type="button"
+                      >
+                        {allowedAction}
+                      </button>
+                    ) : null}
+                  </article>
+                );
+              })
+            ) : (
+              <small>Empty inventory</small>
+            )}
+          </div>
         </section>
         <details className="monster-journal-panel">
           <summary>
@@ -119,6 +177,28 @@ function getStatusText(status: MultiplayerStatus, playerCount: number, lastMove:
   if (status === 'online') return `Online - ${playerCount} player${playerCount === 1 ? '' : 's'}`;
   if (status === 'connecting') return 'Connecting';
   return lastMove?.blocked ? `Offline local - blocked by ${formatBlockedBy(lastMove.blockedBy)}` : 'Offline local';
+}
+
+function getCardRows(saveState: MonsterRpgSaveState): Array<{ id: string; definition: CardDefinition | undefined; quantity: number }> {
+  return Object.entries(saveState.inventory.cards)
+    .map(([id, stack]) => ({
+      id,
+      definition: getCardDefinition(id),
+      quantity: stack.quantity
+    }))
+    .filter((card) => card.quantity > 0)
+    .sort((a, b) => {
+      const aType = a.definition?.type ?? 'zzz';
+      const bType = b.definition?.type ?? 'zzz';
+      return aType.localeCompare(bType) || a.id.localeCompare(b.id);
+    });
+}
+
+function getCardAction(card: { definition: CardDefinition | undefined }): string | null {
+  if (!card.definition) return null;
+  if (card.definition.type === 'material' || card.definition.type === 'buff') return 'Activate';
+  if (card.definition.type === 'creature' || card.definition.type === 'farm') return 'Use Elder';
+  return null;
 }
 
 function formatBlockedBy(blockedBy: MovementResult['blockedBy']): string {

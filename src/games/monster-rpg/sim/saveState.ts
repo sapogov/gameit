@@ -145,7 +145,8 @@ function createEmptySaveContainers(playerId: string, homeVillageId: PlayerProfil
       playerLevel: 1,
       playerExperience: 0,
       flags: {},
-      completedQuestIds: []
+      completedQuestIds: [],
+      activeCardBuffs: {}
     }
   };
 }
@@ -330,7 +331,18 @@ function isValidProgression(progression: unknown, playerId: string): progression
     candidate.playerLevel > 0 &&
     isNonNegativeInteger(candidate.playerExperience) &&
     isBooleanRecord(candidate.flags) &&
-    isUniqueStringArray(candidate.completedQuestIds)
+    isUniqueStringArray(candidate.completedQuestIds) &&
+    isCardBuffRecord(candidate.activeCardBuffs)
+  );
+}
+
+function isCardBuffRecord(value: unknown): value is ProgressionSaveContainer['activeCardBuffs'] {
+  if (value === undefined) return true;
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+
+  return Object.entries(value).every(
+    ([buffType, cardId]) =>
+      (buffType === 'battle' || buffType === 'drop-chance') && isNonEmptyString(cardId)
   );
 }
 

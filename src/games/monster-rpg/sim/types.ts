@@ -59,6 +59,9 @@ export interface PlayerProfile {
 }
 
 export type CreatureRarity = 'common' | 'uncommon' | 'rare' | 'legendary' | 'mythical';
+export type CardRarity = CreatureRarity;
+export type CardType = 'creature' | 'farm' | 'material' | 'buff';
+export type CardBuffType = 'battle' | 'drop-chance';
 
 export type CreatureType =
   | 'verdant'
@@ -183,6 +186,7 @@ export interface ProgressionSaveContainer {
   playerExperience: number;
   flags: Record<string, boolean>;
   completedQuestIds: string[];
+  activeCardBuffs?: Partial<Record<CardBuffType, string>>;
 }
 
 export interface WorldPosition {
