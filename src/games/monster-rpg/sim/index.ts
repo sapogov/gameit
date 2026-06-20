@@ -17,6 +17,13 @@ export type {
   NetworkEvent,
   MoveIntentMessage,
   MovementResult,
+  AttackPoolId,
+  BaseStatTendencies,
+  CreatureRarity,
+  CreatureSpeciesRecord,
+  CreatureType,
+  JournalSpeciesState,
+  JournalSpeciesViewState,
   PlayerProfile,
   ProgressionSaveContainer,
   RoomPlayerId,
@@ -66,3 +73,15 @@ export {
   type MonsterRpgSaveRepository,
   type SaveImportResult
 } from './saveState';
+export {
+  attackPoolIds,
+  creatureRarities,
+  creatureTypes,
+  GEN_1_SPECIES_COUNT,
+  gen1SpeciesCatalog,
+  getSpeciesById,
+  getSpeciesBySlug,
+  isKnownSpeciesId,
+  validateSpeciesCatalog
+} from './speciesCatalog';
+export { getJournalSpeciesViewState, recordCreatureDiscovered, recordWildCreatureSeen } from './creatureJournal';

@@ -14,6 +14,7 @@ import type {
   VillageSaveContainer
 } from './types';
 import { canEnterTile, getMapById, homeVillageMap, isMapId, villageDefinitions } from './maps';
+import { isKnownSpeciesId } from './speciesCatalog';
 
 export const MONSTER_RPG_PROFILE_KEY = 'gameit.monsterRpg.profile';
 export const MONSTER_RPG_SAVE_KEY = 'gameit.monsterRpg.save';
@@ -33,7 +34,7 @@ export interface MonsterRpgSaveRepository {
 }
 
 const validVillageIds = new Set(villageDefinitions.map((village) => village.id));
-const validJournalStates = new Set<JournalSpeciesState>(['fought', 'discovered']);
+const validJournalStates = new Set<JournalSpeciesState>(['silhouette', 'discovered']);
 
 export const localMonsterRpgSaveRepository: MonsterRpgSaveRepository = {
   loadProfile() {
@@ -253,7 +254,8 @@ function isValidCreatureRecord(record: unknown, playerId: string): record is Cre
   return (
     isNonEmptyString(candidate.id) &&
     candidate.ownerPlayerId === playerId &&
-    isNonEmptyString(candidate.speciesId) &&
+    Number.isSafeInteger(candidate.speciesId) &&
+    isKnownSpeciesId(candidate.speciesId) &&
     isNonNegativeInteger(candidate.level) &&
     candidate.level > 0 &&
     isNonNegativeInteger(candidate.experience) &&
@@ -311,7 +313,10 @@ function isValidJournal(journal: unknown, playerId: string): journal is JournalS
   if (!candidate.species || typeof candidate.species !== 'object' || Array.isArray(candidate.species)) return false;
 
   return Object.entries(candidate.species).every(
-    ([speciesId, state]) => isNonEmptyString(speciesId) && validJournalStates.has(state as JournalSpeciesState)
+    ([speciesId, state]) =>
+      isNumericRecordKey(speciesId) &&
+      isKnownSpeciesId(Number(speciesId)) &&
+      validJournalStates.has(state as JournalSpeciesState)
   );
 }
 
@@ -378,6 +383,10 @@ function isUniqueStringArray(value: unknown): value is string[] {
 
 function isNonEmptyString(value: unknown): value is string {
   return typeof value === 'string' && value.trim().length > 0;
+}
+
+function isNumericRecordKey(value: string): boolean {
+  return /^[1-9]\d*$/.test(value);
 }
 
 function isNonNegativeInteger(value: unknown): value is number {

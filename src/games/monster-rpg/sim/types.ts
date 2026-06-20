@@ -58,6 +58,62 @@ export interface PlayerProfile {
   homeVillageId: VillageId;
 }
 
+export type CreatureRarity = 'common' | 'uncommon' | 'rare' | 'legendary' | 'mythical';
+
+export type CreatureType =
+  | 'verdant'
+  | 'ember'
+  | 'tide'
+  | 'stone'
+  | 'gale'
+  | 'spark'
+  | 'shade'
+  | 'lumen'
+  | 'frost'
+  | 'mystic'
+  | 'toxin'
+  | 'metal';
+
+export type AttackPoolId =
+  | 'basic'
+  | 'starter-balanced'
+  | 'starter-guard'
+  | 'starter-quick'
+  | 'verdant-bite'
+  | 'ember-claw'
+  | 'tide-splash'
+  | 'stone-guard'
+  | 'gale-peck'
+  | 'spark-jolt'
+  | 'shade-prowl'
+  | 'lumen-pulse'
+  | 'frost-nip'
+  | 'mystic-focus'
+  | 'toxin-sting'
+  | 'metal-tackle'
+  | 'rare-burst'
+  | 'legendary-aura'
+  | 'mythic-surge';
+
+export interface BaseStatTendencies {
+  hp: number;
+  attack: number;
+  defense: number;
+  speed: number;
+  stamina: number;
+}
+
+export interface CreatureSpeciesRecord {
+  id: number;
+  slug: string;
+  displayName: string;
+  rarity: CreatureRarity;
+  type: CreatureType;
+  baseStats: BaseStatTendencies;
+  attackPoolIds: AttackPoolId[];
+  mvpStatus: 'polished' | 'placeholder';
+}
+
 export interface SaveStack {
   id: string;
   ownerPlayerId: string;
@@ -74,7 +130,7 @@ export interface InventorySaveContainer {
 export interface CreatureSaveRecord {
   id: string;
   ownerPlayerId: string;
-  speciesId: string;
+  speciesId: number;
   level: number;
   experience: number;
   hp: number;
@@ -112,7 +168,9 @@ export interface FarmSaveContainer {
   farms: Record<string, FarmSaveRecord>;
 }
 
-export type JournalSpeciesState = 'fought' | 'discovered';
+export type JournalSpeciesState = 'silhouette' | 'discovered';
+
+export type JournalSpeciesViewState = 'unseen' | JournalSpeciesState;
 
 export interface JournalSaveContainer {
   ownerPlayerId: string;

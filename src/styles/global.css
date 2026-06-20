@@ -368,6 +368,12 @@ input,select {
   border: 3px solid #26351f;
 }
 
+.monster-hud-stack {
+  display: grid;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
 .monster-hud-panel p,
 .monster-hud-panel h2 {
   margin: 0;
@@ -390,6 +396,86 @@ input,select {
 .monster-hud-panel h2 {
   font-size: 1.4rem;
   line-height: 1.1;
+}
+
+.monster-journal-panel {
+  width: min(420px, calc(100vw - 8rem));
+  max-height: min(360px, calc(100vh - 12rem));
+  overflow: auto;
+  padding: 0.55rem;
+  background: rgba(255, 248, 214, 0.94);
+  color: #26351f;
+  border: 3px solid #26351f;
+  pointer-events: auto;
+}
+
+.monster-journal-panel summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.monster-journal-panel summary span {
+  padding: 0.12rem 0.35rem;
+  background: #d7c884;
+  border: 2px solid #26351f;
+  font-size: 0.68rem;
+}
+
+.monster-journal-grid {
+  display: grid;
+  gap: 0.25rem;
+  margin-top: 0.55rem;
+}
+
+.monster-journal-row {
+  display: grid;
+  grid-template-columns: 4.4rem 1.2rem minmax(5rem, 1fr) minmax(5.5rem, auto);
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.35rem;
+  background: #fff8d6;
+  border: 2px solid #5c6b3a;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.monster-journal-row.silhouette {
+  background: #e7d792;
+}
+
+.monster-journal-row.unseen {
+  color: #68715c;
+  background: #d9d0aa;
+}
+
+.monster-journal-mark {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #26351f;
+  background: transparent;
+}
+
+.monster-journal-row.silhouette .monster-journal-mark {
+  background: #26351f;
+}
+
+.monster-journal-row.discovered .monster-journal-mark {
+  background: #95c46d;
+}
+
+.monster-journal-name,
+.monster-journal-meta {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .monster-save-actions button,
@@ -505,6 +591,26 @@ input,select {
     min-width: 0;
     max-width: calc(100vw - 7.5rem);
     padding: 0.5rem 0.6rem;
+  }
+
+  .monster-journal-panel {
+    width: calc(100vw - 7.5rem);
+    max-height: 220px;
+    padding: 0.45rem;
+  }
+
+  .monster-journal-panel summary {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .monster-journal-row {
+    grid-template-columns: 3.6rem 1rem minmax(4rem, 1fr);
+  }
+
+  .monster-journal-meta {
+    grid-column: 3;
   }
 
   .monster-hud-panel h2 {

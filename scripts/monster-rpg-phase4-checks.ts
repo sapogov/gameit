@@ -13,6 +13,12 @@ import {
   MONSTER_RPG_SCHEMA_VERSION,
   MONSTER_RPG_SAVE_KEY,
   movePlayer,
+  GEN_1_SPECIES_COUNT,
+  gen1SpeciesCatalog,
+  getJournalSpeciesViewState,
+  recordCreatureDiscovered,
+  recordWildCreatureSeen,
+  validateSpeciesCatalog,
   type MonsterRpgSaveState,
   type PlayerProfile
 } from '../src/games/monster-rpg/sim';
@@ -32,6 +38,8 @@ checkHomeVillageEastGateExit();
 checkOverworldVillageEntry();
 checkBuildingEntryAndExit();
 checkBlockedMovement();
+checkGen1SpeciesCatalog();
+checkCreatureJournalStates();
 await checkSdkMultiplayerFlow();
 
 console.log('monster-rpg phase 4 sim and SDK checks passed');
@@ -133,6 +141,22 @@ function checkBlockedMovement(): void {
   assert.equal(result.state.position.x, 61);
   assert.equal(result.state.position.y, 3);
   assert.equal(result.state.position.facing, 'east');
+}
+
+function checkGen1SpeciesCatalog(): void {
+  assert.equal(gen1SpeciesCatalog.length, GEN_1_SPECIES_COUNT);
+  assert.deepEqual(validateSpeciesCatalog(), []);
+}
+
+function checkCreatureJournalStates(): void {
+  const save = createInitialSave(createProfile('journal-checker'));
+  const seen = recordWildCreatureSeen(save, 1);
+  const discovered = recordCreatureDiscovered(seen, 1);
+
+  assert.equal(getJournalSpeciesViewState(save, 1), 'unseen');
+  assert.equal(getJournalSpeciesViewState(seen, 1), 'silhouette');
+  assert.equal(getJournalSpeciesViewState(discovered, 1), 'discovered');
+  assert.equal(recordWildCreatureSeen(discovered, 1), discovered);
 }
 
 async function checkSdkMultiplayerFlow(): Promise<void> {

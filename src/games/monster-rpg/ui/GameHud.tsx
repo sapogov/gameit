@@ -1,4 +1,13 @@
-import type { MapKind, MonsterRpgSaveState, MovementResult, MultiplayerStatus } from '../sim';
+import {
+  gen1SpeciesCatalog,
+  getJournalSpeciesViewState,
+  type CreatureSpeciesRecord,
+  type JournalSpeciesViewState,
+  type MapKind,
+  type MonsterRpgSaveState,
+  type MovementResult,
+  type MultiplayerStatus
+} from '../sim';
 
 interface GameHudProps {
   importStatus: string | null;
@@ -27,16 +36,34 @@ export function GameHud({
 }: GameHudProps) {
   const status = getStatusText(multiplayerStatus, playerCount, lastMove);
   const locationHint = `${formatMapKind(mapKind)} - ${saveState.position.x}, ${saveState.position.y}`;
+  const discoveredCount = Object.values(saveState.journal.species).filter((state) => state === 'discovered').length;
+  const silhouetteCount = Object.values(saveState.journal.species).filter((state) => state === 'silhouette').length;
 
   return (
     <div className="monster-hud">
-      <section className="monster-hud-panel">
-        <p>{mapName}</p>
-        <h2>{saveState.profile.name}</h2>
-        <span>{status}</span>
-        <small>{locationHint}</small>
-        {importStatus ? <small>{importStatus}</small> : null}
-      </section>
+      <div className="monster-hud-stack">
+        <section className="monster-hud-panel">
+          <p>{mapName}</p>
+          <h2>{saveState.profile.name}</h2>
+          <span>{status}</span>
+          <small>{locationHint}</small>
+          {importStatus ? <small>{importStatus}</small> : null}
+        </section>
+        <details className="monster-journal-panel">
+          <summary>
+            Creature Journal <span>{discoveredCount} found</span> <span>{silhouetteCount} seen</span>
+          </summary>
+          <div className="monster-journal-grid">
+            {gen1SpeciesCatalog.map((species) => (
+              <JournalSpeciesRow
+                key={species.id}
+                species={species}
+                viewState={getJournalSpeciesViewState(saveState, species.id)}
+              />
+            ))}
+          </div>
+        </details>
+      </div>
       <div className="monster-save-actions" aria-label="Save actions">
         <button onClick={onExport} title="Export local save" type="button">
           Export
@@ -57,6 +84,27 @@ export function GameHud({
           Reset
         </button>
       </div>
+    </div>
+  );
+}
+
+function JournalSpeciesRow({
+  species,
+  viewState
+}: {
+  species: CreatureSpeciesRecord;
+  viewState: JournalSpeciesViewState;
+}) {
+  const isDiscovered = viewState === 'discovered';
+  const isSilhouette = viewState === 'silhouette';
+  const displayName = isDiscovered ? species.displayName : isSilhouette ? 'Silhouette' : 'Unseen';
+
+  return (
+    <div className={`monster-journal-row ${viewState}`}>
+      <span className="monster-journal-number">#{String(species.id).padStart(3, '0')}</span>
+      <span className="monster-journal-mark" aria-hidden="true" />
+      <span className="monster-journal-name">{displayName}</span>
+      <span className="monster-journal-meta">{isDiscovered ? `${species.rarity} / ${species.type}` : viewState}</span>
     </div>
   );
 }
