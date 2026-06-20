@@ -4,11 +4,16 @@ import { bootGame, type MonsterRpgGameRuntime } from './client';
 import type { LocationTransitionMessage, MultiplayerConnection } from './network';
 import {
   clearProgress,
+  buildStarterMagicDustFarm,
+  completeVillageElderDialog,
+  completeVillageElderOnboarding,
   createInitialSave,
   createPlayerProfile,
+  convertStarterCreatureCards,
   exportSave,
   getGameMap,
   importSavePayload,
+  isVillageElderDialogComplete,
   loadProfile,
   loadSave,
   movePlayer,
@@ -23,6 +28,7 @@ import {
 import { CharacterCreator } from './ui/CharacterCreator';
 import { GameHud } from './ui/GameHud';
 import { MobileDpad } from './ui/MobileDpad';
+import { VillageElderOnboarding } from './ui/VillageElderOnboarding';
 
 function getInitialState(): MonsterRpgSaveState | null {
   const saved = loadSave();
@@ -40,6 +46,8 @@ export function MonsterRpgGame() {
   const multiplayerStatusRef = useRef<MultiplayerStatus>('offline');
   const pendingTransitionRef = useRef<LocationTransitionMessage | null>(null);
   const [saveState, setSaveState] = useState<MonsterRpgSaveState | null>(getInitialState);
+  const saveStateRef = useRef<MonsterRpgSaveState | null>(saveState);
+  const freeMovementUnlockedRef = useRef(saveState ? isVillageElderDialogComplete(saveState) : false);
   const [lastMove, setLastMove] = useState<MovementResult | null>(null);
   const [roomState, setRoomState] = useState<LocationRoomState | null>(null);
   const [importStatus, setImportStatus] = useState<string | null>(null);
@@ -51,6 +59,17 @@ export function MonsterRpgGame() {
   }, []);
 
   const handleAction = useCallback((action: InputAction) => {
+    const currentState = saveStateRef.current;
+    if (action.type === 'move' && currentState && !freeMovementUnlockedRef.current) {
+      setLastMove({
+        state: currentState,
+        moved: false,
+        blocked: true,
+        blockedBy: 'onboarding'
+      });
+      return;
+    }
+
     if (action.type === 'move' && connectionRef.current && multiplayerStatusRef.current === 'online') {
       moveSequenceRef.current += 1;
       connectionRef.current.sendMoveIntent({
@@ -77,6 +96,67 @@ export function MonsterRpgGame() {
     setImportStatus(null);
     setLastMove(null);
     setSaveState(initialSave);
+  };
+
+  const persistOnboardingUpdate = (updater: (current: MonsterRpgSaveState) => MonsterRpgSaveState) => {
+    setSaveState((current) => {
+      if (!current) return current;
+
+      const nextState = updater(current);
+      saveProgress(nextState);
+      saveStateRef.current = nextState;
+      freeMovementUnlockedRef.current = isVillageElderDialogComplete(nextState);
+      setLastMove(null);
+      return nextState;
+    });
+  };
+
+  const handleCompleteVillageElderDialog = () => {
+    setImportStatus('Starter Pack received');
+    persistOnboardingUpdate(completeVillageElderDialog);
+  };
+
+  const handleConvertStarterCards = () => {
+    setSaveState((current) => {
+      if (!current) return current;
+
+      const result = convertStarterCreatureCards(current);
+      if (!result.ok) {
+        setImportStatus(formatStarterConversionFailure(result.reason));
+        return current;
+      }
+
+      saveProgress(result.state);
+      saveStateRef.current = result.state;
+      freeMovementUnlockedRef.current = isVillageElderDialogComplete(result.state);
+      setImportStatus('Starter Creatures joined');
+      setLastMove(null);
+      return result.state;
+    });
+  };
+
+  const handleBuildStarterFarm = () => {
+    setSaveState((current) => {
+      if (!current) return current;
+
+      const result = buildStarterMagicDustFarm(current);
+      if (!result.ok) {
+        setImportStatus(formatStarterFarmFailure(result.reason));
+        return current;
+      }
+
+      saveProgress(result.state);
+      saveStateRef.current = result.state;
+      freeMovementUnlockedRef.current = isVillageElderDialogComplete(result.state);
+      setImportStatus('Magic Dust Farm built');
+      setLastMove(null);
+      return result.state;
+    });
+  };
+
+  const handleFinishVillageElderOnboarding = () => {
+    setImportStatus('Onboarding complete');
+    persistOnboardingUpdate(completeVillageElderOnboarding);
   };
 
   const handleExportSave = () => {
@@ -125,6 +205,11 @@ export function MonsterRpgGame() {
     updateMultiplayerStatus('offline');
     setSaveState(null);
   };
+
+  useEffect(() => {
+    saveStateRef.current = saveState;
+    freeMovementUnlockedRef.current = saveState ? isVillageElderDialogComplete(saveState) : false;
+  }, [saveState]);
 
   useEffect(() => {
     if (!saveState || !canvasHostRef.current || runtimeRef.current) return;
@@ -286,6 +371,13 @@ export function MonsterRpgGame() {
           onImport={handleImportSave}
           onReset={handleReset}
         />
+        <VillageElderOnboarding
+          saveState={saveState}
+          onBuildFarm={handleBuildStarterFarm}
+          onCompleteDialog={handleCompleteVillageElderDialog}
+          onConvertCreatures={handleConvertStarterCards}
+          onFinish={handleFinishVillageElderOnboarding}
+        />
         <MobileDpad onAction={handleAction} />
       </div>
       <Link className="monster-back-link" to="/">
@@ -299,4 +391,15 @@ function formatImportFailure(reason: 'invalid-json' | 'unsupported-schema' | 'in
   if (reason === 'invalid-json') return 'bad JSON';
   if (reason === 'unsupported-schema') return 'unsupported version';
   return 'invalid save';
+}
+
+function formatStarterConversionFailure(reason: 'already-converted' | 'missing-card' | 'missing-magic-dust'): string {
+  if (reason === 'already-converted') return 'Starter Creatures already converted';
+  if (reason === 'missing-card') return 'Missing starter Creature Cards';
+  return 'Not enough Magic Dust';
+}
+
+function formatStarterFarmFailure(reason: 'already-built' | 'missing-card'): string {
+  if (reason === 'already-built') return 'Magic Dust Farm already built';
+  return 'Missing Magic Dust Farm Card';
 }

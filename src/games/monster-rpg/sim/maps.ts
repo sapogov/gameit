@@ -265,21 +265,23 @@ function createVillageDefinition(
   width: 2 | 3,
   height: 2 | 3
 ): VillageDefinition {
+  const isHomeVillage = id === 'home-village';
+
   return {
     id,
     name: villageNames[id],
     footprint: { x, y, width, height },
     spawn: {
       mapId: id,
-      x: 14,
-      y: 16,
-      facing: 'north'
+      x: isHomeVillage ? 13 : 14,
+      y: isHomeVillage ? 5 : 16,
+      facing: isHomeVillage ? 'south' : 'north'
     },
     returnSpawn: {
       mapId: 'world-map',
-      x: id === 'home-village' ? x + width : x + Math.floor(width / 2),
-      y: id === 'home-village' ? y + Math.floor(height / 2) : y + height,
-      facing: id === 'home-village' ? 'east' : 'south'
+      x: isHomeVillage ? x + width : x + Math.floor(width / 2),
+      y: isHomeVillage ? y + Math.floor(height / 2) : y + height,
+      facing: isHomeVillage ? 'east' : 'south'
     }
   };
 }

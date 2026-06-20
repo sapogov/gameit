@@ -262,8 +262,11 @@ async function checkBlockedTerrainRejectedOnline(endpoint: string): Promise<void
 }
 
 async function enterHomeVillageShop(room: SdkRoom): Promise<LocationTransition> {
-  await sendMoves(room, ['west', 'west', 'west', 'west', 'west', 'west', 'west', 'west']);
-  await sendMoves(room, ['north', 'north']);
+  await sendMoves(room, ['east']);
+  await sendMoves(room, ['south', 'south', 'south', 'south', 'south']);
+  await sendMoves(room, ['west', 'west', 'west', 'west', 'west', 'west', 'west', 'west', 'west', 'west']);
+  await sendMoves(room, ['south', 'south', 'south', 'south']);
+  await sendMoves(room, ['east', 'east']);
   return sendMoveForTransition(room, 'north');
 }
 
