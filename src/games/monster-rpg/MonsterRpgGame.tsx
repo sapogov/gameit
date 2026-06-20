@@ -5,6 +5,7 @@ import type { BattleConnection, LocationTransitionMessage, MultiplayerConnection
 import {
   clearProgress,
   PackOpenTrace,
+  applyBattleRewardsToSave,
   buildStarterMagicDustFarm,
   activateBuffCard,
   activateCreatureCardViaElder,
@@ -680,31 +681,15 @@ export function MonsterRpgGame() {
 
     setSaveState((current) => {
       if (!current) return current;
-      const creature = current.creatures.creatures[result.playerCreatureId];
-      const nextCreatures = creature
-        ? {
-            ...current.creatures.creatures,
-            [result.playerCreatureId]: {
-              ...creature,
-              hp: result.playerCreatureHp,
-              fainted: result.playerCreatureFainted
-            }
-          }
-        : current.creatures.creatures;
-      const nextState: MonsterRpgSaveState = {
-        ...recordWildCreatureSeen(current, claim.speciesId),
-        creatures: {
-          ...current.creatures,
-          creatures: nextCreatures
-        },
-        updatedAt: new Date().toISOString()
-      };
+      const applied = applyBattleRewardsToSave(recordWildCreatureSeen(current, claim.speciesId), result);
+      const nextState = applied.state;
+      if (applied.packTrace) setPackTrace(applied.packTrace);
       saveProgress(nextState);
       saveStateRef.current = nextState;
       return nextState;
     });
 
-    setImportStatus(formatBattleOutcome(result.outcome));
+    setImportStatus(formatBattleOutcome(result));
     activeBattleClaimRef.current = null;
     battleConnectionRef.current?.leave({ silent: true });
     battleConnectionRef.current = null;
@@ -811,9 +796,20 @@ function formatWildEncounterClaimFailure(reason: string | undefined): string {
   return `Wild claim failed${reason ? `: ${reason}` : ''}`;
 }
 
-function formatBattleOutcome(outcome: 'defeated' | 'lost' | 'ran'): string {
-  if (outcome === 'defeated') return 'Battle won';
-  if (outcome === 'lost') return 'Battle lost';
+function formatBattleOutcome(result: BattleResultMessage): string {
+  if (result.outcome === 'defeated') {
+    const rewards = result.rewards;
+    if (!rewards) return 'Battle won';
+    const drops = [
+      `${rewards.magicDust} Magic Dust`,
+      `${rewards.playerExperience} player XP`,
+      `${rewards.battlingCreatureExperience} Creature XP`,
+      rewards.packSeed !== undefined ? 'Pack' : null,
+      rewards.directDropEggSpeciesId !== undefined ? 'Egg' : null
+    ].filter(Boolean);
+    return `Battle won - ${drops.join(', ')}`;
+  }
+  if (result.outcome === 'lost') return 'Battle lost';
   return 'Ran from battle';
 }
 
