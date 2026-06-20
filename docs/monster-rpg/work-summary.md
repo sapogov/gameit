@@ -249,6 +249,14 @@
 - Added Phaser wild Creature icon rendering plus keyboard/mobile Interact input for claiming visible encounters.
 - Added focused simulation tests and SDK checks for shared encounter visibility, claim contention, release after loss, and cooldown rejection.
 
+## 2026-06-20 - Issue #12: Tap-to-Walk and Creature Label Setting
+
+- Added shared grid pathfinding for tap-to-walk, including blocked-tile, boundary, transition-tile, and Creature interaction-distance handling.
+- Wired Phaser map clicks/taps to emit existing `move` actions so online play still sends server-authoritative `moveIntent` messages and offline play stays on the pure movement path.
+- Added persistent Monster RPG settings with Creature label mode defaulting to icon-only and an HUD segmented control for icon-only vs icon-plus-name.
+- Updated wild Creature rendering with optional Species name labels that hide near reserved HUD and mobile D-pad areas.
+- Added focused pathfinding/settings tests and expanded Monster RPG phase checks for tap-to-walk behavior.
+
 ## Next Work
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.

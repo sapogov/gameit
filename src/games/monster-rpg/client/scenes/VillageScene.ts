@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import type {
   AvatarId,
+  CreatureLabelMode,
   GameMap,
   InputAction,
   LocationPlayerState,
@@ -11,10 +12,11 @@ import type {
   TileType,
   WildEncounterState
 } from '../../sim';
-import { getGameMap } from '../../sim';
+import { findWalkPath, findWalkPathToInteractionDistance, getGameMap, getSpeciesById } from '../../sim';
 import { monsterRpgAssetKeys, monsterRpgAssetManifest, type MonsterRpgAssetKey } from '../assets/monsterRpgAssets';
 
 interface VillageSceneOptions {
+  creatureLabelMode: CreatureLabelMode;
   initialState: MonsterRpgSaveState;
   map: GameMap;
   onAction: (action: InputAction) => void;
@@ -100,10 +102,12 @@ interface EncounterView {
   container: Phaser.GameObjects.Container;
   body: Phaser.GameObjects.Arc;
   shine: Phaser.GameObjects.Arc;
+  label: Phaser.GameObjects.Text;
 }
 
 export class VillageScene extends Phaser.Scene {
   private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
+  private creatureLabelMode: CreatureLabelMode;
   private keys?: MovementKeyMap;
   private map: GameMap;
   private mapGraphics?: Phaser.GameObjects.Graphics;
@@ -117,6 +121,7 @@ export class VillageScene extends Phaser.Scene {
 
   constructor(options: VillageSceneOptions) {
     super({ key: 'VillageScene' });
+    this.creatureLabelMode = options.creatureLabelMode;
     this.saveState = options.initialState;
     this.map = options.map;
     this.onAction = options.onAction;
@@ -154,6 +159,13 @@ export class VillageScene extends Phaser.Scene {
     } else if (Phaser.Input.Keyboard.JustDown(this.keys.E) || Phaser.Input.Keyboard.JustDown(this.keys.SPACE)) {
       this.onAction({ type: 'interact' });
     }
+
+    this.updateEncounterLabelVisibility();
+  }
+
+  setCreatureLabelMode(mode: CreatureLabelMode) {
+    this.creatureLabelMode = mode;
+    this.renderEncounters();
   }
 
   setSaveState(state: MonsterRpgSaveState) {
@@ -177,6 +189,7 @@ export class VillageScene extends Phaser.Scene {
     if (!this.input.keyboard) return;
     this.cursors = this.input.keyboard.createCursorKeys();
     this.keys = this.input.keyboard.addKeys('W,A,S,D,E,SPACE') as MovementKeyMap;
+    this.input.on('pointerdown', this.handlePointerDown, this);
   }
 
   private configureCamera() {
@@ -205,6 +218,27 @@ export class VillageScene extends Phaser.Scene {
   private handleResize(gameSize: Phaser.Structs.Size) {
     this.cameras.main.setSize(gameSize.width, gameSize.height);
     this.configureCamera();
+    this.updateEncounterLabelVisibility();
+  }
+
+  private handlePointerDown(pointer: Phaser.Input.Pointer) {
+    if (!pointer.primaryDown) return;
+
+    const camera = this.cameras.main;
+    const worldPoint = camera.getWorldPoint(pointer.x, pointer.y);
+    const targetX = Math.floor(worldPoint.x / this.map.tileSize);
+    const targetY = Math.floor(worldPoint.y / this.map.tileSize);
+    const localPlayer = this.getLocalPlayer();
+    if (!localPlayer) return;
+
+    const encounter = this.getEncounterAt(targetX, targetY);
+    const path = encounter
+      ? findWalkPathToInteractionDistance(this.map, localPlayer.position, targetX, targetY)
+      : findWalkPath(this.map, localPlayer.position, targetX, targetY);
+
+    path?.forEach((direction) => {
+      this.onAction({ type: 'move', direction });
+    });
   }
 
   private drawMap() {
@@ -398,6 +432,8 @@ export class VillageScene extends Phaser.Scene {
       const view = this.encounters.get(id) ?? this.createEncounterView(id);
       this.syncEncounterView(view, encounter);
     });
+
+    this.updateEncounterLabelVisibility();
   }
 
   private renderPlayers() {
@@ -451,10 +487,19 @@ export class VillageScene extends Phaser.Scene {
     const container = this.add.container(0, 0);
     const body = this.add.circle(0, 0, 7, 0x7ddf8a).setStrokeStyle(2, 0x17351f);
     const shine = this.add.circle(-2, -3, 2, 0xf7ffd8, 0.85);
-    container.add([body, shine]);
+    const label = this.add
+      .text(0, 10, '', {
+        color: '#fff8d6',
+        fontFamily: 'monospace',
+        fontSize: '7px',
+        stroke: '#17351f',
+        strokeThickness: 3
+      })
+      .setOrigin(0.5, 0);
+    container.add([body, shine, label]);
     container.setDepth(4);
-    this.encounters.set(id, { container, body, shine });
-    return { container, body, shine };
+    this.encounters.set(id, { container, body, shine, label });
+    return { container, body, shine, label };
   }
 
   private syncEncounterView(view: EncounterView, encounter: WildEncounterState) {
@@ -465,6 +510,9 @@ export class VillageScene extends Phaser.Scene {
     view.body.setFillStyle(getSpeciesIconColor(encounter.speciesId), 1);
     view.shine.setRadius(Math.max(2, radius * 0.24));
     view.shine.setPosition(-radius * 0.26, -radius * 0.38);
+    view.label.setY(radius + 2);
+    view.label.setFontSize(this.map.kind === 'world-map' ? '6px' : '7px');
+    view.label.setText(getSpeciesById(encounter.speciesId)?.displayName ?? `Species #${encounter.speciesId}`);
   }
 
   private createPlayerView(id: RoomPlayerId, player: LocationPlayerState): PlayerView {
@@ -548,6 +596,43 @@ export class VillageScene extends Phaser.Scene {
 
   private getLocalPlayerId(): RoomPlayerId {
     return this.roomState?.localPlayerId ?? 'local';
+  }
+
+  private getLocalPlayer(): LocationPlayerState | null {
+    return this.getRenderablePlayers()[this.getLocalPlayerId()] ?? null;
+  }
+
+  private getEncounterAt(x: number, y: number): WildEncounterState | null {
+    return Object.values(this.getRenderableEncounters()).find((encounter) => encounter.x === x && encounter.y === y) ?? null;
+  }
+
+  private updateEncounterLabelVisibility() {
+    this.encounters.forEach((view) => {
+      const screen = this.worldToScreen(view.container.x, view.container.y);
+      const visible = this.creatureLabelMode === 'icon-plus-name' && !this.isInReservedHudArea(screen.x, screen.y);
+      view.label.setVisible(visible);
+    });
+  }
+
+  private worldToScreen(x: number, y: number): { x: number; y: number } {
+    const camera = this.cameras.main;
+    return {
+      x: (x - camera.worldView.x) * camera.zoom,
+      y: (y - camera.worldView.y) * camera.zoom
+    };
+  }
+
+  private isInReservedHudArea(x: number, y: number): boolean {
+    const width = this.scale.gameSize.width || 640;
+    const height = this.scale.gameSize.height || 480;
+    const isMobileWidth = width < 680;
+    const topHudHeight = isMobileWidth ? 124 : 112;
+    const dpadWidth = isMobileWidth ? 156 : 170;
+    const dpadHeight = isMobileWidth ? 156 : 170;
+
+    if (y < topHudHeight) return true;
+    if (x > width - dpadWidth && y > height - dpadHeight) return true;
+    return false;
   }
 
   private followLocalPlayer() {

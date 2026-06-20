@@ -24,14 +24,17 @@ import {
   importSavePayload,
   isAtVillageHospital,
   isVillageElderDialogComplete,
+  loadMonsterRpgSettings,
   loadProfile,
   loadSave,
   movePlayer,
   moveCreatureToActiveParty,
   moveCreatureToStorage,
+  saveMonsterRpgSettings,
   saveProgress,
   useReviveItem,
   type AvatarId,
+  type CreatureLabelMode,
   type InputAction,
   type LocationRoomState,
   type MonsterRpgSaveState,
@@ -66,6 +69,7 @@ export function MonsterRpgGame() {
   const [importStatus, setImportStatus] = useState<string | null>(null);
   const [packTrace, setPackTrace] = useState<PackOpenTrace | null>(null);
   const [multiplayerStatus, setMultiplayerStatus] = useState<MultiplayerStatus>('offline');
+  const [settings, setSettings] = useState(loadMonsterRpgSettings);
 
   const updateMultiplayerStatus = useCallback((status: MultiplayerStatus) => {
     multiplayerStatusRef.current = status;
@@ -412,6 +416,14 @@ export function MonsterRpgGame() {
     setSaveState(null);
   };
 
+  const handleCreatureLabelModeChange = (creatureLabelMode: CreatureLabelMode) => {
+    setSettings((current) => {
+      const next = { ...current, creatureLabelMode };
+      saveMonsterRpgSettings(next);
+      return next;
+    });
+  };
+
   useEffect(() => {
     saveStateRef.current = saveState;
     freeMovementUnlockedRef.current = saveState ? isVillageElderDialogComplete(saveState) : false;
@@ -421,6 +433,7 @@ export function MonsterRpgGame() {
     if (!saveState || !canvasHostRef.current || runtimeRef.current) return;
 
     runtimeRef.current = bootGame(canvasHostRef.current, {
+      creatureLabelMode: settings.creatureLabelMode,
       initialState: saveState,
       onAction: handleAction
     });
@@ -430,6 +443,10 @@ export function MonsterRpgGame() {
       runtimeRef.current = null;
     };
   }, [handleAction, saveState?.profile.playerId]);
+
+  useEffect(() => {
+    runtimeRef.current?.setCreatureLabelMode(settings.creatureLabelMode);
+  }, [settings.creatureLabelMode]);
 
   useEffect(() => {
     if (!saveState) return;
@@ -574,6 +591,7 @@ export function MonsterRpgGame() {
           multiplayerStatus={multiplayerStatus}
           playerCount={roomState ? Object.keys(roomState.players).length : 1}
           saveState={saveState}
+          creatureLabelMode={settings.creatureLabelMode}
           packOpenTrace={packTrace}
           onExport={handleExportSave}
           onImport={handleImportSave}
@@ -584,6 +602,7 @@ export function MonsterRpgGame() {
           onHospitalHeal={handleHospitalHeal}
           onMoveCreatureToActive={handleMoveCreatureToActive}
           onMoveCreatureToStorage={handleMoveCreatureToStorage}
+          onCreatureLabelModeChange={handleCreatureLabelModeChange}
           onReviveCreature={handleReviveCreature}
           onReset={handleReset}
         />
