@@ -164,6 +164,61 @@ describe('Monster RPG save import and export', () => {
 
     expect(importSavePayload(payload)).toEqual({ ok: false, reason: 'invalid-save' });
   });
+
+  test('import preserves farm guard assignment and rejects unknown guard references', () => {
+    const save = createInitialSave(createPlayerProfile('Ivo', 'scout'));
+    const creature = createValidCreature(save.profile.playerId);
+    const guardedSave = {
+      ...save,
+      creatures: {
+        ...save.creatures,
+        activePartyCreatureIds: [creature.id],
+        creatures: {
+          [creature.id]: creature
+        }
+      },
+      farms: {
+        ...save.farms,
+        farms: {
+          'dust-farm': {
+            id: 'dust-farm',
+            ownerPlayerId: save.profile.playerId,
+            farmType: 'magic-dust',
+            resourceId: 'magicDust',
+            level: 1,
+            mapId: 'home-village',
+            position: { mapId: 'home-village', x: 24, y: 16 },
+            productionRatePerMinute: 1,
+            storageCap: 24,
+            storedResources: { magicDust: 4 },
+            lastProductionAt: '2026-06-20T12:00:00.000Z',
+            guardCreatureId: creature.id,
+            theftCooldowns: {}
+          }
+        }
+      }
+    };
+    const imported = importSavePayload(JSON.stringify(guardedSave));
+    const brokenGuard = importSavePayload(
+      JSON.stringify({
+        ...guardedSave,
+        farms: {
+          ...guardedSave.farms,
+          farms: {
+            'dust-farm': {
+              ...guardedSave.farms.farms['dust-farm'],
+              guardCreatureId: 'missing-creature'
+            }
+          }
+        }
+      })
+    );
+
+    expect(imported.ok).toBe(true);
+    if (!imported.ok) return;
+    expect(imported.state.farms.farms['dust-farm'].guardCreatureId).toBe(creature.id);
+    expect(brokenGuard).toEqual({ ok: false, reason: 'invalid-save' });
+  });
 });
 
 function createMemoryStorage(): Storage {
@@ -189,4 +244,25 @@ function createMemoryStorage(): Storage {
       values.set(key, value);
     }
   };
+}
+
+function createValidCreature(ownerPlayerId: string) {
+  return {
+    id: 'creature-1',
+    ownerPlayerId,
+    speciesId: 1,
+    level: 1,
+    experience: 0,
+    stats: { hp: 10, attack: 4, defense: 4, speed: 4, stamina: 4 },
+    attacks: [
+      { id: 'attack-1', name: 'Tackle', type: 'verdant', power: 4, statFocus: 'attack' },
+      { id: 'attack-2', name: 'Brace', type: 'stone', power: 3, statFocus: 'defense' },
+      { id: 'attack-3', name: 'Dash', type: 'gale', power: 3, statFocus: 'speed' },
+      { id: 'attack-4', name: 'Pulse', type: 'lumen', power: 3, statFocus: 'stamina' }
+    ],
+    hp: 10,
+    maxHp: 10,
+    fainted: false,
+    cooldowns: {}
+  } as const;
 }

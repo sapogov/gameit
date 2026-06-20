@@ -423,6 +423,41 @@ input,select {
   border-top: 1px solid rgba(38, 53, 31, 0.24);
 }
 
+.monster-farm-row strong {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.monster-farm-actions {
+  display: grid;
+  grid-template-columns: minmax(80px, auto) minmax(0, 1fr);
+  gap: 0.35rem;
+  align-items: end;
+}
+
+.monster-farm-actions label {
+  display: grid;
+  gap: 0.12rem;
+  min-width: 0;
+  color: #5a6b35;
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.monster-farm-actions select {
+  min-width: 0;
+  width: 100%;
+  min-height: 34px;
+  border: 2px solid #26351f;
+  background: #fff8d6;
+  color: #26351f;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
 .monster-farm-row:first-child {
   border-top: 0;
   padding-top: 0;
@@ -670,6 +705,7 @@ input,select {
 .monster-card-actions button,
 .monster-card-row button,
 .monster-card-panel button,
+.monster-farm-actions button,
 .monster-creature-actions button,
 .monster-back-link {
   border: 3px solid #26351f;
@@ -681,7 +717,8 @@ input,select {
   text-decoration: none;
 }
 
-.monster-creature-actions button:disabled {
+.monster-creature-actions button:disabled,
+.monster-farm-actions button:disabled {
   cursor: not-allowed;
   opacity: 0.55;
 }
@@ -696,7 +733,8 @@ input,select {
 .monster-save-actions label,
 .monster-card-actions button,
 .monster-card-row button,
-.monster-card-panel button {
+.monster-card-panel button,
+.monster-farm-actions button {
   display: grid;
   place-items: center;
   min-width: 74px;

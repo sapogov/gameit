@@ -163,17 +163,30 @@ export {
 export type { CardDefinition, PackOpenTrace } from './cards';
 export {
   MAGIC_DUST_FARM_ID,
+  MAGIC_DUST_FARM_CARD_ID,
   MAGIC_DUST_FARM_TYPE,
   MAGIC_DUST_RESOURCE_ID,
+  assignFarmGuard,
+  clearFarmGuard,
   collectFacingFarm,
   createFarmSaveRecord,
   getAccruedFarmRecord,
   getFacingFarm,
   getFarmDefinition,
   getFarmStoredQuantity,
+  getFarmUpgradePreview,
+  isFarmGuardActive,
+  upgradeFarm,
   type FarmDefinition,
+  type FarmCardUpgradeRequirement,
   type FarmCollectionFailureReason,
-  type FarmCollectionResult
+  type FarmCollectionResult,
+  type FarmGuardAssignmentResult,
+  type FarmGuardFailureReason,
+  type FarmUpgradeFailureReason,
+  type FarmUpgradePlan,
+  type FarmUpgradePreview,
+  type FarmUpgradeRequirements
 } from './farms';
 export {
   CREATURE_ATTACK_COUNT,

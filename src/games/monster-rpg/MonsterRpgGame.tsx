@@ -6,10 +6,12 @@ import {
   clearProgress,
   PackOpenTrace,
   applyBattleRewardsToSave,
+  assignFarmGuard,
   buildStarterMagicDustFarm,
   activateBuffCard,
   activateCreatureCardViaElder,
   activateMaterialCard,
+  clearFarmGuard,
   collectFacingFarm,
   completeVillageElderDialog,
   completeVillageElderOnboarding,
@@ -36,6 +38,7 @@ import {
   recordWildCreatureSeen,
   saveMonsterRpgSettings,
   saveProgress,
+  upgradeFarm,
   useReviveItem,
   type AvatarId,
   type BattleResultMessage,
@@ -412,6 +415,44 @@ export function MonsterRpgGame() {
     });
   };
 
+  const handleUpgradeFarm = (farmId: string) => {
+    setSaveState((current) => {
+      if (!current) return current;
+
+      const result = upgradeFarm(current, farmId);
+      if (!result.ok) {
+        setImportStatus(formatFarmUpgradeFailure(result.reason));
+        return current;
+      }
+
+      saveProgress(result.state);
+      saveStateRef.current = result.state;
+      setLastMove(null);
+      setPackTrace(null);
+      setImportStatus(`Farm upgraded to level ${result.farm.level}`);
+      return result.state;
+    });
+  };
+
+  const handleAssignFarmGuard = (farmId: string, creatureId: string | null) => {
+    setSaveState((current) => {
+      if (!current) return current;
+
+      const result = creatureId ? assignFarmGuard(current, farmId, creatureId) : clearFarmGuard(current, farmId);
+      if (!result.ok) {
+        setImportStatus(formatFarmGuardFailure(result.reason));
+        return current;
+      }
+
+      saveProgress(result.state);
+      saveStateRef.current = result.state;
+      setLastMove(null);
+      setPackTrace(null);
+      setImportStatus(creatureId ? 'Farm guard assigned' : 'Farm guard cleared');
+      return result.state;
+    });
+  };
+
   const handleExportSave = () => {
     if (!saveState) return;
 
@@ -755,6 +796,8 @@ export function MonsterRpgGame() {
           onHospitalHeal={handleHospitalHeal}
           onMoveCreatureToActive={handleMoveCreatureToActive}
           onMoveCreatureToStorage={handleMoveCreatureToStorage}
+          onUpgradeFarm={handleUpgradeFarm}
+          onAssignFarmGuard={handleAssignFarmGuard}
           onCreatureLabelModeChange={handleCreatureLabelModeChange}
           onBattleAttack={handleBattleAttack}
           onRunBattle={handleRunBattle}
@@ -829,6 +872,23 @@ function formatFarmCollectionFailure(reason: string | undefined): string {
   if (reason === 'empty') return 'Farm storage empty';
   if (reason === 'not-owner') return 'Only the village owner can collect';
   return `Farm collection failed${reason ? `: ${reason}` : ''}`;
+}
+
+function formatFarmUpgradeFailure(reason: string | undefined): string {
+  if (reason === 'missing-farm') return 'Farm not found';
+  if (reason === 'not-owner') return 'Only the village owner can upgrade';
+  if (reason === 'max-level') return 'Farm is max level';
+  if (reason === 'missing-card') return 'Need matching Farm Card';
+  if (reason === 'missing-material') return 'Not enough Magic Dust';
+  return `Farm upgrade failed${reason ? `: ${reason}` : ''}`;
+}
+
+function formatFarmGuardFailure(reason: string | undefined): string {
+  if (reason === 'missing-farm') return 'Farm not found';
+  if (reason === 'not-owner') return 'Only the village owner can assign guards';
+  if (reason === 'missing-creature') return 'Creature not found';
+  if (reason === 'creature-fainted') return 'Fainted Creatures cannot guard';
+  return `Farm guard failed${reason ? `: ${reason}` : ''}`;
 }
 
 function formatBattleOutcome(result: BattleResultMessage): string {
