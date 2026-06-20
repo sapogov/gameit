@@ -7,6 +7,7 @@ import {
   loadSave,
   saveProgress
 } from './saveState';
+import { REVIVE_ITEM_ID, STARTING_REVIVE_ITEM_QUANTITY } from './creatureParty';
 
 beforeEach(() => {
   Object.defineProperty(globalThis, 'localStorage', {
@@ -37,7 +38,13 @@ describe('Monster RPG save import and export', () => {
     expect(imported.state.progression.ownerPlayerId).toBe(profile.playerId);
     expect(imported.state.inventory).toMatchObject({
       currencies: { magicDust: 0 },
-      items: {},
+      items: {
+        [REVIVE_ITEM_ID]: {
+          id: REVIVE_ITEM_ID,
+          ownerPlayerId: profile.playerId,
+          quantity: STARTING_REVIVE_ITEM_QUANTITY
+        }
+      },
       cards: {},
       creatureCards: {},
       eggs: {}

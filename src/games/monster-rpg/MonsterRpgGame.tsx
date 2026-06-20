@@ -18,14 +18,19 @@ import {
   exportSave,
   getGameMap,
   getCardDefinition,
+  healAllCreaturesAtHospital,
   hatchEgg,
   openPack,
   importSavePayload,
+  isAtVillageHospital,
   isVillageElderDialogComplete,
   loadProfile,
   loadSave,
   movePlayer,
+  moveCreatureToActiveParty,
+  moveCreatureToStorage,
   saveProgress,
+  useReviveItem,
   type AvatarId,
   type InputAction,
   type LocationRoomState,
@@ -274,6 +279,81 @@ export function MonsterRpgGame() {
     });
   };
 
+  const handleHospitalHeal = () => {
+    setSaveState((current) => {
+      if (!current) return current;
+      if (!isAtVillageHospital(current)) {
+        setImportStatus(formatCreaturePartyFailure('not-at-hospital'));
+        return current;
+      }
+
+      const result = healAllCreaturesAtHospital(current);
+      saveProgress(result);
+      saveStateRef.current = result;
+      setLastMove(null);
+      setPackTrace(null);
+      setImportStatus('Hospital full heal complete');
+      return result;
+    });
+  };
+
+  const handleReviveCreature = (creatureId: string) => {
+    setSaveState((current) => {
+      if (!current) return current;
+
+      const result = useReviveItem(current, creatureId);
+      if (!result.ok) {
+        setImportStatus(formatCreaturePartyFailure(result.reason));
+        return current;
+      }
+
+      saveProgress(result.state);
+      saveStateRef.current = result.state;
+      setLastMove(null);
+      setPackTrace(null);
+      setImportStatus('Revive item used');
+      return result.state;
+    });
+  };
+
+  const handleMoveCreatureToActive = (creatureId: string) => {
+    setSaveState((current) => {
+      if (!current) return current;
+
+      const result = moveCreatureToActiveParty(current, creatureId);
+      if (!result.ok) {
+        setImportStatus(formatCreaturePartyFailure(result.reason));
+        return current;
+      }
+
+      saveProgress(result.state);
+      saveStateRef.current = result.state;
+      setLastMove(null);
+      setPackTrace(null);
+      setImportStatus('Creature moved to active party');
+      return result.state;
+    });
+  };
+
+  const handleMoveCreatureToStorage = (creatureId: string) => {
+    setSaveState((current) => {
+      if (!current) return current;
+
+      const result = moveCreatureToStorage(current, creatureId);
+      if (!result.ok) {
+        setImportStatus(formatCreaturePartyFailure(result.reason));
+        return current;
+      }
+
+      saveProgress(result.state);
+      saveStateRef.current = result.state;
+      setLastMove(null);
+      setPackTrace(null);
+      setImportStatus('Creature moved to storage');
+      return result.state;
+    });
+  };
+
   const handleExportSave = () => {
     if (!saveState) return;
 
@@ -475,6 +555,7 @@ export function MonsterRpgGame() {
       <div className="monster-game-stage">
         <div className="monster-canvas-host" ref={canvasHostRef} />
         <GameHud
+          canUseHospital={isAtVillageHospital(saveState)}
           importStatus={importStatus}
           lastMove={lastMove}
           mapKind={activeMap.kind}
@@ -489,6 +570,10 @@ export function MonsterRpgGame() {
           onActivateCard={handleActivateCard}
           onRouteCardToElder={handleRouteCardToElder}
           onHatchEgg={handleHatchEgg}
+          onHospitalHeal={handleHospitalHeal}
+          onMoveCreatureToActive={handleMoveCreatureToActive}
+          onMoveCreatureToStorage={handleMoveCreatureToStorage}
+          onReviveCreature={handleReviveCreature}
           onReset={handleReset}
         />
         <VillageElderOnboarding
@@ -533,4 +618,15 @@ function formatCardFailure(reason: string | undefined): string {
   if (reason === 'missing-material') return 'Not enough Magic Dust';
   if (reason === 'missing-egg') return 'Egg not available';
   return `Card action failed${reason ? `: ${reason}` : ''}`;
+}
+
+function formatCreaturePartyFailure(reason: string | undefined): string {
+  if (reason === 'missing-creature') return 'Creature not found';
+  if (reason === 'party-full') return 'Active party is full';
+  if (reason === 'already-active') return 'Creature already active';
+  if (reason === 'already-stored') return 'Creature already stored';
+  if (reason === 'missing-item') return 'No Revive item';
+  if (reason === 'not-fainted') return 'Creature is not Fainted';
+  if (reason === 'not-at-hospital') return 'Visit a Village Hospital first';
+  return `Creature action failed${reason ? `: ${reason}` : ''}`;
 }

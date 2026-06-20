@@ -12,6 +12,7 @@ import type {
   MonsterRpgSaveState
 } from './types';
 import { getSpeciesById } from './speciesCatalog';
+import { placeNewCreature } from './creatureParty';
 
 export const MAGIC_DUST_MATERIAL_ID = 'magicDust';
 export const CREATURE_ATTACK_COUNT = 4;
@@ -94,24 +95,24 @@ export function convertCreatureCardViaElder(
       attacks: [...card.knownAttacks, ...extraAttacks]
     });
 
-    return {
-      ok: true,
-      creatureId,
-      state: {
+    const stateWithCreature = placeNewCreature(
+      {
         ...stateAfterCost,
         inventory: {
           ...stateAfterCost.inventory,
           creatureCards
         },
-        creatures: {
-          ...stateAfterCost.creatures,
-          activePartyCreatureIds: [...stateAfterCost.creatures.activePartyCreatureIds, creatureId],
-          creatures: {
-            ...stateAfterCost.creatures.creatures,
-            [creatureId]: creatureRecord
-          }
-        },
-        journal: recordDiscovered(stateAfterCost, species.id),
+        journal: recordDiscovered(stateAfterCost, species.id)
+      },
+      creatureId,
+      creatureRecord
+    );
+
+    return {
+      ok: true,
+      creatureId,
+      state: {
+        ...stateWithCreature,
         updatedAt: new Date().toISOString()
       }
     };
@@ -221,24 +222,24 @@ export function hatchEgg(
   delete eggs[eggId];
   const stateAfterCost = consumeRequirements(state, egg.requirements);
 
-  return {
-    ok: true,
-    creatureId,
-    state: {
+  const stateWithCreature = placeNewCreature(
+    {
       ...stateAfterCost,
       inventory: {
         ...stateAfterCost.inventory,
         eggs
       },
-      creatures: {
-        ...stateAfterCost.creatures,
-        activePartyCreatureIds: [...stateAfterCost.creatures.activePartyCreatureIds, creatureId],
-        creatures: {
-          ...stateAfterCost.creatures.creatures,
-          [creatureId]: creatureRecord
-        }
-      },
-      journal: recordDiscovered(stateAfterCost, species.id),
+      journal: recordDiscovered(stateAfterCost, species.id)
+    },
+    creatureId,
+    creatureRecord
+  );
+
+  return {
+    ok: true,
+    creatureId,
+    state: {
+      ...stateWithCreature,
       updatedAt: new Date().toISOString()
     }
   };

@@ -29,6 +29,8 @@ export type {
   CreatureAttackRecord,
   CreatureCardInstance,
   CreatureRarity,
+  CreatureSaveContainer,
+  CreatureSaveRecord,
   CreatureSpeciesRecord,
   CreatureStatKey,
   CreatureType,
@@ -132,6 +134,25 @@ export {
   type CreatureLifecycleFailureReason,
   type CreatureLifecycleResult
 } from './creatureLifecycle';
+export {
+  ACTIVE_PARTY_LIMIT,
+  REVIVE_ITEM_ID,
+  REVIVE_ITEM_RESTORE_RATIO,
+  STARTING_REVIVE_ITEM_QUANTITY,
+  canCreatureUseRole,
+  healAllCreaturesAtHospital,
+  isAtVillageHospital,
+  isCreatureFainted,
+  isValidCreatureContainerLayout,
+  moveCreatureToActiveParty,
+  moveCreatureToStorage,
+  placeNewCreature,
+  setCreatureHp,
+  useReviveItem,
+  type CreaturePartyFailureReason,
+  type CreaturePartyResult,
+  type CreatureUseRole
+} from './creatureParty';
 export { getJournalSpeciesViewState, recordCreatureDiscovered, recordWildCreatureSeen } from './creatureJournal';
 export {
   buildStarterMagicDustFarm,

@@ -31,7 +31,9 @@ export function VillageElderOnboarding({
 
   const magicDust = saveState.inventory.currencies[MAGIC_DUST_CURRENCY_ID] ?? 0;
   const requiredMagicDust = getStarterCreatureConversionCost();
-  const hasStarterCards = starterCreatureCards.every((card) => (saveState.inventory.cards[card.cardId]?.quantity ?? 0) > 0);
+  const hasStarterCards = starterCreatureCards.every((card) =>
+    Object.values(saveState.inventory.creatureCards).some((creatureCard) => creatureCard.cardDefinitionId === card.cardId)
+  );
   const canConvert = hasStarterCards && magicDust >= requiredMagicDust;
   const canBuildFarm = (saveState.inventory.cards[STARTER_FARM_CARD_ID]?.quantity ?? 0) > 0;
 

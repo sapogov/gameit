@@ -21,6 +21,7 @@ import type {
 import { canEnterTile, getMapById, homeVillageMap, isMapId, villageDefinitions } from './maps';
 import { creatureTypes, isKnownSpeciesId } from './speciesCatalog';
 import { cardRarities } from './cards';
+import { isValidCreatureContainerLayout, REVIVE_ITEM_ID, STARTING_REVIVE_ITEM_QUANTITY } from './creatureParty';
 
 export const MONSTER_RPG_PROFILE_KEY = 'gameit.monsterRpg.profile';
 export const MONSTER_RPG_SAVE_KEY = 'gameit.monsterRpg.save';
@@ -126,7 +127,13 @@ function createEmptySaveContainers(playerId: string, homeVillageId: PlayerProfil
     inventory: {
       ownerPlayerId: playerId,
       currencies: { magicDust: 0 },
-      items: {},
+      items: {
+        [REVIVE_ITEM_ID]: {
+          id: REVIVE_ITEM_ID,
+          ownerPlayerId: playerId,
+          quantity: STARTING_REVIVE_ITEM_QUANTITY
+        }
+      },
       cards: {},
       creatureCards: {},
       eggs: {}
@@ -294,11 +301,8 @@ function isValidCreatures(creatures: unknown, playerId: string): creatures is Cr
 
   const records = candidate.creatures;
   if (!records || typeof records !== 'object' || Array.isArray(records)) return false;
-  const knownCreatureIds = new Set(Object.keys(records));
-
   return (
-    candidate.activePartyCreatureIds.every((id) => knownCreatureIds.has(id)) &&
-    candidate.storedCreatureIds.every((id) => knownCreatureIds.has(id)) &&
+    isValidCreatureContainerLayout(candidate) &&
     Object.entries(records).every(([id, record]) => id === record.id && isValidCreatureRecord(record, playerId))
   );
 }
@@ -321,8 +325,10 @@ function isValidCreatureRecord(record: unknown, playerId: string): record is Cre
     candidate.attacks.every(isValidAttackRecord) &&
     isNonNegativeInteger(candidate.hp) &&
     isNonNegativeInteger(candidate.maxHp) &&
+    candidate.maxHp > 0 &&
     candidate.hp <= candidate.maxHp &&
     typeof candidate.fainted === 'boolean' &&
+    candidate.fainted === (candidate.hp === 0) &&
     isCooldownRecord(candidate.cooldowns)
   );
 }
