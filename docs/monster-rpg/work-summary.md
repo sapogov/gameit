@@ -272,6 +272,13 @@
 - Preserved existing wild encounter cleanup: successful run releases the encounter, clears in-battle player state, and applies the same per-player encounter cooldown as a loss.
 - Added focused simulation coverage for failed run, retry, successful run, unsupported run rejection, and expanded SDK checks to retry until a run resolves.
 
+## 2026-06-20 - Issue #15: Wild Battle Rewards, XP, And Direct-Drop Eggs
+
+- Added deterministic server-generated wild Battle reward bundles on wins only, covering Magic Dust, player XP, Creature XP, Pack chance, material chance, and rare exact-Species direct-drop Eggs.
+- Added idempotent local save application for Battle rewards, including full XP for the non-Fainted battling Creature, 80% XP for other non-Fainted active party Creatures, no XP for Fainted or stored Creatures, and duplicate-result protection.
+- Wired reward payloads through Battle Room results and the React save path, with HUD readouts for player XP, Creature XP, and material currencies.
+- Added focused reward generation/application coverage and verified with full tests, production build, and Monster RPG phase checks.
+
 ## Next Work
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.

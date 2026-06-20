@@ -237,7 +237,24 @@ export interface BattleRoomState {
   lastLog: BattleTurnLogEntry[];
   validPlayerAttackIds: string[];
   rewardGranted: boolean;
+  rewards?: BattleRewardBundle;
   disconnectGraceUntil?: string;
+}
+
+export interface BattleMaterialReward {
+  materialId: string;
+  quantity: number;
+}
+
+export interface BattleRewardBundle {
+  seed: number;
+  magicDust: number;
+  playerExperience: number;
+  battlingCreatureExperience: number;
+  activePartyExperience: number;
+  packSeed?: number;
+  directDropEggSpeciesId?: number;
+  materials: BattleMaterialReward[];
 }
 
 export interface CreatureSaveContainer {
@@ -424,6 +441,7 @@ export interface BattleResultMessage {
   playerCreatureHp: number;
   playerCreatureFainted: boolean;
   rewardGranted: boolean;
+  rewards?: BattleRewardBundle;
 }
 
 export interface LocationRoomState {

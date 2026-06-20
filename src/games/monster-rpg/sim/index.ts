@@ -9,6 +9,8 @@ export type {
   BattleParticipantKind,
   BattleParticipantState,
   BattleResultMessage,
+  BattleRewardBundle,
+  BattleMaterialReward,
   BattleRoomState,
   BattleStatus,
   BattleTurnLogEntry,
@@ -212,6 +214,15 @@ export {
   type BattleActionResult,
   type BattleResolution
 } from './battles';
+export {
+  BATTLE_REWARD_DIRECT_EGG_CHANCE,
+  BATTLE_REWARD_MAGIC_DUST_BASE,
+  BATTLE_REWARD_MATERIAL_CHANCE,
+  BATTLE_REWARD_PACK_CHANCE,
+  applyBattleRewardsToSave,
+  generateWildBattleRewards,
+  type ApplyBattleRewardsResult
+} from './battleRewards';
 export {
   buildStarterMagicDustFarm,
   completeVillageElderDialog,

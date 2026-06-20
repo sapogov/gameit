@@ -84,6 +84,7 @@ export function GameHud({
   const creatureRows = getCreatureRows(saveState);
   const activeCount = saveState.creatures.activePartyCreatureIds.length;
   const reviveCount = saveState.inventory.items[REVIVE_ITEM_ID]?.quantity ?? 0;
+  const currencySummary = formatCurrencySummary(saveState.inventory.currencies);
   const canRunFromBattle = battleState?.status === 'active' && battleState.canRun;
 
   return (
@@ -93,6 +94,8 @@ export function GameHud({
           <p>{mapName}</p>
           <h2>{saveState.profile.name}</h2>
           <span>{status}</span>
+          <small>Player XP {saveState.progression.playerExperience}</small>
+          <small>{currencySummary}</small>
           <small>{locationHint}</small>
           {importStatus ? <small>{importStatus}</small> : null}
         </section>
@@ -167,7 +170,8 @@ export function GameHud({
                       </small>
                     </div>
                     <small>
-                      HP {row.creature.hp}/{row.creature.maxHp} · {row.creature.fainted ? 'Fainted' : 'Ready'}
+                      HP {row.creature.hp}/{row.creature.maxHp} · XP {row.creature.experience} ·{' '}
+                      {row.creature.fainted ? 'Fainted' : 'Ready'}
                     </small>
                     <small>
                       Stats HP {row.creature.stats.hp} / ATK {row.creature.stats.attack} / DEF{' '}
@@ -379,6 +383,18 @@ function formatMapKind(kind: MapKind): string {
   if (kind === 'world-map') return 'Overworld';
   if (kind === 'interior') return 'Interior';
   return 'Village';
+}
+
+function formatCurrencySummary(currencies: Record<string, number>): string {
+  const entries = Object.entries(currencies).filter(([, quantity]) => quantity > 0);
+  if (entries.length === 0) return 'No materials';
+
+  return entries.map(([id, quantity]) => `${formatMaterialId(id)} ${quantity}`).join(' / ');
+}
+
+function formatMaterialId(id: string): string {
+  if (id === 'magicDust') return 'Magic Dust';
+  return id.replace(/([A-Z])/g, ' $1').replace(/^./, (letter) => letter.toUpperCase());
 }
 
 function getStatusText(status: MultiplayerStatus, playerCount: number, lastMove: MovementResult | null): string {

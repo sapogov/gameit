@@ -1,13 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import {
+  applyBattleRewardsToSave,
   choosePlayerBattleAttack,
   createBattleRoomState,
+  generateWildBattleRewards,
   getBattleAttackFatigueCost,
   getFirstBattleReadyCreature,
   getBattleRunChance,
   runFromBattle
 } from '.';
-import type { CreatureSaveRecord, MonsterRpgSaveState } from './types';
+import type { BattleRewardBundle, CreatureSaveRecord, MonsterRpgSaveState } from './types';
 import { createInitialSave, createPlayerProfile } from './saveState';
 
 describe('battle simulation', () => {
@@ -50,6 +52,39 @@ describe('battle simulation', () => {
     expect(result.state.player.activeCreature.fatigue).toBeGreaterThanOrEqual(0);
     expect(result.state.enemy.activeCreature.hp).toBeLessThan(result.state.enemy.activeCreature.maxHp);
     expect(result.state.lastLog.some((entry) => entry.message.includes('used'))).toBe(true);
+  });
+
+  it('adds server-generated rewards only when the player wins', () => {
+    const profile = createPlayerProfile('Battle Tester', 'ranger');
+    const state = createBattleRoomState({
+      battleId: 'battle-win',
+      encounterId: 'encounter-win',
+      playerProfile: profile,
+      playerCreature: createCreature(profile.playerId, 'winner', 1, 60, false),
+      wildSpeciesId: 3,
+      now: new Date('2026-06-20T12:00:00.000Z')
+    });
+    const weakEnemy = {
+      ...state,
+      enemy: {
+        ...state.enemy,
+        activeCreature: {
+          ...state.enemy.activeCreature,
+          hp: 1
+        }
+      }
+    };
+
+    const result = choosePlayerBattleAttack(weakEnemy, state.validPlayerAttackIds[0]);
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error(result.reason);
+    expect(result.result?.outcome).toBe('defeated');
+    expect(result.result?.rewardGranted).toBe(true);
+    expect(result.result?.rewards?.magicDust).toBeGreaterThan(0);
+    if (result.result?.rewards?.directDropEggSpeciesId !== undefined) {
+      expect(result.result.rewards.directDropEggSpeciesId).toBe(3);
+    }
   });
 
   it('rejects repeated strong attacks when fatigue is too high', () => {
@@ -143,6 +178,7 @@ describe('battle simulation', () => {
     if (!result.result) throw new Error('expected run result');
     expect(result.result.outcome).toBe('ran');
     expect(result.result.rewardGranted).toBe(false);
+    expect(result.result.rewards).toBeUndefined();
   });
 
   it('rejects running when the battle type does not support escape', () => {
@@ -163,6 +199,92 @@ describe('battle simulation', () => {
     expect(result.ok).toBe(false);
     if (result.ok) throw new Error('expected run rejection');
     expect(result.reason).toBe('run-unavailable');
+  });
+
+  it('generates deterministic wild battle rewards with optional pack, material, and exact-species egg drops', () => {
+    const profile = createPlayerProfile('Reward Tester', 'keeper');
+    const state = createBattleRoomState({
+      battleId: 'battle-reward-deterministic',
+      encounterId: 'encounter-reward-deterministic',
+      playerProfile: profile,
+      playerCreature: createCreature(profile.playerId, 'rewarder', 1, 60, false),
+      wildSpeciesId: 3
+    });
+
+    const first = generateWildBattleRewards(state, { seed: 44 });
+    const second = generateWildBattleRewards(state, { seed: 44 });
+    const forcedDrops = generateWildBattleRewards(state, { seed: 45, rng: sequenceRng([0, 0, 0, 0.5]) });
+
+    expect(first).toEqual(second);
+    expect(forcedDrops.packSeed).toBeDefined();
+    expect(forcedDrops.materials).toHaveLength(1);
+    expect(forcedDrops.directDropEggSpeciesId).toBe(3);
+  });
+
+  it('applies win rewards to currencies, XP, pack cards, and exact-species direct-drop eggs once', () => {
+    const profile = createPlayerProfile('Reward Saver', 'scout');
+    const battling = createCreature(profile.playerId, 'battling-creature', 1, 40, false);
+    const support = createCreature(profile.playerId, 'support-creature', 2, 50, false);
+    const fainted = createCreature(profile.playerId, 'fainted-support', 3, 0, true);
+    const stored = createCreature(profile.playerId, 'stored-creature', 4, 50, false);
+    const state: MonsterRpgSaveState = {
+      ...createInitialSave(profile),
+      inventory: {
+        ...createInitialSave(profile).inventory,
+        currencies: { magicDust: 1 }
+      },
+      creatures: {
+        ownerPlayerId: profile.playerId,
+        activePartyCreatureIds: [battling.id, support.id, fainted.id],
+        storedCreatureIds: [stored.id],
+        creatures: {
+          [battling.id]: battling,
+          [support.id]: support,
+          [fainted.id]: fainted,
+          [stored.id]: stored
+        }
+      }
+    };
+    const rewards: BattleRewardBundle = {
+      seed: 700,
+      magicDust: 5,
+      playerExperience: 11,
+      battlingCreatureExperience: 20,
+      activePartyExperience: 16,
+      packSeed: 701,
+      directDropEggSpeciesId: 3,
+      materials: [{ materialId: 'galeEssence', quantity: 2 }]
+    };
+    const result = {
+      battleId: 'battle-apply-rewards',
+      encounterId: 'encounter-apply-rewards',
+      outcome: 'defeated' as const,
+      playerCreatureId: battling.id,
+      playerCreatureHp: 34,
+      playerCreatureFainted: false,
+      rewardGranted: true,
+      rewards
+    };
+
+    const applied = applyBattleRewardsToSave(state, result);
+    const appliedAgain = applyBattleRewardsToSave(applied.state, result);
+
+    expect(applied.rewardsApplied).toBe(true);
+    expect(applied.packTrace?.cards).toHaveLength(5);
+    expect(applied.state.inventory.currencies.magicDust).toBe(6);
+    expect(applied.state.inventory.currencies.galeEssence).toBe(2);
+    expect(applied.state.progression.playerExperience).toBe(11);
+    expect(applied.state.creatures.creatures[battling.id].experience).toBe(20);
+    expect(applied.state.creatures.creatures[battling.id].hp).toBe(34);
+    expect(applied.state.creatures.creatures[support.id].experience).toBe(16);
+    expect(applied.state.creatures.creatures[fainted.id].experience).toBe(0);
+    expect(applied.state.creatures.creatures[stored.id].experience).toBe(0);
+    expect(Object.values(applied.state.inventory.eggs)[0].speciesId).toBe(3);
+
+    expect(appliedAgain.rewardsApplied).toBe(false);
+    expect(appliedAgain.state.inventory.currencies.magicDust).toBe(6);
+    expect(appliedAgain.state.progression.playerExperience).toBe(11);
+    expect(Object.values(appliedAgain.state.inventory.eggs)).toHaveLength(1);
   });
 });
 
@@ -207,4 +329,9 @@ function createCreature(
     fainted,
     cooldowns: {}
   };
+}
+
+function sequenceRng(values: number[]): () => number {
+  let index = 0;
+  return () => values[index++] ?? values[values.length - 1] ?? 0;
 }

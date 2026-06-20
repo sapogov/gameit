@@ -6,8 +6,10 @@ import type {
   CreatureSaveRecord,
   MonsterRpgSaveState,
   PlayerProfile,
+  BattleRewardBundle,
   WildEncounterOutcome
 } from './types';
+import { generateWildBattleRewards } from './battleRewards';
 import { createRng, rollStats, selectCreatureAttacks } from './creatureLifecycle';
 import { canCreatureUseRole } from './creatureParty';
 import { getSpeciesById } from './speciesCatalog';
@@ -30,6 +32,7 @@ export interface BattleResolution {
   playerCreatureHp: number;
   playerCreatureFainted: boolean;
   rewardGranted: boolean;
+  rewards?: BattleRewardBundle;
 }
 
 export function getFirstBattleReadyCreature(state: MonsterRpgSaveState): CreatureSaveRecord | null {
@@ -197,7 +200,8 @@ export function toBattleResult(state: BattleRoomState): BattleResolution | null 
     playerCreatureId: state.player.activeCreature.id,
     playerCreatureHp: state.player.activeCreature.hp,
     playerCreatureFainted: state.player.activeCreature.fainted,
-    rewardGranted: state.rewardGranted
+    rewardGranted: state.rewardGranted,
+    rewards: state.rewardGranted ? state.rewards : undefined
   };
 }
 
@@ -215,7 +219,8 @@ function completeBattle(
   const next = withValidAttackIds({
     ...appendBattleLog(state, getCompletionMessage(outcome), now),
     status: statusByOutcome[outcome],
-    rewardGranted: grantReward ? !state.rewardGranted : state.rewardGranted
+    rewardGranted: grantReward ? !state.rewardGranted : state.rewardGranted,
+    rewards: grantReward && !state.rewardGranted ? generateWildBattleRewards(state) : state.rewards
   });
 
   return {
