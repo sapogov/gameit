@@ -1,5 +1,5 @@
-import type { CardBuffType, CardRarity, CreatureSaveRecord, MonsterRpgSaveState, SaveStack } from './types';
-import { getSpeciesById } from './speciesCatalog';
+import type { CardBuffType, CardRarity, MonsterRpgSaveState, SaveStack } from './types';
+import { createCreatureCardInstance, convertCreatureCardViaElder, MAGIC_DUST_MATERIAL_ID } from './creatureLifecycle';
 
 export const CARD_PACK_SIZE = 5;
 export const cardRarities = ['common', 'uncommon', 'rare', 'legendary', 'mythical'] as const;
@@ -8,7 +8,7 @@ export const cardBuffTypes = ['battle', 'drop-chance'] as const;
 
 export const CARD_PACK_RARITY_TIERS: readonly CardRarity[] = ['common', 'uncommon', 'rare'];
 
-export const MAGIC_DUST_CURRENCY_ID = 'magicDust';
+export const MAGIC_DUST_CURRENCY_ID = MAGIC_DUST_MATERIAL_ID;
 export const STARTER_FARM_CARD_ID = 'farm-card:magic-dust-farm';
 
 export const STARTER_CREATURE_CARD_IDS = [
@@ -66,6 +66,7 @@ export interface CardActionResult {
 
 export interface PackOpenTraceCard {
   cardId: string;
+  instanceId?: string;
   type: CardDefinition['type'];
   rarity: CardRarity;
 }
@@ -113,6 +114,26 @@ const CARD_CATALOG = [
     description: 'Convert through Village Elder into a Dashkit.',
     actionHint: 'Use Village Elder',
     packWeight: 34
+  },
+  {
+    id: 'creature-card:duskleaf',
+    type: 'creature',
+    rarity: 'uncommon',
+    speciesId: 15,
+    name: 'Duskleaf Creature Card',
+    description: 'Use through Village Elder to prepare a Duskleaf Egg with inherited attacks.',
+    actionHint: 'Use Village Elder',
+    packWeight: 14
+  },
+  {
+    id: 'creature-card:runebuck',
+    type: 'creature',
+    rarity: 'rare',
+    speciesId: 20,
+    name: 'Runebuck Creature Card',
+    description: 'Use through Village Elder to prepare a Runebuck Egg with inherited attacks.',
+    actionHint: 'Use Village Elder',
+    packWeight: 6
   },
   {
     id: STARTER_FARM_CARD_ID,
@@ -214,17 +235,32 @@ export function openPack(state: MonsterRpgSaveState, options?: { seed?: number; 
   const now = new Date().toISOString();
 
   let cards = state.inventory.cards;
+  let creatureCards = state.inventory.creatureCards;
   const cardEntries: PackOpenTraceCard[] = [];
   const countsByRarity = createEmptyRarityCounts();
 
   for (let index = 0; index < CARD_PACK_SIZE; index += 1) {
     const card = pickPackCard(rng);
-    cards = withCardStack(cards, card.id, state.profile.playerId, 1);
-    cardEntries.push({
-      cardId: card.id,
-      type: card.type,
-      rarity: card.rarity
-    });
+    if (card.type === 'creature') {
+      const instance = createCreatureCardInstance(card, state.profile.playerId, creatureCards, { rng });
+      creatureCards = {
+        ...creatureCards,
+        [instance.id]: instance
+      };
+      cardEntries.push({
+        cardId: card.id,
+        instanceId: instance.id,
+        type: card.type,
+        rarity: card.rarity
+      });
+    } else {
+      cards = withCardStack(cards, card.id, state.profile.playerId, 1);
+      cardEntries.push({
+        cardId: card.id,
+        type: card.type,
+        rarity: card.rarity
+      });
+    }
     countsByRarity[card.rarity] += 1;
   }
 
@@ -234,7 +270,8 @@ export function openPack(state: MonsterRpgSaveState, options?: { seed?: number; 
       ...state,
       inventory: {
         ...state.inventory,
-        cards
+        cards,
+        creatureCards
       },
       updatedAt: now
     },
@@ -316,62 +353,8 @@ export function activateBuffCard(state: MonsterRpgSaveState, cardId: string): Ca
   };
 }
 
-export function activateCreatureCardViaElder(state: MonsterRpgSaveState, cardId: string): CardActionResult {
-  const definition = getCreatureCardById(cardId);
-  if (!definition) return { ok: false, reason: 'wrong-card-type', state };
-
-  const currentStack = state.inventory.cards[cardId];
-  if (!currentStack || currentStack.quantity < 1) {
-    return { ok: false, reason: 'missing-card', state };
-  }
-
-  const species = getSpeciesById(definition.speciesId);
-  if (!species) {
-    return { ok: false, reason: 'invalid-species', state };
-  }
-
-  const creatureId = createCreatureId(state.creatures.creatures);
-  const creatureRecord: CreatureSaveRecord = {
-    id: creatureId,
-    ownerPlayerId: state.profile.playerId,
-    speciesId: species.id,
-    level: 1,
-    experience: 0,
-    hp: species.baseStats.hp,
-    maxHp: species.baseStats.hp,
-    fainted: false,
-    cooldowns: {}
-  };
-
-  const withCard = consumeCard(state.inventory.cards, cardId, state.profile.playerId);
-
-  return {
-    ok: true,
-    state: {
-      ...state,
-      inventory: {
-        ...state.inventory,
-        cards: withCard,
-
-      },
-      creatures: {
-        ...state.creatures,
-        activePartyCreatureIds: [...state.creatures.activePartyCreatureIds, creatureId],
-        creatures: {
-          ...state.creatures.creatures,
-          [creatureId]: creatureRecord
-        }
-      },
-      journal: {
-        ...state.journal,
-        species: {
-          ...state.journal.species,
-          [String(definition.speciesId)]: 'discovered'
-        }
-      },
-      updatedAt: new Date().toISOString()
-    }
-  };
+export function activateCreatureCardViaElder(state: MonsterRpgSaveState, cardId: string) {
+  return convertCreatureCardViaElder(state, cardId);
 }
 
 export function buildFarmCardViaElder(state: MonsterRpgSaveState, cardId: string): CardActionResult {
@@ -440,15 +423,6 @@ function pickPackCard(rng: () => number): CardDefinition {
   }
 
   return CARD_CATALOG[CARD_CATALOG.length - 1];
-}
-
-function createCreatureId(creatures: Record<string, any>): string {
-  let next = 1;
-  while (creatures[`card-creature-${next}`]) {
-    next += 1;
-  }
-
-  return `card-creature-${next}`;
 }
 
 function createRng(seed: number = Date.now()): () => number {

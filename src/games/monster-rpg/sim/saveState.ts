@@ -1,7 +1,12 @@
 import type {
   AvatarId,
+  CreationRequirement,
   CreatureSaveContainer,
+  CreatureAttackRecord,
+  CreatureCardInstance,
   CreatureSaveRecord,
+  CreatureStatKey,
+  EggSaveRecord,
   FarmSaveContainer,
   FarmSaveRecord,
   InventorySaveContainer,
@@ -14,11 +19,12 @@ import type {
   VillageSaveContainer
 } from './types';
 import { canEnterTile, getMapById, homeVillageMap, isMapId, villageDefinitions } from './maps';
-import { isKnownSpeciesId } from './speciesCatalog';
+import { creatureTypes, isKnownSpeciesId } from './speciesCatalog';
+import { cardRarities } from './cards';
 
 export const MONSTER_RPG_PROFILE_KEY = 'gameit.monsterRpg.profile';
 export const MONSTER_RPG_SAVE_KEY = 'gameit.monsterRpg.save';
-export const MONSTER_RPG_SCHEMA_VERSION = 5;
+export const MONSTER_RPG_SCHEMA_VERSION = 6;
 
 export type SaveImportResult =
   | { ok: true; state: MonsterRpgSaveState }
@@ -35,6 +41,9 @@ export interface MonsterRpgSaveRepository {
 
 const validVillageIds = new Set(villageDefinitions.map((village) => village.id));
 const validJournalStates = new Set<JournalSpeciesState>(['silhouette', 'discovered']);
+const validCardRarities = new Set<string>(cardRarities);
+const validCreatureTypes = new Set<string>(creatureTypes);
+const validStatKeys = new Set<CreatureStatKey>(['hp', 'attack', 'defense', 'speed', 'stamina']);
 
 export const localMonsterRpgSaveRepository: MonsterRpgSaveRepository = {
   loadProfile() {
@@ -118,7 +127,9 @@ function createEmptySaveContainers(playerId: string, homeVillageId: PlayerProfil
       ownerPlayerId: playerId,
       currencies: { magicDust: 0 },
       items: {},
-      cards: {}
+      cards: {},
+      creatureCards: {},
+      eggs: {}
     },
     creatures: {
       ownerPlayerId: playerId,
@@ -227,7 +238,51 @@ function isValidInventory(inventory: unknown, playerId: string): inventory is In
     candidate.ownerPlayerId === playerId &&
     isQuantityRecord(candidate.currencies) &&
     isStackRecord(candidate.items, playerId) &&
-    isStackRecord(candidate.cards, playerId)
+    isStackRecord(candidate.cards, playerId) &&
+    isCreatureCardRecord(candidate.creatureCards, playerId) &&
+    isEggRecord(candidate.eggs, playerId)
+  );
+}
+
+function isCreatureCardRecord(value: unknown, playerId: string): value is Record<string, CreatureCardInstance> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+
+  return Object.entries(value).every(
+    ([id, card]) =>
+      id === card.id &&
+      isNonEmptyString(card.id) &&
+      card.ownerPlayerId === playerId &&
+      isNonEmptyString(card.cardDefinitionId) &&
+      Number.isSafeInteger(card.speciesId) &&
+      isKnownSpeciesId(card.speciesId) &&
+      validCardRarities.has(card.rarity) &&
+      isValidStats(card.stats) &&
+      Array.isArray(card.knownAttacks) &&
+      card.knownAttacks.length === 2 &&
+      card.knownAttacks.every(isValidAttackRecord)
+  );
+}
+
+function isEggRecord(value: unknown, playerId: string): value is Record<string, EggSaveRecord> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+
+  return Object.entries(value).every(
+    ([id, egg]) =>
+      id === egg.id &&
+      isNonEmptyString(egg.id) &&
+      egg.ownerPlayerId === playerId &&
+      Number.isSafeInteger(egg.speciesId) &&
+      isKnownSpeciesId(egg.speciesId) &&
+      validCardRarities.has(egg.rarity) &&
+      (egg.origin === 'card' || egg.origin === 'direct-drop') &&
+      Array.isArray(egg.requirements) &&
+      egg.requirements.every(isValidCreationRequirement) &&
+      isIsoDate(egg.createdAt) &&
+      (egg.stats === undefined || isValidStats(egg.stats)) &&
+      (egg.inheritedAttacks === undefined ||
+        (Array.isArray(egg.inheritedAttacks) &&
+          egg.inheritedAttacks.length === 2 &&
+          egg.inheritedAttacks.every(isValidAttackRecord)))
   );
 }
 
@@ -260,6 +315,10 @@ function isValidCreatureRecord(record: unknown, playerId: string): record is Cre
     isNonNegativeInteger(candidate.level) &&
     candidate.level > 0 &&
     isNonNegativeInteger(candidate.experience) &&
+    isValidStats(candidate.stats) &&
+    Array.isArray(candidate.attacks) &&
+    candidate.attacks.length === 4 &&
+    candidate.attacks.every(isValidAttackRecord) &&
     isNonNegativeInteger(candidate.hp) &&
     isNonNegativeInteger(candidate.maxHp) &&
     candidate.hp <= candidate.maxHp &&
@@ -374,6 +433,53 @@ function isQuantityRecord(value: unknown): value is Record<string, number> {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
 
   return Object.entries(value).every(([id, quantity]) => isNonEmptyString(id) && isNonNegativeInteger(quantity));
+}
+
+function isValidStats(value: unknown): value is CreatureSaveRecord['stats'] {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const stats = value as CreatureSaveRecord['stats'];
+
+  return (
+    isNonNegativeInteger(stats.hp) &&
+    stats.hp > 0 &&
+    isNonNegativeInteger(stats.attack) &&
+    isNonNegativeInteger(stats.defense) &&
+    isNonNegativeInteger(stats.speed) &&
+    isNonNegativeInteger(stats.stamina)
+  );
+}
+
+function isValidAttackRecord(value: unknown): value is CreatureAttackRecord {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const attack = value as CreatureAttackRecord;
+
+  return (
+    isNonEmptyString(attack.id) &&
+    isNonEmptyString(attack.name) &&
+    validCreatureTypes.has(attack.type) &&
+    isNonNegativeInteger(attack.power) &&
+    attack.power > 0 &&
+    validStatKeys.has(attack.statFocus)
+  );
+}
+
+function isValidCreationRequirement(value: unknown): boolean {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const requirement = value as CreationRequirement;
+  const scope = requirement.scope;
+
+  return (
+    isNonEmptyString(requirement.materialId) &&
+    isNonNegativeInteger(requirement.quantity) &&
+    requirement.quantity > 0 &&
+    (scope === undefined ||
+      (typeof scope === 'object' &&
+        !Array.isArray(scope) &&
+        (scope.rarity === undefined || validCardRarities.has(scope.rarity)) &&
+        (scope.type === undefined || validCreatureTypes.has(scope.type)) &&
+        (scope.speciesId === undefined ||
+          (Number.isSafeInteger(scope.speciesId) && isKnownSpeciesId(scope.speciesId)))))
+  );
 }
 
 function isCooldownRecord(value: unknown): value is Record<string, string> {

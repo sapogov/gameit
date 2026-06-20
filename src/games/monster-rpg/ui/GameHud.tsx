@@ -1,7 +1,9 @@
 import {
   gen1SpeciesCatalog,
   getCardDefinition,
+  getEggDescription,
   getJournalSpeciesViewState,
+  getSpeciesById,
   type CardDefinition,
   type CreatureSpeciesRecord,
   type JournalSpeciesViewState,
@@ -27,6 +29,7 @@ interface GameHudProps {
   onOpenPack: () => void;
   onActivateCard: (cardId: string) => void;
   onRouteCardToElder: (cardId: string) => void;
+  onHatchEgg: (eggId: string) => void;
 }
 
 export function GameHud({
@@ -43,7 +46,8 @@ export function GameHud({
   onReset,
   onOpenPack,
   onActivateCard,
-  onRouteCardToElder
+  onRouteCardToElder,
+  onHatchEgg
 }: GameHudProps) {
   const status = getStatusText(multiplayerStatus, playerCount, lastMove);
   const locationHint = `${formatMapKind(mapKind)} - ${saveState.position.x}, ${saveState.position.y}`;
@@ -80,18 +84,23 @@ export function GameHud({
                 return (
                   <article className="monster-card-row" key={card.id}>
                     <span>
-                      <strong>{card.definition?.name ?? card.id}</strong>
+                      <strong>{card.name}</strong>
                     </span>
-                    <small>
-                      {card.definition?.type ?? 'unknown'} · {card.definition?.rarity ?? 'unknown'} · qty {card.quantity}
-                    </small>
+                    <small>{card.detail}</small>
+                    {card.description ? <small>{card.description}</small> : null}
                     {allowedAction ? (
                       <button
                         onClick={() => {
-                          if (card.definition?.type === 'material' || card.definition?.type === 'buff') {
-                            onActivateCard(card.id);
-                          } else {
+                          if (card.kind === 'stack') {
+                            if (card.definition?.type === 'farm') {
+                              onRouteCardToElder(card.id);
+                            } else {
+                              onActivateCard(card.id);
+                            }
+                          } else if (card.kind === 'creature-card') {
                             onRouteCardToElder(card.id);
+                          } else {
+                            onHatchEgg(card.id);
                           }
                         }}
                         type="button"
@@ -179,25 +188,59 @@ function getStatusText(status: MultiplayerStatus, playerCount: number, lastMove:
   return lastMove?.blocked ? `Offline local - blocked by ${formatBlockedBy(lastMove.blockedBy)}` : 'Offline local';
 }
 
-function getCardRows(saveState: MonsterRpgSaveState): Array<{ id: string; definition: CardDefinition | undefined; quantity: number }> {
-  return Object.entries(saveState.inventory.cards)
+type CardRow =
+  | { id: string; kind: 'stack'; definition: CardDefinition | undefined; name: string; detail: string; description?: string }
+  | { id: string; kind: 'creature-card'; name: string; detail: string; description?: string }
+  | { id: string; kind: 'egg'; name: string; detail: string; description?: string };
+
+function getCardRows(saveState: MonsterRpgSaveState): CardRow[] {
+  const stackRows: CardRow[] = Object.entries(saveState.inventory.cards)
     .map(([id, stack]) => ({
       id,
+      kind: 'stack' as const,
       definition: getCardDefinition(id),
-      quantity: stack.quantity
+      quantity: stack.quantity,
+      name: getCardDefinition(id)?.name ?? id,
+      detail: `${getCardDefinition(id)?.type ?? 'unknown'} · ${getCardDefinition(id)?.rarity ?? 'unknown'} · qty ${stack.quantity}`
     }))
     .filter((card) => card.quantity > 0)
-    .sort((a, b) => {
-      const aType = a.definition?.type ?? 'zzz';
-      const bType = b.definition?.type ?? 'zzz';
-      return aType.localeCompare(bType) || a.id.localeCompare(b.id);
-    });
+    .map(({ id, kind, definition, name, detail }) => ({ id, kind, definition, name, detail }));
+
+  const creatureCardRows: CardRow[] = Object.values(saveState.inventory.creatureCards).map((card) => {
+    const definition = getCardDefinition(card.cardDefinitionId);
+    const stats = `HP ${card.stats.hp} / ATK ${card.stats.attack} / DEF ${card.stats.defense} / SPD ${card.stats.speed}`;
+    return {
+      id: card.id,
+      kind: 'creature-card',
+      name: definition?.name ?? card.id,
+      detail: `creature · ${card.rarity} · ${stats}`,
+      description: `Known attacks: ${card.knownAttacks.map((attack) => attack.name).join(', ')}`
+    };
+  });
+
+  const eggRows: CardRow[] = Object.values(saveState.inventory.eggs).map((egg) => {
+    const species = getSpeciesById(egg.speciesId);
+    return {
+      id: egg.id,
+      kind: 'egg',
+      name: `${species?.displayName ?? `Species #${egg.speciesId}`} Egg`,
+      detail: `egg · ${egg.rarity} · ${egg.origin === 'card' ? 'card-made' : 'direct drop'}`,
+      description: getEggDescription(egg, species)
+    };
+  });
+
+  return [...stackRows, ...creatureCardRows, ...eggRows].sort((a, b) => {
+    const kindSort = a.kind.localeCompare(b.kind);
+    return kindSort || a.id.localeCompare(b.id);
+  });
 }
 
-function getCardAction(card: { definition: CardDefinition | undefined }): string | null {
+function getCardAction(card: CardRow): string | null {
+  if (card.kind === 'egg') return 'Hatch';
+  if (card.kind === 'creature-card') return 'Use Elder';
   if (!card.definition) return null;
   if (card.definition.type === 'material' || card.definition.type === 'buff') return 'Activate';
-  if (card.definition.type === 'creature' || card.definition.type === 'farm') return 'Use Elder';
+  if (card.definition.type === 'farm') return 'Use Elder';
   return null;
 }
 

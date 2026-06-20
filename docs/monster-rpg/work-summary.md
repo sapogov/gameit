@@ -224,6 +224,17 @@
 - Added HUD inventory panel showing card type/rarity/quantity and action labels (`Activate` vs `Use Elder`), plus pack-open summary.
 - Added deterministic domain tests for pack drawing, Material/Buff activation, Elder routing, and farm uniqueness behavior.
 
+## 2026-06-20 - Issue #9: Creature Card, Egg, and Creature Lifecycle
+
+- Added per-card Creature Card instances with rolled stats and two known Attacks generated from Species, Rarity, type, and stat tendencies.
+- Added Creature/Egg lifecycle simulation: common Creature Cards convert directly into Creatures, while uncommon-or-higher Creature Cards become Eggs with inherited stats and Attacks.
+- Added direct-drop Egg creation and hatching; direct-drop Eggs keep Attacks hidden until hatching and roll all four Attacks when the Creature is created.
+- Added Magic Dust creation/hatching requirements with scoped rarity/type/species metadata for future material expansion.
+- Added save schema version 6 validation for Creature Card instances, Eggs, stat rolls, Attack records, and Creature records with four Attacks.
+- Updated Starter Pack onboarding to grant per-card Creature Card instances and preserve their rolled stats/Attacks through starter conversion.
+- Updated the HUD inventory panel to show Creature Card stat/Attack details, card-made Egg inherited Attacks, direct-drop Egg descriptions, and Egg hatching actions.
+- Added deterministic domain tests for Creature Card conversion, card-made Eggs, direct-drop Egg hatching, and scoped Magic Dust requirements.
+
 ## Next Work
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.

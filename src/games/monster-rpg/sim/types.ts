@@ -106,6 +106,16 @@ export interface BaseStatTendencies {
   stamina: number;
 }
 
+export type CreatureStatKey = keyof BaseStatTendencies;
+
+export interface CreatureAttackRecord {
+  id: string;
+  name: string;
+  type: CreatureType;
+  power: number;
+  statFocus: CreatureStatKey;
+}
+
 export interface CreatureSpeciesRecord {
   id: number;
   slug: string;
@@ -123,11 +133,49 @@ export interface SaveStack {
   quantity: number;
 }
 
+export type CreationRequirementScope = {
+  rarity?: CreatureRarity;
+  type?: CreatureType;
+  speciesId?: number;
+};
+
+export interface CreationRequirement {
+  materialId: string;
+  quantity: number;
+  scope?: CreationRequirementScope;
+}
+
+export interface CreatureCardInstance {
+  id: string;
+  ownerPlayerId: string;
+  cardDefinitionId: string;
+  speciesId: number;
+  rarity: CardRarity;
+  stats: BaseStatTendencies;
+  knownAttacks: [CreatureAttackRecord, CreatureAttackRecord];
+}
+
+export type EggOrigin = 'card' | 'direct-drop';
+
+export interface EggSaveRecord {
+  id: string;
+  ownerPlayerId: string;
+  speciesId: number;
+  rarity: CreatureRarity;
+  origin: EggOrigin;
+  requirements: CreationRequirement[];
+  createdAt: string;
+  stats?: BaseStatTendencies;
+  inheritedAttacks?: [CreatureAttackRecord, CreatureAttackRecord];
+}
+
 export interface InventorySaveContainer {
   ownerPlayerId: string;
   currencies: Record<string, number>;
   items: Record<string, SaveStack>;
   cards: Record<string, SaveStack>;
+  creatureCards: Record<string, CreatureCardInstance>;
+  eggs: Record<string, EggSaveRecord>;
 }
 
 export interface CreatureSaveRecord {
@@ -136,6 +184,8 @@ export interface CreatureSaveRecord {
   speciesId: number;
   level: number;
   experience: number;
+  stats: BaseStatTendencies;
+  attacks: CreatureAttackRecord[];
   hp: number;
   maxHp: number;
   fainted: boolean;

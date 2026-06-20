@@ -1,6 +1,6 @@
-import type { CreatureSaveRecord, MonsterRpgSaveState, SaveStack } from './types';
-import { getSpeciesById } from './speciesCatalog';
+import type { MonsterRpgSaveState, SaveStack } from './types';
 import { getCreatureCardById, MAGIC_DUST_CURRENCY_ID, STARTER_FARM_CARD_ID, STARTER_CREATURE_CARD_IDS } from './cards';
+import { convertCreatureCardViaElder, createCreatureCardInstance } from './creatureLifecycle';
 
 export const MAGIC_DUST_FARM_TYPE = 'magic-dust';
 export const STARTER_CREATURE_MAGIC_DUST_COST = 1;
@@ -82,7 +82,14 @@ export function convertStarterCreatureCards(state: MonsterRpgSaveState): Starter
     return { ok: false, state, reason: 'already-converted' };
   }
 
-  if (starterCreatureCards.some((card) => (state.inventory.cards[card.cardId]?.quantity ?? 0) < 1)) {
+  if (
+    starterCreatureCards.some(
+      (card) =>
+        !Object.values(state.inventory.creatureCards).some(
+          (creatureCard) => creatureCard.cardDefinitionId === card.cardId
+        )
+    )
+  ) {
     return { ok: false, state, reason: 'missing-card' };
   }
 
@@ -92,54 +99,17 @@ export function convertStarterCreatureCards(state: MonsterRpgSaveState): Starter
     return { ok: false, state, reason: 'missing-magic-dust' };
   }
 
-  const ownerPlayerId = state.profile.playerId;
-  const convertedCreatures = Object.fromEntries(
-    starterCreatureCards.map((card) => {
-      const species = getSpeciesById(card.speciesId);
-      if (!species) throw new Error(`Unknown starter species ${card.speciesId}`);
-      const creatureId = `starter-creature-${card.speciesId}`;
-      const creature: CreatureSaveRecord = {
-        id: creatureId,
-        ownerPlayerId,
-        speciesId: card.speciesId,
-        level: 1,
-        experience: 0,
-        hp: species.baseStats.hp,
-        maxHp: species.baseStats.hp,
-        fainted: false,
-        cooldowns: {}
-      };
+  const stateWithCreatures = starterCreatureCards.reduce((currentState, card) => {
+    const instance = Object.values(currentState.inventory.creatureCards).find(
+      (creatureCard) => creatureCard.cardDefinitionId === card.cardId
+    );
+    if (!instance) throw new Error(`Missing starter Creature Card instance ${card.cardId}`);
 
-      return [creatureId, creature];
-    })
-  );
-  const convertedCreatureIds = Object.keys(convertedCreatures);
+    const result = convertCreatureCardViaElder(currentState, instance.id);
+    if (!result.ok) throw new Error(`Starter Creature Card conversion failed: ${result.reason}`);
 
-  const stateWithCreatures: MonsterRpgSaveState = {
-    ...state,
-    inventory: {
-      ...state.inventory,
-      currencies: {
-        ...state.inventory.currencies,
-        [MAGIC_DUST_CURRENCY_ID]: currentMagicDust - requiredMagicDust
-      },
-      cards: starterCreatureCards.reduce(
-        (cards, card) => decrementStack(cards, card.cardId, 1),
-        state.inventory.cards
-      )
-    },
-    creatures: {
-      ...state.creatures,
-      activePartyCreatureIds: [
-        ...state.creatures.activePartyCreatureIds,
-        ...convertedCreatureIds.filter((id) => !state.creatures.activePartyCreatureIds.includes(id))
-      ],
-      creatures: {
-        ...state.creatures.creatures,
-        ...convertedCreatures
-      }
-    }
-  };
+    return result.state;
+  }, state);
 
   return {
     ok: true,
@@ -206,8 +176,19 @@ function grantStarterPack(state: MonsterRpgSaveState): MonsterRpgSaveState {
   const cards = {
     ...state.inventory.cards
   };
+  let creatureCards = {
+    ...state.inventory.creatureCards
+  };
   starterCreatureCards.forEach((card) => {
-    cards[card.cardId] = incrementStack(cards[card.cardId], card.cardId, ownerPlayerId, 1);
+    const definition = getCreatureCardById(card.cardId);
+    if (!definition) throw new Error(`Missing starter Creature Card definition ${card.cardId}`);
+    const instance = createCreatureCardInstance(definition, ownerPlayerId, creatureCards, {
+      seed: card.speciesId * 1_001
+    });
+    creatureCards = {
+      ...creatureCards,
+      [instance.id]: instance
+    };
   });
   cards[STARTER_FARM_CARD_ID] = incrementStack(cards[STARTER_FARM_CARD_ID], STARTER_FARM_CARD_ID, ownerPlayerId, 1);
 
@@ -220,7 +201,8 @@ function grantStarterPack(state: MonsterRpgSaveState): MonsterRpgSaveState {
         [MAGIC_DUST_CURRENCY_ID]:
           (state.inventory.currencies[MAGIC_DUST_CURRENCY_ID] ?? 0) + STARTER_PACK_MAGIC_DUST_GRANT
       },
-      cards
+      cards,
+      creatureCards
     },
     journal: {
       ...state.journal,

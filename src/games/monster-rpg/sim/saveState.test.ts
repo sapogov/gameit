@@ -38,7 +38,9 @@ describe('Monster RPG save import and export', () => {
     expect(imported.state.inventory).toMatchObject({
       currencies: { magicDust: 0 },
       items: {},
-      cards: {}
+      cards: {},
+      creatureCards: {},
+      eggs: {}
     });
   });
 
