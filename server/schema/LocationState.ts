@@ -1,5 +1,5 @@
 import { defineTypes, MapSchema, Schema } from '@colyseus/schema';
-import type { AvatarId, Direction, MapKind, MapId } from '../../src/games/monster-rpg/sim/types';
+import type { AvatarId, Direction, MapKind, MapId, WildEncounterStatus } from '../../src/games/monster-rpg/sim/types';
 
 export class PlayerProfileSchema extends Schema {
   declare schemaVersion: number;
@@ -64,6 +64,42 @@ defineTypes(LocationPlayerSchema, {
   connected: 'boolean'
 });
 
+export class WildEncounterSchema extends Schema {
+  declare id: string;
+  declare zoneId: string;
+  declare mapId: MapId;
+  declare speciesId: number;
+  declare x: number;
+  declare y: number;
+  declare status: WildEncounterStatus;
+  declare claimedByPlayerId: string;
+  declare respawnAt: string;
+
+  constructor() {
+    super();
+    this.id = '';
+    this.zoneId = '';
+    this.mapId = 'world-map';
+    this.speciesId = 1;
+    this.x = 0;
+    this.y = 0;
+    this.status = 'available';
+    this.claimedByPlayerId = '';
+    this.respawnAt = '';
+  }
+}
+defineTypes(WildEncounterSchema, {
+  id: 'string',
+  zoneId: 'string',
+  mapId: 'string',
+  speciesId: 'number',
+  x: 'number',
+  y: 'number',
+  status: 'string',
+  claimedByPlayerId: 'string',
+  respawnAt: 'string'
+});
+
 export class LocationStateSchema extends Schema {
   declare mapId: MapId;
   declare mapName: string;
@@ -71,6 +107,7 @@ export class LocationStateSchema extends Schema {
   declare tileWidth: number;
   declare tileHeight: number;
   declare players: MapSchema<LocationPlayerSchema>;
+  declare encounters: MapSchema<WildEncounterSchema>;
 
   constructor() {
     super();
@@ -80,6 +117,7 @@ export class LocationStateSchema extends Schema {
     this.tileWidth = 16;
     this.tileHeight = 16;
     this.players = new MapSchema<LocationPlayerSchema>();
+    this.encounters = new MapSchema<WildEncounterSchema>();
   }
 }
 defineTypes(LocationStateSchema, {
@@ -88,5 +126,6 @@ defineTypes(LocationStateSchema, {
   mapKind: 'string',
   tileWidth: 'number',
   tileHeight: 'number',
-  players: { map: LocationPlayerSchema }
+  players: { map: LocationPlayerSchema },
+  encounters: { map: WildEncounterSchema }
 });

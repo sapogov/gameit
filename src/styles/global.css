@@ -703,6 +703,13 @@ input,select {
   grid-row: 3;
 }
 
+.monster-dpad .interact {
+  grid-column: 2;
+  grid-row: 2;
+  background: rgba(247, 220, 111, 0.92);
+  color: #1f2430;
+}
+
 @media (hover: none), (max-width: 760px) {
   .monster-dpad {
     display: grid;

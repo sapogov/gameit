@@ -11,6 +11,7 @@ export type {
   EggOrigin,
   EggSaveRecord,
   GameMap,
+  ClaimWildEncounterMessage,
   InputAction,
   InteriorMapId,
   LocationPlayerState,
@@ -45,6 +46,10 @@ export type {
   VillageSaveContainer,
   VillageId,
   VillageMap,
+  ResolveWildEncounterMessage,
+  WildEncounterOutcome,
+  WildEncounterState,
+  WildEncounterStatus,
   WorldPosition
 } from './types';
 export {
@@ -69,6 +74,21 @@ export {
   walkableTiles
 } from './maps';
 export { movePlayer } from './movement';
+export {
+  WILD_ENCOUNTER_LOSS_COOLDOWN_MS,
+  WILD_ENCOUNTER_MAX_SPAWN_INTERVAL_MS,
+  WILD_ENCOUNTER_MIN_SPAWN_INTERVAL_MS,
+  WILD_ENCOUNTER_RESPAWN_MS,
+  canTargetEncounter,
+  createWildEncounterSpawn,
+  getFacingTile,
+  getWildEncounterZonesForMap,
+  isPositionInsideEncounterZone,
+  rollSpawnDelayMs,
+  type EncounterRng,
+  type WildEncounterSpawn,
+  type WildEncounterZone
+} from './wildEncounters';
 export {
   clearProgress,
   createInitialSave,

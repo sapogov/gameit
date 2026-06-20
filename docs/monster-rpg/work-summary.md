@@ -242,6 +242,13 @@
 - Added Creature HUD detail rows showing species, rarity, HP, Fainted status, stats, attacks, active/storage location, and recovery/transfer actions.
 - Verified with focused party tests, full Vitest suite, production build, and Monster RPG phase checks.
 
+## 2026-06-20 - Issue #11: Visible Shared Wild Encounter Claim Flow
+
+- Added server-owned Wild Encounter state to Location Rooms, with map-scoped visible Creature spawns, 90-120 second natural reroll timers, 30-second claim/defeat respawn timers, and 30-second per-player loss/run cooldowns.
+- Added encounter zone/spawn simulation helpers, directional target validation, Colyseus claim/release messages, and shared unavailable state when one player claims an encounter.
+- Added Phaser wild Creature icon rendering plus keyboard/mobile Interact input for claiming visible encounters.
+- Added focused simulation tests and SDK checks for shared encounter visibility, claim contention, release after loss, and cooldown rejection.
+
 ## Next Work
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.
