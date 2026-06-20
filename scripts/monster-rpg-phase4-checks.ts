@@ -10,6 +10,7 @@ import {
   loadProfile,
   loadSave,
   MONSTER_RPG_PROFILE_KEY,
+  MONSTER_RPG_SCHEMA_VERSION,
   MONSTER_RPG_SAVE_KEY,
   movePlayer,
   type MonsterRpgSaveState,
@@ -339,8 +340,7 @@ function createState(
   facing: MonsterRpgSaveState['position']['facing']
 ): MonsterRpgSaveState {
   return {
-    schemaVersion: 4,
-    profile: createProfile('phase-4-checker'),
+    ...createInitialSave(createProfile('phase-4-checker')),
     mapId,
     position: { mapId, x, y, facing },
     updatedAt: new Date().toISOString()
@@ -349,8 +349,8 @@ function createState(
 
 function createProfile(id = 'phase-4-checker'): PlayerProfile {
   return {
-    schemaVersion: 4,
-    id,
+    schemaVersion: MONSTER_RPG_SCHEMA_VERSION,
+    playerId: id,
     name: `Checker ${id}`.slice(0, 18),
     avatar: 'scout',
     homeVillageId: 'home-village'

@@ -52,10 +52,79 @@ export type TileType =
 
 export interface PlayerProfile {
   schemaVersion: number;
-  id: string;
+  playerId: string;
   name: string;
   avatar: AvatarId;
   homeVillageId: VillageId;
+}
+
+export interface SaveStack {
+  id: string;
+  ownerPlayerId: string;
+  quantity: number;
+}
+
+export interface InventorySaveContainer {
+  ownerPlayerId: string;
+  currencies: Record<string, number>;
+  items: Record<string, SaveStack>;
+  cards: Record<string, SaveStack>;
+}
+
+export interface CreatureSaveRecord {
+  id: string;
+  ownerPlayerId: string;
+  speciesId: string;
+  level: number;
+  experience: number;
+  hp: number;
+  maxHp: number;
+  fainted: boolean;
+  cooldowns: Record<string, string>;
+}
+
+export interface CreatureSaveContainer {
+  ownerPlayerId: string;
+  activePartyCreatureIds: string[];
+  storedCreatureIds: string[];
+  creatures: Record<string, CreatureSaveRecord>;
+}
+
+export interface VillageSaveContainer {
+  id: VillageId;
+  ownerPlayerId: string;
+  level: number;
+  discoveredVillageIds: VillageId[];
+}
+
+export interface FarmSaveRecord {
+  id: string;
+  ownerPlayerId: string;
+  farmType: string;
+  level: number;
+  storedResources: Record<string, number>;
+  collectCooldownUntil?: string;
+  theftCooldowns: Record<string, string>;
+}
+
+export interface FarmSaveContainer {
+  ownerPlayerId: string;
+  farms: Record<string, FarmSaveRecord>;
+}
+
+export type JournalSpeciesState = 'fought' | 'discovered';
+
+export interface JournalSaveContainer {
+  ownerPlayerId: string;
+  species: Record<string, JournalSpeciesState>;
+}
+
+export interface ProgressionSaveContainer {
+  ownerPlayerId: string;
+  playerLevel: number;
+  playerExperience: number;
+  flags: Record<string, boolean>;
+  completedQuestIds: string[];
 }
 
 export interface WorldPosition {
@@ -152,6 +221,12 @@ export interface MonsterRpgSaveState {
   profile: PlayerProfile;
   position: WorldPosition;
   mapId: MapId;
+  inventory: InventorySaveContainer;
+  creatures: CreatureSaveContainer;
+  village: VillageSaveContainer;
+  farms: FarmSaveContainer;
+  journal: JournalSaveContainer;
+  progression: ProgressionSaveContainer;
   updatedAt: string;
 }
 

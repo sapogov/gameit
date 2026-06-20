@@ -392,7 +392,8 @@ input,select {
   line-height: 1.1;
 }
 
-.monster-reset-button,
+.monster-save-actions button,
+.monster-save-actions label,
 .monster-back-link {
   border: 3px solid #26351f;
   background: #fff8d6;
@@ -403,11 +404,28 @@ input,select {
   text-decoration: none;
 }
 
-.monster-reset-button {
-  min-width: 80px;
-  min-height: 42px;
-  padding: 0.4rem 0.65rem;
+.monster-save-actions {
+  display: flex;
+  gap: 0.4rem;
   pointer-events: auto;
+}
+
+.monster-save-actions button,
+.monster-save-actions label {
+  display: grid;
+  place-items: center;
+  min-width: 74px;
+  min-height: 42px;
+  margin-bottom: 0;
+  padding: 0.4rem 0.65rem;
+}
+
+.monster-save-actions input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .monster-back-link {
@@ -499,8 +517,14 @@ input,select {
     font-size: 0.68rem;
   }
 
-  .monster-reset-button {
-    min-width: 68px;
+  .monster-save-actions {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .monster-save-actions button,
+  .monster-save-actions label {
+    min-width: 66px;
     min-height: 38px;
     padding: 0.3rem 0.45rem;
   }

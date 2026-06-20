@@ -6,7 +6,9 @@ import {
   clearProgress,
   createInitialSave,
   createPlayerProfile,
+  exportSave,
   getGameMap,
+  importSavePayload,
   loadProfile,
   loadSave,
   movePlayer,
@@ -40,6 +42,7 @@ export function MonsterRpgGame() {
   const [saveState, setSaveState] = useState<MonsterRpgSaveState | null>(getInitialState);
   const [lastMove, setLastMove] = useState<MovementResult | null>(null);
   const [roomState, setRoomState] = useState<LocationRoomState | null>(null);
+  const [importStatus, setImportStatus] = useState<string | null>(null);
   const [multiplayerStatus, setMultiplayerStatus] = useState<MultiplayerStatus>('offline');
 
   const updateMultiplayerStatus = useCallback((status: MultiplayerStatus) => {
@@ -71,8 +74,42 @@ export function MonsterRpgGame() {
     const profile = createPlayerProfile(name, avatar);
     const initialSave = createInitialSave(profile);
     saveProgress(initialSave);
+    setImportStatus(null);
     setLastMove(null);
     setSaveState(initialSave);
+  };
+
+  const handleExportSave = () => {
+    if (!saveState) return;
+
+    const blob = new Blob([exportSave(saveState)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `gameit-monsters-${saveState.profile.playerId}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+    setImportStatus('Save exported');
+  };
+
+  const handleImportSave = async (file: File) => {
+    const payload = await file.text();
+    const result = importSavePayload(payload);
+
+    if (!result.ok) {
+      setImportStatus(`Import failed: ${formatImportFailure(result.reason)}`);
+      return;
+    }
+
+    connectionRef.current?.leave();
+    connectionRef.current = null;
+    pendingTransitionRef.current = null;
+    saveProgress(result.state);
+    setLastMove(null);
+    setRoomState(null);
+    updateMultiplayerStatus('offline');
+    setSaveState(result.state);
+    setImportStatus('Save imported');
   };
 
   const handleReset = () => {
@@ -82,6 +119,7 @@ export function MonsterRpgGame() {
     runtimeRef.current?.destroy();
     runtimeRef.current = null;
     clearProgress();
+    setImportStatus(null);
     setLastMove(null);
     setRoomState(null);
     updateMultiplayerStatus('offline');
@@ -100,7 +138,7 @@ export function MonsterRpgGame() {
       runtimeRef.current?.destroy();
       runtimeRef.current = null;
     };
-  }, [handleAction, saveState?.profile.id]);
+  }, [handleAction, saveState?.profile.playerId]);
 
   useEffect(() => {
     if (!saveState) return;
@@ -224,7 +262,7 @@ export function MonsterRpgGame() {
       }
       updateMultiplayerStatus('offline');
     };
-  }, [saveState?.profile.id, saveState?.mapId, updateMultiplayerStatus]);
+  }, [saveState?.profile.playerId, saveState?.mapId, updateMultiplayerStatus]);
 
   if (!saveState) {
     return <CharacterCreator onCreate={handleCreateProfile} />;
@@ -237,12 +275,15 @@ export function MonsterRpgGame() {
       <div className="monster-game-stage">
         <div className="monster-canvas-host" ref={canvasHostRef} />
         <GameHud
+          importStatus={importStatus}
           lastMove={lastMove}
           mapKind={activeMap.kind}
           mapName={roomState?.mapName ?? activeMap.name}
           multiplayerStatus={multiplayerStatus}
           playerCount={roomState ? Object.keys(roomState.players).length : 1}
           saveState={saveState}
+          onExport={handleExportSave}
+          onImport={handleImportSave}
           onReset={handleReset}
         />
         <MobileDpad onAction={handleAction} />
@@ -252,4 +293,10 @@ export function MonsterRpgGame() {
       </Link>
     </main>
   );
+}
+
+function formatImportFailure(reason: 'invalid-json' | 'unsupported-schema' | 'invalid-save'): string {
+  if (reason === 'invalid-json') return 'bad JSON';
+  if (reason === 'unsupported-schema') return 'unsupported version';
+  return 'invalid save';
 }

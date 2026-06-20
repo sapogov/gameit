@@ -89,7 +89,7 @@ function toLocationRoomState(state: any, localPlayerId: string): LocationRoomSta
       profile: {
         schemaVersion:
           typeof player.profile.schemaVersion === 'number' ? player.profile.schemaVersion : MONSTER_RPG_SCHEMA_VERSION,
-        id: player.profile.id,
+        playerId: player.profile.id,
         name: player.profile.name,
         avatar: player.profile.avatar,
         homeVillageId: 'home-village'
