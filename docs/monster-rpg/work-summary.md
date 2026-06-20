@@ -215,6 +215,15 @@
 - Implemented issue #7 first-run Village Elder onboarding: new players spawn at Home Village Town Hall, receive a one-time Starter Pack, convert three common Creature Cards with Magic Dust, build the first Magic Dust Farm, persist onboarding flags, and see a forced Elder panel until setup completes.
 - Resolved PR #2 conflicts against `main` by keeping the current Snake portal shell, wiring GameIt Monsters into the active registry and routes, preserving Monster RPG styles/docs/server pieces, and validating build/tests/phase checks.
 
+## 2026-06-20 - Issue #8: Inventory Cards and Pack Opening Tracer
+
+- Added card-domain simulation for Creature, Farm, Material, and Buff card types plus five-card pack generation.
+- Added pack tracer with deterministic output (ordered card pulls + rarity counts) for reproducible assertions.
+- Added manual card actions: Material and Buff cards activate from inventory, Creature and Farm cards route through Village Elder actions.
+- Added Buff activation guard to enforce one active card per buff type and server-side persistence support for active card buffs.
+- Added HUD inventory panel showing card type/rarity/quantity and action labels (`Activate` vs `Use Elder`), plus pack-open summary.
+- Added deterministic domain tests for pack drawing, Material/Buff activation, Elder routing, and farm uniqueness behavior.
+
 ## Next Work
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.

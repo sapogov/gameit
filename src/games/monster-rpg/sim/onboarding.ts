@@ -1,10 +1,8 @@
 import type { CreatureSaveRecord, MonsterRpgSaveState, SaveStack } from './types';
 import { getSpeciesById } from './speciesCatalog';
+import { getCreatureCardById, MAGIC_DUST_CURRENCY_ID, STARTER_FARM_CARD_ID, STARTER_CREATURE_CARD_IDS } from './cards';
 
-export const MAGIC_DUST_CURRENCY_ID = 'magicDust';
 export const MAGIC_DUST_FARM_TYPE = 'magic-dust';
-export const MAGIC_DUST_FARM_ID = 'home-magic-dust-farm';
-export const STARTER_FARM_CARD_ID = 'farm-card:magic-dust-farm';
 export const STARTER_CREATURE_MAGIC_DUST_COST = 1;
 export const STARTER_PACK_MAGIC_DUST_GRANT = 3;
 export const STARTER_PACK_ONBOARDING_TEXT =
@@ -18,11 +16,16 @@ export const villageElderFlags = {
   onboardingComplete: 'villageElder.onboardingComplete'
 } as const;
 
-export const starterCreatureCards = [
-  { cardId: 'creature-card:spriglet', speciesId: 1 },
-  { cardId: 'creature-card:bramblet', speciesId: 2 },
-  { cardId: 'creature-card:dashkit', speciesId: 3 }
-] as const;
+export const MAGIC_DUST_FARM_ID = 'home-magic-dust-farm';
+export const starterCreatureCards = STARTER_CREATURE_CARD_IDS.map((cardId) => {
+  const definition = getCreatureCardById(cardId);
+  if (!definition) throw new Error(`Missing creature card definition for starter card ${cardId}`);
+
+  return {
+    cardId,
+    speciesId: definition.speciesId
+  };
+});
 
 export type VillageElderOnboardingStep = 'elder-dialog' | 'convert-creatures' | 'build-farm' | 'finish' | 'complete';
 

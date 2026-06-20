@@ -324,6 +324,9 @@ body[data-theme='light'] .admin-form input {
   left: 0.75rem;
   right: 0.75rem;
   z-index: 2;
+}
+
+.monster-hud-stack {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -362,6 +365,60 @@ body[data-theme='light'] .admin-form input {
 .monster-hud-panel h2 {
   font-size: 1.4rem;
   line-height: 1.1;
+}
+
+.monster-card-panel {
+  pointer-events: auto;
+  min-width: min(320px, calc(100vw - 8rem));
+}
+
+.monster-card-actions {
+  margin-top: 0.35rem;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.monster-card-grid {
+  margin-top: 0.25rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.monster-card-row {
+  display: grid;
+  gap: 0.12rem;
+}
+
+.monster-card-row button {
+  margin-top: 0.12rem;
+}
+
+.monster-save-actions {
+  pointer-events: auto;
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+  margin-top: 0.6rem;
+}
+
+.monster-save-actions button,
+.monster-save-actions label,
+.monster-card-actions button,
+.monster-card-row button,
+.monster-card-panel button,
+.monster-onboarding-panel button {
+  pointer-events: auto;
+}
+
+.monster-save-actions label {
+  border: none;
+  background: #32194e;
+  color: #f1dfff;
+  padding: 0.55rem 0.8rem;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .monster-reset-button,

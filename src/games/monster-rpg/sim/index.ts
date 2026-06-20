@@ -2,6 +2,10 @@ export type {
   AvatarId,
   BuildingDefinition,
   BuildingType,
+  CardBuffType,
+  CardDefinition,
+  CardRarity,
+  CardType,
   Direction,
   GameMap,
   InputAction,
@@ -84,6 +88,27 @@ export {
   isKnownSpeciesId,
   validateSpeciesCatalog
 } from './speciesCatalog';
+export {
+  CARD_PACK_SIZE,
+  CARD_PACK_RARITY_TIERS,
+  MAGIC_DUST_CURRENCY_ID,
+  STARTER_FARM_CARD_ID,
+  PackOpenTrace,
+  activateBuffCard,
+  activateCreatureCardViaElder,
+  activateMaterialCard,
+  cardBuffTypes,
+  cardRarities,
+  cardTypes,
+  buildFarmCardViaElder,
+  getCardCatalog,
+  getBuffCardById,
+  getCardDefinition,
+  getCreatureCardById,
+  getFarmCardById,
+  getMaterialCardById,
+  openPack
+} from './cards';
 export { getJournalSpeciesViewState, recordCreatureDiscovered, recordWildCreatureSeen } from './creatureJournal';
 export {
   buildStarterMagicDustFarm,
@@ -97,11 +122,9 @@ export {
   hasConvertedStarterCreatureCards,
   isVillageElderDialogComplete,
   isVillageElderOnboardingComplete,
-  MAGIC_DUST_CURRENCY_ID,
   MAGIC_DUST_FARM_ID,
   MAGIC_DUST_FARM_TYPE,
   STARTER_CREATURE_MAGIC_DUST_COST,
-  STARTER_FARM_CARD_ID,
   STARTER_PACK_MAGIC_DUST_GRANT,
   STARTER_PACK_ONBOARDING_TEXT,
   starterCreatureCards,

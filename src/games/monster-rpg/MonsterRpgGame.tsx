@@ -4,14 +4,21 @@ import { bootGame, type MonsterRpgGameRuntime } from './client';
 import type { LocationTransitionMessage, MultiplayerConnection } from './network';
 import {
   clearProgress,
+  PackOpenTrace,
   buildStarterMagicDustFarm,
+  activateBuffCard,
+  activateCreatureCardViaElder,
+  activateMaterialCard,
   completeVillageElderDialog,
   completeVillageElderOnboarding,
   createInitialSave,
   createPlayerProfile,
   convertStarterCreatureCards,
+  buildFarmCardViaElder,
   exportSave,
   getGameMap,
+  getCardDefinition,
+  openPack,
   importSavePayload,
   isVillageElderDialogComplete,
   loadProfile,
@@ -51,6 +58,7 @@ export function MonsterRpgGame() {
   const [lastMove, setLastMove] = useState<MovementResult | null>(null);
   const [roomState, setRoomState] = useState<LocationRoomState | null>(null);
   const [importStatus, setImportStatus] = useState<string | null>(null);
+  const [packTrace, setPackTrace] = useState<PackOpenTrace | null>(null);
   const [multiplayerStatus, setMultiplayerStatus] = useState<MultiplayerStatus>('offline');
 
   const updateMultiplayerStatus = useCallback((status: MultiplayerStatus) => {
@@ -157,6 +165,93 @@ export function MonsterRpgGame() {
   const handleFinishVillageElderOnboarding = () => {
     setImportStatus('Onboarding complete');
     persistOnboardingUpdate(completeVillageElderOnboarding);
+  };
+
+  const handleOpenPack = () => {
+    if (!saveStateRef.current) return;
+    const result = openPack(saveStateRef.current, { seed: Date.now() });
+    setPackTrace(result.trace);
+    saveProgress(result.state);
+    saveStateRef.current = result.state;
+    setLastMove(null);
+    setImportStatus(`Pack opened (${result.trace.cards.length})`);
+    setSaveState(result.state);
+  };
+
+  const handleActivateCard = (cardId: string) => {
+    setSaveState((current) => {
+      if (!current) return current;
+      const definition = getCardDefinition(cardId);
+
+      if (definition?.type === 'material') {
+        const result = activateMaterialCard(current, cardId);
+        if (!result.ok) {
+          setImportStatus(formatCardFailure(result.reason));
+          return current;
+        }
+        saveProgress(result.state);
+        saveStateRef.current = result.state;
+        setLastMove(null);
+        setPackTrace(null);
+        setImportStatus('Material card activated');
+        return result.state;
+      }
+
+      if (definition?.type === 'buff') {
+        const result = activateBuffCard(current, cardId);
+        if (!result.ok) {
+          setImportStatus(formatCardFailure(result.reason));
+          return current;
+        }
+        saveProgress(result.state);
+        saveStateRef.current = result.state;
+        setLastMove(null);
+        setPackTrace(null);
+        setImportStatus('Buff card activated');
+        return result.state;
+      }
+
+      setImportStatus('Unknown card action');
+      return current;
+    });
+  };
+
+  const handleRouteCardToElder = (cardId: string) => {
+    setSaveState((current) => {
+      if (!current) return current;
+      const definition = getCardDefinition(cardId);
+
+      if (definition?.type === 'creature') {
+        const result = activateCreatureCardViaElder(current, cardId);
+        if (!result.ok) {
+          setImportStatus(formatCardFailure(result.reason));
+          return current;
+        }
+        saveProgress(result.state);
+        saveStateRef.current = result.state;
+        setLastMove(null);
+        setPackTrace(null);
+        setImportStatus('Creature card routed to Elder');
+        return result.state;
+      }
+
+      if (definition?.type === 'farm') {
+        const result = buildFarmCardViaElder(current, cardId);
+        if (!result.ok) {
+          setImportStatus(formatCardFailure(result.reason));
+          return current;
+        }
+        saveProgress(result.state);
+        saveStateRef.current = result.state;
+        setLastMove(null);
+        setPackTrace(null);
+        setImportStatus('Farm card routed to Elder');
+        return result.state;
+      }
+
+      setImportStatus('Card cannot use Village Elder action');
+      return current;
+    });
   };
 
   const handleExportSave = () => {
@@ -367,8 +462,12 @@ export function MonsterRpgGame() {
           multiplayerStatus={multiplayerStatus}
           playerCount={roomState ? Object.keys(roomState.players).length : 1}
           saveState={saveState}
+          packOpenTrace={packTrace}
           onExport={handleExportSave}
           onImport={handleImportSave}
+          onOpenPack={handleOpenPack}
+          onActivateCard={handleActivateCard}
+          onRouteCardToElder={handleRouteCardToElder}
           onReset={handleReset}
         />
         <VillageElderOnboarding
@@ -402,4 +501,13 @@ function formatStarterConversionFailure(reason: 'already-converted' | 'missing-c
 function formatStarterFarmFailure(reason: 'already-built' | 'missing-card'): string {
   if (reason === 'already-built') return 'Magic Dust Farm already built';
   return 'Missing Magic Dust Farm Card';
+}
+
+function formatCardFailure(reason: string | undefined): string {
+  if (reason === 'missing-card') return 'Card not available';
+  if (reason === 'buff-slot-occupied') return 'Buff slot already active';
+  if (reason === 'farm-type-locked') return 'Farm type already built';
+  if (reason === 'wrong-card-type') return 'Card cannot use this action';
+  if (reason === 'invalid-species') return 'Card points to unknown species';
+  return `Card action failed${reason ? `: ${reason}` : ''}`;
 }
