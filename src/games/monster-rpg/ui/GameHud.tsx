@@ -124,5 +124,6 @@ function getStatusText(status: MultiplayerStatus, playerCount: number, lastMove:
 function formatBlockedBy(blockedBy: MovementResult['blockedBy']): string {
   if (!blockedBy) return 'obstacle';
   if (blockedBy === 'bounds') return 'edge';
+  if (blockedBy === 'onboarding') return 'Village Elder';
   return blockedBy.replace(/([A-Z])/g, ' $1').toLowerCase();
 }

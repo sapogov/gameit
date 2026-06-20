@@ -212,6 +212,7 @@
 - Continued issue #5 TDD with import failure behavior: invalid JSON imports now preserve the current save, and unsupported save schema versions return a clear `unsupported-schema` failure reason.
 - Finished issue #5 save foundation: added repository-style local persistence, owned save containers for inventory, creatures, village, farms, journal, and progression, strict import validation for ownership/IDs/quantities/cooldowns, and manual HUD export/import controls.
 - Implemented issue #6 catalog and Journal shell: added a 147-record Gen 1 Species catalog with 22 polished MVP Species, validation for IDs/slugs/rarity/type/attack pools, Journal unseen/silhouette/discovered transitions, save import validation for known Species, and a collapsible Creature Journal HUD panel.
+- Implemented issue #7 first-run Village Elder onboarding: new players spawn at Home Village Town Hall, receive a one-time Starter Pack, convert three common Creature Cards with Magic Dust, build the first Magic Dust Farm, persist onboarding flags, and see a forced Elder panel until setup completes.
 - Resolved PR #2 conflicts against `main` by keeping the current Snake portal shell, wiring GameIt Monsters into the active registry and routes, preserving Monster RPG styles/docs/server pieces, and validating build/tests/phase checks.
 
 ## Next Work

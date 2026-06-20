@@ -85,3 +85,28 @@ export {
   validateSpeciesCatalog
 } from './speciesCatalog';
 export { getJournalSpeciesViewState, recordCreatureDiscovered, recordWildCreatureSeen } from './creatureJournal';
+export {
+  buildStarterMagicDustFarm,
+  completeVillageElderDialog,
+  completeVillageElderOnboarding,
+  convertStarterCreatureCards,
+  getStarterCreatureConversionCost,
+  getVillageElderOnboardingStep,
+  hasBuiltStarterMagicDustFarm,
+  hasClaimedStarterPack,
+  hasConvertedStarterCreatureCards,
+  isVillageElderDialogComplete,
+  isVillageElderOnboardingComplete,
+  MAGIC_DUST_CURRENCY_ID,
+  MAGIC_DUST_FARM_ID,
+  MAGIC_DUST_FARM_TYPE,
+  STARTER_CREATURE_MAGIC_DUST_COST,
+  STARTER_FARM_CARD_ID,
+  STARTER_PACK_MAGIC_DUST_GRANT,
+  STARTER_PACK_ONBOARDING_TEXT,
+  starterCreatureCards,
+  villageElderFlags,
+  type StarterCreatureConversionResult,
+  type StarterFarmBuildResult,
+  type VillageElderOnboardingStep
+} from './onboarding';
