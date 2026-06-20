@@ -19,6 +19,8 @@ import {
   getJournalSpeciesViewState,
   recordCreatureDiscovered,
   recordWildCreatureSeen,
+  findWalkPath,
+  findWalkPathToInteractionDistance,
   validateSpeciesCatalog,
   type MonsterRpgSaveState,
   type PlayerProfile
@@ -39,6 +41,7 @@ checkHomeVillageEastGateExit();
 checkOverworldVillageEntry();
 checkBuildingEntryAndExit();
 checkBlockedMovement();
+checkTapToWalkPathing();
 checkGen1SpeciesCatalog();
 checkCreatureJournalStates();
 await checkSdkMultiplayerFlow();
@@ -142,6 +145,20 @@ function checkBlockedMovement(): void {
   assert.equal(result.state.position.x, 61);
   assert.equal(result.state.position.y, 3);
   assert.equal(result.state.position.facing, 'east');
+}
+
+function checkTapToWalkPathing(): void {
+  const homeVillage = getGameMap('home-village');
+  const homeStart = createState('home-village', 28, 10, 'east').position;
+  assert.deepEqual(findWalkPath(homeVillage, homeStart, 29, 10), ['east']);
+
+  const worldMap = getGameMap('world-map');
+  const worldStart = createState('world-map', 61, 3, 'south').position;
+  assert.equal(findWalkPath(worldMap, worldStart, 62, 3), null);
+  assert.equal(findWalkPath(worldMap, worldStart, -1, 3), null);
+
+  const encounterPath = findWalkPathToInteractionDistance(homeVillage, homeStart, 25, 10);
+  assert.ok(encounterPath, 'tap path should stop at interaction distance for visible Creatures');
 }
 
 function checkGen1SpeciesCatalog(): void {

@@ -7,6 +7,7 @@ export type {
   CardType,
   CreationRequirement,
   CreationRequirementScope,
+  CreatureLabelMode,
   Direction,
   EggOrigin,
   EggSaveRecord,
@@ -74,6 +75,7 @@ export {
   walkableTiles
 } from './maps';
 export { movePlayer } from './movement';
+export { findWalkPath, findWalkPathToInteractionDistance } from './pathfinding';
 export {
   WILD_ENCOUNTER_LOSS_COOLDOWN_MS,
   WILD_ENCOUNTER_MAX_SPAWN_INTERVAL_MS,
@@ -105,6 +107,13 @@ export {
   type MonsterRpgSaveRepository,
   type SaveImportResult
 } from './saveState';
+export {
+  MONSTER_RPG_SETTINGS_KEY,
+  defaultMonsterRpgSettings,
+  loadMonsterRpgSettings,
+  saveMonsterRpgSettings,
+  type MonsterRpgSettings
+} from './settings';
 export {
   attackPoolIds,
   creatureRarities,

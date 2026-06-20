@@ -6,6 +6,8 @@ export type MultiplayerStatus = 'connecting' | 'online' | 'offline';
 
 export type RoomPlayerId = string;
 
+export type CreatureLabelMode = 'icon-only' | 'icon-plus-name';
+
 export type VillageId =
   | 'home-village'
   | 'brookhaven-village'

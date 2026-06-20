@@ -8,6 +8,7 @@ import {
   getJournalSpeciesViewState,
   getSpeciesById,
   type CardDefinition,
+  type CreatureLabelMode,
   type CreatureSaveRecord,
   type CreatureSpeciesRecord,
   type JournalSpeciesViewState,
@@ -27,6 +28,7 @@ interface GameHudProps {
   multiplayerStatus: MultiplayerStatus;
   playerCount: number;
   saveState: MonsterRpgSaveState;
+  creatureLabelMode: CreatureLabelMode;
   packOpenTrace: PackOpenTrace | null;
   onExport: () => void;
   onImport: (file: File) => void;
@@ -38,6 +40,7 @@ interface GameHudProps {
   onHospitalHeal: () => void;
   onMoveCreatureToActive: (creatureId: string) => void;
   onMoveCreatureToStorage: (creatureId: string) => void;
+  onCreatureLabelModeChange: (mode: CreatureLabelMode) => void;
   onReviveCreature: (creatureId: string) => void;
 }
 
@@ -50,6 +53,7 @@ export function GameHud({
   multiplayerStatus,
   playerCount,
   saveState,
+  creatureLabelMode,
   packOpenTrace,
   onExport,
   onImport,
@@ -61,6 +65,7 @@ export function GameHud({
   onHospitalHeal,
   onMoveCreatureToActive,
   onMoveCreatureToStorage,
+  onCreatureLabelModeChange,
   onReviveCreature
 }: GameHudProps) {
   const status = getStatusText(multiplayerStatus, playerCount, lastMove);
@@ -194,6 +199,25 @@ export function GameHud({
             )}
           </div>
         </section>
+        <details className="monster-settings-panel">
+          <summary>Settings</summary>
+          <div className="monster-segmented-control" aria-label="Creature label mode">
+            <button
+              className={creatureLabelMode === 'icon-only' ? 'active' : ''}
+              onClick={() => onCreatureLabelModeChange('icon-only')}
+              type="button"
+            >
+              Icon
+            </button>
+            <button
+              className={creatureLabelMode === 'icon-plus-name' ? 'active' : ''}
+              onClick={() => onCreatureLabelModeChange('icon-plus-name')}
+              type="button"
+            >
+              Icon + Name
+            </button>
+          </div>
+        </details>
         <details className="monster-journal-panel">
           <summary>
             Creature Journal <span>{discoveredCount} found</span> <span>{silhouetteCount} seen</span>

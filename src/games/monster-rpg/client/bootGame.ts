@@ -1,15 +1,17 @@
 import Phaser from 'phaser';
-import type { InputAction, LocationRoomState, MonsterRpgSaveState } from '../sim';
+import type { CreatureLabelMode, InputAction, LocationRoomState, MonsterRpgSaveState } from '../sim';
 import { getGameMap } from '../sim';
 import { VillageScene } from './scenes/VillageScene';
 
 export interface MonsterRpgGameRuntime {
+  setCreatureLabelMode: (mode: CreatureLabelMode) => void;
   setSaveState: (state: MonsterRpgSaveState) => void;
   setRoomState: (state: LocationRoomState | null) => void;
   destroy: () => void;
 }
 
 interface BootGameOptions {
+  creatureLabelMode: CreatureLabelMode;
   initialState: MonsterRpgSaveState;
   onAction: (action: InputAction) => void;
 }
@@ -17,6 +19,7 @@ interface BootGameOptions {
 export function bootGame(parent: HTMLElement, options: BootGameOptions): MonsterRpgGameRuntime {
   const villageScene = new VillageScene({
     initialState: options.initialState,
+    creatureLabelMode: options.creatureLabelMode,
     map: getGameMap(options.initialState.mapId),
     onAction: options.onAction
   });
@@ -36,6 +39,9 @@ export function bootGame(parent: HTMLElement, options: BootGameOptions): Monster
   });
 
   return {
+    setCreatureLabelMode: (mode) => {
+      villageScene.setCreatureLabelMode(mode);
+    },
     setSaveState: (state) => {
       villageScene.setSaveState(state);
     },
