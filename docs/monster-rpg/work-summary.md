@@ -207,6 +207,7 @@
 - Added local-first save export/import requirement before public testing.
 - Consolidated `PLAN.md` into an implementation roadmap with current baseline, ADR references, architecture rules, phases, acceptance checks, and test plan.
 - Published the GameIt Monsters MVP PRD to GitHub issue #4 with the `ready-for-agent` label and saved the PRD text in `docs/monster-rpg/prd-gameit-monsters-mvp.md`.
+- Resolved PR #2 conflicts against `main` by keeping the current Snake portal shell, wiring GameIt Monsters into the active registry and routes, preserving Monster RPG styles/docs/server pieces, and validating build/tests/phase checks.
 
 ## Next Work
 

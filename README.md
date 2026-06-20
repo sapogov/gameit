@@ -1,203 +1,107 @@
-# GameIt Portal
+# GameIt Portal MVP
 
-GameIt is a compact browser-game portal built for **GitHub Pages**.
-It includes:
+Browser-based arcade portal MVP built with **React + TypeScript + Vite** and designed for static hosting.
 
-- Home page with GameIt hero banner and game cards.
-- Individual game pages (`/game/:gameId`).
-- Leaderboard page with game tabs + period filters (daily / weekly / monthly / all time).
-- Admin panel with game cards and per-game config pages.
-- Theme switcher (dark/light), persisted in `localStorage`.
-- Data layer currently backed by `localStorage`, designed to be swapped with AWS backend later.
+## Features
 
-## Tech Stack
+- Responsive portal with light/dark mode toggle.
+- Game registry with playable Snake, playable GameIt Monsters, and placeholders.
+- Global leaderboard modal with per-game and daily/weekly/all-time tabs.
+- Snake MVP with start flow, modes, powerups, pause/resume, restart, game-over, level-complete, local profile persistence, and in-game leaderboard.
+- GameIt Monsters foundation with original monster-collecting fantasy, Phaser 2D playfield, DOM HUD, local save state, and optional Colyseus multiplayer presence.
+- Admin route (`/admin`) with passcode gate for Snake config.
+- LocalStorage config + leaderboard providers with future remote provider stub.
+- GitHub Pages workflow + Vite base path toggle.
 
-- React 18
-- TypeScript
-- Vite
-- React Router
-- GitHub Actions + GitHub Pages deploy
-
-## Monster RPG Foundation
-
-GameIt now includes Phase 0 planning and boundaries for **GameIt Monsters**, an original monster-collecting browser MMO inspired by retro handheld RPGs.
-
-- Phase 0 docs: `docs/monster-rpg/phase-0-foundation.md`
-- Running work summary: `docs/monster-rpg/work-summary.md`
-- Shared game contracts: `src/games/monster-rpg/sim`
-- Future client home: `src/games/monster-rpg/client`
-- Future DOM UI home: `src/games/monster-rpg/ui`
-
-Chosen direction: React/Vite portal, Phaser 2D client, DOM HUD, square tiles, Node + Colyseus authoritative multiplayer, first proving online presence + movement.
-
-Phase 2 adds a local Colyseus room named `home_village` on `127.0.0.1:2567` for multiplayer presence.
-
-## Project Structure
-
-```text
-.
-├── .github/workflows/deploy-pages.yml   # Build and deploy to GitHub Pages
-├── design.html                           # Provided design reference
-├── src
-│   ├── components
-│   │   ├── GameCard.tsx
-│   │   └── Layout.tsx
-│   ├── data
-│   │   └── defaultGames.ts
-│   ├── pages
-│   │   ├── AdminGameConfigPage.tsx
-│   │   ├── AdminPage.tsx
-│   │   ├── GamePage.tsx
-│   │   ├── HomePage.tsx
-│   │   └── LeaderboardPage.tsx
-│   ├── repositories
-│   │   └── localStorageRepository.ts
-│   ├── App.tsx
-│   ├── main.tsx
-│   ├── styles.css
-│   └── types.ts
-├── index.html
-├── package.json
-├── tsconfig.app.json
-├── tsconfig.json
-├── tsconfig.node.json
-└── vite.config.ts
-```
-
-## Local Development
-
-### Requirements
-
-- Node.js 20+ (recommended)
-- npm 10+
-
-### Install
+## Local Run
 
 ```bash
-npm ci
-```
-
-### Start dev server
-
-```bash
+npm install
 npm run dev
 ```
 
-### Start multiplayer dev
+## Multiplayer Dev
 
 ```bash
 npm run dev:multiplayer
 ```
 
-Open `http://127.0.0.1:5173/gameit/game/gameit-monsters` in two browser tabs to test local Colyseus presence and server-authoritative movement. If the Colyseus server is not running, GameIt Monsters falls back to offline local mode.
+Open `http://127.0.0.1:5173/gameit/games/gameit-monsters` in two browser tabs to test local Colyseus presence and server-authoritative movement. If the Colyseus server is not running, GameIt Monsters falls back to offline local mode.
 
-### Production build
+## Build / Preview
 
 ```bash
 npm run build
-```
-
-### Preview built app
-
-```bash
 npm run preview
 ```
 
-## Routing
+## Deploy to GitHub Pages
 
-- `/` — Home
-- `/game/:gameId` — Game host page
-- `/leaderboard` — Leaderboard with tabs and date-range filters
-- `/admin` — Admin panel
-- `/admin/game/:gameId` — Per-game config
+1. Push to `main`.
+2. Enable **Pages** in repo settings and set source to **GitHub Actions**.
+3. Workflow `.github/workflows/deploy-pages.yml` builds with `GITHUB_PAGES=true`.
 
-## Data Model
+Update `vite.config.ts` repo base (`/gameit/`) if your repository name differs.
 
-### Game
+## Admin Access (MVP)
 
-- `id: string`
-- `title: string`
-- `description: string`
-- `cover: string`
-- `route: string`
-- `modes: Mode[]`
-- `enabled: boolean`
+- Route: `/admin`
+- Passcode uses `VITE_ADMIN_PASSCODE` or falls back to `dev-admin`.
+- This gate is intentionally lightweight and **not secure production auth**.
 
-### LeaderboardEntry
+## Architecture Overview
 
-- `id: string`
-- `gameId: string`
-- `playerName: string`
-- `skin: string`
-- `mode: Mode`
-- `score: number`
-- `date: ISO string`
+- `src/app`: routing + shell
+- `src/config`: game registry
+- `src/providers`: leaderboard provider abstraction
+- `src/games/snake`: snake engine/config/UI
+- `src/games/monster-rpg`: GameIt Monsters simulation, Phaser client, UI, and networking adapter
+- `src/admin`: admin settings UI
+- `src/games/placeholders`: future game placeholders
+- `server`: Colyseus authoritative rooms for GameIt Monsters
 
-## Current Storage Strategy (v1)
+The Snake engine isolates deterministic updates, item rules, and collision logic from React UI. GameIt Monsters keeps simulation, rendering, DOM UI, and networking separated so the server can remain authoritative for online play.
 
-Implemented in `src/repositories/localStorageRepository.ts`:
+## Monster RPG Foundation
 
-- Games are stored under `gameit.games`.
-- Leaderboard entries are stored under `gameit.entries`.
-- Theme is stored under `gameit.theme`.
-- On first load, default games and sample leaderboard data are seeded.
+GameIt Monsters is an original monster-collecting browser MMO inspired by retro handheld RPGs.
 
-## AWS Migration Plan (v2+)
+- Phase 0 docs: `docs/monster-rpg/phase-0-foundation.md`
+- MVP PRD: `docs/monster-rpg/prd-gameit-monsters-mvp.md`
+- Running work summary: `docs/monster-rpg/work-summary.md`
+- Shared game contracts: `src/games/monster-rpg/sim`
+- Phaser client: `src/games/monster-rpg/client`
+- DOM UI: `src/games/monster-rpg/ui`
 
-To migrate from local storage to AWS with minimal UI changes:
+Chosen direction: React/Vite portal, Phaser 2D client, DOM HUD, square tiles, Node + Colyseus authoritative multiplayer, first proving online presence + movement.
 
-1. Keep `Game` and `LeaderboardEntry` types as API contracts.
-2. Introduce repository interfaces (`GamesRepository`, `LeaderboardRepository`).
-3. Create AWS implementation (e.g., API Gateway + Lambda + DynamoDB).
-4. Replace only data provider wiring in `App.tsx`.
+## Adding a New Game
 
-Suggested AWS path:
+1. Add entry in `src/config/games.ts`.
+2. Add route and lazy module in `src/app/App.tsx`.
+3. Implement game module under `src/games/<game-name>`.
+4. Use leaderboard provider interface for score persistence.
 
-- **Auth**: Cognito (later, for admin authentication)
-- **API**: API Gateway + Lambda
-- **Data**: DynamoDB (`games`, `leaderboard_entries`)
-- **Assets**: S3 + CloudFront (if game assets become heavy)
+## Known Limitations
 
-## GitHub Pages Deploy
+- Snake rendering currently targets fixed 24x24 draw space.
+- Endless mode currently wraps world and provides directional text indicator.
+- Some advanced admin knobs are available in config schema but not all are exposed in the first UI form.
+- GameIt Monsters persistence is local-first until deployment target and backend storage are locked.
+- No backend auth or remote persistence in MVP.
 
-Workflow file: `.github/workflows/deploy-pages.yml`.
+## Future Improvements
 
-It runs on every push to `main`:
+- PWA offline caching.
+- Seeded RNG mode for deterministic tests.
+- More exhaustive engine tests and replay harness.
+- Full admin controls for every nested spawn/powerup parameter.
+- Remote leaderboard provider.
+- Production persistence and auth for GameIt Monsters.
 
-1. `npm ci`
-2. `npm run build`
-3. Upload `dist`
-4. Deploy via `actions/deploy-pages`
+## UI Asset Integration
 
-### One-time repository setup
-
-In GitHub repo settings:
-
-1. Go to **Settings → Pages**.
-2. Set **Build and deployment** to **GitHub Actions**.
-3. Ensure default branch is `main`.
-
-### Base path note
-
-`vite.config.ts` uses:
-
-```ts
-base: '/gameit/'
-```
-
-If your repository name is different, update this value to match your repo slug.
-
-## How to Add Games Now
-
-1. Open `/admin`.
-2. Fill title, description, optional cover URL.
-3. Click **Add game**.
-4. Open **Configure** to change title/description and toggle enabled state.
-
-## Future Enhancements
-
-- Admin authentication (password/Cognito).
-- Real leaderboard ingestion from game clients.
-- Cloud synchronization instead of local-only storage.
-- Search/filter/sort for large game collections.
-- Localization support if non-English UI is needed later.
+- Place logo sheet at `public/assets/logos.png`.
+- Place UI sprite sheet at `public/assets/assets.png`.
+- Logo crop coordinates are configured in `src/config/uiAssets.ts` (`logoSpriteSheet.logos`).
+- Sprite mapping placeholders for buttons/frames are also centralized in `src/config/uiAssets.ts` for quick updates.
