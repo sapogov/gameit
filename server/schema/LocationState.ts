@@ -50,18 +50,24 @@ export class LocationPlayerSchema extends Schema {
   declare profile: PlayerProfileSchema;
   declare position: WorldPositionSchema;
   declare connected: boolean;
+  declare inBattle: boolean;
+  declare battleId: string;
 
   constructor() {
     super();
     this.profile = new PlayerProfileSchema();
     this.position = new WorldPositionSchema();
     this.connected = true;
+    this.inBattle = false;
+    this.battleId = '';
   }
 }
 defineTypes(LocationPlayerSchema, {
   profile: PlayerProfileSchema,
   position: WorldPositionSchema,
-  connected: 'boolean'
+  connected: 'boolean',
+  inBattle: 'boolean',
+  battleId: 'string'
 });
 
 export class WildEncounterSchema extends Schema {

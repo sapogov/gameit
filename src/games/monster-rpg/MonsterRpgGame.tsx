@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { bootGame, type MonsterRpgGameRuntime } from './client';
-import type { LocationTransitionMessage, MultiplayerConnection } from './network';
+import type { BattleConnection, LocationTransitionMessage, MultiplayerConnection } from './network';
 import {
   clearProgress,
   PackOpenTrace,
@@ -17,6 +17,7 @@ import {
   buildFarmCardViaElder,
   exportSave,
   getGameMap,
+  getFirstBattleReadyCreature,
   getCardDefinition,
   healAllCreaturesAtHospital,
   hatchEgg,
@@ -30,10 +31,13 @@ import {
   movePlayer,
   moveCreatureToActiveParty,
   moveCreatureToStorage,
+  recordWildCreatureSeen,
   saveMonsterRpgSettings,
   saveProgress,
   useReviveItem,
   type AvatarId,
+  type BattleResultMessage,
+  type BattleRoomState,
   type CreatureLabelMode,
   type InputAction,
   type LocationRoomState,
@@ -58,6 +62,13 @@ export function MonsterRpgGame() {
   const canvasHostRef = useRef<HTMLDivElement | null>(null);
   const runtimeRef = useRef<MonsterRpgGameRuntime | null>(null);
   const connectionRef = useRef<MultiplayerConnection | null>(null);
+  const battleConnectionRef = useRef<BattleConnection | null>(null);
+  const activeBattleClaimRef = useRef<{
+    battleId: string;
+    battleToken: string;
+    encounterId: string;
+    speciesId: number;
+  } | null>(null);
   const moveSequenceRef = useRef(0);
   const multiplayerStatusRef = useRef<MultiplayerStatus>('offline');
   const pendingTransitionRef = useRef<LocationTransitionMessage | null>(null);
@@ -66,6 +77,7 @@ export function MonsterRpgGame() {
   const freeMovementUnlockedRef = useRef(saveState ? isVillageElderDialogComplete(saveState) : false);
   const [lastMove, setLastMove] = useState<MovementResult | null>(null);
   const [roomState, setRoomState] = useState<LocationRoomState | null>(null);
+  const [battleState, setBattleState] = useState<BattleRoomState | null>(null);
   const [importStatus, setImportStatus] = useState<string | null>(null);
   const [packTrace, setPackTrace] = useState<PackOpenTrace | null>(null);
   const [multiplayerStatus, setMultiplayerStatus] = useState<MultiplayerStatus>('offline');
@@ -88,6 +100,11 @@ export function MonsterRpgGame() {
       return;
     }
 
+    if (action.type === 'move' && battleState?.status === 'active') {
+      setImportStatus('Battle in progress');
+      return;
+    }
+
     if (action.type === 'move' && connectionRef.current && multiplayerStatusRef.current === 'online') {
       moveSequenceRef.current += 1;
       connectionRef.current.sendMoveIntent({
@@ -100,7 +117,12 @@ export function MonsterRpgGame() {
     if (action.type === 'interact' && connectionRef.current && multiplayerStatusRef.current === 'online') {
       const encounter = getFacingEncounter(roomState, currentState);
       if (encounter) {
-        connectionRef.current.sendClaimWildEncounter({ encounterId: encounter.id });
+        const activeCreature = currentState ? getFirstBattleReadyCreature(currentState) : null;
+        if (!activeCreature) {
+          setImportStatus('No ready Creature for battle');
+          return;
+        }
+        connectionRef.current.sendClaimWildEncounter({ encounterId: encounter.id, activeCreature });
         setImportStatus(`Claiming wild Creature #${encounter.speciesId}`);
       } else {
         setImportStatus('No wild Creature ahead');
@@ -116,7 +138,7 @@ export function MonsterRpgGame() {
       saveProgress(result.state);
       return result.state;
     });
-  }, [roomState]);
+  }, [battleState?.status, roomState]);
 
   const handleCreateProfile = (name: string, avatar: AvatarId) => {
     const profile = createPlayerProfile(name, avatar);
@@ -392,7 +414,10 @@ export function MonsterRpgGame() {
     }
 
     connectionRef.current?.leave();
+    battleConnectionRef.current?.leave();
     connectionRef.current = null;
+    battleConnectionRef.current = null;
+    activeBattleClaimRef.current = null;
     pendingTransitionRef.current = null;
     saveProgress(result.state);
     setLastMove(null);
@@ -404,7 +429,10 @@ export function MonsterRpgGame() {
 
   const handleReset = () => {
     connectionRef.current?.leave();
+    battleConnectionRef.current?.leave();
     connectionRef.current = null;
+    battleConnectionRef.current = null;
+    activeBattleClaimRef.current = null;
     pendingTransitionRef.current = null;
     runtimeRef.current?.destroy();
     runtimeRef.current = null;
@@ -412,8 +440,17 @@ export function MonsterRpgGame() {
     setImportStatus(null);
     setLastMove(null);
     setRoomState(null);
+    setBattleState(null);
     updateMultiplayerStatus('offline');
     setSaveState(null);
+  };
+
+  const handleBattleAttack = (attackId: string) => {
+    battleConnectionRef.current?.sendAttack({ attackId });
+  };
+
+  const handleRunBattle = () => {
+    battleConnectionRef.current?.sendRun();
   };
 
   const handleCreatureLabelModeChange = (creatureLabelMode: CreatureLabelMode) => {
@@ -532,6 +569,23 @@ export function MonsterRpgGame() {
                 return nextSave;
               });
             },
+            onWildEncounterClaimed: (claim) => {
+              if (cancelled) return;
+
+              activeBattleClaimRef.current = {
+                battleId: claim.battleId,
+                battleToken: claim.battleToken,
+                encounterId: claim.encounterId,
+                speciesId: claim.speciesId
+              };
+              setImportStatus('Battle started');
+              void connectBattleRoom(claim.battleId, claim.battleToken);
+            },
+            onWildEncounterClaimRejected: (message) => {
+              if (!cancelled) {
+                setImportStatus(formatWildEncounterClaimFailure(message.reason));
+              }
+            },
             onStatus: (status) => {
               if (!cancelled) {
                 updateMultiplayerStatus(status);
@@ -572,6 +626,90 @@ export function MonsterRpgGame() {
     };
   }, [saveState?.profile.playerId, saveState?.mapId, updateMultiplayerStatus]);
 
+  const connectBattleRoom = useCallback(
+    async (battleId: string, battleToken: string) => {
+      const currentState = saveStateRef.current;
+      if (!currentState) return;
+
+      battleConnectionRef.current?.leave({ silent: true });
+      battleConnectionRef.current = null;
+
+      try {
+        const { connectToBattle } = await import('./network');
+        const connection = await connectToBattle(
+          {
+            battleId,
+            battleToken,
+            profile: currentState.profile
+          },
+          {
+            onBattleState: (nextBattleState) => {
+              setBattleState(nextBattleState);
+            },
+            onBattleResult: (result) => {
+              applyBattleResult(result, battleToken);
+            },
+            onStatus: (status) => {
+              if (status === 'offline') {
+                battleConnectionRef.current = null;
+              }
+            }
+          }
+        );
+        battleConnectionRef.current = connection;
+      } catch (error) {
+        console.warn('[monster-rpg] battle room unavailable', error);
+        activeBattleClaimRef.current = null;
+        setBattleState(null);
+        setImportStatus('Battle unavailable');
+      }
+    },
+    []
+  );
+
+  const applyBattleResult = useCallback((result: BattleResultMessage, battleToken: string) => {
+    const claim = activeBattleClaimRef.current;
+    if (!claim || claim.battleId !== result.battleId) return;
+
+    connectionRef.current?.sendResolveWildEncounter({
+      encounterId: result.encounterId,
+      outcome: result.outcome,
+      battleId: result.battleId,
+      battleToken
+    });
+
+    setSaveState((current) => {
+      if (!current) return current;
+      const creature = current.creatures.creatures[result.playerCreatureId];
+      const nextCreatures = creature
+        ? {
+            ...current.creatures.creatures,
+            [result.playerCreatureId]: {
+              ...creature,
+              hp: result.playerCreatureHp,
+              fainted: result.playerCreatureFainted
+            }
+          }
+        : current.creatures.creatures;
+      const nextState: MonsterRpgSaveState = {
+        ...recordWildCreatureSeen(current, claim.speciesId),
+        creatures: {
+          ...current.creatures,
+          creatures: nextCreatures
+        },
+        updatedAt: new Date().toISOString()
+      };
+      saveProgress(nextState);
+      saveStateRef.current = nextState;
+      return nextState;
+    });
+
+    setImportStatus(formatBattleOutcome(result.outcome));
+    activeBattleClaimRef.current = null;
+    battleConnectionRef.current?.leave({ silent: true });
+    battleConnectionRef.current = null;
+  }, []);
+
   if (!saveState) {
     return <CharacterCreator onCreate={handleCreateProfile} />;
   }
@@ -593,6 +731,7 @@ export function MonsterRpgGame() {
           saveState={saveState}
           creatureLabelMode={settings.creatureLabelMode}
           packOpenTrace={packTrace}
+          battleState={battleState}
           onExport={handleExportSave}
           onImport={handleImportSave}
           onOpenPack={handleOpenPack}
@@ -603,6 +742,8 @@ export function MonsterRpgGame() {
           onMoveCreatureToActive={handleMoveCreatureToActive}
           onMoveCreatureToStorage={handleMoveCreatureToStorage}
           onCreatureLabelModeChange={handleCreatureLabelModeChange}
+          onBattleAttack={handleBattleAttack}
+          onRunBattle={handleRunBattle}
           onReviveCreature={handleReviveCreature}
           onReset={handleReset}
         />
@@ -659,6 +800,21 @@ function formatCreaturePartyFailure(reason: string | undefined): string {
   if (reason === 'not-fainted') return 'Creature is not Fainted';
   if (reason === 'not-at-hospital') return 'Visit a Village Hospital first';
   return `Creature action failed${reason ? `: ${reason}` : ''}`;
+}
+
+function formatWildEncounterClaimFailure(reason: string | undefined): string {
+  if (reason === 'in-battle') return 'Already in battle';
+  if (reason === 'unavailable') return 'Wild Creature already claimed';
+  if (reason === 'cooldown') return 'Wild Creature cooldown active';
+  if (reason === 'range') return 'Face the wild Creature first';
+  if (reason === 'no-ready-creature') return 'No ready Creature for battle';
+  return `Wild claim failed${reason ? `: ${reason}` : ''}`;
+}
+
+function formatBattleOutcome(outcome: 'defeated' | 'lost' | 'ran'): string {
+  if (outcome === 'defeated') return 'Battle won';
+  if (outcome === 'lost') return 'Battle lost';
+  return 'Ran from battle';
 }
 
 function getFacingEncounter(roomState: LocationRoomState | null, saveState: MonsterRpgSaveState | null) {

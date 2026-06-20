@@ -257,6 +257,14 @@
 - Updated wild Creature rendering with optional Species name labels that hide near reserved HUD and mobile D-pad areas.
 - Added focused pathfinding/settings tests and expanded Monster RPG phase checks for tap-to-walk behavior.
 
+## 2026-06-20 - Issue #13: Battle Room Tracer With Manual Attacks And Enemy AI
+
+- Added a separate Colyseus Battle Room tracer created from claimed visible wild encounters, with join tokens, no spectating, disconnect grace, and once-only battle result recording.
+- Added server-side 1v1 battle simulation for manual player attacks, enemy AI attack choice, HP resolution, and fatigue costs that block repeated strong attacks.
+- Marked Location Room players as `inBattle`, blocked movement and repeat encounter claims while battling, verified battle results before releasing or respawning encounters, and rendered in-battle overworld sprites translucent.
+- Added a DOM battle panel with HP/fatigue meters, attack buttons, Run, and battle log, plus client wiring to apply server HP/Fainted results back into the local save.
+- Added focused battle simulation tests and expanded Monster RPG SDK checks for battle room join, no-spectator rejection, in-battle movement blocking, run resolution, location release, and cooldown rejection.
+
 ## Next Work
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.

@@ -1,2 +1,2 @@
-export type { LocationTransitionMessage, MultiplayerConnection } from './colyseusClient';
-export { connectToLocation } from './colyseusClient';
+export type { BattleConnection, LocationTransitionMessage, MultiplayerConnection } from './colyseusClient';
+export { connectToBattle, connectToLocation } from './colyseusClient';

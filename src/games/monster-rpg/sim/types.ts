@@ -194,6 +194,50 @@ export interface CreatureSaveRecord {
   cooldowns: Record<string, string>;
 }
 
+export type BattleParticipantKind = 'player' | 'enemy';
+
+export type BattleStatus = 'active' | 'player-won' | 'player-lost' | 'ran' | 'disconnected-grace' | 'abandoned';
+
+export interface BattleCreatureState {
+  id: string;
+  ownerPlayerId: string;
+  speciesId: number;
+  level: number;
+  stats: BaseStatTendencies;
+  attacks: CreatureAttackRecord[];
+  hp: number;
+  maxHp: number;
+  fatigue: number;
+  maxFatigue: number;
+  fainted: boolean;
+}
+
+export interface BattleParticipantState {
+  kind: BattleParticipantKind;
+  playerId: string;
+  name: string;
+  activeCreature: BattleCreatureState;
+}
+
+export interface BattleTurnLogEntry {
+  id: string;
+  message: string;
+}
+
+export interface BattleRoomState {
+  battleId: string;
+  encounterId: string;
+  wildSpeciesId: number;
+  status: BattleStatus;
+  turn: number;
+  player: BattleParticipantState;
+  enemy: BattleParticipantState;
+  lastLog: BattleTurnLogEntry[];
+  validPlayerAttackIds: string[];
+  rewardGranted: boolean;
+  disconnectGraceUntil?: string;
+}
+
 export interface CreatureSaveContainer {
   ownerPlayerId: string;
   activePartyCreatureIds: string[];
@@ -313,12 +357,16 @@ export type NetworkEvent =
   | { type: 'moveIntent'; playerId: string; direction: Direction; sequence: number }
   | { type: 'claimWildEncounter'; playerId: string; encounterId: string }
   | { type: 'statePatch'; state: LocationRoomState }
-  | { type: 'locationTransition'; toMapId: MapId; spawn: WorldPosition; transitionId: string };
+  | { type: 'locationTransition'; toMapId: MapId; spawn: WorldPosition; transitionId: string }
+  | { type: 'joinBattle'; playerId: string; battleId: string }
+  | { type: 'chooseBattleAttack'; playerId: string; battleId: string; attackId: string };
 
 export interface LocationPlayerState {
   profile: PlayerProfile;
   position: WorldPosition;
   connected: boolean;
+  inBattle: boolean;
+  battleId?: string;
 }
 
 export type WildEncounterStatus = 'available' | 'claimed';
@@ -339,11 +387,41 @@ export interface WildEncounterState {
 
 export interface ClaimWildEncounterMessage {
   encounterId: string;
+  activeCreature?: CreatureSaveRecord;
 }
 
 export interface ResolveWildEncounterMessage {
   encounterId: string;
   outcome: WildEncounterOutcome;
+  battleId?: string;
+  battleToken?: string;
+}
+
+export interface WildEncounterClaimedMessage {
+  encounterId: string;
+  speciesId: number;
+  battleId: string;
+  battleToken: string;
+}
+
+export interface BattleAttackIntentMessage {
+  attackId: string;
+}
+
+export interface JoinBattleOptions {
+  battleId: string;
+  battleToken: string;
+  profile: PlayerProfile;
+}
+
+export interface BattleResultMessage {
+  battleId: string;
+  encounterId: string;
+  outcome: WildEncounterOutcome;
+  playerCreatureId: string;
+  playerCreatureHp: number;
+  playerCreatureFainted: boolean;
+  rewardGranted: boolean;
 }
 
 export interface LocationRoomState {
