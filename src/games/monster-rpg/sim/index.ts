@@ -3,10 +3,13 @@ export type {
   BuildingDefinition,
   BuildingType,
   CardBuffType,
-  CardDefinition,
   CardRarity,
   CardType,
+  CreationRequirement,
+  CreationRequirementScope,
   Direction,
+  EggOrigin,
+  EggSaveRecord,
   GameMap,
   InputAction,
   InteriorMapId,
@@ -23,8 +26,11 @@ export type {
   MovementResult,
   AttackPoolId,
   BaseStatTendencies,
+  CreatureAttackRecord,
+  CreatureCardInstance,
   CreatureRarity,
   CreatureSpeciesRecord,
+  CreatureStatKey,
   CreatureType,
   JournalSpeciesState,
   JournalSpeciesViewState,
@@ -93,7 +99,6 @@ export {
   CARD_PACK_RARITY_TIERS,
   MAGIC_DUST_CURRENCY_ID,
   STARTER_FARM_CARD_ID,
-  PackOpenTrace,
   activateBuffCard,
   activateCreatureCardViaElder,
   activateMaterialCard,
@@ -109,6 +114,24 @@ export {
   getMaterialCardById,
   openPack
 } from './cards';
+export type { CardDefinition, PackOpenTrace } from './cards';
+export {
+  CREATURE_ATTACK_COUNT,
+  CREATURE_CARD_KNOWN_ATTACK_COUNT,
+  MAGIC_DUST_MATERIAL_ID,
+  convertCreatureCardViaElder,
+  createCreatureCardInstance,
+  createDirectDropEgg,
+  createRng as createCreatureLifecycleRng,
+  getCreatureCreationRequirements,
+  getEggDescription,
+  hatchEgg,
+  rollStats,
+  selectCreatureAttacks,
+  type CreatureCardDefinitionLike,
+  type CreatureLifecycleFailureReason,
+  type CreatureLifecycleResult
+} from './creatureLifecycle';
 export { getJournalSpeciesViewState, recordCreatureDiscovered, recordWildCreatureSeen } from './creatureJournal';
 export {
   buildStarterMagicDustFarm,

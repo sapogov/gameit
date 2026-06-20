@@ -18,6 +18,7 @@ import {
   exportSave,
   getGameMap,
   getCardDefinition,
+  hatchEgg,
   openPack,
   importSavePayload,
   isVillageElderDialogComplete,
@@ -221,7 +222,7 @@ export function MonsterRpgGame() {
       if (!current) return current;
       const definition = getCardDefinition(cardId);
 
-      if (definition?.type === 'creature') {
+      if (current.inventory.creatureCards[cardId] || definition?.type === 'creature') {
         const result = activateCreatureCardViaElder(current, cardId);
         if (!result.ok) {
           setImportStatus(formatCardFailure(result.reason));
@@ -251,6 +252,25 @@ export function MonsterRpgGame() {
 
       setImportStatus('Card cannot use Village Elder action');
       return current;
+    });
+  };
+
+  const handleHatchEgg = (eggId: string) => {
+    setSaveState((current) => {
+      if (!current) return current;
+
+      const result = hatchEgg(current, eggId);
+      if (!result.ok) {
+        setImportStatus(formatCardFailure(result.reason));
+        return current;
+      }
+
+      saveProgress(result.state);
+      saveStateRef.current = result.state;
+      setLastMove(null);
+      setPackTrace(null);
+      setImportStatus('Egg hatched');
+      return result.state;
     });
   };
 
@@ -468,6 +488,7 @@ export function MonsterRpgGame() {
           onOpenPack={handleOpenPack}
           onActivateCard={handleActivateCard}
           onRouteCardToElder={handleRouteCardToElder}
+          onHatchEgg={handleHatchEgg}
           onReset={handleReset}
         />
         <VillageElderOnboarding
@@ -509,5 +530,7 @@ function formatCardFailure(reason: string | undefined): string {
   if (reason === 'farm-type-locked') return 'Farm type already built';
   if (reason === 'wrong-card-type') return 'Card cannot use this action';
   if (reason === 'invalid-species') return 'Card points to unknown species';
+  if (reason === 'missing-material') return 'Not enough Magic Dust';
+  if (reason === 'missing-egg') return 'Egg not available';
   return `Card action failed${reason ? `: ${reason}` : ''}`;
 }

@@ -40,9 +40,15 @@ describe('Village Elder onboarding', () => {
     expect(hasClaimedStarterPack(withPack)).toBe(true);
     expect(isVillageElderDialogComplete(withPack)).toBe(true);
     starterCreatureCards.forEach((card) => {
-      expect(withPack.inventory.cards[card.cardId]?.quantity).toBe(1);
+      const starterInstance = Object.values(withPack.inventory.creatureCards).find(
+        (creatureCard) => creatureCard.cardDefinitionId === card.cardId
+      );
+      const repeatedStarterInstance = Object.values(repeated.inventory.creatureCards).find(
+        (creatureCard) => creatureCard.cardDefinitionId === card.cardId
+      );
+      expect(starterInstance?.speciesId).toBe(card.speciesId);
       expect(withPack.journal.species[String(card.speciesId)]).toBe('discovered');
-      expect(repeated.inventory.cards[card.cardId]?.quantity).toBe(1);
+      expect(repeatedStarterInstance?.speciesId).toBe(card.speciesId);
     });
     expect(withPack.inventory.cards[STARTER_FARM_CARD_ID]?.quantity).toBe(1);
     expect(repeated.inventory.cards[STARTER_FARM_CARD_ID]?.quantity).toBe(1);
@@ -58,9 +64,13 @@ describe('Village Elder onboarding', () => {
     expect(hasConvertedStarterCreatureCards(result.state)).toBe(true);
     expect(result.state.inventory.currencies[MAGIC_DUST_CURRENCY_ID]).toBe(0);
     starterCreatureCards.forEach((card) => {
-      expect(result.state.inventory.cards[card.cardId]).toBeUndefined();
-      expect(result.state.creatures.activePartyCreatureIds).toContain(`starter-creature-${card.speciesId}`);
-      expect(result.state.creatures.creatures[`starter-creature-${card.speciesId}`]?.speciesId).toBe(card.speciesId);
+      expect(
+        Object.values(result.state.inventory.creatureCards).some(
+          (creatureCard) => creatureCard.cardDefinitionId === card.cardId
+        )
+      ).toBe(false);
+      expect(Object.values(result.state.creatures.creatures).some((creature) => creature.speciesId === card.speciesId))
+        .toBe(true);
     });
   });
 
@@ -118,7 +128,7 @@ describe('Village Elder onboarding', () => {
 
 function createProfile(): PlayerProfile {
   return {
-    schemaVersion: 5,
+    schemaVersion: 6,
     playerId: 'player-1',
     name: 'Mika',
     avatar: 'scout',
