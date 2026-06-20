@@ -1,6 +1,10 @@
-import { useMemo } from 'react';
+import { lazy, Suspense, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import type { Game } from '../types';
+
+const MonsterRpgGame = lazy(() =>
+  import('../games/monster-rpg/MonsterRpgGame').then((module) => ({ default: module.MonsterRpgGame }))
+);
 
 export function GamePage({ games }: { games: Game[] }) {
   const { gameId } = useParams();
@@ -12,6 +16,20 @@ export function GamePage({ games }: { games: Game[] }) {
         <h2>Game not found</h2>
         <Link to="/">Back to Home</Link>
       </main>
+    );
+  }
+
+  if (game.id === 'gameit-monsters') {
+    return (
+      <Suspense
+        fallback={
+          <main className="page">
+            <h2>Loading GameIt Monsters</h2>
+          </main>
+        }
+      >
+        <MonsterRpgGame />
+      </Suspense>
     );
   }
 

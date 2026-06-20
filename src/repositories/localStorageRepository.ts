@@ -17,7 +17,16 @@ function parse<T>(value: string | null, fallback: T): T {
 
 function seedGames(): Game[] {
   const existing = parse<Game[]>(localStorage.getItem(GAMES_KEY), []);
-  if (existing.length > 0) return existing;
+  if (existing.length > 0) {
+    const existingIds = new Set(existing.map((game) => game.id));
+    const missingDefaults = defaultGames.filter((game) => !existingIds.has(game.id));
+    if (missingDefaults.length === 0) return existing;
+
+    const merged = [...missingDefaults, ...existing];
+    localStorage.setItem(GAMES_KEY, JSON.stringify(merged));
+    return merged;
+  }
+
   localStorage.setItem(GAMES_KEY, JSON.stringify(defaultGames));
   return defaultGames;
 }

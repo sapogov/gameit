@@ -18,6 +18,20 @@ It includes:
 - React Router
 - GitHub Actions + GitHub Pages deploy
 
+## Monster RPG Foundation
+
+GameIt now includes Phase 0 planning and boundaries for **GameIt Monsters**, an original monster-collecting browser MMO inspired by retro handheld RPGs.
+
+- Phase 0 docs: `docs/monster-rpg/phase-0-foundation.md`
+- Running work summary: `docs/monster-rpg/work-summary.md`
+- Shared game contracts: `src/games/monster-rpg/sim`
+- Future client home: `src/games/monster-rpg/client`
+- Future DOM UI home: `src/games/monster-rpg/ui`
+
+Chosen direction: React/Vite portal, Phaser 2D client, DOM HUD, square tiles, Node + Colyseus authoritative multiplayer, first proving online presence + movement.
+
+Phase 2 adds a local Colyseus room named `home_village` on `127.0.0.1:2567` for multiplayer presence.
+
 ## Project Structure
 
 ```text
@@ -68,6 +82,14 @@ npm ci
 ```bash
 npm run dev
 ```
+
+### Start multiplayer dev
+
+```bash
+npm run dev:multiplayer
+```
+
+Open `http://127.0.0.1:5173/gameit/game/gameit-monsters` in two browser tabs to test local Colyseus presence and server-authoritative movement. If the Colyseus server is not running, GameIt Monsters falls back to offline local mode.
 
 ### Production build
 

@@ -2,6 +2,15 @@ import type { Game } from '../types';
 
 export const defaultGames: Game[] = [
   {
+    id: 'gameit-monsters',
+    title: 'GameIt Monsters',
+    description: 'Build a village, explore tile roads, collect original creatures, and meet other players online.',
+    cover: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=900&q=80',
+    route: '/game/gameit-monsters',
+    modes: ['Casual', 'Ranked'],
+    enabled: true
+  },
+  {
     id: 'neon-revenant',
     title: 'Neon Revenant',
     description: 'Master kinetic combat in a glowing cyber arena.',
