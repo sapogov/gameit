@@ -147,6 +147,8 @@ function copyBattleStateToSchema(state: BattleRoomState, schema: BattleStateSche
   schema.wildSpeciesId = state.wildSpeciesId;
   schema.status = state.status;
   schema.turn = state.turn;
+  schema.canRun = state.canRun;
+  schema.runAttempts = state.runAttempts;
   schema.player = toParticipantSchema(state.player);
   schema.enemy = toParticipantSchema(state.enemy);
   schema.lastLog.clear();

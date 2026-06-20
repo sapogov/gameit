@@ -202,6 +202,7 @@ export {
   choosePlayerBattleAttack,
   createBattleRoomState,
   getBattleAttackFatigueCost,
+  getBattleRunChance,
   getFirstBattleReadyCreature,
   getValidBattleAttackIds,
   markBattleDisconnected,

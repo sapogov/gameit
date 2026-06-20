@@ -136,6 +136,8 @@ export class BattleStateSchema extends Schema {
   declare wildSpeciesId: number;
   declare status: BattleStatus;
   declare turn: number;
+  declare canRun: boolean;
+  declare runAttempts: number;
   declare player: BattleParticipantSchema;
   declare enemy: BattleParticipantSchema;
   declare lastLog: ArraySchema<BattleLogEntrySchema>;
@@ -150,6 +152,8 @@ export class BattleStateSchema extends Schema {
     this.wildSpeciesId = 1;
     this.status = 'active';
     this.turn = 1;
+    this.canRun = false;
+    this.runAttempts = 0;
     this.player = new BattleParticipantSchema();
     this.enemy = new BattleParticipantSchema();
     this.lastLog = new ArraySchema<BattleLogEntrySchema>();
@@ -164,6 +168,8 @@ defineTypes(BattleStateSchema, {
   wildSpeciesId: 'number',
   status: 'string',
   turn: 'number',
+  canRun: 'boolean',
+  runAttempts: 'number',
   player: BattleParticipantSchema,
   enemy: BattleParticipantSchema,
   lastLog: [BattleLogEntrySchema],

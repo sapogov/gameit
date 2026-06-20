@@ -222,6 +222,8 @@ function toBattleRoomState(state: any): BattleRoomState {
     wildSpeciesId: typeof state.wildSpeciesId === 'number' ? state.wildSpeciesId : 1,
     status: toBattleStatus(state.status),
     turn: typeof state.turn === 'number' ? state.turn : 1,
+    canRun: Boolean(state.canRun),
+    runAttempts: typeof state.runAttempts === 'number' ? state.runAttempts : 0,
     player: toBattleParticipant(state.player, 'player'),
     enemy: toBattleParticipant(state.enemy, 'enemy'),
     lastLog: toArray(state.lastLog).map((entry: any) => ({

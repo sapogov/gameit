@@ -230,6 +230,8 @@ export interface BattleRoomState {
   wildSpeciesId: number;
   status: BattleStatus;
   turn: number;
+  canRun: boolean;
+  runAttempts: number;
   player: BattleParticipantState;
   enemy: BattleParticipantState;
   lastLog: BattleTurnLogEntry[];
