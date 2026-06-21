@@ -310,6 +310,15 @@
 - Added guarded-theft settlement so visitor losses faint the battling Creature and steal nothing, while visitor wins steal capped resources, start cooldown, log guard outcome, and faint the guard when present in save state.
 - Added focused battle/farm tests plus production build and Monster RPG SDK verification.
 
+## 2026-06-21 - Issue #20: Station Discovery And Travel
+
+- Added a station save container with generic destination records for player villages and future cities, including future reputation, guard, and ban hook keys without implementing those systems.
+- Added player-village discovery when villages are entered, while preserving the existing discovered village list for current MVP flows.
+- Added Magic Dust station travel quotes and confirmation-only teleport execution with safe destination spawns.
+- Implemented the reversed level-difference travel cost: higher-level player/village context pays more when traveling to lower-level targets.
+- Added a compact Station HUD panel that lists discovered destinations and requires Travel then Confirm before charging Magic Dust.
+- Added focused station simulation tests plus save validation coverage for future city-shaped destinations.
+
 ## Next Work
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.

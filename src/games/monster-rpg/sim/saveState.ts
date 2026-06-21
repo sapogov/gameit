@@ -18,16 +18,18 @@ import type {
   PlayerProfile,
   ProgressionSaveContainer,
   SaveStack,
+  StationSaveContainer,
   VillageSaveContainer
 } from './types';
 import { canEnterTile, getMapById, homeVillageMap, isMapId, villageDefinitions } from './maps';
 import { creatureTypes, isKnownSpeciesId } from './speciesCatalog';
 import { cardRarities } from './cards';
 import { isValidCreatureContainerLayout, REVIVE_ITEM_ID, STARTING_REVIVE_ITEM_QUANTITY } from './creatureParty';
+import { createInitialStationContainer, isValidStationDestination } from './stations';
 
 export const MONSTER_RPG_PROFILE_KEY = 'gameit.monsterRpg.profile';
 export const MONSTER_RPG_SAVE_KEY = 'gameit.monsterRpg.save';
-export const MONSTER_RPG_SCHEMA_VERSION = 7;
+export const MONSTER_RPG_SCHEMA_VERSION = 8;
 
 export type SaveImportResult =
   | { ok: true; state: MonsterRpgSaveState }
@@ -152,6 +154,7 @@ function createEmptySaveContainers(playerId: string, homeVillageId: PlayerProfil
       level: 1,
       discoveredVillageIds: [homeVillageId]
     },
+    station: createInitialStationContainer(playerId, homeVillageId),
     farms: {
       ownerPlayerId: playerId,
       farms: {},
@@ -233,6 +236,7 @@ function isValidSaveState(state: unknown): state is MonsterRpgSaveState {
     isValidInventory(candidate.inventory, playerId) &&
     isValidCreatures(candidate.creatures, playerId) &&
     isValidVillage(candidate.village, candidate.profile) &&
+    isValidStation(candidate.station, playerId) &&
     isValidFarms(candidate.farms, playerId, candidate.creatures) &&
     isValidJournal(candidate.journal, playerId) &&
     isValidProgression(candidate.progression, playerId) &&
@@ -347,6 +351,18 @@ function isValidVillage(village: unknown, profile: PlayerProfile): village is Vi
     candidate.level > 0 &&
     isUniqueStringArray(candidate.discoveredVillageIds) &&
     candidate.discoveredVillageIds.every((id) => validVillageIds.has(id as PlayerProfile['homeVillageId']))
+  );
+}
+
+function isValidStation(station: unknown, playerId: string): station is StationSaveContainer {
+  if (!station || typeof station !== 'object') return false;
+  const candidate = station as StationSaveContainer;
+  if (candidate.ownerPlayerId !== playerId) return false;
+  if (!candidate.discoveredDestinations || typeof candidate.discoveredDestinations !== 'object') return false;
+  if (Array.isArray(candidate.discoveredDestinations)) return false;
+
+  return Object.entries(candidate.discoveredDestinations).every(
+    ([id, destination]) => isValidStationDestination(destination) && id === destination.id
   );
 }
 
