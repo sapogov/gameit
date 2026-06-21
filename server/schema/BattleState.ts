@@ -1,5 +1,11 @@
 import { ArraySchema, defineTypes, Schema } from '@colyseus/schema';
-import type { BattleStatus, BattleParticipantKind, CreatureStatKey, CreatureType } from '../../src/games/monster-rpg/sim/types';
+import type {
+  BattleKind,
+  BattleStatus,
+  BattleParticipantKind,
+  CreatureStatKey,
+  CreatureType
+} from '../../src/games/monster-rpg/sim/types';
 
 export class BattleStatsSchema extends Schema {
   declare hp: number;
@@ -133,6 +139,7 @@ defineTypes(BattleLogEntrySchema, {
 export class BattleStateSchema extends Schema {
   declare battleId: string;
   declare encounterId: string;
+  declare battleKind: BattleKind;
   declare wildSpeciesId: number;
   declare status: BattleStatus;
   declare turn: number;
@@ -149,6 +156,7 @@ export class BattleStateSchema extends Schema {
     super();
     this.battleId = '';
     this.encounterId = '';
+    this.battleKind = 'wild';
     this.wildSpeciesId = 1;
     this.status = 'active';
     this.turn = 1;
@@ -165,6 +173,7 @@ export class BattleStateSchema extends Schema {
 defineTypes(BattleStateSchema, {
   battleId: 'string',
   encounterId: 'string',
+  battleKind: 'string',
   wildSpeciesId: 'number',
   status: 'string',
   turn: 'number',

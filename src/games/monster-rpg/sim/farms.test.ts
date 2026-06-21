@@ -14,6 +14,7 @@ import {
   MAGIC_DUST_FARM_ID,
   MAGIC_DUST_FARM_TYPE,
   setCreatureHp,
+  resolveGuardedFarmTheft,
   upgradeFarm,
   type CreatureSaveRecord,
   createFarmSaveRecord,
@@ -296,6 +297,128 @@ describe('Magic Dust Farms', () => {
     expect(result.reason).toBe('guarded');
     expect(result.state.inventory.currencies[MAGIC_DUST_CURRENCY_ID]).toBe(10);
     expect(result.state.farms.theftLog).toHaveLength(0);
+  });
+
+  it('treats a farm with a fainted assigned guard as unguarded for visitor theft', () => {
+    const visitor = createPlayerProfile('Mika', 'scout');
+    const faintedGuard = createCreature({
+      id: 'owner-guard-1',
+      ownerPlayerId: 'owner-1',
+      hp: 0,
+      fainted: true
+    });
+    const state = withMagicDust(
+      withCreature(
+        withFarm(
+          createInitialSave(visitor),
+          createFarm({ ownerPlayerId: 'owner-1', stored: 12, guardCreatureId: faintedGuard.id })
+        ),
+        faintedGuard
+      ),
+      10
+    );
+    const adjacent = {
+      ...state,
+      position: { mapId: 'home-village' as const, x: 24, y: 17, facing: 'north' as const }
+    };
+
+    const result = attemptFacingFarmTheft(adjacent, new Date('2026-06-20T12:00:00.000Z'), { rng: () => 0 });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error(result.reason);
+    expect(result.outcome).toBe('success');
+    expect(result.stolenQuantity).toBe(3);
+    expect(result.logEntry.guardResult).toBe('unguarded');
+  });
+
+  it('resolves a lost guard battle by fainting the visitor Creature and stealing nothing', () => {
+    const visitor = createPlayerProfile('Mika', 'scout');
+    const visitorCreature = createCreature({ id: 'visitor-creature', ownerPlayerId: visitor.playerId, hp: 7 });
+    const guard = createCreature({ id: 'owner-guard-1', ownerPlayerId: 'owner-1' });
+    const state = withMagicDust(
+      withCreature(
+        withCreature(
+          withFarm(
+            createInitialSave(visitor),
+            createFarm({ ownerPlayerId: 'owner-1', stored: 12, guardCreatureId: guard.id })
+          ),
+          visitorCreature
+        ),
+        guard
+      ),
+      10
+    );
+
+    const result = resolveGuardedFarmTheft(state, {
+      farmId: MAGIC_DUST_FARM_ID,
+      playerCreatureId: visitorCreature.id,
+      playerCreatureHp: 0,
+      playerCreatureFainted: true,
+      visitorWon: false,
+      now: new Date('2026-06-20T12:00:00.000Z')
+    });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error(result.reason);
+    expect(result.outcome).toBe('failed');
+    expect(result.stolenQuantity).toBe(0);
+    expect(result.state.creatures.creatures[visitorCreature.id].hp).toBe(0);
+    expect(result.state.creatures.creatures[visitorCreature.id].fainted).toBe(true);
+    expect(result.state.creatures.creatures[guard.id].fainted).toBe(false);
+    expect(result.state.inventory.currencies[MAGIC_DUST_CURRENCY_ID]).toBe(9);
+    expect(result.state.farms.farms[MAGIC_DUST_FARM_ID].storedResources[MAGIC_DUST_CURRENCY_ID]).toBe(12);
+    expect(result.state.farms.theftLog?.[0]).toMatchObject({
+      outcome: 'failed',
+      stolenQuantity: 0,
+      guardResult: 'visitor-lost'
+    });
+  });
+
+  it('resolves a won guard battle by stealing capped resources and fainting the guard', () => {
+    const visitor = createPlayerProfile('Mika', 'scout');
+    const visitorCreature = createCreature({ id: 'visitor-creature', ownerPlayerId: visitor.playerId, hp: 7 });
+    const guard = createCreature({ id: 'owner-guard-1', ownerPlayerId: 'owner-1', hp: 5 });
+    const state = withMagicDust(
+      withCreature(
+        withCreature(
+          withFarm(
+            createInitialSave(visitor),
+            createFarm({ ownerPlayerId: 'owner-1', stored: 12, guardCreatureId: guard.id })
+          ),
+          visitorCreature
+        ),
+        guard
+      ),
+      10
+    );
+
+    const result = resolveGuardedFarmTheft(state, {
+      farmId: MAGIC_DUST_FARM_ID,
+      guardCreatureHp: 0,
+      playerCreatureId: visitorCreature.id,
+      playerCreatureHp: 3,
+      playerCreatureFainted: false,
+      visitorWon: true,
+      now: new Date('2026-06-20T12:00:00.000Z')
+    });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error(result.reason);
+    expect(result.outcome).toBe('success');
+    expect(result.stolenQuantity).toBe(3);
+    expect(result.cooldownUntil).toBe('2026-06-21T12:00:00.000Z');
+    expect(result.state.creatures.creatures[visitorCreature.id].hp).toBe(3);
+    expect(result.state.creatures.creatures[visitorCreature.id].fainted).toBe(false);
+    expect(result.state.creatures.creatures[guard.id].hp).toBe(0);
+    expect(result.state.creatures.creatures[guard.id].fainted).toBe(true);
+    expect(isFarmGuardActive(result.state, result.state.farms.farms[MAGIC_DUST_FARM_ID])).toBe(false);
+    expect(result.state.inventory.currencies[MAGIC_DUST_CURRENCY_ID]).toBe(12);
+    expect(result.state.farms.farms[MAGIC_DUST_FARM_ID].storedResources[MAGIC_DUST_CURRENCY_ID]).toBe(9);
+    expect(result.state.farms.theftLog?.[0]).toMatchObject({
+      outcome: 'success',
+      stolenQuantity: 3,
+      guardResult: 'visitor-won'
+    });
   });
 
   it('increases Magic Dust theft cost when visitor player or village level exceeds target village level', () => {

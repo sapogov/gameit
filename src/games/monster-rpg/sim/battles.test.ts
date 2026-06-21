@@ -3,6 +3,7 @@ import {
   applyBattleRewardsToSave,
   choosePlayerBattleAttack,
   createBattleRoomState,
+  createGuardBattleRoomState,
   generateWildBattleRewards,
   getBattleAttackFatigueCost,
   getFirstBattleReadyCreature,
@@ -199,6 +200,32 @@ describe('battle simulation', () => {
     expect(result.ok).toBe(false);
     if (result.ok) throw new Error('expected run rejection');
     expect(result.reason).toBe('run-unavailable');
+  });
+
+  it('resolves guard battles with core attack rules but no run or wild rewards', () => {
+    const profile = createPlayerProfile('Guard Challenger', 'scout');
+    const playerCreature = createCreature(profile.playerId, 'visitor-creature', 1, 60, false);
+    const guardCreature = createCreature('owner-1', 'guard-creature', 2, 1, false);
+    const state = createGuardBattleRoomState({
+      battleId: 'battle-guard',
+      farmId: 'farm-1',
+      playerProfile: profile,
+      playerCreature,
+      guardCreature,
+      now: new Date('2026-06-20T12:00:00.000Z')
+    });
+
+    const run = runFromBattle(state);
+    const result = choosePlayerBattleAttack(state, state.validPlayerAttackIds[0]);
+
+    expect(state.battleKind).toBe('guard-theft');
+    expect(state.canRun).toBe(false);
+    expect(run.ok).toBe(false);
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error(result.reason);
+    expect(result.result?.outcome).toBe('defeated');
+    expect(result.result?.rewardGranted).toBe(false);
+    expect(result.result?.rewards).toBeUndefined();
   });
 
   it('generates deterministic wild battle rewards with optional pack, material, and exact-species egg drops', () => {

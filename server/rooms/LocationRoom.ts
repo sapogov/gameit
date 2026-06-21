@@ -25,9 +25,11 @@ import {
 } from '../../src/games/monster-rpg/sim';
 import type {
   AvatarId,
+  ClaimGuardedFarmTheftMessage,
   ClaimWildEncounterMessage,
   CreatureSaveRecord,
   Direction,
+  FarmSaveRecord,
   JoinLocationOptions,
   MapId,
   MonsterRpgSaveState,
@@ -36,7 +38,13 @@ import type {
   ResolveWildEncounterMessage,
   WorldPosition
 } from '../../src/games/monster-rpg/sim/types';
-import { createBattleClaim, getResolvedBattleOutcome, onBattleClaimResolved, removeBattleClaim } from '../battleRegistry';
+import {
+  createBattleClaim,
+  createGuardBattleClaim,
+  getResolvedBattleOutcome,
+  onBattleClaimResolved,
+  removeBattleClaim
+} from '../battleRegistry';
 import { LocationPlayerSchema, LocationStateSchema, WildEncounterSchema } from '../schema/LocationState';
 
 const avatarIds = new Set<AvatarId>(['scout', 'ranger', 'keeper']);
@@ -87,6 +95,9 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
     });
     this.onMessage('claimWildEncounter', (client, payload: ClaimWildEncounterMessage) => {
       this.handleClaimWildEncounter(client, payload);
+    });
+    this.onMessage('claimGuardedFarmTheft', (client, payload: ClaimGuardedFarmTheftMessage) => {
+      this.handleClaimGuardedFarmTheft(client, payload);
     });
     this.onMessage('resolveWildEncounter', (client, payload: ResolveWildEncounterMessage) => {
       this.handleResolveWildEncounter(client, payload);
@@ -227,6 +238,66 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
     });
   }
 
+  private handleClaimGuardedFarmTheft(client: Client, payload: ClaimGuardedFarmTheftMessage) {
+    const player = this.state.players.get(client.sessionId);
+    const farm = sanitizeFarm(payload?.farm);
+
+    if (!player || !farm) {
+      client.send('guardedFarmTheftClaimRejected', { farmId: farm?.id ?? '', reason: 'missing' });
+      return;
+    }
+
+    if (player.inBattle) {
+      client.send('guardedFarmTheftClaimRejected', { farmId: farm.id, reason: 'in-battle' });
+      return;
+    }
+
+    if (farm.ownerPlayerId === player.profile.id) {
+      client.send('guardedFarmTheftClaimRejected', { farmId: farm.id, reason: 'owner-cannot-steal' });
+      return;
+    }
+
+    if (farm.mapId !== this.mapId || !isFacingFarmPosition(player.position, farm)) {
+      client.send('guardedFarmTheftClaimRejected', { farmId: farm.id, reason: 'range' });
+      return;
+    }
+
+    const activeCreature = sanitizeBattleCreature(payload?.activeCreature, player.profile.id);
+    if (!activeCreature) {
+      client.send('guardedFarmTheftClaimRejected', { farmId: farm.id, reason: 'no-ready-creature' });
+      return;
+    }
+
+    const guardCreature = sanitizeGuardCreature(payload?.guardCreature, farm);
+    if (!guardCreature) {
+      client.send('guardedFarmTheftClaimRejected', { farmId: farm.id, reason: 'unguarded' });
+      return;
+    }
+
+    const battleClaim = createGuardBattleClaim({
+      farm,
+      guardCreature,
+      locationRoomId: this.roomId,
+      mapId: this.mapId,
+      playerProfile: schemaToProfile(player),
+      playerCreature: activeCreature
+    });
+    this.battleResultCleanups.set(
+      battleClaim.battleId,
+      onBattleClaimResolved(battleClaim.battleId, (result) => {
+        this.finalizeBattleResult(result);
+      })
+    );
+
+    player.inBattle = true;
+    player.battleId = battleClaim.battleId;
+    client.send('guardedFarmTheftClaimed', {
+      farmId: farm.id,
+      battleId: battleClaim.battleId,
+      battleToken: battleClaim.battleToken
+    });
+  }
+
   private handleResolveWildEncounter(client: Client, payload: ResolveWildEncounterMessage) {
     const encounterId = typeof payload?.encounterId === 'string' ? payload.encounterId : '';
     const outcome = payload?.outcome;
@@ -317,7 +388,16 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
 
     const encounter = this.state.encounters.get(result.encounterId);
     const player = Array.from(this.state.players.values()).find((candidate) => candidate.battleId === result.battleId);
-    if (!encounter) return;
+    if (!encounter) {
+      if (player) {
+        player.inBattle = false;
+        player.battleId = '';
+      }
+      this.finalizedBattleIds.add(result.battleId);
+      this.battleResultCleanups.get(result.battleId)?.();
+      this.battleResultCleanups.delete(result.battleId);
+      return;
+    }
 
     if (result.outcome === 'lost' || result.outcome === 'ran') {
       if (player) {
@@ -432,10 +512,71 @@ function getEncounterCooldownKey(playerId: string, encounterId: string): string 
   return `${playerId}:${encounterId}`;
 }
 
+function sanitizeFarm(farm: FarmSaveRecord | undefined): FarmSaveRecord | null {
+  if (!farm || typeof farm !== 'object') return null;
+  if (
+    typeof farm.id !== 'string' ||
+    !farm.id ||
+    typeof farm.ownerPlayerId !== 'string' ||
+    !farm.ownerPlayerId ||
+    typeof farm.farmType !== 'string' ||
+    !farm.farmType ||
+    typeof farm.resourceId !== 'string' ||
+    !farm.resourceId ||
+    typeof farm.mapId !== 'string' ||
+    !farm.mapId ||
+    typeof farm.position !== 'object' ||
+    !farm.position ||
+    typeof farm.position.x !== 'number' ||
+    typeof farm.position.y !== 'number' ||
+    typeof farm.guardCreatureId !== 'string' ||
+    !farm.guardCreatureId
+  ) {
+    return null;
+  }
+
+  return {
+    ...farm,
+    position: { ...farm.position },
+    storedResources: { ...farm.storedResources },
+    theftCooldowns: { ...farm.theftCooldowns }
+  };
+}
+
+function isFacingFarmPosition(position: WorldPosition, farm: FarmSaveRecord): boolean {
+  const deltaByDirection = {
+    north: { x: 0, y: -1 },
+    east: { x: 1, y: 0 },
+    south: { x: 0, y: 1 },
+    west: { x: -1, y: 0 }
+  } as const;
+  const delta = deltaByDirection[position.facing];
+
+  return position.mapId === farm.position.mapId && position.x + delta.x === farm.position.x && position.y + delta.y === farm.position.y;
+}
+
+function sanitizeGuardCreature(creature: CreatureSaveRecord | undefined, farm: FarmSaveRecord): CreatureSaveRecord | null {
+  if (
+    creature &&
+    creature.id === farm.guardCreatureId &&
+    creature.ownerPlayerId === farm.ownerPlayerId &&
+    canCreatureUseRole(creature, 'guard')
+  ) {
+    return {
+      ...creature,
+      stats: { ...creature.stats },
+      attacks: creature.attacks.slice(0, 4).map((attack) => ({ ...attack })),
+      cooldowns: { ...creature.cooldowns }
+    };
+  }
+
+  return null;
+}
+
 function sanitizeBattleCreature(
   creature: CreatureSaveRecord | undefined,
   ownerPlayerId: string,
-  fallbackSpeciesId: number
+  fallbackSpeciesId?: number
 ): CreatureSaveRecord | null {
   if (creature && creature.ownerPlayerId === ownerPlayerId && canCreatureUseRole(creature, 'battle')) {
     return {
@@ -447,6 +588,8 @@ function sanitizeBattleCreature(
   }
 
   if (creature) return null;
+
+  if (fallbackSpeciesId === undefined) return null;
 
   const species = getSpeciesById(fallbackSpeciesId) ?? getSpeciesById(1);
   if (!species) return null;

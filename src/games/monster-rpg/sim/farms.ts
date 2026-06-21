@@ -27,6 +27,14 @@ export type FarmTheftFailureReason =
   | 'empty'
   | 'missing-magic-dust';
 
+export type GuardedFarmTheftResolutionFailureReason =
+  | 'missing-farm'
+  | 'owner-cannot-steal'
+  | 'unguarded'
+  | 'cooldown'
+  | 'empty'
+  | 'missing-magic-dust';
+
 export type FarmCollectionResult =
   | { ok: true; state: MonsterRpgSaveState; farm: FarmSaveRecord; collectedQuantity: number }
   | { ok: false; state: MonsterRpgSaveState; reason: FarmCollectionFailureReason; farm?: FarmSaveRecord };
@@ -55,6 +63,26 @@ export type FarmTheftAttemptResult =
       ok: false;
       state: MonsterRpgSaveState;
       reason: FarmTheftFailureReason;
+      farm?: FarmSaveRecord;
+      cooldownUntil?: string;
+      costRequired?: number;
+    };
+
+export type GuardedFarmTheftResolutionResult =
+  | {
+      ok: true;
+      state: MonsterRpgSaveState;
+      farm: FarmSaveRecord;
+      outcome: 'success' | 'failed';
+      stolenQuantity: number;
+      costPaid: number;
+      cooldownUntil?: string;
+      logEntry: FarmTheftLogEntry;
+    }
+  | {
+      ok: false;
+      state: MonsterRpgSaveState;
+      reason: GuardedFarmTheftResolutionFailureReason;
       farm?: FarmSaveRecord;
       cooldownUntil?: string;
       costRequired?: number;
@@ -421,7 +449,6 @@ export function attemptFacingFarmTheft(
   if (farm.ownerPlayerId === state.profile.playerId) {
     return { ok: false, state, reason: 'owner-cannot-steal', farm };
   }
-  if (isFarmGuardBlockingTheft(state, farm)) return { ok: false, state, reason: 'guarded', farm };
 
   const accruedFarm = getAccruedFarmRecord(farm, now);
   const cooldownUntil = getFarmTheftCooldown(accruedFarm, state.profile.playerId, now);
@@ -435,6 +462,7 @@ export function attemptFacingFarmTheft(
   if ((state.inventory.currencies[MAGIC_DUST_RESOURCE_ID] ?? 0) < costRequired) {
     return { ok: false, state, reason: 'missing-magic-dust', farm: accruedFarm, costRequired };
   }
+  if (isFarmGuardBlockingTheft(state, accruedFarm)) return { ok: false, state, reason: 'guarded', farm: accruedFarm };
 
   const successChance = getFarmTheftSuccessChance(state, targetVillageLevel);
   const succeeded = (options.rng ?? Math.random)() < successChance;
@@ -481,6 +509,131 @@ export function attemptFacingFarmTheft(
           ...state.inventory.currencies,
           [MAGIC_DUST_RESOURCE_ID]:
             (state.inventory.currencies[MAGIC_DUST_RESOURCE_ID] ?? 0) - costRequired + stolenQuantity
+        }
+      },
+      farms: {
+        ...state.farms,
+        farms: {
+          ...state.farms.farms,
+          [nextFarm.id]: nextFarm
+        },
+        theftLog: [...(state.farms.theftLog ?? []), logEntry]
+      },
+      updatedAt: now.toISOString()
+    }
+  };
+}
+
+export function resolveGuardedFarmTheft(
+  state: MonsterRpgSaveState,
+  {
+    farmId,
+    guardCreatureHp,
+    now = new Date(),
+    playerCreatureFainted,
+    playerCreatureHp,
+    playerCreatureId,
+    visitorWon
+  }: {
+    farmId: string;
+    guardCreatureHp?: number;
+    now?: Date;
+    playerCreatureFainted: boolean;
+    playerCreatureHp: number;
+    playerCreatureId: string;
+    visitorWon: boolean;
+  }
+): GuardedFarmTheftResolutionResult {
+  const farm = state.farms.farms[farmId];
+  if (!farm) return { ok: false, state, reason: 'missing-farm' };
+  if (farm.ownerPlayerId === state.profile.playerId) {
+    return { ok: false, state, reason: 'owner-cannot-steal', farm };
+  }
+  if (!isFarmGuardBlockingTheft(state, farm)) return { ok: false, state, reason: 'unguarded', farm };
+
+  const accruedFarm = getAccruedFarmRecord(farm, now);
+  const cooldownUntil = getFarmTheftCooldown(accruedFarm, state.profile.playerId, now);
+  if (cooldownUntil) return { ok: false, state, reason: 'cooldown', farm: accruedFarm, cooldownUntil };
+
+  const storedQuantity = accruedFarm.storedResources[accruedFarm.resourceId] ?? 0;
+  if (storedQuantity <= 0) return { ok: false, state, reason: 'empty', farm: accruedFarm };
+
+  const targetVillageLevel = getTargetVillageLevel(state, accruedFarm);
+  const costRequired = getFarmTheftAttemptCost(state, targetVillageLevel);
+  if ((state.inventory.currencies[MAGIC_DUST_RESOURCE_ID] ?? 0) < costRequired) {
+    return { ok: false, state, reason: 'missing-magic-dust', farm: accruedFarm, costRequired };
+  }
+
+  const stolenQuantity = visitorWon ? getFarmTheftStolenQuantity(storedQuantity) : 0;
+  const nextCooldownUntil = visitorWon ? new Date(now.getTime() + FARM_THEFT_COOLDOWN_MS).toISOString() : undefined;
+  const theftCooldowns =
+    visitorWon && nextCooldownUntil
+      ? {
+          ...accruedFarm.theftCooldowns,
+          [getFarmTheftCooldownKey(state.profile.playerId)]: nextCooldownUntil
+        }
+      : accruedFarm.theftCooldowns;
+  const nextFarm: FarmSaveRecord = {
+    ...accruedFarm,
+    storedResources: {
+      ...accruedFarm.storedResources,
+      [accruedFarm.resourceId]: storedQuantity - stolenQuantity
+    },
+    theftCooldowns
+  };
+  const logEntry = createFarmTheftLogEntry({
+    attackerPlayerId: state.profile.playerId,
+    costPaid: costRequired,
+    farm: nextFarm,
+    guardResult: visitorWon ? 'visitor-won' : 'visitor-lost',
+    now,
+    outcome: visitorWon ? 'success' : 'failed',
+    stolenQuantity
+  });
+  const playerCreature = state.creatures.creatures[playerCreatureId];
+  const guardCreature =
+    farm.guardCreatureId && visitorWon ? state.creatures.creatures[farm.guardCreatureId] : undefined;
+
+  return {
+    ok: true,
+    farm: nextFarm,
+    outcome: logEntry.outcome,
+    stolenQuantity,
+    costPaid: costRequired,
+    cooldownUntil: nextCooldownUntil,
+    logEntry,
+    state: {
+      ...state,
+      inventory: {
+        ...state.inventory,
+        currencies: {
+          ...state.inventory.currencies,
+          [MAGIC_DUST_RESOURCE_ID]:
+            (state.inventory.currencies[MAGIC_DUST_RESOURCE_ID] ?? 0) - costRequired + stolenQuantity
+        }
+      },
+      creatures: {
+        ...state.creatures,
+        creatures: {
+          ...state.creatures.creatures,
+          ...(playerCreature
+            ? {
+                [playerCreatureId]: {
+                  ...playerCreature,
+                  hp: visitorWon ? Math.max(0, Math.min(playerCreature.maxHp, playerCreatureHp)) : 0,
+                  fainted: visitorWon ? playerCreatureFainted || playerCreatureHp <= 0 : true
+                }
+              }
+            : {}),
+          ...(guardCreature
+            ? {
+                [guardCreature.id]: {
+                  ...guardCreature,
+                  hp: Math.max(0, Math.min(guardCreature.maxHp, guardCreatureHp ?? 0)),
+                  fainted: (guardCreatureHp ?? 0) <= 0
+                }
+              }
+            : {})
         }
       },
       farms: {
@@ -565,6 +718,7 @@ function createFarmTheftLogEntry({
   attackerPlayerId,
   costPaid,
   farm,
+  guardResult = 'unguarded',
   now,
   outcome,
   stolenQuantity
@@ -572,6 +726,7 @@ function createFarmTheftLogEntry({
   attackerPlayerId: string;
   costPaid: number;
   farm: FarmSaveRecord;
+  guardResult?: FarmTheftLogEntry['guardResult'];
   now: Date;
   outcome: 'success' | 'failed';
   stolenQuantity: number;
@@ -589,7 +744,7 @@ function createFarmTheftLogEntry({
     resourceId: farm.resourceId,
     stolenQuantity,
     costPaid,
-    guardResult: 'unguarded'
+    guardResult
   };
 }
 

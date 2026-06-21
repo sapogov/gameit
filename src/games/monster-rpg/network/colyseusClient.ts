@@ -11,6 +11,8 @@ import type {
   MoveIntentMessage,
   MultiplayerStatus,
   ClaimWildEncounterMessage,
+  ClaimGuardedFarmTheftMessage,
+  GuardedFarmTheftClaimedMessage,
   ResolveWildEncounterMessage,
   WildEncounterClaimedMessage,
   WorldPosition
@@ -28,12 +30,15 @@ interface ConnectionHandlers {
   onTransition: (transition: LocationTransitionMessage) => void;
   onWildEncounterClaimed: (message: WildEncounterClaimedMessage) => void;
   onWildEncounterClaimRejected: (message: { encounterId: string; reason: string }) => void;
+  onGuardedFarmTheftClaimed: (message: GuardedFarmTheftClaimedMessage) => void;
+  onGuardedFarmTheftClaimRejected: (message: { farmId: string; reason: string }) => void;
 }
 
 export interface MultiplayerConnection {
   sessionId: string;
   sendMoveIntent: (message: MoveIntentMessage) => void;
   sendClaimWildEncounter: (message: ClaimWildEncounterMessage) => void;
+  sendClaimGuardedFarmTheft: (message: ClaimGuardedFarmTheftMessage) => void;
   sendResolveWildEncounter: (message: ResolveWildEncounterMessage) => void;
   leave: (options?: { silent?: boolean }) => void;
 }
@@ -80,6 +85,12 @@ export async function connectToLocation(
   room.onMessage('wildEncounterClaimRejected', (message: { encounterId: string; reason: string }) => {
     handlers.onWildEncounterClaimRejected(message);
   });
+  room.onMessage('guardedFarmTheftClaimed', (message: GuardedFarmTheftClaimedMessage) => {
+    handlers.onGuardedFarmTheftClaimed(message);
+  });
+  room.onMessage('guardedFarmTheftClaimRejected', (message: { farmId: string; reason: string }) => {
+    handlers.onGuardedFarmTheftClaimRejected(message);
+  });
   room.onError((code, message) => {
     console.warn(`[monster-rpg] multiplayer room error ${code}: ${message ?? 'unknown error'}`);
     handlers.onStatus('offline');
@@ -97,6 +108,9 @@ export async function connectToLocation(
     },
     sendClaimWildEncounter: (message) => {
       room.send('claimWildEncounter', message);
+    },
+    sendClaimGuardedFarmTheft: (message) => {
+      room.send('claimGuardedFarmTheft', message);
     },
     sendResolveWildEncounter: (message) => {
       room.send('resolveWildEncounter', message);
@@ -220,6 +234,7 @@ function toBattleRoomState(state: any): BattleRoomState {
     battleId: typeof state.battleId === 'string' ? state.battleId : '',
     encounterId: typeof state.encounterId === 'string' ? state.encounterId : '',
     wildSpeciesId: typeof state.wildSpeciesId === 'number' ? state.wildSpeciesId : 1,
+    battleKind: state.battleKind === 'guard-theft' ? 'guard-theft' : 'wild',
     status: toBattleStatus(state.status),
     turn: typeof state.turn === 'number' ? state.turn : 1,
     canRun: Boolean(state.canRun),

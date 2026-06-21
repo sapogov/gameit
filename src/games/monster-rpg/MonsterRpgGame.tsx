@@ -22,6 +22,7 @@ import {
   buildFarmCardViaElder,
   exportSave,
   getGameMap,
+  getFacingFarm,
   getFirstBattleReadyCreature,
   getCardDefinition,
   healAllCreaturesAtHospital,
@@ -37,6 +38,7 @@ import {
   moveCreatureToActiveParty,
   moveCreatureToStorage,
   recordWildCreatureSeen,
+  resolveGuardedFarmTheft,
   saveMonsterRpgSettings,
   saveProgress,
   upgradeFarm,
@@ -70,10 +72,12 @@ export function MonsterRpgGame() {
   const connectionRef = useRef<MultiplayerConnection | null>(null);
   const battleConnectionRef = useRef<BattleConnection | null>(null);
   const activeBattleClaimRef = useRef<{
+    kind: 'wild' | 'guard-theft';
     battleId: string;
     battleToken: string;
-    encounterId: string;
-    speciesId: number;
+    encounterId?: string;
+    farmId?: string;
+    speciesId?: number;
   } | null>(null);
   const moveSequenceRef = useRef(0);
   const multiplayerStatusRef = useRef<MultiplayerStatus>('offline');
@@ -143,6 +147,18 @@ export function MonsterRpgGame() {
             setLastMove(null);
             setPackTrace(null);
             setImportStatus(formatFarmTheftAttempt(theft));
+            return;
+          }
+          if (theft.reason === 'guarded' && multiplayerStatusRef.current === 'online' && connectionRef.current) {
+            const farm = theft.farm ?? getFacingFarm(currentState);
+            const activeCreature = getFirstBattleReadyCreature(currentState);
+            const guardCreature = farm?.guardCreatureId ? currentState.creatures.creatures[farm.guardCreatureId] : undefined;
+            if (!farm || !activeCreature || !guardCreature) {
+              setImportStatus(!activeCreature ? 'No ready Creature for guard battle' : 'Farm guard data unavailable');
+              return;
+            }
+            connectionRef.current.sendClaimGuardedFarmTheft({ farm, activeCreature, guardCreature });
+            setImportStatus('Challenging farm guard');
             return;
           }
           setImportStatus(formatFarmTheftFailure(theft.reason, theft));
@@ -658,6 +674,7 @@ export function MonsterRpgGame() {
               if (cancelled) return;
 
               activeBattleClaimRef.current = {
+                kind: 'wild',
                 battleId: claim.battleId,
                 battleToken: claim.battleToken,
                 encounterId: claim.encounterId,
@@ -669,6 +686,23 @@ export function MonsterRpgGame() {
             onWildEncounterClaimRejected: (message) => {
               if (!cancelled) {
                 setImportStatus(formatWildEncounterClaimFailure(message.reason));
+              }
+            },
+            onGuardedFarmTheftClaimed: (claim) => {
+              if (cancelled) return;
+
+              activeBattleClaimRef.current = {
+                kind: 'guard-theft',
+                battleId: claim.battleId,
+                battleToken: claim.battleToken,
+                farmId: claim.farmId
+              };
+              setImportStatus('Guard battle started');
+              void connectBattleRoom(claim.battleId, claim.battleToken);
+            },
+            onGuardedFarmTheftClaimRejected: (message) => {
+              if (!cancelled) {
+                setImportStatus(formatGuardedFarmTheftClaimFailure(message.reason));
               }
             },
             onStatus: (status) => {
@@ -756,24 +790,48 @@ export function MonsterRpgGame() {
     const claim = activeBattleClaimRef.current;
     if (!claim || claim.battleId !== result.battleId) return;
 
-    connectionRef.current?.sendResolveWildEncounter({
-      encounterId: result.encounterId,
-      outcome: result.outcome,
-      battleId: result.battleId,
-      battleToken
-    });
+    if (claim.kind === 'wild' && claim.encounterId && claim.speciesId !== undefined) {
+      connectionRef.current?.sendResolveWildEncounter({
+        encounterId: result.encounterId,
+        outcome: result.outcome,
+        battleId: result.battleId,
+        battleToken
+      });
 
-    setSaveState((current) => {
-      if (!current) return current;
-      const applied = applyBattleRewardsToSave(recordWildCreatureSeen(current, claim.speciesId), result);
-      const nextState = applied.state;
-      if (applied.packTrace) setPackTrace(applied.packTrace);
-      saveProgress(nextState);
-      saveStateRef.current = nextState;
-      return nextState;
-    });
+      setSaveState((current) => {
+        if (!current) return current;
+        const applied = applyBattleRewardsToSave(recordWildCreatureSeen(current, claim.speciesId!), result);
+        const nextState = applied.state;
+        if (applied.packTrace) setPackTrace(applied.packTrace);
+        saveProgress(nextState);
+        saveStateRef.current = nextState;
+        return nextState;
+      });
 
-    setImportStatus(formatBattleOutcome(result));
+      setImportStatus(formatBattleOutcome(result));
+    } else if (claim.kind === 'guard-theft' && claim.farmId) {
+      setSaveState((current) => {
+        if (!current) return current;
+        const guardBattle = resolveGuardedFarmTheft(current, {
+          farmId: claim.farmId!,
+          guardCreatureHp: result.outcome === 'defeated' ? 0 : undefined,
+          playerCreatureFainted: result.playerCreatureFainted,
+          playerCreatureHp: result.playerCreatureHp,
+          playerCreatureId: result.playerCreatureId,
+          visitorWon: result.outcome === 'defeated'
+        });
+        if (!guardBattle.ok) {
+          setImportStatus(formatFarmTheftFailure(guardBattle.reason, guardBattle));
+          return current;
+        }
+
+        saveProgress(guardBattle.state);
+        saveStateRef.current = guardBattle.state;
+        setPackTrace(null);
+        setImportStatus(formatFarmTheftAttempt(guardBattle));
+        return guardBattle.state;
+      });
+    }
     activeBattleClaimRef.current = null;
     battleConnectionRef.current?.leave({ silent: true });
     battleConnectionRef.current = null;
@@ -889,7 +947,7 @@ function formatFarmCollectionFailure(reason: string | undefined): string {
   return `Farm collection failed${reason ? `: ${reason}` : ''}`;
 }
 
-function formatFarmTheftAttempt(result: Extract<ReturnType<typeof attemptFacingFarmTheft>, { ok: true }>): string {
+function formatFarmTheftAttempt(result: { outcome: 'success' | 'failed'; stolenQuantity: number; costPaid: number }): string {
   if (result.outcome === 'success') {
     return `Theft succeeded: stole ${result.stolenQuantity} Magic Dust, paid ${result.costPaid}`;
   }
@@ -898,7 +956,7 @@ function formatFarmTheftAttempt(result: Extract<ReturnType<typeof attemptFacingF
 
 function formatFarmTheftFailure(
   reason: string | undefined,
-  result?: Extract<ReturnType<typeof attemptFacingFarmTheft>, { ok: false }>
+  result?: { cooldownUntil?: string; costRequired?: number }
 ): string {
   if (reason === 'cooldown' && result?.cooldownUntil) {
     return `Theft cooldown until ${new Date(result.cooldownUntil).toLocaleTimeString()}`;
@@ -908,6 +966,15 @@ function formatFarmTheftFailure(
   if (reason === 'missing-magic-dust') return `Need ${result?.costRequired ?? 1} Magic Dust to attempt theft`;
   if (reason === 'owner-cannot-steal') return 'Owners collect instead of stealing';
   return `Theft failed${reason ? `: ${reason}` : ''}`;
+}
+
+function formatGuardedFarmTheftClaimFailure(reason: string | undefined): string {
+  if (reason === 'range') return 'Face the guarded farm first';
+  if (reason === 'in-battle') return 'Battle already in progress';
+  if (reason === 'no-ready-creature') return 'No ready Creature for guard battle';
+  if (reason === 'unguarded') return 'Farm guard is inactive';
+  if (reason === 'owner-cannot-steal') return 'Owners collect instead of stealing';
+  return `Guard battle failed${reason ? `: ${reason}` : ''}`;
 }
 
 function formatFarmUpgradeFailure(reason: string | undefined): string {

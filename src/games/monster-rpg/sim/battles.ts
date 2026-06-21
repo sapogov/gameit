@@ -62,6 +62,7 @@ export function createBattleRoomState({
   return withValidAttackIds({
     battleId,
     encounterId,
+    battleKind: 'wild',
     wildSpeciesId,
     status: 'active',
     turn: 1,
@@ -83,6 +84,55 @@ export function createBattleRoomState({
       {
         id: `${now.getTime()}:start`,
         message: `A wild ${getSpeciesById(wildSpeciesId)?.displayName ?? `Species #${wildSpeciesId}`} appeared.`
+      }
+    ],
+    validPlayerAttackIds: [],
+    rewardGranted: false
+  });
+}
+
+export function createGuardBattleRoomState({
+  battleId,
+  farmId,
+  guardCreature,
+  playerCreature,
+  playerProfile,
+  now = new Date()
+}: {
+  battleId: string;
+  farmId: string;
+  guardCreature: CreatureSaveRecord;
+  playerCreature: CreatureSaveRecord;
+  playerProfile: PlayerProfile;
+  now?: Date;
+}): BattleRoomState {
+  const guardSpecies = getSpeciesById(guardCreature.speciesId);
+
+  return withValidAttackIds({
+    battleId,
+    encounterId: `guard-theft:${farmId}`,
+    battleKind: 'guard-theft',
+    wildSpeciesId: guardCreature.speciesId,
+    status: 'active',
+    turn: 1,
+    canRun: false,
+    runAttempts: 0,
+    player: {
+      kind: 'player',
+      playerId: playerProfile.playerId,
+      name: playerProfile.name,
+      activeCreature: toBattleCreature(playerCreature)
+    },
+    enemy: {
+      kind: 'enemy',
+      playerId: guardCreature.ownerPlayerId,
+      name: `${guardSpecies?.displayName ?? `Species #${guardCreature.speciesId}`} Guard`,
+      activeCreature: toBattleCreature(guardCreature)
+    },
+    lastLog: [
+      {
+        id: `${now.getTime()}:start`,
+        message: `The farm guard ${guardSpecies?.displayName ?? `Species #${guardCreature.speciesId}`} blocks the theft.`
       }
     ],
     validPlayerAttackIds: [],
@@ -219,8 +269,8 @@ function completeBattle(
   const next = withValidAttackIds({
     ...appendBattleLog(state, getCompletionMessage(outcome), now),
     status: statusByOutcome[outcome],
-    rewardGranted: grantReward ? !state.rewardGranted : state.rewardGranted,
-    rewards: grantReward && !state.rewardGranted ? generateWildBattleRewards(state) : state.rewards
+    rewardGranted: state.rewardGranted || (grantReward && state.battleKind === 'wild'),
+    rewards: grantReward && state.battleKind === 'wild' && !state.rewardGranted ? generateWildBattleRewards(state) : state.rewards
   });
 
   return {

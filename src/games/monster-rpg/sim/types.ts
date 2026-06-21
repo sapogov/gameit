@@ -194,6 +194,8 @@ export interface CreatureSaveRecord {
   cooldowns: Record<string, string>;
 }
 
+export type BattleKind = 'wild' | 'guard-theft';
+
 export type BattleParticipantKind = 'player' | 'enemy';
 
 export type BattleStatus = 'active' | 'player-won' | 'player-lost' | 'ran' | 'disconnected-grace' | 'abandoned';
@@ -227,6 +229,7 @@ export interface BattleTurnLogEntry {
 export interface BattleRoomState {
   battleId: string;
   encounterId: string;
+  battleKind: BattleKind;
   wildSpeciesId: number;
   status: BattleStatus;
   turn: number;
@@ -308,7 +311,7 @@ export interface FarmTheftLogEntry {
   resourceId: string;
   stolenQuantity: number;
   costPaid: number;
-  guardResult: 'unguarded';
+  guardResult: 'unguarded' | 'visitor-won' | 'visitor-lost';
 }
 
 export interface FarmSaveContainer {
@@ -440,6 +443,12 @@ export interface ClaimWildEncounterMessage {
   activeCreature?: CreatureSaveRecord;
 }
 
+export interface ClaimGuardedFarmTheftMessage {
+  farm: FarmSaveRecord;
+  activeCreature?: CreatureSaveRecord;
+  guardCreature?: CreatureSaveRecord;
+}
+
 export interface ResolveWildEncounterMessage {
   encounterId: string;
   outcome: WildEncounterOutcome;
@@ -450,6 +459,12 @@ export interface ResolveWildEncounterMessage {
 export interface WildEncounterClaimedMessage {
   encounterId: string;
   speciesId: number;
+  battleId: string;
+  battleToken: string;
+}
+
+export interface GuardedFarmTheftClaimedMessage {
+  farmId: string;
   battleId: string;
   battleToken: string;
 }
