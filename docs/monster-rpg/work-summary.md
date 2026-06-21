@@ -328,6 +328,16 @@
 - Updated the HUD level readout and Pack trace display for level-up Pack rewards.
 - Added deterministic tests for level thresholds, reward claiming/idempotency, future unlock representation, Battle XP leveling, and reward-table rarity/type boundaries.
 
+## 2026-06-21 - Issue #22: MVP Art And HUD Polish Pass
+
+- Improved character creation skin choices with distinct sprite-like body, head, feet, gear text, and clearer selected-state presentation.
+- Added readable Phaser map labels for Town Hall/Village Elder, Hospital, Station, and Magic Dust Farm while preserving original local pixel-style assets.
+- Reworked visible wild encounter markers from plain dots into simple creature-like icons with body, crest, shine, shadow, and optional species labels.
+- Tightened first-run onboarding layout so desktop and mobile hide lower HUD drawers while the Village Elder panel is active, avoiding HUD/control overlap.
+- Improved the Battle button copy to `Run Away` and kept HP/fatigue meters plus battle log in a bounded panel.
+- Added Farm HUD storage bars and clearer stored/cap, production, guard, access, cooldown/upgrade readouts.
+- Reworked inventory card rows with type, rarity, quantity badges, scannable details, and bounded scroll so opened packs do not push UI past the playfield.
+
 ## Next Work
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.

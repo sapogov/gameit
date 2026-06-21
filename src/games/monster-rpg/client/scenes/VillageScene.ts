@@ -101,7 +101,9 @@ interface PlayerView {
 
 interface EncounterView {
   container: Phaser.GameObjects.Container;
+  shadow: Phaser.GameObjects.Rectangle;
   body: Phaser.GameObjects.Arc;
+  crest: Phaser.GameObjects.Triangle;
   shine: Phaser.GameObjects.Arc;
   label: Phaser.GameObjects.Text;
 }
@@ -111,6 +113,7 @@ interface FarmView {
   base: Phaser.GameObjects.Rectangle;
   field: Phaser.GameObjects.Rectangle;
   dust: Phaser.GameObjects.Arc;
+  label: Phaser.GameObjects.Text;
 }
 
 export class VillageScene extends Phaser.Scene {
@@ -387,6 +390,9 @@ export class VillageScene extends Phaser.Scene {
         if (buildingKey) {
           this.addSpriteOverlay(sprites, buildingKey, (exit.x - 1) * tileSize, (exit.y - 2) * tileSize, tileSize * 3, tileSize * 3);
         }
+        if (buildingTile) {
+          this.addMapLabel(sprites, this.getBuildingLabel(buildingTile), exit.x * tileSize + tileSize / 2, (exit.y - 2.15) * tileSize);
+        }
         this.addSpriteOverlay(sprites, monsterRpgAssetKeys.markerDoor, exit.x * tileSize, exit.y * tileSize, tileSize, tileSize);
         this.addSpriteOverlay(
           sprites,
@@ -415,6 +421,22 @@ export class VillageScene extends Phaser.Scene {
     image.setDepth(2);
     sprites.add(image);
     return image;
+  }
+
+  private addMapLabel(sprites: Phaser.GameObjects.Container, text: string, x: number, y: number) {
+    const label = this.add
+      .text(x, y, text, {
+        align: 'center',
+        color: '#fff8d6',
+        fontFamily: 'monospace',
+        fontSize: this.map.kind === 'world-map' ? '6px' : '7px',
+        stroke: '#1b1c24',
+        strokeThickness: 3
+      })
+      .setOrigin(0.5, 0.5)
+      .setDepth(4);
+    sprites.add(label);
+    return label;
   }
 
   private shouldDrawTerrainSprite(tile: TileType, x: number, y: number): boolean {
@@ -525,7 +547,9 @@ export class VillageScene extends Phaser.Scene {
 
   private createEncounterView(id: string): EncounterView {
     const container = this.add.container(0, 0);
+    const shadow = this.add.rectangle(0, 4, 14, 5, 0x1b1c24, 0.28);
     const body = this.add.circle(0, 0, 7, 0x7ddf8a).setStrokeStyle(2, 0x17351f);
+    const crest = this.add.triangle(0, -8, 0, 8, 5, 0, -5, 0, 0xf7dc6f).setStrokeStyle(1, 0x17351f);
     const shine = this.add.circle(-2, -3, 2, 0xf7ffd8, 0.85);
     const label = this.add
       .text(0, 10, '', {
@@ -536,18 +560,24 @@ export class VillageScene extends Phaser.Scene {
         strokeThickness: 3
       })
       .setOrigin(0.5, 0);
-    container.add([body, shine, label]);
+    container.add([shadow, crest, body, shine, label]);
     container.setDepth(4);
-    this.encounters.set(id, { container, body, shine, label });
-    return { container, body, shine, label };
+    this.encounters.set(id, { container, shadow, body, crest, shine, label });
+    return { container, shadow, body, crest, shine, label };
   }
 
   private syncEncounterView(view: EncounterView, encounter: WildEncounterState) {
     const { tileSize } = this.map;
     const radius = this.map.kind === 'world-map' ? tileSize * 0.34 : tileSize * 0.3;
+    const color = getSpeciesIconColor(encounter.speciesId);
     view.container.setPosition(encounter.x * tileSize + tileSize / 2, encounter.y * tileSize + tileSize / 2);
+    view.shadow.setSize(radius * 1.75, Math.max(3, radius * 0.44));
+    view.shadow.setY(radius * 0.5);
     view.body.setRadius(radius);
-    view.body.setFillStyle(getSpeciesIconColor(encounter.speciesId), 1);
+    view.body.setFillStyle(color, 1);
+    view.crest.setPosition(0, -radius * 0.7);
+    view.crest.setScale(Math.max(0.75, radius / 8));
+    view.crest.setFillStyle(getSpeciesAccentColor(encounter.speciesId), 0.95);
     view.shine.setRadius(Math.max(2, radius * 0.24));
     view.shine.setPosition(-radius * 0.26, -radius * 0.38);
     view.label.setY(radius + 2);
@@ -560,11 +590,21 @@ export class VillageScene extends Phaser.Scene {
     const base = this.add.rectangle(0, 0, 18, 16, 0x8c5b2a).setStrokeStyle(2, 0x26351f);
     const field = this.add.rectangle(0, 4, 16, 7, 0x6f9f48);
     const dust = this.add.circle(5, -5, 3, 0xf8df64, 0.95).setStrokeStyle(1, 0xfff8d6);
+    const label = this.add
+      .text(0, 12, 'Magic Dust Farm', {
+        align: 'center',
+        color: '#fff8d6',
+        fontFamily: 'monospace',
+        fontSize: '7px',
+        stroke: '#1b1c24',
+        strokeThickness: 3
+      })
+      .setOrigin(0.5, 0);
 
-    container.add([base, field, dust]);
+    container.add([base, field, dust, label]);
     container.setDepth(3);
-    this.farms.set(id, { container, base, field, dust });
-    return { container, base, field, dust };
+    this.farms.set(id, { container, base, field, dust, label });
+    return { container, base, field, dust, label };
   }
 
   private syncFarmView(view: FarmView, farm: FarmSaveRecord) {
@@ -580,6 +620,8 @@ export class VillageScene extends Phaser.Scene {
     view.field.setY(height * 0.18);
     view.dust.setPosition(width * 0.28, -height * 0.32);
     view.dust.setRadius(Math.max(2, tileSize * 0.14));
+    view.label.setY(height * 0.48);
+    view.label.setFontSize(this.map.kind === 'world-map' ? '6px' : '7px');
   }
 
   private createPlayerView(id: RoomPlayerId, player: LocationPlayerState): PlayerView {
@@ -732,6 +774,15 @@ export class VillageScene extends Phaser.Scene {
     return buildingAssetKeys[tile as keyof typeof buildingAssetKeys];
   }
 
+  private getBuildingLabel(tile: TileType): string {
+    if (tile === 'townHall') return 'Town Hall / Elder';
+    if (tile === 'clinic') return 'Hospital';
+    if (tile === 'postOffice') return 'Station';
+    if (tile === 'shop') return 'Shop';
+    if (tile === 'tavern') return 'Tavern';
+    return 'Home';
+  }
+
   private getTerrainAssetKey(tile: TileType): MonsterRpgAssetKey | undefined {
     return terrainAssetKeys[tile as keyof typeof terrainAssetKeys];
   }
@@ -740,4 +791,9 @@ export class VillageScene extends Phaser.Scene {
 function getSpeciesIconColor(speciesId: number): number {
   const colors = [0x7ddf8a, 0xff9f5f, 0x69c6ff, 0xb9a37a, 0xf7dc6f, 0xb987ff];
   return colors[Math.abs(speciesId) % colors.length];
+}
+
+function getSpeciesAccentColor(speciesId: number): number {
+  const colors = [0xf7dc6f, 0x95c46d, 0xfff8d6, 0xd95f3d, 0x69c6ff, 0x26351f];
+  return colors[Math.abs(speciesId + 2) % colors.length];
 }

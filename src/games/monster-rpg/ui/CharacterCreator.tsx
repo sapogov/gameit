@@ -5,10 +5,10 @@ interface CharacterCreatorProps {
   onCreate: (name: string, avatar: AvatarId) => void;
 }
 
-const avatarOptions: Array<{ id: AvatarId; label: string; description: string }> = [
-  { id: 'scout', label: 'Scout', description: 'Bright village runner' },
-  { id: 'ranger', label: 'Ranger', description: 'Trail-wise explorer' },
-  { id: 'keeper', label: 'Keeper', description: 'Calm creature friend' }
+const avatarOptions: Array<{ id: AvatarId; label: string; description: string; gear: string }> = [
+  { id: 'scout', label: 'Scout', description: 'Bright village runner', gear: 'gold jacket' },
+  { id: 'ranger', label: 'Ranger', description: 'Trail-wise explorer', gear: 'green cloak' },
+  { id: 'keeper', label: 'Keeper', description: 'Calm creature friend', gear: 'rose coat' }
 ];
 
 export function CharacterCreator({ onCreate }: CharacterCreatorProps) {
@@ -49,9 +49,14 @@ export function CharacterCreator({ onCreate }: CharacterCreatorProps) {
               role="radio"
               type="button"
             >
-              <span className="monster-avatar-sprite" aria-hidden="true" />
+              <span className="monster-avatar-sprite" aria-hidden="true">
+                <span className="monster-avatar-head" />
+                <span className="monster-avatar-body" />
+                <span className="monster-avatar-feet" />
+              </span>
               <strong>{option.label}</strong>
               <span>{option.description}</span>
+              <small>{option.gear}</small>
             </button>
           ))}
         </div>
