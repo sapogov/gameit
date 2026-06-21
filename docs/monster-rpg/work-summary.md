@@ -295,6 +295,14 @@
 - Wired Farm HUD upgrade controls and guard selection while keeping Farm simulation, React UI, and save validation separate.
 - Added focused Farm upgrade/guard tests and save import coverage for persisted guard references.
 
+## 2026-06-20 - Issue #18: Visitor Permissions And Theft From Unguarded Farms
+
+- Added visitor farm theft simulation with Magic Dust attempt costs, deterministic success checks, 25% stored-resource cap, and 24-hour cooldowns keyed per visitor.
+- Preserved owner-only Farm management for upgrades and guard assignment while allowing visitor-held farm records for theft checks.
+- Added theft attempt logging for later activity feed work, recording attacker, defender, farm type, outcome, stolen amount, cost, and unguarded result.
+- Wired adjacent facing Interact so owners collect and visitors attempt theft, with Farm HUD text for visitor cost/cooldown state.
+- Added focused farm tests for successful theft, cooldown blocking, failed attempts, level-scaled costs, and owner-only management.
+
 ## Next Work
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.

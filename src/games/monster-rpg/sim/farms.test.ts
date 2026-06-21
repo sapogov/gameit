@@ -3,7 +3,9 @@ import {
   collectFacingFarm,
   createInitialSave,
   createPlayerProfile,
+  attemptFacingFarmTheft,
   getAccruedFarmRecord,
+  getFarmTheftAttemptCost,
   getFarmUpgradePreview,
   assignFarmGuard,
   isFarmGuardActive,
@@ -184,6 +186,148 @@ describe('Magic Dust Farms', () => {
     expect(farm.guardCreatureId).toBe(guard.id);
     expect(isFarmGuardActive(fainted.state, farm)).toBe(false);
   });
+
+  it('lets visitors steal capped resources from unguarded farms and starts a 24-hour cooldown', () => {
+    const visitor = createPlayerProfile('Mika', 'scout');
+    const ownerPlayerId = 'owner-1';
+    const state = withMagicDust(
+      withFarm(createInitialSave(visitor), createFarm({ ownerPlayerId, stored: 12 })),
+      10
+    );
+    const adjacent = {
+      ...state,
+      position: { mapId: 'home-village' as const, x: 24, y: 17, facing: 'north' as const }
+    };
+
+    const result = attemptFacingFarmTheft(adjacent, new Date('2026-06-20T12:00:00.000Z'), { rng: () => 0 });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error(result.reason);
+    expect(result.outcome).toBe('success');
+    expect(result.stolenQuantity).toBe(3);
+    expect(result.costPaid).toBe(1);
+    expect(result.cooldownUntil).toBe('2026-06-21T12:00:00.000Z');
+    expect(result.state.inventory.currencies[MAGIC_DUST_CURRENCY_ID]).toBe(12);
+    expect(result.state.farms.farms[MAGIC_DUST_FARM_ID].storedResources[MAGIC_DUST_CURRENCY_ID]).toBe(9);
+    expect(result.state.farms.farms[MAGIC_DUST_FARM_ID].theftCooldowns[`visitor:${visitor.playerId}`]).toBe(
+      '2026-06-21T12:00:00.000Z'
+    );
+    expect(result.state.farms.theftLog).toHaveLength(1);
+    expect(result.state.farms.theftLog?.[0]).toMatchObject({
+      attackerPlayerId: visitor.playerId,
+      defenderPlayerId: ownerPlayerId,
+      outcome: 'success',
+      stolenQuantity: 3,
+      costPaid: 1,
+      guardResult: 'unguarded'
+    });
+  });
+
+  it('blocks visitor theft during cooldown without charging Magic Dust', () => {
+    const visitor = createPlayerProfile('Mika', 'scout');
+    const state = withMagicDust(
+      withFarm(
+        createInitialSave(visitor),
+        createFarm({
+          ownerPlayerId: 'owner-1',
+          stored: 12,
+          theftCooldowns: { [`visitor:${visitor.playerId}`]: '2026-06-21T12:00:00.000Z' }
+        })
+      ),
+      10
+    );
+    const adjacent = {
+      ...state,
+      position: { mapId: 'home-village' as const, x: 24, y: 17, facing: 'north' as const }
+    };
+
+    const result = attemptFacingFarmTheft(adjacent, new Date('2026-06-20T12:05:00.000Z'), { rng: () => 0 });
+
+    expect(result.ok).toBe(false);
+    if (result.ok) throw new Error('Expected cooldown failure');
+    expect(result.reason).toBe('cooldown');
+    expect(result.cooldownUntil).toBe('2026-06-21T12:00:00.000Z');
+    expect(result.state.inventory.currencies[MAGIC_DUST_CURRENCY_ID]).toBe(10);
+    expect(result.state.farms.theftLog).toHaveLength(0);
+  });
+
+  it('charges failed theft attempts but does not steal or start cooldown', () => {
+    const visitor = createPlayerProfile('Mika', 'scout');
+    const state = withMagicDust(
+      withFarm(createInitialSave(visitor), createFarm({ ownerPlayerId: 'owner-1', stored: 12 })),
+      10
+    );
+    const adjacent = {
+      ...state,
+      position: { mapId: 'home-village' as const, x: 24, y: 17, facing: 'north' as const }
+    };
+
+    const result = attemptFacingFarmTheft(adjacent, new Date('2026-06-20T12:00:00.000Z'), { rng: () => 1 });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error(result.reason);
+    expect(result.outcome).toBe('failed');
+    expect(result.stolenQuantity).toBe(0);
+    expect(result.cooldownUntil).toBeUndefined();
+    expect(result.state.inventory.currencies[MAGIC_DUST_CURRENCY_ID]).toBe(9);
+    expect(result.state.farms.farms[MAGIC_DUST_FARM_ID].storedResources[MAGIC_DUST_CURRENCY_ID]).toBe(12);
+    expect(result.state.farms.farms[MAGIC_DUST_FARM_ID].theftCooldowns[`visitor:${visitor.playerId}`]).toBeUndefined();
+    expect(result.state.farms.theftLog?.[0]).toMatchObject({ outcome: 'failed', stolenQuantity: 0, costPaid: 1 });
+  });
+
+  it('blocks visitor theft from guarded farms even when the guard Creature is not in the visitor save', () => {
+    const visitor = createPlayerProfile('Mika', 'scout');
+    const state = withMagicDust(
+      withFarm(
+        createInitialSave(visitor),
+        createFarm({ ownerPlayerId: 'owner-1', stored: 12, guardCreatureId: 'owner-guard-1' })
+      ),
+      10
+    );
+    const adjacent = {
+      ...state,
+      position: { mapId: 'home-village' as const, x: 24, y: 17, facing: 'north' as const }
+    };
+
+    const result = attemptFacingFarmTheft(adjacent, new Date('2026-06-20T12:00:00.000Z'), { rng: () => 0 });
+
+    expect(result.ok).toBe(false);
+    if (result.ok) throw new Error('Expected guarded failure');
+    expect(result.reason).toBe('guarded');
+    expect(result.state.inventory.currencies[MAGIC_DUST_CURRENCY_ID]).toBe(10);
+    expect(result.state.farms.theftLog).toHaveLength(0);
+  });
+
+  it('increases Magic Dust theft cost when visitor player or village level exceeds target village level', () => {
+    const visitor = createPlayerProfile('Mika', 'scout');
+    const initial = createInitialSave(visitor);
+    const state = {
+      ...initial,
+      village: { ...initial.village, level: 4 },
+      progression: { ...initial.progression, playerLevel: 3 }
+    };
+
+    expect(getFarmTheftAttemptCost(state, 1)).toBe(7);
+  });
+
+  it('keeps farm management owner-only for visitor-held farm records', () => {
+    const visitor = createPlayerProfile('Mika', 'scout');
+    const readyCreature = createCreature({ id: 'visitor-guard', ownerPlayerId: visitor.playerId });
+    const state = withCreature(
+      withFarm(createInitialSave(visitor), createFarm({ ownerPlayerId: 'owner-1', stored: 12 })),
+      readyCreature
+    );
+
+    const upgraded = upgradeFarm(state, MAGIC_DUST_FARM_ID);
+    const guarded = assignFarmGuard(state, MAGIC_DUST_FARM_ID, readyCreature.id);
+
+    expect(upgraded.ok).toBe(false);
+    if (upgraded.ok) throw new Error('Expected upgrade rejection');
+    expect(upgraded.reason).toBe('not-owner');
+    expect(guarded.ok).toBe(false);
+    if (guarded.ok) throw new Error('Expected guard rejection');
+    expect(guarded.reason).toBe('not-owner');
+  });
 });
 
 function createFarm(overrides: Partial<FarmSaveRecord> & { stored?: number } = {}): FarmSaveRecord {
@@ -229,6 +373,19 @@ function withCreature(state: ReturnType<typeof createInitialSave>, creature: Cre
       creatures: {
         ...state.creatures.creatures,
         [creature.id]: creature
+      }
+    }
+  };
+}
+
+function withMagicDust(state: ReturnType<typeof createInitialSave>, quantity: number) {
+  return {
+    ...state,
+    inventory: {
+      ...state.inventory,
+      currencies: {
+        ...state.inventory.currencies,
+        [MAGIC_DUST_CURRENCY_ID]: quantity
       }
     }
   };

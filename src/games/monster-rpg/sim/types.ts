@@ -294,9 +294,27 @@ export interface FarmSaveRecord {
   theftCooldowns: Record<string, string>;
 }
 
+export type FarmTheftOutcome = 'success' | 'failed';
+
+export interface FarmTheftLogEntry {
+  id: string;
+  farmId: string;
+  farmType: string;
+  villageId: VillageId;
+  attackerPlayerId: string;
+  defenderPlayerId: string;
+  attemptedAt: string;
+  outcome: FarmTheftOutcome;
+  resourceId: string;
+  stolenQuantity: number;
+  costPaid: number;
+  guardResult: 'unguarded';
+}
+
 export interface FarmSaveContainer {
   ownerPlayerId: string;
   farms: Record<string, FarmSaveRecord>;
+  theftLog?: FarmTheftLogEntry[];
 }
 
 export type JournalSpeciesState = 'silhouette' | 'discovered';

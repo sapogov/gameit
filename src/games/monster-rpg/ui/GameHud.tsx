@@ -8,10 +8,13 @@ import {
   getCardDefinition,
   getEggDescription,
   getFarmDefinition,
+  getFarmTheftAttemptCost,
+  getFarmTheftCooldown,
   getFarmUpgradePreview,
   getJournalSpeciesViewState,
   getSpeciesById,
   isFarmGuardActive,
+  isFarmGuardBlockingTheft,
   type CardDefinition,
   type BattleRoomState,
   type CreatureLabelMode,
@@ -179,14 +182,16 @@ export function GameHud({
                     Produces {farm.rate}/min · {farm.status}
                   </small>
                   <small>{farm.guardStatus}</small>
+                  <small>{farm.accessText}</small>
                   <small>{farm.upgradeRequirementText}</small>
                   <div className="monster-farm-actions">
-                    <button disabled={!farm.canUpgrade} onClick={() => onUpgradeFarm(farm.id)} type="button">
+                    <button disabled={!farm.canUpgrade || !farm.canManage} onClick={() => onUpgradeFarm(farm.id)} type="button">
                       Upgrade
                     </button>
                     <label>
                       Guard
                       <select
+                        disabled={!farm.canManage}
                         value={farm.guardCreatureId ?? ''}
                         onChange={(event) => {
                           const value = event.currentTarget.value;
@@ -529,8 +534,10 @@ type FarmRow = {
   rate: number;
   status: string;
   canUpgrade: boolean;
+  canManage: boolean;
   guardCreatureId?: string;
   guardStatus: string;
+  accessText: string;
   upgradeRequirementText: string;
 };
 
@@ -548,6 +555,8 @@ function toFarmRow(saveState: MonsterRpgSaveState, farm: FarmSaveRecord, now: Da
   const cap = accrued.storageCap;
   const guard = farm.guardCreatureId ? saveState.creatures.creatures[farm.guardCreatureId] : undefined;
   const guardSpecies = guard ? getSpeciesById(guard.speciesId) : undefined;
+  const canManage = farm.ownerPlayerId === saveState.profile.playerId;
+  const cooldownUntil = getFarmTheftCooldown(accrued, saveState.profile.playerId, now);
 
   return {
     id: farm.id,
@@ -559,14 +568,40 @@ function toFarmRow(saveState: MonsterRpgSaveState, farm: FarmSaveRecord, now: Da
     rate: accrued.productionRatePerMinute,
     status: stored >= cap ? 'Full' : stored > 0 ? 'Ready' : 'Producing',
     canUpgrade: Boolean(preview?.canUpgrade),
+    canManage,
     guardCreatureId: farm.guardCreatureId,
     guardStatus: farm.guardCreatureId
       ? `Guard ${guardSpecies?.displayName ?? farm.guardCreatureId} · ${
           isFarmGuardActive(saveState, farm) ? 'active' : 'inactive'
         }`
       : 'Guard unassigned',
-    upgradeRequirementText: formatFarmUpgradeRequirement(preview?.plan)
+    accessText: canManage ? 'Owner access: collect, upgrade, guard' : formatVisitorFarmAccess(saveState, accrued, cooldownUntil, now),
+    upgradeRequirementText: canManage ? formatFarmUpgradeRequirement(preview?.plan) : 'Visitor access: face farm and press Interact'
   };
+}
+
+function formatVisitorFarmAccess(
+  saveState: MonsterRpgSaveState,
+  farm: FarmSaveRecord,
+  cooldownUntil: string | undefined,
+  now: Date
+): string {
+  if (cooldownUntil) return `Theft cooldown ${formatDuration(Date.parse(cooldownUntil) - now.getTime())}`;
+  if (isFarmGuardBlockingTheft(saveState, farm)) return 'Theft blocked by active guard';
+
+  const targetVillageLevel =
+    farm.ownerPlayerId === saveState.village.ownerPlayerId && farm.mapId === saveState.village.id
+      ? saveState.village.level
+      : farm.level;
+  return `Theft attempt cost ${getFarmTheftAttemptCost(saveState, targetVillageLevel)} Magic Dust`;
+}
+
+function formatDuration(ms: number): string {
+  const minutes = Math.max(0, Math.ceil(ms / 60_000));
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  if (hours <= 0) return `${remainingMinutes}m`;
+  return `${hours}h ${remainingMinutes}m`;
 }
 
 function formatFarmUpgradeRequirement(plan: FarmUpgradePlan | undefined): string {
