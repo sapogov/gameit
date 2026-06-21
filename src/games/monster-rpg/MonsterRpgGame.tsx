@@ -858,6 +858,7 @@ export function MonsterRpgGame() {
         const applied = applyBattleRewardsToSave(recordWildCreatureSeen(current, claim.speciesId!), result);
         const nextState = applied.state;
         if (applied.packTrace) setPackTrace(applied.packTrace);
+        else if (applied.levelRewardPackTraces.length > 0) setPackTrace(applied.levelRewardPackTraces[0]);
         saveProgress(nextState);
         saveStateRef.current = nextState;
         return nextState;

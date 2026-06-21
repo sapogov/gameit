@@ -29,7 +29,7 @@ import { createInitialStationContainer, isValidStationDestination } from './stat
 
 export const MONSTER_RPG_PROFILE_KEY = 'gameit.monsterRpg.profile';
 export const MONSTER_RPG_SAVE_KEY = 'gameit.monsterRpg.save';
-export const MONSTER_RPG_SCHEMA_VERSION = 8;
+export const MONSTER_RPG_SCHEMA_VERSION = 9;
 
 export type SaveImportResult =
   | { ok: true; state: MonsterRpgSaveState }
@@ -170,6 +170,8 @@ function createEmptySaveContainers(playerId: string, homeVillageId: PlayerProfil
       playerExperience: 0,
       flags: {},
       completedQuestIds: [],
+      claimedLevelRewardIds: [],
+      unlockedPlayerSkillIds: [],
       activeCardBuffs: {}
     }
   };
@@ -480,6 +482,8 @@ function isValidProgression(progression: unknown, playerId: string): progression
     isNonNegativeInteger(candidate.playerExperience) &&
     isBooleanRecord(candidate.flags) &&
     isUniqueStringArray(candidate.completedQuestIds) &&
+    isUniqueStringArray(candidate.claimedLevelRewardIds) &&
+    isUniqueStringArray(candidate.unlockedPlayerSkillIds) &&
     isCardBuffRecord(candidate.activeCardBuffs)
   );
 }

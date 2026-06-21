@@ -1,4 +1,4 @@
-import type { CardBuffType, CardRarity, MonsterRpgSaveState, SaveStack } from './types';
+import type { CardBuffType, CardRarity, CardRewardSource, MonsterRpgSaveState, SaveStack } from './types';
 import { createCreatureCardInstance, convertCreatureCardViaElder, MAGIC_DUST_MATERIAL_ID } from './creatureLifecycle';
 import { createFarmSaveRecord } from './farms';
 
@@ -77,12 +77,24 @@ export interface PackOpenTrace {
   cards: PackOpenTraceCard[];
   countsByRarity: Record<CardRarity, number>;
   seed?: number;
+  rewardTableId: string;
 }
 
 export interface OpenPackResult {
   ok: true;
   state: MonsterRpgSaveState;
   trace: PackOpenTrace;
+}
+
+export interface CardRewardTableEntry {
+  cardId: string;
+  weight: number;
+}
+
+export interface CardRewardTable {
+  id: string;
+  sources: readonly CardRewardSource[];
+  entries: readonly CardRewardTableEntry[];
 }
 
 const CARD_CATALOG = [
@@ -203,12 +215,39 @@ const CARD_CATALOG = [
 
 const catalogById = new Map<string, CardDefinition>(CARD_CATALOG.map((card) => [card.id, card]));
 
+export const STANDARD_CARD_PACK_REWARD_TABLE_ID = 'card-pack:standard';
+
+const CARD_REWARD_TABLES = [
+  {
+    id: STANDARD_CARD_PACK_REWARD_TABLE_ID,
+    sources: ['quest', 'level', 'monster-drop', 'special-building', 'manual-pack'],
+    entries: CARD_CATALOG.map((card) => ({
+      cardId: card.id,
+      weight: card.packWeight
+    }))
+  }
+] as const satisfies readonly CardRewardTable[];
+
+const rewardTableById = new Map<string, CardRewardTable>(CARD_REWARD_TABLES.map((table) => [table.id, table]));
+
 export function getCardDefinition(id: string): CardDefinition | undefined {
   return catalogById.get(id);
 }
 
 export function getCardCatalog(): readonly CardDefinition[] {
   return CARD_CATALOG;
+}
+
+export function getCardRewardTables(): readonly CardRewardTable[] {
+  return CARD_REWARD_TABLES;
+}
+
+export function getCardRewardTable(id: string): CardRewardTable | undefined {
+  return rewardTableById.get(id);
+}
+
+export function getCardRewardTableForSource(source: CardRewardSource): CardRewardTable {
+  return CARD_REWARD_TABLES.find((table) => table.sources.includes(source)) ?? CARD_REWARD_TABLES[0];
 }
 
 export function getMaterialCardById(id: string): MaterialCardDefinition | undefined {
@@ -231,9 +270,13 @@ export function getFarmCardById(id: string): FarmCardDefinition | undefined {
   return definition?.type === 'farm' ? definition : undefined;
 }
 
-export function openPack(state: MonsterRpgSaveState, options?: { seed?: number; rng?: () => number }): OpenPackResult {
+export function openPack(
+  state: MonsterRpgSaveState,
+  options?: { seed?: number; rng?: () => number; rewardTable?: CardRewardTable }
+): OpenPackResult {
   const rng = options?.rng ?? createRng(options?.seed);
   const now = new Date().toISOString();
+  const rewardTable = options?.rewardTable ?? getCardRewardTableForSource('manual-pack');
 
   let cards = state.inventory.cards;
   let creatureCards = state.inventory.creatureCards;
@@ -241,7 +284,7 @@ export function openPack(state: MonsterRpgSaveState, options?: { seed?: number; 
   const countsByRarity = createEmptyRarityCounts();
 
   for (let index = 0; index < CARD_PACK_SIZE; index += 1) {
-    const card = pickPackCard(rng);
+    const card = drawCardFromRewardTable(rewardTable, rng);
     if (card.type === 'creature') {
       const instance = createCreatureCardInstance(card, state.profile.playerId, creatureCards, { rng });
       creatureCards = {
@@ -279,6 +322,7 @@ export function openPack(state: MonsterRpgSaveState, options?: { seed?: number; 
     trace: {
       openedAt: now,
       seed: options?.seed,
+      rewardTableId: rewardTable.id,
       cards: cardEntries,
       countsByRarity
     }
@@ -410,16 +454,22 @@ function createEmptyRarityCounts(): Record<CardRarity, number> {
   };
 }
 
-function pickPackCard(rng: () => number): CardDefinition {
-  const totalWeight = CARD_CATALOG.reduce((sum, card) => sum + card.packWeight, 0);
+export function drawCardFromRewardTable(table: CardRewardTable, rng: () => number): CardDefinition {
+  const totalWeight = table.entries.reduce((sum, entry) => sum + entry.weight, 0);
   let cursor = rng() * totalWeight;
 
-  for (const card of CARD_CATALOG) {
-    cursor -= card.packWeight;
-    if (cursor <= 0) return card;
+  for (const entry of table.entries) {
+    cursor -= entry.weight;
+    if (cursor <= 0) {
+      const card = getCardDefinition(entry.cardId);
+      if (!card) throw new Error(`Unknown card reward table entry: ${entry.cardId}`);
+      return card;
+    }
   }
 
-  return CARD_CATALOG[CARD_CATALOG.length - 1];
+  const fallback = getCardDefinition(table.entries[table.entries.length - 1]?.cardId);
+  if (!fallback) throw new Error(`Card reward table has no valid entries: ${table.id}`);
+  return fallback;
 }
 
 function createRng(seed: number = Date.now()): () => number {

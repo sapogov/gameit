@@ -9,6 +9,7 @@ import {
   createDirectDropEgg,
   createInitialSave,
   createPlayerProfile,
+  drawCardFromRewardTable,
   getCardCatalog,
   getCreatureCreationRequirements,
   getEggDescription,
@@ -18,6 +19,7 @@ import {
   getSpeciesById,
   hatchEgg,
   openPack,
+  type CardRewardTable,
   type MonsterRpgSaveState
 } from '.';
 
@@ -33,6 +35,7 @@ describe('Monster RPG cards', () => {
     expect(second.ok).toBe(true);
     expect(first.trace.cards).toHaveLength(5);
     expect(first.trace.seed).toBe(seed);
+    expect(first.trace.rewardTableId).toBe('card-pack:standard');
     expect(second.trace.seed).toBe(seed);
     expect(first.trace.cards.map((card) => card.cardId)).toEqual(second.trace.cards.map((card) => card.cardId));
     expect(first.trace.cards.map((card) => card.instanceId ?? null)).toEqual(
@@ -44,6 +47,25 @@ describe('Monster RPG cards', () => {
       Object.values(first.state.inventory.cards).reduce((sum, stack) => sum + stack.quantity, 0) +
       Object.keys(first.state.inventory.creatureCards).length;
     expect(inventoryCount).toBe(5);
+  });
+
+  it('draws reward-table entries at deterministic rarity and card-type boundaries', () => {
+    const table: CardRewardTable = {
+      id: 'test-table',
+      sources: ['quest', 'level'],
+      entries: [
+        { cardId: 'material-card:charcoal-bundle', weight: 5 },
+        { cardId: 'creature-card:duskleaf', weight: 3 },
+        { cardId: 'buff-card:drop-luck', weight: 2 }
+      ]
+    };
+
+    expect(drawCardFromRewardTable(table, () => 0).type).toBe('material');
+    expect(drawCardFromRewardTable(table, () => 0.499).rarity).toBe('common');
+    expect(drawCardFromRewardTable(table, () => 0.501).type).toBe('creature');
+    expect(drawCardFromRewardTable(table, () => 0.799).rarity).toBe('uncommon');
+    expect(drawCardFromRewardTable(table, () => 0.801).type).toBe('buff');
+    expect(drawCardFromRewardTable(table, () => 0.999).rarity).toBe('rare');
   });
 
   it('supports deterministic material card activation and keeps remaining stack state', () => {

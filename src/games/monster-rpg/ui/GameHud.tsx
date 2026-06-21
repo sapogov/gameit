@@ -12,6 +12,7 @@ import {
   getFarmTheftCooldown,
   getFarmUpgradePreview,
   getJournalSpeciesViewState,
+  getNextPlayerLevelThreshold,
   getStationDestinations,
   getSpeciesById,
   isFarmGuardActive,
@@ -119,6 +120,7 @@ export function GameHud({
   const reviveCount = saveState.inventory.items[REVIVE_ITEM_ID]?.quantity ?? 0;
   const currencySummary = formatCurrencySummary(saveState.inventory.currencies);
   const canRunFromBattle = battleState?.status === 'active' && battleState.canRun;
+  const nextLevelThreshold = getNextPlayerLevelThreshold(saveState.progression.playerLevel);
 
   return (
     <div className="monster-hud">
@@ -127,7 +129,10 @@ export function GameHud({
           <p>{mapName}</p>
           <h2>{saveState.profile.name}</h2>
           <span>{status}</span>
-          <small>Player XP {saveState.progression.playerExperience}</small>
+          <small>
+            Lv {saveState.progression.playerLevel} · XP {saveState.progression.playerExperience}
+            {nextLevelThreshold ? `/${nextLevelThreshold.totalExperience}` : ''}
+          </small>
           <small>{currencySummary}</small>
           <small>{locationHint}</small>
           {importStatus ? <small>{importStatus}</small> : null}

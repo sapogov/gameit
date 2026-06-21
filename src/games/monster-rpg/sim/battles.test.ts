@@ -301,6 +301,9 @@ describe('battle simulation', () => {
     expect(applied.state.inventory.currencies.magicDust).toBe(6);
     expect(applied.state.inventory.currencies.galeEssence).toBe(2);
     expect(applied.state.progression.playerExperience).toBe(11);
+    expect(applied.state.progression.playerLevel).toBe(2);
+    expect(applied.claimedLevelRewardIds).toEqual(['player-level-2-pack']);
+    expect(applied.levelRewardPackTraces).toHaveLength(1);
     expect(applied.state.creatures.creatures[battling.id].experience).toBe(20);
     expect(applied.state.creatures.creatures[battling.id].hp).toBe(34);
     expect(applied.state.creatures.creatures[support.id].experience).toBe(16);
@@ -311,6 +314,8 @@ describe('battle simulation', () => {
     expect(appliedAgain.rewardsApplied).toBe(false);
     expect(appliedAgain.state.inventory.currencies.magicDust).toBe(6);
     expect(appliedAgain.state.progression.playerExperience).toBe(11);
+    expect(appliedAgain.state.progression.playerLevel).toBe(2);
+    expect(appliedAgain.claimedLevelRewardIds).toHaveLength(0);
     expect(Object.values(appliedAgain.state.inventory.eggs)).toHaveLength(1);
   });
 });
