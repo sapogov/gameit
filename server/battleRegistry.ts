@@ -1,8 +1,10 @@
 import { randomUUID } from 'node:crypto';
 import type {
   BattleResolution,
+  BattleKind,
   BattleRoomState,
   CreatureSaveRecord,
+  FarmSaveRecord,
   MapId,
   PlayerProfile,
   WildEncounterOutcome
@@ -11,13 +13,16 @@ import type {
 const BATTLE_CLAIM_TTL_MS = 5 * 60_000;
 
 export interface BattleClaim {
+  battleKind: BattleKind;
   battleId: string;
   battleToken: string;
   encounterId: string;
+  farmId?: string;
   locationRoomId: string;
   mapId: MapId;
   playerProfile: PlayerProfile;
   playerCreature: CreatureSaveRecord;
+  guardCreature?: CreatureSaveRecord;
   wildSpeciesId: number;
   createdAt: number;
   expiresAt: number;
@@ -45,6 +50,7 @@ export function createBattleClaim({
   cleanupExpiredBattleClaims();
   const battleId = `battle:${encounterId}:${playerProfile.playerId}:${Date.now()}`;
   const claim: BattleClaim = {
+    battleKind: 'wild',
     battleId,
     battleToken: randomUUID(),
     encounterId,
@@ -55,6 +61,44 @@ export function createBattleClaim({
     wildSpeciesId,
     createdAt: Date.now(),
     expiresAt: Date.now() + BATTLE_CLAIM_TTL_MS
+  };
+  battleClaims.set(battleId, claim);
+  return claim;
+}
+
+export function createGuardBattleClaim({
+  farm,
+  guardCreature,
+  locationRoomId,
+  mapId,
+  playerProfile,
+  playerCreature
+}: {
+  farm: FarmSaveRecord;
+  guardCreature: CreatureSaveRecord;
+  locationRoomId: string;
+  mapId: MapId;
+  playerProfile: PlayerProfile;
+  playerCreature: CreatureSaveRecord;
+}): BattleClaim {
+  cleanupExpiredBattleClaims();
+  const encounterId = `guard-theft:${farm.id}`;
+  const battleId = `battle:${encounterId}:${playerProfile.playerId}:${Date.now()}`;
+  const now = Date.now();
+  const claim: BattleClaim = {
+    battleKind: 'guard-theft',
+    battleId,
+    battleToken: randomUUID(),
+    encounterId,
+    farmId: farm.id,
+    locationRoomId,
+    mapId,
+    playerProfile,
+    playerCreature,
+    guardCreature,
+    wildSpeciesId: guardCreature.speciesId,
+    createdAt: now,
+    expiresAt: now + BATTLE_CLAIM_TTL_MS
   };
   battleClaims.set(battleId, claim);
   return claim;

@@ -4,6 +4,7 @@ import {
   BATTLE_DISCONNECT_GRACE_MS,
   choosePlayerBattleAttack,
   createBattleRoomState,
+  createGuardBattleRoomState,
   getBattleAttackFatigueCost,
   markBattleDisconnected,
   resumeDisconnectedBattle,
@@ -41,13 +42,22 @@ export class BattleRoom extends Room {
 
     this.battleToken = battleToken;
     this.playerId = claim.playerProfile.playerId;
-    this.battleState = createBattleRoomState({
-      battleId: claim.battleId,
-      encounterId: claim.encounterId,
-      playerProfile: claim.playerProfile,
-      playerCreature: claim.playerCreature,
-      wildSpeciesId: claim.wildSpeciesId
-    });
+    this.battleState =
+      claim.battleKind === 'guard-theft' && claim.guardCreature && claim.farmId
+        ? createGuardBattleRoomState({
+            battleId: claim.battleId,
+            farmId: claim.farmId,
+            playerProfile: claim.playerProfile,
+            playerCreature: claim.playerCreature,
+            guardCreature: claim.guardCreature
+          })
+        : createBattleRoomState({
+            battleId: claim.battleId,
+            encounterId: claim.encounterId,
+            playerProfile: claim.playerProfile,
+            playerCreature: claim.playerCreature,
+            wildSpeciesId: claim.wildSpeciesId
+          });
     this.setState(toBattleStateSchema(this.battleState));
 
     this.onMessage('chooseAttack', (client, payload: BattleAttackIntentMessage) => {
@@ -144,6 +154,7 @@ function toBattleStateSchema(state: BattleRoomState): BattleStateSchema {
 function copyBattleStateToSchema(state: BattleRoomState, schema: BattleStateSchema): void {
   schema.battleId = state.battleId;
   schema.encounterId = state.encounterId;
+  schema.battleKind = state.battleKind;
   schema.wildSpeciesId = state.wildSpeciesId;
   schema.status = state.status;
   schema.turn = state.turn;

@@ -419,7 +419,9 @@ function isFarmTheftLog(value: unknown): value is FarmTheftLogEntry[] | undefine
       isNonNegativeInteger(candidate.stolenQuantity) &&
       isNonNegativeInteger(candidate.costPaid) &&
       candidate.costPaid > 0 &&
-      candidate.guardResult === 'unguarded'
+      (candidate.guardResult === 'unguarded' ||
+        candidate.guardResult === 'visitor-won' ||
+        candidate.guardResult === 'visitor-lost')
     );
   });
 }

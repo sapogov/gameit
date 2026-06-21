@@ -303,6 +303,13 @@
 - Wired adjacent facing Interact so owners collect and visitors attempt theft, with Farm HUD text for visitor cost/cooldown state.
 - Added focused farm tests for successful theft, cooldown blocking, failed attempts, level-scaled costs, and owner-only management.
 
+## 2026-06-21 - Issue #19: Guard Battle Theft Flow
+
+- Added guard-theft Battle claims that reuse the Battle Room attack/fatigue/HP rules while disabling Run and wild rewards.
+- Wired guarded Farm theft attempts to start a guard battle when the visitor has a ready Creature and the assigned guard is active.
+- Added guarded-theft settlement so visitor losses faint the battling Creature and steal nothing, while visitor wins steal capped resources, start cooldown, log guard outcome, and faint the guard when present in save state.
+- Added focused battle/farm tests plus production build and Monster RPG SDK verification.
+
 ## Next Work
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.
