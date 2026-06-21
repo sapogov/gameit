@@ -274,6 +274,30 @@ export interface VillageSaveContainer {
   discoveredVillageIds: VillageId[];
 }
 
+export type StationDestinationKind = 'player-village' | 'city';
+
+export interface StationDestinationFutureHooks {
+  reputationKey?: string;
+  guardPolicyKey?: string;
+  banFlagKey?: string;
+}
+
+export interface StationDestination {
+  id: string;
+  kind: StationDestinationKind;
+  mapId: MapId;
+  displayName: string;
+  level: number;
+  ownerPlayerId?: string;
+  spawn: WorldPosition;
+  futureHooks?: StationDestinationFutureHooks;
+}
+
+export interface StationSaveContainer {
+  ownerPlayerId: string;
+  discoveredDestinations: Record<string, StationDestination>;
+}
+
 export interface FarmPosition {
   mapId: VillageId;
   x: number;
@@ -509,6 +533,7 @@ export interface MonsterRpgSaveState {
   inventory: InventorySaveContainer;
   creatures: CreatureSaveContainer;
   village: VillageSaveContainer;
+  station: StationSaveContainer;
   farms: FarmSaveContainer;
   journal: JournalSaveContainer;
   progression: ProgressionSaveContainer;

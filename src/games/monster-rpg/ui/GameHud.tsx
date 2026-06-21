@@ -12,9 +12,11 @@ import {
   getFarmTheftCooldown,
   getFarmUpgradePreview,
   getJournalSpeciesViewState,
+  getStationDestinations,
   getSpeciesById,
   isFarmGuardActive,
   isFarmGuardBlockingTheft,
+  quoteStationTravel,
   type CardDefinition,
   type BattleRoomState,
   type CreatureLabelMode,
@@ -27,7 +29,8 @@ import {
   type MapKind,
   type MonsterRpgSaveState,
   type MovementResult,
-  type MultiplayerStatus
+  type MultiplayerStatus,
+  type StationDestination
 } from '../sim';
 
 interface GameHudProps {
@@ -59,6 +62,10 @@ interface GameHudProps {
   onBattleAttack: (attackId: string) => void;
   onRunBattle: () => void;
   onReviveCreature: (creatureId: string) => void;
+  pendingStationDestinationId: string | null;
+  onPrepareStationTravel: (destinationId: string) => void;
+  onCancelStationTravel: () => void;
+  onConfirmStationTravel: (destinationId: string) => void;
 }
 
 export function GameHud({
@@ -89,7 +96,11 @@ export function GameHud({
   onCreatureLabelModeChange,
   onBattleAttack,
   onRunBattle,
-  onReviveCreature
+  onReviveCreature,
+  pendingStationDestinationId,
+  onPrepareStationTravel,
+  onCancelStationTravel,
+  onConfirmStationTravel
 }: GameHudProps) {
   const status = getStatusText(multiplayerStatus, playerCount, lastMove);
   const locationHint = `${formatMapKind(mapKind)} - ${saveState.position.x}, ${saveState.position.y}`;
@@ -98,6 +109,7 @@ export function GameHud({
   const cardRows = getCardRows(saveState);
   const creatureRows = getCreatureRows(saveState);
   const farmRows = getFarmRows(saveState, new Date(farmStatusNow));
+  const stationRows = getStationRows(saveState);
   const guardOptions = creatureRows.map((row) => ({
     id: row.id,
     label: `${row.species?.displayName ?? `Species #${row.creature.speciesId}`} (${row.container})`,
@@ -212,6 +224,50 @@ export function GameHud({
             </div>
           </section>
         ) : null}
+        <details className="monster-station-panel" open>
+          <summary>
+            Station <span>{stationRows.length} discovered</span>
+          </summary>
+          <div className="monster-station-grid">
+            {stationRows.map((destination) => {
+              const pending = pendingStationDestinationId === destination.id;
+              return (
+                <article className="monster-station-row" key={destination.id}>
+                  <div>
+                    <strong>{destination.displayName}</strong>
+                    <small>
+                      {formatStationDestinationKind(destination.kind)} · Lv {destination.level} · {destination.costText}
+                    </small>
+                    <small>{destination.statusText}</small>
+                  </div>
+                  {pending ? (
+                    <div className="monster-station-confirm">
+                      <small>Confirm travel before Magic Dust is charged.</small>
+                      <button
+                        disabled={!destination.canTravel}
+                        onClick={() => onConfirmStationTravel(destination.id)}
+                        type="button"
+                      >
+                        Confirm
+                      </button>
+                      <button onClick={onCancelStationTravel} type="button">
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      disabled={!destination.canPrepare}
+                      onClick={() => onPrepareStationTravel(destination.id)}
+                      type="button"
+                    >
+                      Travel
+                    </button>
+                  )}
+                </article>
+              );
+            })}
+          </div>
+        </details>
         <details className="monster-creature-panel" open>
           <summary>
             Creatures <span>{activeCount}/{ACTIVE_PARTY_LIMIT} active</span> <span>{reviveCount} revives</span>
@@ -540,6 +596,40 @@ type FarmRow = {
   accessText: string;
   upgradeRequirementText: string;
 };
+
+type StationRow = StationDestination & {
+  canPrepare: boolean;
+  canTravel: boolean;
+  costText: string;
+  statusText: string;
+};
+
+function getStationRows(saveState: MonsterRpgSaveState): StationRow[] {
+  return getStationDestinations(saveState).map((destination) => {
+    const quote = quoteStationTravel(saveState, destination.id);
+    const cost = quote.ok ? quote.cost : quote.costRequired;
+    return {
+      ...destination,
+      canPrepare: quote.ok,
+      canTravel: quote.ok,
+      costText: cost === undefined ? 'No route' : `${cost} Magic Dust`,
+      statusText: formatStationTravelStatus(quote)
+    };
+  });
+}
+
+function formatStationDestinationKind(kind: StationDestination['kind']): string {
+  if (kind === 'city') return 'City';
+  return 'Player village';
+}
+
+function formatStationTravelStatus(quote: ReturnType<typeof quoteStationTravel>): string {
+  if (quote.ok) return 'Ready for teleport';
+  if (quote.reason === 'already-there') return 'Current location';
+  if (quote.reason === 'missing-magic-dust') return `Need ${quote.costRequired ?? 0} Magic Dust`;
+  if (quote.reason === 'unsafe-spawn') return 'Destination blocked';
+  return 'Undiscovered route';
+}
 
 function getFarmRows(saveState: MonsterRpgSaveState, now: Date): FarmRow[] {
   return Object.values(saveState.farms.farms)

@@ -341,6 +341,7 @@ body[data-theme='light'] .admin-form input {
 .monster-hud-panel,
 .monster-creature-panel,
 .monster-journal-panel,
+.monster-station-panel,
 .monster-settings-panel {
   min-width: min(270px, calc(100vw - 8rem));
   max-width: min(340px, calc(100vw - 8rem));
@@ -352,6 +353,7 @@ body[data-theme='light'] .admin-form input {
 
 .monster-creature-panel,
 .monster-journal-panel,
+.monster-station-panel,
 .monster-settings-panel {
   max-width: min(390px, calc(100vw - 8rem));
   max-height: min(52vh, 430px);
@@ -362,6 +364,7 @@ body[data-theme='light'] .admin-form input {
 
 .monster-creature-panel summary,
 .monster-journal-panel summary,
+.monster-station-panel summary,
 .monster-settings-panel summary {
   cursor: pointer;
   font-weight: 900;
@@ -440,6 +443,39 @@ body[data-theme='light'] .admin-form input {
   margin-top: 0.12rem;
 }
 
+.monster-station-grid {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 0.45rem;
+}
+
+.monster-station-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.45rem;
+  align-items: center;
+  padding-top: 0.4rem;
+  border-top: 2px solid rgba(38, 53, 31, 0.22);
+}
+
+.monster-station-row:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.monster-station-row small,
+.monster-station-confirm small {
+  display: block;
+  color: #5a6b35;
+}
+
+.monster-station-confirm {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.3rem;
+}
+
 .monster-save-actions {
   pointer-events: auto;
   display: flex;
@@ -453,6 +489,7 @@ body[data-theme='light'] .admin-form input {
 .monster-card-actions button,
 .monster-card-row button,
 .monster-card-panel button,
+.monster-station-panel button,
 .monster-onboarding-panel button {
   pointer-events: auto;
 }
@@ -575,6 +612,7 @@ body[data-theme='light'] .admin-form input {
   .monster-hud-panel,
   .monster-creature-panel,
   .monster-journal-panel,
+  .monster-station-panel,
   .monster-settings-panel {
     min-width: 0;
     max-width: calc(100vw - 7.5rem);

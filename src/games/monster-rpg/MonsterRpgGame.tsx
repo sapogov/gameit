@@ -16,9 +16,11 @@ import {
   collectFacingFarm,
   completeVillageElderDialog,
   completeVillageElderOnboarding,
+  confirmStationTravel,
   createInitialSave,
   createPlayerProfile,
   convertStarterCreatureCards,
+  discoverCurrentStationDestination,
   buildFarmCardViaElder,
   exportSave,
   getGameMap,
@@ -93,6 +95,7 @@ export function MonsterRpgGame() {
   const [multiplayerStatus, setMultiplayerStatus] = useState<MultiplayerStatus>('offline');
   const [settings, setSettings] = useState(loadMonsterRpgSettings);
   const [farmStatusNow, setFarmStatusNow] = useState(Date.now());
+  const [pendingStationDestinationId, setPendingStationDestinationId] = useState<string | null>(null);
 
   const updateMultiplayerStatus = useCallback((status: MultiplayerStatus) => {
     multiplayerStatusRef.current = status;
@@ -189,9 +192,13 @@ export function MonsterRpgGame() {
       if (!current) return current;
 
       const result = movePlayer(current, action, getGameMap(current.mapId));
-      setLastMove(result);
-      saveProgress(result.state);
-      return result.state;
+      const discoveredState = discoverCurrentStationDestination(result.state);
+      const nextResult = discoveredState === result.state ? result : { ...result, state: discoveredState };
+      setLastMove(nextResult);
+      saveProgress(discoveredState);
+      saveStateRef.current = discoveredState;
+      setPendingStationDestinationId(null);
+      return discoveredState;
     });
   }, [battleState?.status, roomState]);
 
@@ -484,6 +491,53 @@ export function MonsterRpgGame() {
     });
   };
 
+  const handlePrepareStationTravel = (destinationId: string) => {
+    setPendingStationDestinationId(destinationId);
+    setImportStatus('Confirm station travel');
+  };
+
+  const handleCancelStationTravel = () => {
+    setPendingStationDestinationId(null);
+    setImportStatus('Station travel canceled');
+  };
+
+  const handleConfirmStationTravel = (destinationId: string) => {
+    setSaveState((current) => {
+      if (!current) return current;
+
+      const result = confirmStationTravel(current, destinationId);
+      if (!result.ok) {
+        setImportStatus(formatStationTravelFailure(result.reason, result));
+        return current;
+      }
+
+      connectionRef.current?.leave({ silent: true });
+      battleConnectionRef.current?.leave({ silent: true });
+      connectionRef.current = null;
+      battleConnectionRef.current = null;
+      activeBattleClaimRef.current = null;
+      pendingTransitionRef.current = null;
+      setRoomState(null);
+      setBattleState(null);
+      updateMultiplayerStatus('offline');
+      saveProgress(result.state);
+      saveStateRef.current = result.state;
+      setLastMove({
+        state: result.state,
+        moved: true,
+        blocked: false,
+        transition: {
+          toMapId: result.destination.mapId,
+          spawn: result.destination.spawn
+        }
+      });
+      setPackTrace(null);
+      setPendingStationDestinationId(null);
+      setImportStatus(`Station travel to ${result.destination.displayName}: paid ${result.costPaid} Magic Dust`);
+      return result.state;
+    });
+  };
+
   const handleExportSave = () => {
     if (!saveState) return;
 
@@ -627,14 +681,15 @@ export function MonsterRpgGame() {
               setSaveState((current) => {
                 if (!current) return current;
 
-                const nextSave: MonsterRpgSaveState = {
+                const nextSave = discoverCurrentStationDestination({
                   ...current,
                   profile: localPlayer.profile,
                   mapId: nextRoomState.mapId,
                   position: localPlayer.position,
                   updatedAt: new Date().toISOString()
-                };
+                });
                 saveProgress(nextSave);
+                saveStateRef.current = nextSave;
                 return nextSave;
               });
             },
@@ -654,12 +709,12 @@ export function MonsterRpgGame() {
               setSaveState((current) => {
                 if (!current) return current;
 
-                const nextSave: MonsterRpgSaveState = {
+                const nextSave = discoverCurrentStationDestination({
                   ...current,
                   mapId: transition.toMapId,
                   position: transition.spawn,
                   updatedAt: new Date().toISOString()
-                };
+                });
                 setLastMove({
                   state: nextSave,
                   moved: true,
@@ -875,6 +930,10 @@ export function MonsterRpgGame() {
           onBattleAttack={handleBattleAttack}
           onRunBattle={handleRunBattle}
           onReviveCreature={handleReviveCreature}
+          pendingStationDestinationId={pendingStationDestinationId}
+          onPrepareStationTravel={handlePrepareStationTravel}
+          onCancelStationTravel={handleCancelStationTravel}
+          onConfirmStationTravel={handleConfirmStationTravel}
           onReset={handleReset}
         />
         <VillageElderOnboarding
@@ -992,6 +1051,17 @@ function formatFarmGuardFailure(reason: string | undefined): string {
   if (reason === 'missing-creature') return 'Creature not found';
   if (reason === 'creature-fainted') return 'Fainted Creatures cannot guard';
   return `Farm guard failed${reason ? `: ${reason}` : ''}`;
+}
+
+function formatStationTravelFailure(
+  reason: string | undefined,
+  result?: { costRequired?: number; destination?: { displayName: string } }
+): string {
+  if (reason === 'already-there') return 'Already at that station destination';
+  if (reason === 'missing-destination') return 'Station destination not discovered';
+  if (reason === 'unsafe-spawn') return 'Station destination spawn unavailable';
+  if (reason === 'missing-magic-dust') return `Need ${result?.costRequired ?? 0} Magic Dust for station travel`;
+  return `Station travel failed${reason ? `: ${reason}` : ''}`;
 }
 
 function formatBattleOutcome(result: BattleResultMessage): string {

@@ -59,6 +59,10 @@ export type {
   ProgressionSaveContainer,
   RoomPlayerId,
   SaveStack,
+  StationDestination,
+  StationDestinationFutureHooks,
+  StationDestinationKind,
+  StationSaveContainer,
   TileType,
   VillageDefinition,
   VillageSaveContainer,
@@ -125,6 +129,25 @@ export {
   type MonsterRpgSaveRepository,
   type SaveImportResult
 } from './saveState';
+export {
+  STATION_TRAVEL_BASE_COST,
+  STATION_TRAVEL_LEVEL_DIFF_COST,
+  STATION_TRAVEL_RESOURCE_ID,
+  confirmStationTravel,
+  createInitialStationContainer,
+  createPlayerVillageStationDestination,
+  discoverCurrentStationDestination,
+  discoverPlayerVillageForStation,
+  getPlayerVillageStationDestinationId,
+  getStationContextLevel,
+  getStationDestinations,
+  getStationTravelCost,
+  isValidStationDestination,
+  quoteStationTravel,
+  type StationTravelFailureReason,
+  type StationTravelQuote,
+  type StationTravelResult
+} from './stations';
 export {
   MONSTER_RPG_SETTINGS_KEY,
   defaultMonsterRpgSettings,

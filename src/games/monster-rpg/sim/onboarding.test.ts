@@ -16,6 +16,7 @@ import {
   importSavePayload,
   MAGIC_DUST_CURRENCY_ID,
   MAGIC_DUST_FARM_ID,
+  MONSTER_RPG_SCHEMA_VERSION,
   STARTER_FARM_CARD_ID,
   starterCreatureCards,
   villageElderFlags,
@@ -128,7 +129,7 @@ describe('Village Elder onboarding', () => {
 
 function createProfile(): PlayerProfile {
   return {
-    schemaVersion: 7,
+    schemaVersion: MONSTER_RPG_SCHEMA_VERSION,
     playerId: 'player-1',
     name: 'Mika',
     avatar: 'scout',

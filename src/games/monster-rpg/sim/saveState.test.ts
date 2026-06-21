@@ -33,6 +33,7 @@ describe('Monster RPG save import and export', () => {
     expect(imported.state.inventory.ownerPlayerId).toBe(profile.playerId);
     expect(imported.state.creatures.ownerPlayerId).toBe(profile.playerId);
     expect(imported.state.village.ownerPlayerId).toBe(profile.playerId);
+    expect(imported.state.station.ownerPlayerId).toBe(profile.playerId);
     expect(imported.state.farms.ownerPlayerId).toBe(profile.playerId);
     expect(imported.state.journal.ownerPlayerId).toBe(profile.playerId);
     expect(imported.state.progression.ownerPlayerId).toBe(profile.playerId);
