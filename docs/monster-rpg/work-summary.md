@@ -319,6 +319,15 @@
 - Added a compact Station HUD panel that lists discovered destinations and requires Travel then Confirm before charging Magic Dust.
 - Added focused station simulation tests plus save validation coverage for future city-shaped destinations.
 
+## 2026-06-21 - Issue #21: Player Level, Pack Milestones, And Reward Tables
+
+- Added data-driven player XP thresholds and level reward definitions for Pack milestones plus future skill/unlock hooks.
+- Added persisted level reward claim IDs and unlocked player skill IDs under save schema version 9 so milestone rewards cannot be duplicated after reload.
+- Reworked card Pack generation through reusable reward tables shared by manual Packs, quest, level, monster-drop, and special-building sources.
+- Wired wild Battle player XP through the progression service so wins can increase player level and auto-claim milestone Packs.
+- Updated the HUD level readout and Pack trace display for level-up Pack rewards.
+- Added deterministic tests for level thresholds, reward claiming/idempotency, future unlock representation, Battle XP leveling, and reward-table rarity/type boundaries.
+
 ## Next Work
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.

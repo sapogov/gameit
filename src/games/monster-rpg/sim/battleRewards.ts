@@ -8,6 +8,7 @@ import type {
 } from './types';
 import { openPack, type PackOpenTrace } from './cards';
 import { createDirectDropEgg, createRng } from './creatureLifecycle';
+import { applyPlayerExperience, type ApplyPlayerExperienceResult } from './playerProgression';
 import { getSpeciesById } from './speciesCatalog';
 
 export const BATTLE_REWARD_MAGIC_DUST_BASE = 2;
@@ -19,6 +20,8 @@ export interface ApplyBattleRewardsResult {
   state: MonsterRpgSaveState;
   rewardsApplied: boolean;
   packTrace?: PackOpenTrace;
+  levelRewardPackTraces: PackOpenTrace[];
+  claimedLevelRewardIds: string[];
 }
 
 export function generateWildBattleRewards(
@@ -62,15 +65,26 @@ export function applyBattleRewardsToSave(
   const stateWithBattleCreature = updateBattleCreatureOutcome(state, result);
 
   if (result.outcome !== 'defeated' || !result.rewardGranted || !result.rewards) {
-    return { state: withUpdatedAt(stateWithBattleCreature), rewardsApplied: false };
+    return {
+      state: withUpdatedAt(stateWithBattleCreature),
+      rewardsApplied: false,
+      levelRewardPackTraces: [],
+      claimedLevelRewardIds: []
+    };
   }
 
   const rewardFlag = getBattleRewardFlag(result.battleId);
   if (stateWithBattleCreature.progression.flags[rewardFlag]) {
-    return { state: withUpdatedAt(stateWithBattleCreature), rewardsApplied: false };
+    return {
+      state: withUpdatedAt(stateWithBattleCreature),
+      rewardsApplied: false,
+      levelRewardPackTraces: [],
+      claimedLevelRewardIds: []
+    };
   }
 
-  let next = applyRewardNumbers(stateWithBattleCreature, result);
+  const rewardNumbers = applyRewardNumbers(stateWithBattleCreature, result);
+  let next = rewardNumbers.state;
   let packTrace: PackOpenTrace | undefined;
 
   if (result.rewards.directDropEggSpeciesId !== undefined) {
@@ -98,7 +112,9 @@ export function applyBattleRewardsToSave(
       }
     }),
     rewardsApplied: true,
-    packTrace
+    packTrace,
+    levelRewardPackTraces: rewardNumbers.progression.packTraces,
+    claimedLevelRewardIds: rewardNumbers.progression.claimedRewards.map((reward) => reward.rewardId)
   };
 }
 
@@ -125,9 +141,15 @@ function updateBattleCreatureOutcome(
   };
 }
 
-function applyRewardNumbers(state: MonsterRpgSaveState, result: BattleResultMessage): MonsterRpgSaveState {
+function applyRewardNumbers(
+  state: MonsterRpgSaveState,
+  result: BattleResultMessage
+): { state: MonsterRpgSaveState; progression: ApplyPlayerExperienceResult } {
   const rewards = result.rewards;
-  if (!rewards) return state;
+  if (!rewards) {
+    const progression = applyPlayerExperience(state, 0);
+    return { state: progression.state, progression };
+  }
 
   const currencies = { ...state.inventory.currencies };
   currencies.magicDust = (currencies.magicDust ?? 0) + rewards.magicDust;
@@ -151,7 +173,7 @@ function applyRewardNumbers(state: MonsterRpgSaveState, result: BattleResultMess
     };
   });
 
-  return {
+  const withNumberRewards: MonsterRpgSaveState = {
     ...state,
     inventory: {
       ...state.inventory,
@@ -160,11 +182,13 @@ function applyRewardNumbers(state: MonsterRpgSaveState, result: BattleResultMess
     creatures: {
       ...state.creatures,
       creatures
-    },
-    progression: {
-      ...state.progression,
-      playerExperience: state.progression.playerExperience + rewards.playerExperience
     }
+  };
+  const progression = applyPlayerExperience(withNumberRewards, rewards.playerExperience, { seed: rewards.seed });
+
+  return {
+    state: progression.state,
+    progression
   };
 }
 

@@ -64,6 +64,8 @@ export type CreatureRarity = 'common' | 'uncommon' | 'rare' | 'legendary' | 'myt
 export type CardRarity = CreatureRarity;
 export type CardType = 'creature' | 'farm' | 'material' | 'buff';
 export type CardBuffType = 'battle' | 'drop-chance';
+export type CardRewardSource = 'quest' | 'level' | 'monster-drop' | 'special-building' | 'manual-pack';
+export type PlayerSkillUnlockKind = 'cooldown-reduction' | 'theft-modifier' | 'travel-modifier' | 'drop-chance';
 
 export type CreatureType =
   | 'verdant'
@@ -359,6 +361,8 @@ export interface ProgressionSaveContainer {
   playerExperience: number;
   flags: Record<string, boolean>;
   completedQuestIds: string[];
+  claimedLevelRewardIds: string[];
+  unlockedPlayerSkillIds: string[];
   activeCardBuffs?: Partial<Record<CardBuffType, string>>;
 }
 

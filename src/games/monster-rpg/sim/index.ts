@@ -4,6 +4,7 @@ export type {
   BuildingType,
   CardBuffType,
   CardRarity,
+  CardRewardSource,
   BattleAttackIntentMessage,
   BattleCreatureState,
   BattleKind,
@@ -56,6 +57,7 @@ export type {
   JournalSpeciesViewState,
   JoinBattleOptions,
   PlayerProfile,
+  PlayerSkillUnlockKind,
   ProgressionSaveContainer,
   RoomPlayerId,
   SaveStack,
@@ -181,12 +183,31 @@ export {
   getCardCatalog,
   getBuffCardById,
   getCardDefinition,
+  getCardRewardTable,
+  getCardRewardTableForSource,
+  getCardRewardTables,
   getCreatureCardById,
   getFarmCardById,
   getMaterialCardById,
+  drawCardFromRewardTable,
   openPack
 } from './cards';
-export type { CardDefinition, PackOpenTrace } from './cards';
+export type { CardDefinition, CardRewardTable, CardRewardTableEntry, PackOpenTrace } from './cards';
+export {
+  PLAYER_LEVEL_REWARDS,
+  PLAYER_LEVEL_THRESHOLDS,
+  applyPlayerExperience,
+  claimAvailableLevelRewards,
+  getNextPlayerLevelThreshold,
+  getPlayerLevelForExperience,
+  type ApplyPlayerExperienceResult,
+  type ClaimLevelRewardsResult,
+  type ClaimedPlayerLevelReward,
+  type PlayerLevelPackRewardDefinition,
+  type PlayerLevelRewardDefinition,
+  type PlayerLevelThreshold,
+  type PlayerSkillUnlockDefinition
+} from './playerProgression';
 export {
   MAGIC_DUST_FARM_ID,
   MAGIC_DUST_FARM_CARD_ID,
