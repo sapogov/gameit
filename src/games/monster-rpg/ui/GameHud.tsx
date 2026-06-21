@@ -172,7 +172,7 @@ export function GameHud({
               })}
               {battleState.canRun ? (
                 <button disabled={!canRunFromBattle} onClick={onRunBattle} type="button">
-                  Run
+                  Run Away
                 </button>
               ) : null}
             </div>
@@ -195,6 +195,9 @@ export function GameHud({
                   <small>
                     Stored {farm.stored}/{farm.cap} {farm.resourceName}
                   </small>
+                  <div className="monster-farm-meter" aria-label={`${farm.name} storage ${farm.stored} of ${farm.cap}`}>
+                    <i style={{ width: `${farm.storagePercent}%` }} />
+                  </div>
                   <small>
                     Produces {farm.rate}/min · {farm.status}
                   </small>
@@ -229,7 +232,7 @@ export function GameHud({
             </div>
           </section>
         ) : null}
-        <details className="monster-station-panel" open>
+        <details className="monster-station-panel">
           <summary>
             Station <span>{stationRows.length} discovered</span>
           </summary>
@@ -273,7 +276,7 @@ export function GameHud({
             })}
           </div>
         </details>
-        <details className="monster-creature-panel" open>
+        <details className="monster-creature-panel">
           <summary>
             Creatures <span>{activeCount}/{ACTIVE_PARTY_LIMIT} active</span> <span>{reviveCount} revives</span>
           </summary>
@@ -353,8 +356,13 @@ export function GameHud({
                 const allowedAction = getCardAction(card);
                 return (
                   <article className="monster-card-row" key={card.id}>
-                    <span>
+                    <span className="monster-card-row-heading">
                       <strong>{card.name}</strong>
+                      <span className="monster-card-badges">
+                        <small>{card.typeLabel}</small>
+                        <small>{card.rarity}</small>
+                        <small>{card.quantityLabel}</small>
+                      </span>
                     </span>
                     <small>{card.detail}</small>
                     {card.description ? <small>{card.description}</small> : null}
@@ -532,9 +540,37 @@ function getStatusText(status: MultiplayerStatus, playerCount: number, lastMove:
 }
 
 type CardRow =
-  | { id: string; kind: 'stack'; definition: CardDefinition | undefined; name: string; detail: string; description?: string }
-  | { id: string; kind: 'creature-card'; name: string; detail: string; description?: string }
-  | { id: string; kind: 'egg'; name: string; detail: string; description?: string };
+  | {
+      id: string;
+      kind: 'stack';
+      definition: CardDefinition | undefined;
+      name: string;
+      detail: string;
+      description?: string;
+      typeLabel: string;
+      rarity: string;
+      quantityLabel: string;
+    }
+  | {
+      id: string;
+      kind: 'creature-card';
+      name: string;
+      detail: string;
+      description?: string;
+      typeLabel: string;
+      rarity: string;
+      quantityLabel: string;
+    }
+  | {
+      id: string;
+      kind: 'egg';
+      name: string;
+      detail: string;
+      description?: string;
+      typeLabel: string;
+      rarity: string;
+      quantityLabel: string;
+    };
 
 function getCardRows(saveState: MonsterRpgSaveState): CardRow[] {
   const stackRows: CardRow[] = Object.entries(saveState.inventory.cards)
@@ -544,10 +580,22 @@ function getCardRows(saveState: MonsterRpgSaveState): CardRow[] {
       definition: getCardDefinition(id),
       quantity: stack.quantity,
       name: getCardDefinition(id)?.name ?? id,
-      detail: `${getCardDefinition(id)?.type ?? 'unknown'} · ${getCardDefinition(id)?.rarity ?? 'unknown'} · qty ${stack.quantity}`
+      detail: getCardDefinition(id)?.description ?? 'Inventory card',
+      typeLabel: getCardDefinition(id)?.type ?? 'unknown',
+      rarity: getCardDefinition(id)?.rarity ?? 'unknown',
+      quantityLabel: `qty ${stack.quantity}`
     }))
     .filter((card) => card.quantity > 0)
-    .map(({ id, kind, definition, name, detail }) => ({ id, kind, definition, name, detail }));
+    .map(({ id, kind, definition, name, detail, typeLabel, rarity, quantityLabel }) => ({
+      id,
+      kind,
+      definition,
+      name,
+      detail,
+      typeLabel,
+      rarity,
+      quantityLabel
+    }));
 
   const creatureCardRows: CardRow[] = Object.values(saveState.inventory.creatureCards).map((card) => {
     const definition = getCardDefinition(card.cardDefinitionId);
@@ -556,7 +604,10 @@ function getCardRows(saveState: MonsterRpgSaveState): CardRow[] {
       id: card.id,
       kind: 'creature-card',
       name: definition?.name ?? card.id,
-      detail: `creature · ${card.rarity} · ${stats}`,
+      detail: stats,
+      typeLabel: 'creature',
+      rarity: card.rarity,
+      quantityLabel: 'qty 1',
       description: `Known attacks: ${card.knownAttacks.map((attack) => attack.name).join(', ')}`
     };
   });
@@ -567,7 +618,10 @@ function getCardRows(saveState: MonsterRpgSaveState): CardRow[] {
       id: egg.id,
       kind: 'egg',
       name: `${species?.displayName ?? `Species #${egg.speciesId}`} Egg`,
-      detail: `egg · ${egg.rarity} · ${egg.origin === 'card' ? 'card-made' : 'direct drop'}`,
+      detail: egg.origin === 'card' ? 'Card-made Egg' : 'Direct drop Egg',
+      typeLabel: 'egg',
+      rarity: egg.rarity,
+      quantityLabel: 'qty 1',
       description: getEggDescription(egg, species)
     };
   });
@@ -600,6 +654,7 @@ type FarmRow = {
   guardStatus: string;
   accessText: string;
   upgradeRequirementText: string;
+  storagePercent: number;
 };
 
 type StationRow = StationDestination & {
@@ -661,6 +716,7 @@ function toFarmRow(saveState: MonsterRpgSaveState, farm: FarmSaveRecord, now: Da
     stored,
     cap,
     rate: accrued.productionRatePerMinute,
+    storagePercent: cap > 0 ? Math.max(0, Math.min(100, (stored / cap) * 100)) : 0,
     status: stored >= cap ? 'Full' : stored > 0 ? 'Ready' : 'Producing',
     canUpgrade: Boolean(preview?.canUpgrade),
     canManage,
