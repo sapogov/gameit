@@ -2,6 +2,7 @@ import { canCreatureUseRole } from './creatureParty';
 import type {
   CardRarity,
   CreationRequirement,
+  FarmTheftLogEntry,
   FarmSaveRecord,
   MonsterRpgSaveState,
   VillageId,
@@ -12,10 +13,19 @@ export const MAGIC_DUST_FARM_TYPE = 'magic-dust';
 export const MAGIC_DUST_RESOURCE_ID = 'magicDust';
 export const MAGIC_DUST_FARM_ID = 'home-magic-dust-farm';
 export const MAGIC_DUST_FARM_CARD_ID = 'farm-card:magic-dust-farm';
+export const FARM_THEFT_COOLDOWN_MS = 24 * 60 * 60 * 1_000;
+export const FARM_THEFT_STEAL_PERCENT = 0.25;
 
 export type FarmCollectionFailureReason = 'not-facing-farm' | 'not-owner' | 'empty';
 export type FarmUpgradeFailureReason = 'missing-farm' | 'not-owner' | 'max-level' | 'missing-card' | 'missing-material';
 export type FarmGuardFailureReason = 'missing-farm' | 'not-owner' | 'missing-creature' | 'creature-fainted';
+export type FarmTheftFailureReason =
+  | 'not-facing-farm'
+  | 'owner-cannot-steal'
+  | 'guarded'
+  | 'cooldown'
+  | 'empty'
+  | 'missing-magic-dust';
 
 export type FarmCollectionResult =
   | { ok: true; state: MonsterRpgSaveState; farm: FarmSaveRecord; collectedQuantity: number }
@@ -28,6 +38,27 @@ export type FarmUpgradeResult =
 export type FarmGuardAssignmentResult =
   | { ok: true; state: MonsterRpgSaveState; farm: FarmSaveRecord }
   | { ok: false; state: MonsterRpgSaveState; reason: FarmGuardFailureReason; farm?: FarmSaveRecord };
+
+export type FarmTheftAttemptResult =
+  | {
+      ok: true;
+      state: MonsterRpgSaveState;
+      farm: FarmSaveRecord;
+      outcome: 'success' | 'failed';
+      stolenQuantity: number;
+      costPaid: number;
+      successChance: number;
+      cooldownUntil?: string;
+      logEntry: FarmTheftLogEntry;
+    }
+  | {
+      ok: false;
+      state: MonsterRpgSaveState;
+      reason: FarmTheftFailureReason;
+      farm?: FarmSaveRecord;
+      cooldownUntil?: string;
+      costRequired?: number;
+    };
 
 export interface FarmCardUpgradeRequirement {
   cardDefinitionId: string;
@@ -380,6 +411,119 @@ export function collectFacingFarm(state: MonsterRpgSaveState, now = new Date()):
   };
 }
 
+export function attemptFacingFarmTheft(
+  state: MonsterRpgSaveState,
+  now = new Date(),
+  options: { rng?: () => number; targetVillageLevel?: number } = {}
+): FarmTheftAttemptResult {
+  const farm = getFacingFarm(state);
+  if (!farm) return { ok: false, state, reason: 'not-facing-farm' };
+  if (farm.ownerPlayerId === state.profile.playerId) {
+    return { ok: false, state, reason: 'owner-cannot-steal', farm };
+  }
+  if (isFarmGuardBlockingTheft(state, farm)) return { ok: false, state, reason: 'guarded', farm };
+
+  const accruedFarm = getAccruedFarmRecord(farm, now);
+  const cooldownUntil = getFarmTheftCooldown(accruedFarm, state.profile.playerId, now);
+  if (cooldownUntil) return { ok: false, state, reason: 'cooldown', farm: accruedFarm, cooldownUntil };
+
+  const storedQuantity = accruedFarm.storedResources[accruedFarm.resourceId] ?? 0;
+  if (storedQuantity <= 0) return { ok: false, state, reason: 'empty', farm: accruedFarm };
+
+  const targetVillageLevel = options.targetVillageLevel ?? getTargetVillageLevel(state, accruedFarm);
+  const costRequired = getFarmTheftAttemptCost(state, targetVillageLevel);
+  if ((state.inventory.currencies[MAGIC_DUST_RESOURCE_ID] ?? 0) < costRequired) {
+    return { ok: false, state, reason: 'missing-magic-dust', farm: accruedFarm, costRequired };
+  }
+
+  const successChance = getFarmTheftSuccessChance(state, targetVillageLevel);
+  const succeeded = (options.rng ?? Math.random)() < successChance;
+  const stolenQuantity = succeeded ? getFarmTheftStolenQuantity(storedQuantity) : 0;
+  const nextCooldownUntil = succeeded ? new Date(now.getTime() + FARM_THEFT_COOLDOWN_MS).toISOString() : undefined;
+  const theftCooldowns: Record<string, string> =
+    succeeded && nextCooldownUntil
+      ? {
+          ...accruedFarm.theftCooldowns,
+          [getFarmTheftCooldownKey(state.profile.playerId)]: nextCooldownUntil
+        }
+      : accruedFarm.theftCooldowns;
+  const nextFarm: FarmSaveRecord = {
+    ...accruedFarm,
+    storedResources: {
+      ...accruedFarm.storedResources,
+      [accruedFarm.resourceId]: storedQuantity - stolenQuantity
+    },
+    theftCooldowns
+  };
+  const logEntry = createFarmTheftLogEntry({
+    attackerPlayerId: state.profile.playerId,
+    costPaid: costRequired,
+    farm: nextFarm,
+    now,
+    outcome: succeeded ? 'success' : 'failed',
+    stolenQuantity
+  });
+
+  return {
+    ok: true,
+    farm: nextFarm,
+    outcome: logEntry.outcome,
+    stolenQuantity,
+    costPaid: costRequired,
+    successChance,
+    cooldownUntil: nextCooldownUntil,
+    logEntry,
+    state: {
+      ...state,
+      inventory: {
+        ...state.inventory,
+        currencies: {
+          ...state.inventory.currencies,
+          [MAGIC_DUST_RESOURCE_ID]:
+            (state.inventory.currencies[MAGIC_DUST_RESOURCE_ID] ?? 0) - costRequired + stolenQuantity
+        }
+      },
+      farms: {
+        ...state.farms,
+        farms: {
+          ...state.farms.farms,
+          [nextFarm.id]: nextFarm
+        },
+        theftLog: [...(state.farms.theftLog ?? []), logEntry]
+      },
+      updatedAt: now.toISOString()
+    }
+  };
+}
+
+export function getFarmTheftCooldown(
+  farm: FarmSaveRecord,
+  visitorPlayerId: string,
+  now = new Date()
+): string | undefined {
+  const cooldown = farm.theftCooldowns[getFarmTheftCooldownKey(visitorPlayerId)];
+  if (!cooldown) return undefined;
+  return Date.parse(cooldown) > now.getTime() ? cooldown : undefined;
+}
+
+export function getFarmTheftAttemptCost(state: MonsterRpgSaveState, targetVillageLevel: number): number {
+  const visitorPowerLevel = Math.max(state.progression.playerLevel, state.village.level);
+  const levelGap = Math.max(0, visitorPowerLevel - Math.max(1, targetVillageLevel));
+  return 1 + levelGap * 2;
+}
+
+export function getFarmTheftSuccessChance(state: MonsterRpgSaveState, targetVillageLevel: number): number {
+  const visitorPowerLevel = Math.max(state.progression.playerLevel, state.village.level);
+  const levelDelta = visitorPowerLevel - Math.max(1, targetVillageLevel);
+  return Math.max(0.35, Math.min(0.9, 0.6 + levelDelta * 0.05));
+}
+
+export function isFarmGuardBlockingTheft(state: MonsterRpgSaveState, farm: FarmSaveRecord): boolean {
+  if (!farm.guardCreatureId) return false;
+  if (farm.ownerPlayerId !== state.profile.playerId && !state.creatures.creatures[farm.guardCreatureId]) return true;
+  return isFarmGuardActive(state, farm);
+}
+
 export function getFacingFarm(state: MonsterRpgSaveState): FarmSaveRecord | undefined {
   const target = getFacingPosition(state.position);
 
@@ -401,6 +545,51 @@ function getFacingPosition(position: WorldPosition): Pick<WorldPosition, 'mapId'
     mapId: position.mapId,
     x: position.x + delta.x,
     y: position.y + delta.y
+  };
+}
+
+function getFarmTheftCooldownKey(visitorPlayerId: string): string {
+  return `visitor:${visitorPlayerId}`;
+}
+
+function getTargetVillageLevel(state: MonsterRpgSaveState, farm: FarmSaveRecord): number {
+  if (farm.ownerPlayerId === state.village.ownerPlayerId && farm.mapId === state.village.id) return state.village.level;
+  return farm.level;
+}
+
+function getFarmTheftStolenQuantity(storedQuantity: number): number {
+  return Math.min(storedQuantity, Math.max(1, Math.floor(storedQuantity * FARM_THEFT_STEAL_PERCENT)));
+}
+
+function createFarmTheftLogEntry({
+  attackerPlayerId,
+  costPaid,
+  farm,
+  now,
+  outcome,
+  stolenQuantity
+}: {
+  attackerPlayerId: string;
+  costPaid: number;
+  farm: FarmSaveRecord;
+  now: Date;
+  outcome: 'success' | 'failed';
+  stolenQuantity: number;
+}): FarmTheftLogEntry {
+  const attemptedAt = now.toISOString();
+  return {
+    id: `theft:${farm.id}:${attackerPlayerId}:${attemptedAt}`,
+    farmId: farm.id,
+    farmType: farm.farmType,
+    villageId: farm.mapId,
+    attackerPlayerId,
+    defenderPlayerId: farm.ownerPlayerId,
+    attemptedAt,
+    outcome,
+    resourceId: farm.resourceId,
+    stolenQuantity,
+    costPaid,
+    guardResult: 'unguarded'
   };
 }
 

@@ -10,6 +10,7 @@ import type {
   FarmPosition,
   FarmSaveContainer,
   FarmSaveRecord,
+  FarmTheftLogEntry,
   InventorySaveContainer,
   JournalSaveContainer,
   JournalSpeciesState,
@@ -153,7 +154,8 @@ function createEmptySaveContainers(playerId: string, homeVillageId: PlayerProfil
     },
     farms: {
       ownerPlayerId: playerId,
-      farms: {}
+      farms: {},
+      theftLog: []
     },
     journal: {
       ownerPlayerId: playerId,
@@ -360,7 +362,7 @@ function isValidFarms(
 
   return Object.entries(candidate.farms).every(
     ([id, farm]) => id === farm.id && isValidFarmRecord(farm, playerId, creatures)
-  );
+  ) && isFarmTheftLog(candidate.theftLog);
 }
 
 function isValidFarmRecord(
@@ -389,10 +391,37 @@ function isValidFarmRecord(
     isIsoDate(candidate.lastProductionAt) &&
     (candidate.guardCreatureId === undefined ||
       (isNonEmptyString(candidate.guardCreatureId) &&
-        creatures.creatures[candidate.guardCreatureId]?.ownerPlayerId === playerId)) &&
+        (candidate.ownerPlayerId !== playerId ||
+          creatures.creatures[candidate.guardCreatureId]?.ownerPlayerId === playerId))) &&
     (candidate.collectCooldownUntil === undefined || isIsoDate(candidate.collectCooldownUntil)) &&
     isCooldownRecord(candidate.theftCooldowns)
   );
+}
+
+function isFarmTheftLog(value: unknown): value is FarmTheftLogEntry[] | undefined {
+  if (value === undefined) return true;
+  if (!Array.isArray(value)) return false;
+
+  return value.every((entry) => {
+    if (!entry || typeof entry !== 'object') return false;
+    const candidate = entry as FarmTheftLogEntry;
+
+    return (
+      isNonEmptyString(candidate.id) &&
+      isNonEmptyString(candidate.farmId) &&
+      isNonEmptyString(candidate.farmType) &&
+      validVillageIds.has(candidate.villageId) &&
+      isNonEmptyString(candidate.attackerPlayerId) &&
+      isNonEmptyString(candidate.defenderPlayerId) &&
+      isIsoDate(candidate.attemptedAt) &&
+      (candidate.outcome === 'success' || candidate.outcome === 'failed') &&
+      isNonEmptyString(candidate.resourceId) &&
+      isNonNegativeInteger(candidate.stolenQuantity) &&
+      isNonNegativeInteger(candidate.costPaid) &&
+      candidate.costPaid > 0 &&
+      candidate.guardResult === 'unguarded'
+    );
+  });
 }
 
 function isValidFarmPosition(position: unknown, mapId: FarmSaveRecord['mapId']): position is FarmPosition {

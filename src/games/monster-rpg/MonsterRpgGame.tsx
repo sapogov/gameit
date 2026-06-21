@@ -7,6 +7,7 @@ import {
   PackOpenTrace,
   applyBattleRewardsToSave,
   assignFarmGuard,
+  attemptFacingFarmTheft,
   buildStarterMagicDustFarm,
   activateBuffCard,
   activateCreatureCardViaElder,
@@ -133,6 +134,20 @@ export function MonsterRpgGame() {
       }
 
       if (collection.reason === 'empty' || collection.reason === 'not-owner') {
+        if (collection.reason === 'not-owner') {
+          const theft = attemptFacingFarmTheft(currentState);
+          if (theft.ok) {
+            saveProgress(theft.state);
+            saveStateRef.current = theft.state;
+            setSaveState(theft.state);
+            setLastMove(null);
+            setPackTrace(null);
+            setImportStatus(formatFarmTheftAttempt(theft));
+            return;
+          }
+          setImportStatus(formatFarmTheftFailure(theft.reason, theft));
+          return;
+        }
         setImportStatus(formatFarmCollectionFailure(collection.reason));
         return;
       }
@@ -872,6 +887,27 @@ function formatFarmCollectionFailure(reason: string | undefined): string {
   if (reason === 'empty') return 'Farm storage empty';
   if (reason === 'not-owner') return 'Only the village owner can collect';
   return `Farm collection failed${reason ? `: ${reason}` : ''}`;
+}
+
+function formatFarmTheftAttempt(result: Extract<ReturnType<typeof attemptFacingFarmTheft>, { ok: true }>): string {
+  if (result.outcome === 'success') {
+    return `Theft succeeded: stole ${result.stolenQuantity} Magic Dust, paid ${result.costPaid}`;
+  }
+  return `Theft failed: paid ${result.costPaid} Magic Dust`;
+}
+
+function formatFarmTheftFailure(
+  reason: string | undefined,
+  result?: Extract<ReturnType<typeof attemptFacingFarmTheft>, { ok: false }>
+): string {
+  if (reason === 'cooldown' && result?.cooldownUntil) {
+    return `Theft cooldown until ${new Date(result.cooldownUntil).toLocaleTimeString()}`;
+  }
+  if (reason === 'guarded') return 'Farm has an active guard';
+  if (reason === 'empty') return 'Nothing stored to steal';
+  if (reason === 'missing-magic-dust') return `Need ${result?.costRequired ?? 1} Magic Dust to attempt theft`;
+  if (reason === 'owner-cannot-steal') return 'Owners collect instead of stealing';
+  return `Theft failed${reason ? `: ${reason}` : ''}`;
 }
 
 function formatFarmUpgradeFailure(reason: string | undefined): string {
