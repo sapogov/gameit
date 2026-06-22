@@ -338,6 +338,20 @@
 - Added Farm HUD storage bars and clearer stored/cap, production, guard, access, cooldown/upgrade readouts.
 - Reworked inventory card rows with type, rarity, quantity badges, scannable details, and bounded scroll so opened packs do not push UI past the playfield.
 
+## 2026-06-21 - GitHub Pages CI Diagnosis
+
+- Checked the failing `Deploy GitHub Pages` workflow on `main`: build and artifact upload pass, deploy fails because GitHub Pages is not enabled for the repository (`has_pages: false`).
+- Fixed the live Pages configuration by switching `sapogov/gameit` from branch publishing to GitHub Actions publishing, reran the Pages workflow successfully, and verified `https://sapogov.github.io/gameit/` serves the built Vite assets.
+
+## 2026-06-21 - HUD Cleanup, 2x2 Farms, And Click-Walk
+
+- Reduced persistent Monster RPG HUD chrome to a compact status panel, collapsed menu dock, and small action log so normal play keeps most of the map visible.
+- Moved Farm, Station, Creatures, Inventory, Journal, Settings, and Save controls behind drawers, with Inventory now summarizing materials, items, Creature Cards, and Eggs before listing cards.
+- Added a 2x2 farm footprint helper used by collection/theft checks, rendering, click targeting, and local movement blocking.
+- Updated tap-to-walk pathfinding to avoid farm footprints, walk to the nearest interaction edge, face the target, and auto-interact after clicking farms or encounters.
+- Replaced burst click movement with a timed tile-step queue so clicked destinations move the character across grid squares instead of jumping.
+- Added focused farm/pathfinding regression tests plus desktop/mobile browser smoke checks and production client build verification.
+
 ## Next Work
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.

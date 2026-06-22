@@ -8,10 +8,20 @@ const steps: Array<{ direction: Direction; dx: number; dy: number }> = [
   { direction: 'west', dx: -1, dy: 0 }
 ];
 
-export function findWalkPath(map: GameMap, start: WorldPosition, targetX: number, targetY: number): Direction[] | null {
+type PathOptions = {
+  isBlocked?: (x: number, y: number) => boolean;
+};
+
+export function findWalkPath(
+  map: GameMap,
+  start: WorldPosition,
+  targetX: number,
+  targetY: number,
+  options: PathOptions = {}
+): Direction[] | null {
   if (start.mapId !== map.id) return null;
   if (!Number.isInteger(targetX) || !Number.isInteger(targetY)) return null;
-  if (!canEnterTile(map, targetX, targetY)) return null;
+  if (!canStandOnTile(map, targetX, targetY, options)) return null;
   if (start.x === targetX && start.y === targetY) return [];
 
   const queue: Array<{ x: number; y: number; directions: Direction[] }> = [
@@ -30,7 +40,7 @@ export function findWalkPath(map: GameMap, start: WorldPosition, targetX: number
 
       if (visited.has(key)) continue;
       if (nextX < 0 || nextY < 0 || nextX >= map.width || nextY >= map.height) continue;
-      if (!canEnterTile(map, nextX, nextY)) continue;
+      if (!canStandOnTile(map, nextX, nextY, options)) continue;
 
       const directions = [...current.directions, step.direction];
       if (nextX === targetX && nextY === targetY) return directions;
@@ -47,31 +57,52 @@ export function findWalkPathToInteractionDistance(
   map: GameMap,
   start: WorldPosition,
   targetX: number,
-  targetY: number
+  targetY: number,
+  targetWidth = 1,
+  targetHeight = 1,
+  options: PathOptions = {}
 ): Direction[] | null {
   if (start.mapId !== map.id) return null;
 
-  for (const step of steps) {
-    const standX = targetX - step.dx;
-    const standY = targetY - step.dy;
-    const previousX = targetX - step.dx * 2;
-    const previousY = targetY - step.dy * 2;
+  targetWidth = Math.max(1, targetWidth);
+  targetHeight = Math.max(1, targetHeight);
+  let bestPath: Direction[] | null = null;
 
-    if (!canEnterTile(map, standX, standY)) continue;
+  for (let y = targetY; y < targetY + targetHeight; y += 1) {
+    for (let x = targetX; x < targetX + targetWidth; x += 1) {
+      for (const step of steps) {
+        const standX = x - step.dx;
+        const standY = y - step.dy;
+        const previousX = standX - step.dx;
+        const previousY = standY - step.dy;
 
-    if (start.x === standX && start.y === standY && start.facing === step.direction) {
-      return [];
+        if (standX >= targetX && standX < targetX + targetWidth && standY >= targetY && standY < targetY + targetHeight) {
+          continue;
+        }
+        if (!canStandOnTile(map, standX, standY, options)) continue;
+
+        if (start.x === standX && start.y === standY && start.facing === step.direction) {
+          return [];
+        }
+
+        if (!canStandOnTile(map, previousX, previousY, options)) continue;
+
+        const path = findWalkPath(map, start, previousX, previousY, options);
+        if (!path) continue;
+
+        const candidatePath = [...path, step.direction];
+        if (!bestPath || candidatePath.length < bestPath.length) {
+          bestPath = candidatePath;
+        }
+      }
     }
-
-    if (!canEnterTile(map, previousX, previousY)) continue;
-
-    const path = findWalkPath(map, start, previousX, previousY);
-    if (!path) continue;
-
-    return [...path, step.direction];
   }
 
-  return null;
+  return bestPath;
+}
+
+function canStandOnTile(map: GameMap, x: number, y: number, options: PathOptions): boolean {
+  return canEnterTile(map, x, y) && !(options.isBlocked?.(x, y) ?? false);
 }
 
 function positionKey(x: number, y: number): string {

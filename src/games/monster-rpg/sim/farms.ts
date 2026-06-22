@@ -15,6 +15,7 @@ export const MAGIC_DUST_FARM_ID = 'home-magic-dust-farm';
 export const MAGIC_DUST_FARM_CARD_ID = 'farm-card:magic-dust-farm';
 export const FARM_THEFT_COOLDOWN_MS = 24 * 60 * 60 * 1_000;
 export const FARM_THEFT_STEAL_PERCENT = 0.25;
+export const FARM_FOOTPRINT_SIZE = 2;
 
 export type FarmCollectionFailureReason = 'not-facing-farm' | 'not-owner' | 'empty';
 export type FarmUpgradeFailureReason = 'missing-farm' | 'not-owner' | 'max-level' | 'missing-card' | 'missing-material';
@@ -681,7 +682,16 @@ export function getFacingFarm(state: MonsterRpgSaveState): FarmSaveRecord | unde
   const target = getFacingPosition(state.position);
 
   return Object.values(state.farms.farms).find(
-    (farm) => farm.position.mapId === target.mapId && farm.position.x === target.x && farm.position.y === target.y
+    (farm) => farm.position.mapId === target.mapId && isFarmTile(farm, target.x, target.y)
+  );
+}
+
+export function isFarmTile(farm: FarmSaveRecord, x: number, y: number): boolean {
+  return (
+    x >= farm.position.x &&
+    x < farm.position.x + FARM_FOOTPRINT_SIZE &&
+    y >= farm.position.y &&
+    y < farm.position.y + FARM_FOOTPRINT_SIZE
   );
 }
 

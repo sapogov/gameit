@@ -548,7 +548,7 @@ export interface MovementResult {
   state: MonsterRpgSaveState;
   moved: boolean;
   blocked: boolean;
-  blockedBy?: TileType | 'bounds' | 'onboarding';
+  blockedBy?: TileType | 'bounds' | 'onboarding' | 'farm';
   transition?: {
     toMapId: MapId;
     spawn: WorldPosition;

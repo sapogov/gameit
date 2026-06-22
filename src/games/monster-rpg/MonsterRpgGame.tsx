@@ -32,6 +32,7 @@ import {
   openPack,
   importSavePayload,
   isAtVillageHospital,
+  isFarmTile,
   isVillageElderDialogComplete,
   loadMonsterRpgSettings,
   loadProfile,
@@ -49,6 +50,7 @@ import {
   type BattleResultMessage,
   type BattleRoomState,
   type CreatureLabelMode,
+  type Direction,
   type InputAction,
   type LocationRoomState,
   type MonsterRpgSaveState,
@@ -117,6 +119,18 @@ export function MonsterRpgGame() {
     if (action.type === 'move' && battleState?.status === 'active') {
       setImportStatus('Battle in progress');
       return;
+    }
+
+    if (action.type === 'move' && currentState) {
+      const farmBlock = getFarmFootprintMoveBlock(currentState, action);
+      if (farmBlock) {
+        setLastMove(farmBlock);
+        saveProgress(farmBlock.state);
+        saveStateRef.current = farmBlock.state;
+        setSaveState(farmBlock.state);
+        setPendingStationDestinationId(null);
+        return;
+      }
     }
 
     if (action.type === 'move' && connectionRef.current && multiplayerStatusRef.current === 'online') {
@@ -957,6 +971,43 @@ function formatImportFailure(reason: 'invalid-json' | 'unsupported-schema' | 'in
   if (reason === 'invalid-json') return 'bad JSON';
   if (reason === 'unsupported-schema') return 'unsupported version';
   return 'invalid save';
+}
+
+const moveDeltaByDirection: Record<Direction, { x: number; y: number }> = {
+  north: { x: 0, y: -1 },
+  east: { x: 1, y: 0 },
+  south: { x: 0, y: 1 },
+  west: { x: -1, y: 0 }
+};
+
+function getFarmFootprintMoveBlock(
+  state: MonsterRpgSaveState,
+  action: InputAction
+): MovementResult | null {
+  if (action.type !== 'move') return null;
+
+  const delta = moveDeltaByDirection[action.direction];
+  const targetX = state.position.x + delta.x;
+  const targetY = state.position.y + delta.y;
+  const blocked = Object.values(state.farms.farms).some(
+    (farm) => farm.position.mapId === state.position.mapId && isFarmTile(farm, targetX, targetY)
+  );
+
+  if (!blocked) return null;
+
+  return {
+    state: {
+      ...state,
+      position: {
+        ...state.position,
+        facing: action.direction
+      },
+      updatedAt: new Date().toISOString()
+    },
+    moved: false,
+    blocked: true,
+    blockedBy: 'farm'
+  };
 }
 
 function formatStarterConversionFailure(reason: 'already-converted' | 'missing-card' | 'missing-magic-dust'): string {
