@@ -111,6 +111,8 @@ export function GameHud({
   const creatureRows = getCreatureRows(saveState);
   const farmRows = getFarmRows(saveState, new Date(farmStatusNow));
   const stationRows = getStationRows(saveState);
+  const inventoryRows = getInventoryRows(saveState);
+  const activityRows = getActivityRows(saveState, importStatus, lastMove, battleState);
   const guardOptions = creatureRows.map((row) => ({
     id: row.id,
     label: `${row.species?.displayName ?? `Species #${row.creature.speciesId}`} (${row.container})`,
@@ -125,7 +127,7 @@ export function GameHud({
   return (
     <div className="monster-hud">
       <div className="monster-hud-stack">
-        <section className="monster-hud-panel">
+        <section className="monster-hud-panel monster-status-panel">
           <p>{mapName}</p>
           <h2>{saveState.profile.name}</h2>
           <span>{status}</span>
@@ -137,6 +139,7 @@ export function GameHud({
           <small>{locationHint}</small>
           {importStatus ? <small>{importStatus}</small> : null}
         </section>
+        <div className="monster-menu-dock" aria-label="Game menus">
         {battleState ? (
           <section className="monster-battle-panel">
             <div className="monster-battle-heading">
@@ -184,8 +187,10 @@ export function GameHud({
           </section>
         ) : null}
         {farmRows.length > 0 ? (
-          <section className="monster-hud-panel monster-farm-panel">
-            <h3>Farms</h3>
+          <details className="monster-farm-panel">
+            <summary>
+              Farms <span>{farmRows.length}</span>
+            </summary>
             <div className="monster-farm-grid">
               {farmRows.map((farm) => (
                 <article className="monster-farm-row" key={farm.id}>
@@ -230,7 +235,7 @@ export function GameHud({
                 </article>
               ))}
             </div>
-          </section>
+          </details>
         ) : null}
         <details className="monster-station-panel">
           <summary>
@@ -338,8 +343,15 @@ export function GameHud({
             )}
           </div>
         </details>
-        <section className="monster-hud-panel monster-card-panel">
-          <h3>Inventory Cards</h3>
+        <details className="monster-card-panel">
+          <summary>
+            Inventory <span>{cardRows.length} cards</span>
+          </summary>
+          <div className="monster-inventory-summary">
+            {inventoryRows.map((row) => (
+              <small key={row}>{row}</small>
+            ))}
+          </div>
           <div className="monster-card-actions">
             <button onClick={onOpenPack} type="button">
               Open Pack
@@ -393,7 +405,7 @@ export function GameHud({
               <small>Empty inventory</small>
             )}
           </div>
-        </section>
+        </details>
         <details className="monster-settings-panel">
           <summary>Settings</summary>
           <div className="monster-segmented-control" aria-label="Creature label mode">
@@ -427,27 +439,37 @@ export function GameHud({
             ))}
           </div>
         </details>
+        <details className="monster-save-panel">
+          <summary>Save</summary>
+          <div className="monster-save-actions" aria-label="Save actions">
+            <button onClick={onExport} title="Export local save" type="button">
+              Export
+            </button>
+            <label title="Import local save">
+              Import
+              <input
+                accept="application/json,.json"
+                onChange={(event) => {
+                  const file = event.currentTarget.files?.[0];
+                  event.currentTarget.value = '';
+                  if (file) onImport(file);
+                }}
+                type="file"
+              />
+            </label>
+            <button onClick={onReset} title="Reset local profile" type="button">
+              Reset
+            </button>
+          </div>
+        </details>
+        </div>
       </div>
-      <div className="monster-save-actions" aria-label="Save actions">
-        <button onClick={onExport} title="Export local save" type="button">
-          Export
-        </button>
-        <label title="Import local save">
-          Import
-          <input
-            accept="application/json,.json"
-            onChange={(event) => {
-              const file = event.currentTarget.files?.[0];
-              event.currentTarget.value = '';
-              if (file) onImport(file);
-            }}
-            type="file"
-          />
-        </label>
-        <button onClick={onReset} title="Reset local profile" type="button">
-          Reset
-        </button>
-      </div>
+      <section className="monster-action-log" aria-label="Action log">
+        <strong>Action Log</strong>
+        {activityRows.map((row) => (
+          <small key={row}>{row}</small>
+        ))}
+      </section>
     </div>
   );
 }
@@ -526,6 +548,50 @@ function formatCurrencySummary(currencies: Record<string, number>): string {
   if (entries.length === 0) return 'No materials';
 
   return entries.map(([id, quantity]) => `${formatMaterialId(id)} ${quantity}`).join(' / ');
+}
+
+function getInventoryRows(saveState: MonsterRpgSaveState): string[] {
+  const currencies = Object.entries(saveState.inventory.currencies)
+    .filter(([, quantity]) => quantity > 0)
+    .map(([id, quantity]) => `${formatMaterialId(id)} ${quantity}`);
+  const items = Object.values(saveState.inventory.items)
+    .filter((stack) => stack.quantity > 0)
+    .map((stack) => `${stack.id.replace(/-/g, ' ')} ${stack.quantity}`);
+  const creatureCardCount = Object.keys(saveState.inventory.creatureCards).length;
+  const eggCount = Object.keys(saveState.inventory.eggs).length;
+
+  return [
+    currencies.length > 0 ? `Materials: ${currencies.join(' / ')}` : 'Materials: none',
+    items.length > 0 ? `Items: ${items.join(' / ')}` : 'Items: none',
+    `Creature cards: ${creatureCardCount}`,
+    `Eggs: ${eggCount}`
+  ];
+}
+
+function getActivityRows(
+  saveState: MonsterRpgSaveState,
+  importStatus: string | null,
+  lastMove: MovementResult | null,
+  battleState: BattleRoomState | null
+): string[] {
+  const rows: string[] = [];
+
+  if (importStatus) rows.push(importStatus);
+  if (lastMove) {
+    rows.push(
+      lastMove.blocked
+        ? `Blocked by ${formatBlockedBy(lastMove.blockedBy)}`
+        : `Moved to ${lastMove.state.position.x}, ${lastMove.state.position.y}`
+    );
+  }
+  battleState?.lastLog.slice(-2).forEach((entry) => rows.push(entry.message));
+  saveState.farms.theftLog?.slice(-2).forEach((entry) => {
+    rows.push(
+      `Farm theft ${entry.outcome}: ${entry.stolenQuantity} ${formatMaterialId(entry.resourceId)}`
+    );
+  });
+
+  return rows.slice(-4).reverse().length > 0 ? rows.slice(-4).reverse() : ['Ready'];
 }
 
 function formatMaterialId(id: string): string {
@@ -794,5 +860,6 @@ function formatBlockedBy(blockedBy: MovementResult['blockedBy']): string {
   if (!blockedBy) return 'obstacle';
   if (blockedBy === 'bounds') return 'edge';
   if (blockedBy === 'onboarding') return 'Village Elder';
+  if (blockedBy === 'farm') return 'farm';
   return blockedBy.replace(/([A-Z])/g, ' $1').toLowerCase();
 }

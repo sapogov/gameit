@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import type {
   AvatarId,
   CreatureLabelMode,
+  Direction,
   FarmSaveRecord,
   GameMap,
   InputAction,
@@ -13,7 +14,14 @@ import type {
   TileType,
   WildEncounterState
 } from '../../sim';
-import { findWalkPath, findWalkPathToInteractionDistance, getGameMap, getSpeciesById } from '../../sim';
+import {
+  FARM_FOOTPRINT_SIZE,
+  findWalkPath,
+  findWalkPathToInteractionDistance,
+  getGameMap,
+  getSpeciesById,
+  isFarmTile
+} from '../../sim';
 import { monsterRpgAssetKeys, monsterRpgAssetManifest, type MonsterRpgAssetKey } from '../assets/monsterRpgAssets';
 
 interface VillageSceneOptions {
@@ -130,6 +138,9 @@ export class VillageScene extends Phaser.Scene {
   private readyToRender = false;
   private roomState: LocationRoomState | null = null;
   private saveState: MonsterRpgSaveState;
+  private queuedInteraction = false;
+  private movementQueue: Direction[] = [];
+  private movementTimer?: Phaser.Time.TimerEvent;
 
   constructor(options: VillageSceneOptions) {
     super({ key: 'VillageScene' });
@@ -162,14 +173,15 @@ export class VillageScene extends Phaser.Scene {
     if (!this.cursors || !this.keys) return;
 
     if (Phaser.Input.Keyboard.JustDown(this.cursors.left) || Phaser.Input.Keyboard.JustDown(this.keys.A)) {
-      this.onAction({ type: 'move', direction: 'west' });
+      this.dispatchManualMove('west');
     } else if (Phaser.Input.Keyboard.JustDown(this.cursors.right) || Phaser.Input.Keyboard.JustDown(this.keys.D)) {
-      this.onAction({ type: 'move', direction: 'east' });
+      this.dispatchManualMove('east');
     } else if (Phaser.Input.Keyboard.JustDown(this.cursors.up) || Phaser.Input.Keyboard.JustDown(this.keys.W)) {
-      this.onAction({ type: 'move', direction: 'north' });
+      this.dispatchManualMove('north');
     } else if (Phaser.Input.Keyboard.JustDown(this.cursors.down) || Phaser.Input.Keyboard.JustDown(this.keys.S)) {
-      this.onAction({ type: 'move', direction: 'south' });
+      this.dispatchManualMove('south');
     } else if (Phaser.Input.Keyboard.JustDown(this.keys.E) || Phaser.Input.Keyboard.JustDown(this.keys.SPACE)) {
+      this.clearMovementQueue();
       this.onAction({ type: 'interact' });
     }
 
@@ -249,13 +261,66 @@ export class VillageScene extends Phaser.Scene {
 
     const encounter = this.getEncounterAt(targetX, targetY);
     const farm = this.getFarmAt(targetX, targetY);
-    const path = encounter || farm
-      ? findWalkPathToInteractionDistance(this.map, localPlayer.position, targetX, targetY)
-      : findWalkPath(this.map, localPlayer.position, targetX, targetY);
+    const pathOptions = { isBlocked: (x: number, y: number) => this.isFarmTileAt(x, y) };
+    const path = farm
+      ? findWalkPathToInteractionDistance(
+          this.map,
+          localPlayer.position,
+          farm.position.x,
+          farm.position.y,
+          FARM_FOOTPRINT_SIZE,
+          FARM_FOOTPRINT_SIZE,
+          pathOptions
+        )
+      : encounter
+        ? findWalkPathToInteractionDistance(this.map, localPlayer.position, targetX, targetY, 1, 1, pathOptions)
+        : findWalkPath(this.map, localPlayer.position, targetX, targetY, pathOptions);
 
-    path?.forEach((direction) => {
-      this.onAction({ type: 'move', direction });
+    if (!path) return;
+    this.queueMovement(path, Boolean(farm || encounter));
+  }
+
+  private dispatchManualMove(direction: Direction) {
+    this.clearMovementQueue();
+    this.onAction({ type: 'move', direction });
+  }
+
+  private queueMovement(path: Direction[], interactAfterPath: boolean) {
+    this.clearMovementQueue();
+    this.movementQueue = [...path];
+    this.queuedInteraction = interactAfterPath;
+
+    if (this.movementQueue.length === 0) {
+      if (this.queuedInteraction) this.onAction({ type: 'interact' });
+      this.queuedInteraction = false;
+      return;
+    }
+
+    this.advanceMovementQueue();
+    this.movementTimer = this.time.addEvent({
+      delay: 150,
+      loop: true,
+      callback: () => this.advanceMovementQueue()
     });
+  }
+
+  private advanceMovementQueue() {
+    const direction = this.movementQueue.shift();
+    if (direction) {
+      this.onAction({ type: 'move', direction });
+      return;
+    }
+
+    const shouldInteract = this.queuedInteraction;
+    this.clearMovementQueue();
+    if (shouldInteract) this.onAction({ type: 'interact' });
+  }
+
+  private clearMovementQueue() {
+    this.movementQueue = [];
+    this.queuedInteraction = false;
+    this.movementTimer?.remove(false);
+    this.movementTimer = undefined;
   }
 
   private drawMap() {
@@ -609,10 +674,13 @@ export class VillageScene extends Phaser.Scene {
 
   private syncFarmView(view: FarmView, farm: FarmSaveRecord) {
     const { tileSize } = this.map;
-    const width = tileSize * 0.86;
-    const height = tileSize * 0.78;
+    const width = tileSize * FARM_FOOTPRINT_SIZE * 0.86;
+    const height = tileSize * FARM_FOOTPRINT_SIZE * 0.76;
 
-    view.container.setPosition(farm.position.x * tileSize + tileSize / 2, farm.position.y * tileSize + tileSize / 2);
+    view.container.setPosition(
+      (farm.position.x + FARM_FOOTPRINT_SIZE / 2) * tileSize,
+      (farm.position.y + FARM_FOOTPRINT_SIZE / 2) * tileSize
+    );
     view.base.setSize(width, height);
     view.base.setFillStyle(0x8c5b2a, 1);
     view.base.setStrokeStyle(Math.max(1, tileSize * 0.08), 0x26351f);
@@ -720,7 +788,11 @@ export class VillageScene extends Phaser.Scene {
   }
 
   private getFarmAt(x: number, y: number): FarmSaveRecord | null {
-    return Object.values(this.getRenderableFarms()).find((farm) => farm.position.x === x && farm.position.y === y) ?? null;
+    return Object.values(this.getRenderableFarms()).find((farm) => isFarmTile(farm, x, y)) ?? null;
+  }
+
+  private isFarmTileAt(x: number, y: number): boolean {
+    return Object.values(this.getRenderableFarms()).some((farm) => isFarmTile(farm, x, y));
   }
 
   private updateEncounterLabelVisibility() {

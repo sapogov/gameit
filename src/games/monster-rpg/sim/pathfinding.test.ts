@@ -48,4 +48,22 @@ describe('tap-to-walk pathfinding', () => {
     expect(`${finalState?.position.x},${finalState?.position.y}`).not.toBe('25,10');
     expect(canTargetEncounter(finalState!.position, { mapId: 'home-village', x: 25, y: 10 })).toBe(true);
   });
+
+  it('paths to the edge of a 2x2 interaction footprint', () => {
+    const map = getGameMap('home-village');
+    const start: WorldPosition = { mapId: 'home-village', x: 21, y: 16, facing: 'east' };
+    const path = findWalkPathToInteractionDistance(map, start, 24, 16, 2, 2);
+    const save = {
+      ...createInitialSave(createPlayerProfile('Path Test', 'scout')),
+      mapId: start.mapId,
+      position: start
+    };
+    const finalState = path?.reduce(
+      (state, direction) => movePlayer(state, { type: 'move', direction }, map).state,
+      save
+    );
+
+    expect(path).not.toBeNull();
+    expect(finalState?.position).toMatchObject({ x: 23, y: 16, facing: 'east' });
+  });
 });

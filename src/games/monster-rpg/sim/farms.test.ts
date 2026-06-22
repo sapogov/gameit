@@ -77,6 +77,21 @@ describe('Magic Dust Farms', () => {
     expect(collected.state.farms.farms[MAGIC_DUST_FARM_ID].storedResources[MAGIC_DUST_CURRENCY_ID]).toBe(0);
   });
 
+  it('collects when facing any tile in the 2x2 farm footprint', () => {
+    const profile = createPlayerProfile('Mika', 'scout');
+    const state = withFarm(createInitialSave(profile), createFarm({ ownerPlayerId: profile.playerId, stored: 4 }));
+    const besideRightEdge = {
+      ...state,
+      position: { mapId: 'home-village' as const, x: 26, y: 17, facing: 'west' as const }
+    };
+
+    const collected = collectFacingFarm(besideRightEdge, new Date('2026-06-20T12:05:00.000Z'));
+
+    expect(collected.ok).toBe(true);
+    if (!collected.ok) throw new Error(collected.reason);
+    expect(collected.collectedQuantity).toBe(9);
+  });
+
   it('rejects collection when not facing a farm or when the farm is empty', () => {
     const profile = createPlayerProfile('Mika', 'scout');
     const state = withFarm(createInitialSave(profile), createFarm({ ownerPlayerId: profile.playerId }));
