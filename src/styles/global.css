@@ -406,18 +406,28 @@ input,select {
   top: 0.75rem;
   left: 0.75rem;
   right: 0.75rem;
+  bottom: 0.75rem;
   z-index: 2;
   pointer-events: none;
 }
 
 .monster-hud-stack {
-  display: grid;
-  grid-template-columns: minmax(220px, 340px) minmax(260px, 420px);
+  display: flex;
   align-items: flex-start;
+  justify-content: space-between;
   gap: 0.75rem;
 }
 
 .monster-hud-stack > * {
+  pointer-events: auto;
+}
+
+.monster-menu-dock {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  max-width: min(760px, calc(100vw - 22rem));
   pointer-events: auto;
 }
 
@@ -469,16 +479,84 @@ input,select {
   line-height: 1.1;
 }
 
-.monster-card-panel {
-  min-width: min(320px, calc(100vw - 8rem));
-  max-height: min(250px, calc(100vh - 18rem));
+.monster-status-panel {
+  min-width: min(220px, calc(100vw - 8rem));
+  max-width: min(280px, calc(100vw - 8rem));
+}
+
+.monster-menu-dock > details {
+  width: auto;
+  max-width: none;
+  max-height: none;
+  overflow: visible;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: #26351f;
+  pointer-events: auto;
+}
+
+.monster-menu-dock > details > summary {
+  display: flex;
+  min-height: 36px;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.55rem;
+  background: rgba(255, 248, 214, 0.94);
+  border: 3px solid #26351f;
+  cursor: pointer;
+  font-size: 0.76rem;
+  font-weight: 900;
+  list-style: none;
+  text-transform: uppercase;
+}
+
+.monster-menu-dock > details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.monster-menu-dock > details > summary span {
+  padding: 0.06rem 0.28rem;
+  background: #d7c884;
+  border: 2px solid #26351f;
+  font-size: 0.66rem;
+}
+
+.monster-menu-dock > details[open] {
+  width: min(420px, calc(100vw - 8rem));
+  max-height: min(430px, calc(100vh - 11rem));
   overflow: auto;
+  padding: 0.55rem;
+  background: rgba(255, 248, 214, 0.95);
+  border: 3px solid #26351f;
+}
+
+.monster-menu-dock > details[open] > summary {
+  margin: -0.55rem -0.55rem 0.45rem;
+  border-width: 0 0 3px;
+}
+
+.monster-card-panel {
   pointer-events: auto;
 }
 
 .monster-farm-panel {
   display: grid;
   gap: 0.35rem;
+}
+
+.monster-inventory-summary {
+  display: grid;
+  gap: 0.14rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid rgba(38, 53, 31, 0.22);
+}
+
+.monster-inventory-summary small {
+  color: #5a6b35;
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .monster-farm-grid {
@@ -603,6 +681,7 @@ input,select {
 .monster-creature-panel,
 .monster-settings-panel,
 .monster-station-panel,
+.monster-save-panel,
 .monster-battle-panel {
   width: min(420px, calc(100vw - 8rem));
   max-height: min(360px, calc(100vh - 12rem));
@@ -617,6 +696,41 @@ input,select {
 .monster-battle-panel {
   display: grid;
   gap: 0.55rem;
+}
+
+.monster-action-log {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: grid;
+  width: min(320px, calc(100vw - 8rem));
+  max-height: 140px;
+  gap: 0.12rem;
+  overflow: hidden;
+  padding: 0.5rem 0.6rem;
+  background: rgba(24, 35, 27, 0.82);
+  border: 3px solid rgba(255, 248, 214, 0.72);
+  color: #fff8d6;
+  pointer-events: none;
+}
+
+.monster-action-log strong,
+.monster-action-log small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.monster-action-log strong {
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.monster-action-log small {
+  color: #e9dda1;
+  font-size: 0.68rem;
+  font-weight: 800;
 }
 
 .monster-battle-heading,
@@ -1053,41 +1167,101 @@ input,select {
   }
 
   .monster-game-shell {
+    position: relative;
+    grid-template-rows: minmax(0, 1fr);
+    gap: 0;
     padding: 0.45rem;
   }
 
   .monster-game-stage {
-    min-height: calc(100vh - 132px);
+    min-height: calc(100svh - 1rem);
   }
 
   .monster-hud {
-    top: 0.5rem;
-    left: 0.5rem;
-    right: 0.5rem;
+    top: 0.4rem;
+    left: 0.4rem;
+    right: 0.4rem;
+    bottom: 0.4rem;
   }
 
   .monster-hud-stack {
-    grid-template-columns: minmax(0, 1fr);
-    max-width: calc(100vw - 7.5rem);
-    max-height: min(390px, calc(100vh - 22rem));
-    overflow: auto;
-    padding-right: 0.25rem;
+    position: relative;
+    min-height: 100%;
+    display: block;
+  }
+
+  .monster-menu-dock {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 7.8rem;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    max-width: none;
+    max-height: none;
+    gap: 0.25rem;
+    overflow-x: auto;
+    overflow-y: visible;
+    scrollbar-width: none;
+  }
+
+  .monster-menu-dock::-webkit-scrollbar {
+    display: none;
+  }
+
+  .monster-menu-dock > details {
+    flex: 0 0 auto;
+    width: auto;
   }
 
   .monster-hud-panel {
     min-width: 0;
     max-width: none;
-    padding: 0.5rem 0.6rem;
+    padding: 0.38rem 0.46rem;
+  }
+
+  .monster-status-panel {
+    max-width: 7.25rem;
+  }
+
+  .monster-menu-dock > details > summary {
+    justify-content: space-between;
+    width: auto;
+    min-height: 30px;
+    gap: 0.25rem;
+    padding: 0.22rem 0.35rem;
+    font-size: 0.58rem;
+    white-space: nowrap;
+  }
+
+  .monster-menu-dock > details > summary span {
+    display: none;
   }
 
   .monster-journal-panel,
   .monster-creature-panel,
   .monster-settings-panel,
   .monster-station-panel,
+  .monster-save-panel,
   .monster-battle-panel {
-    width: calc(100vw - 7.5rem);
-    max-height: 220px;
-    padding: 0.45rem;
+    width: min(17.5rem, calc(100vw - 0.8rem));
+    max-height: min(15rem, 38svh);
+    padding: 0.38rem;
+  }
+
+  .monster-menu-dock > details[open] {
+    position: fixed;
+    top: 3.3rem;
+    right: 0.8rem;
+    z-index: 5;
+    width: min(17.5rem, calc(100vw - 0.8rem));
+    max-height: min(15rem, 38svh);
+    padding: 0.38rem;
+  }
+
+  .monster-menu-dock > details[open] > summary {
+    margin: -0.38rem -0.38rem 0.32rem;
   }
 
   .monster-journal-panel summary,
@@ -1117,18 +1291,51 @@ input,select {
   }
 
   .monster-hud-panel h2 {
-    font-size: 1.05rem;
+    overflow: hidden;
+    font-size: 0.9rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .monster-hud-panel p,
   .monster-hud-panel span,
   .monster-hud-panel small {
-    font-size: 0.68rem;
+    font-size: 0.58rem;
+    line-height: 1.16;
+  }
+
+  .monster-status-panel span,
+  .monster-status-currency,
+  .monster-status-message {
+    display: none;
+  }
+
+  .monster-status-level,
+  .monster-status-location {
+    display: block;
   }
 
   .monster-save-actions {
     flex-direction: column;
     gap: 0.3rem;
+  }
+
+  .monster-action-log {
+    left: 0;
+    bottom: 0;
+    width: min(12rem, calc(100vw - 10.5rem));
+    min-height: 2rem;
+    max-height: 2rem;
+    padding: 0.25rem 0.35rem;
+  }
+
+  .monster-action-log strong,
+  .monster-action-log small:not(:first-of-type) {
+    display: none;
+  }
+
+  .monster-action-log small {
+    font-size: 0.58rem;
   }
 
   .monster-save-actions button,
@@ -1158,8 +1365,8 @@ input,select {
   }
 
   .monster-dpad {
-    right: 0.6rem;
-    bottom: 0.6rem;
+    right: 0.45rem;
+    bottom: 0.45rem;
     grid-template-columns: repeat(3, 46px);
     grid-template-rows: repeat(3, 46px);
   }
@@ -1168,5 +1375,16 @@ input,select {
     width: 46px;
     height: 46px;
     font-size: 1.2rem;
+  }
+
+  .monster-back-link {
+    position: absolute;
+    left: 0.45rem;
+    bottom: 2.85rem;
+    z-index: 4;
+    min-height: 32px;
+    padding: 0.25rem 0.45rem;
+    background: rgba(255, 248, 214, 0.9);
+    font-size: 0.62rem;
   }
 }
