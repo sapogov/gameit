@@ -131,13 +131,13 @@ export function GameHud({
           <p>{mapName}</p>
           <h2>{saveState.profile.name}</h2>
           <span>{status}</span>
-          <small>
+          <small className="monster-status-level">
             Lv {saveState.progression.playerLevel} · XP {saveState.progression.playerExperience}
             {nextLevelThreshold ? `/${nextLevelThreshold.totalExperience}` : ''}
           </small>
-          <small>{currencySummary}</small>
-          <small>{locationHint}</small>
-          {importStatus ? <small>{importStatus}</small> : null}
+          <small className="monster-status-currency">{currencySummary}</small>
+          <small className="monster-status-location">{locationHint}</small>
+          {importStatus ? <small className="monster-status-message">{importStatus}</small> : null}
         </section>
         <div className="monster-menu-dock" aria-label="Game menus">
         {battleState ? (

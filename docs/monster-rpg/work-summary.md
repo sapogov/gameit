@@ -352,6 +352,23 @@
 - Replaced burst click movement with a timed tile-step queue so clicked destinations move the character across grid squares instead of jumping.
 - Added focused farm/pathfinding regression tests plus desktop/mobile browser smoke checks and production client build verification.
 
+## 2026-06-22 - AI Art Approval Sheets
+
+- Generated high-quality pixel-art approval sheets for overworld environment/building sprites, farm variants, player animation seed poses, and six creature seed concepts.
+- Saved the generated review sheets under `docs/monster-rpg/art-approval/` so approved directions can be iterated into normalized production sprites later.
+- Noted that player and creature sheets are approval mood boards only; final production strips still need seed-frame selection, originality review, chroma-key/alpha cleanup, fixed frame slots, and sprite-pipeline normalization.
+- Added follow-up approval sheets for animated creature strips plus terrain corrections: straight road tiles, road end/curve, plain water tiles, shoreline, and bridge-over-water.
+- Sliced the approved sheets into local game assets, wired new terrain/water/road PNGs through the Monster RPG asset manifest, and switched Phaser wild encounters to animated creature sprites from a 6-row, 4-frame spritesheet.
+- Verified the client build and browser rendering with local Vite plus Colyseus: roads render from the new straight-road tile assets, and online wild encounters render animated creature sprite markers.
+- Added deterministic terrain sprite variants for grass, fields, forest, trees, and mountains, with stable tile-coordinate selection in Phaser so maps look less repetitive without inflating world-map render cost.
+- Increased rendered wild encounter creature size for village and overworld views while preserving the existing 64px spritesheet source.
+
+## 2026-06-27 - Mobile HUD And Tap Movement Polish
+
+- Reworked the mobile Monster RPG HUD so status, menu chips, action log, D-pad, and back navigation use much less screen space during normal play.
+- Bounded opened mobile menu drawers to a small scrollable overlay instead of allowing farm/save/inventory panels to cover most of the playfield.
+- Added paced tap-to-walk dispatch and adjacent-tile Phaser tweens so clicked destinations move through visible grid steps instead of visually teleporting.
+
 ## Next Work
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.

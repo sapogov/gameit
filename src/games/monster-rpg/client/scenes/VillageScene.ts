@@ -22,7 +22,12 @@ import {
   getSpeciesById,
   isFarmTile
 } from '../../sim';
-import { monsterRpgAssetKeys, monsterRpgAssetManifest, type MonsterRpgAssetKey } from '../assets/monsterRpgAssets';
+import {
+  monsterRpgAssetKeys,
+  monsterRpgAssetManifest,
+  monsterRpgSpriteSheetManifest,
+  type MonsterRpgAssetKey
+} from '../assets/monsterRpgAssets';
 
 interface VillageSceneOptions {
   creatureLabelMode: CreatureLabelMode;
@@ -73,6 +78,13 @@ const avatarColors: Record<AvatarId, number> = {
   keeper: 0xf26d6d
 };
 
+const directionDeltas: Record<Direction, { x: number; y: number }> = {
+  north: { x: 0, y: -1 },
+  east: { x: 1, y: 0 },
+  south: { x: 0, y: 1 },
+  west: { x: -1, y: 0 }
+};
+
 const buildingAssetKeys = {
   clinic: monsterRpgAssetKeys.buildingClinic,
   house: monsterRpgAssetKeys.buildingHouse,
@@ -90,6 +102,17 @@ const terrainAssetKeys = {
   water: monsterRpgAssetKeys.terrainWater
 } as const satisfies Partial<Record<TileType, MonsterRpgAssetKey>>;
 
+const terrainVariantKeys = {
+  field: [monsterRpgAssetKeys.terrainFieldAi1, monsterRpgAssetKeys.terrainFieldAi2, monsterRpgAssetKeys.terrainFieldAi3],
+  forest: [monsterRpgAssetKeys.terrainForestAi1, monsterRpgAssetKeys.terrainForestAi2, monsterRpgAssetKeys.terrainForestAi3],
+  grass: [monsterRpgAssetKeys.terrainGrass1, monsterRpgAssetKeys.terrainGrass2, monsterRpgAssetKeys.terrainGrass3],
+  mountain: [monsterRpgAssetKeys.terrainMountainAi1, monsterRpgAssetKeys.terrainMountainAi2],
+  tree: [monsterRpgAssetKeys.terrainTreeAi1, monsterRpgAssetKeys.terrainTreeAi2]
+} as const satisfies Partial<Record<TileType, readonly MonsterRpgAssetKey[]>>;
+
+const CREATURE_ENCOUNTER_ROWS = 6;
+const CREATURE_ENCOUNTER_FRAMES = 4;
+
 interface MapRenderMetrics {
   cameraZoom: number;
   labelOffsetY: number;
@@ -105,15 +128,16 @@ interface PlayerView {
   body: Phaser.GameObjects.Rectangle;
   facing: Phaser.GameObjects.Triangle;
   label: Phaser.GameObjects.Text;
+  lastTileX?: number;
+  lastTileY?: number;
+  moveTween?: Phaser.Tweens.Tween;
 }
 
 interface EncounterView {
   container: Phaser.GameObjects.Container;
-  shadow: Phaser.GameObjects.Rectangle;
-  body: Phaser.GameObjects.Arc;
-  crest: Phaser.GameObjects.Triangle;
-  shine: Phaser.GameObjects.Arc;
   label: Phaser.GameObjects.Text;
+  shadow: Phaser.GameObjects.Ellipse;
+  sprite: Phaser.GameObjects.Sprite;
 }
 
 interface FarmView {
@@ -139,7 +163,9 @@ export class VillageScene extends Phaser.Scene {
   private roomState: LocationRoomState | null = null;
   private saveState: MonsterRpgSaveState;
   private queuedInteraction = false;
+  private expectedMovementTile: { x: number; y: number } | null = null;
   private movementQueue: Direction[] = [];
+  private movementStepInFlight = false;
   private movementTimer?: Phaser.Time.TimerEvent;
 
   constructor(options: VillageSceneOptions) {
@@ -156,9 +182,18 @@ export class VillageScene extends Phaser.Scene {
         this.load.image(asset.key, asset.src);
       }
     });
+    monsterRpgSpriteSheetManifest.forEach((asset) => {
+      if (!this.textures.exists(asset.key)) {
+        this.load.spritesheet(asset.key, asset.src, {
+          frameHeight: asset.frameHeight,
+          frameWidth: asset.frameWidth
+        });
+      }
+    });
   }
 
   create() {
+    this.configureEncounterAnimations();
     this.drawMap();
     this.configureInput();
     this.readyToRender = true;
@@ -200,6 +235,7 @@ export class VillageScene extends Phaser.Scene {
     this.saveState = state;
     this.renderFarms();
     this.renderPlayers();
+    if (this.readyToRender) this.completeQueuedMovementStep();
   }
 
   setRoomState(state: LocationRoomState | null) {
@@ -209,6 +245,7 @@ export class VillageScene extends Phaser.Scene {
     this.roomState = state;
     this.renderEncounters();
     this.renderPlayers();
+    if (this.readyToRender) this.completeQueuedMovementStep();
   }
 
   private configureInput() {
@@ -216,6 +253,23 @@ export class VillageScene extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys();
     this.keys = this.input.keyboard.addKeys('W,A,S,D,E,SPACE') as MovementKeyMap;
     this.input.on('pointerdown', this.handlePointerDown, this);
+  }
+
+  private configureEncounterAnimations() {
+    for (let row = 0; row < CREATURE_ENCOUNTER_ROWS; row += 1) {
+      const key = this.getEncounterAnimationKey(row + 1);
+      if (this.anims.exists(key)) continue;
+
+      this.anims.create({
+        frameRate: 5,
+        frames: this.anims.generateFrameNumbers(monsterRpgAssetKeys.creatureEncounters, {
+          end: row * CREATURE_ENCOUNTER_FRAMES + CREATURE_ENCOUNTER_FRAMES - 1,
+          start: row * CREATURE_ENCOUNTER_FRAMES
+        }),
+        key,
+        repeat: -1
+      });
+    }
   }
 
   private configureCamera() {
@@ -228,6 +282,7 @@ export class VillageScene extends Phaser.Scene {
   }
 
   private setActiveMap(map: GameMap) {
+    this.clearMovementQueue();
     this.map = map;
     if (!this.readyToRender) return;
 
@@ -297,17 +352,27 @@ export class VillageScene extends Phaser.Scene {
     }
 
     this.advanceMovementQueue();
-    this.movementTimer = this.time.addEvent({
-      delay: 150,
-      loop: true,
-      callback: () => this.advanceMovementQueue()
-    });
   }
 
   private advanceMovementQueue() {
+    if (this.movementStepInFlight || this.movementTimer) return;
+
     const direction = this.movementQueue.shift();
     if (direction) {
+      const localPlayer = this.getLocalPlayer();
+      const delta = directionDeltas[direction];
+      this.expectedMovementTile = localPlayer
+        ? {
+            x: localPlayer.position.x + delta.x,
+            y: localPlayer.position.y + delta.y
+          }
+        : null;
+      this.movementStepInFlight = true;
       this.onAction({ type: 'move', direction });
+      this.movementTimer = this.time.delayedCall(360, () => {
+        this.movementTimer = undefined;
+        if (this.movementStepInFlight) this.clearMovementQueue();
+      });
       return;
     }
 
@@ -316,9 +381,31 @@ export class VillageScene extends Phaser.Scene {
     if (shouldInteract) this.onAction({ type: 'interact' });
   }
 
+  private completeQueuedMovementStep() {
+    if (!this.movementStepInFlight) return;
+    const localPlayer = this.getLocalPlayer();
+    if (
+      this.expectedMovementTile &&
+      localPlayer &&
+      (localPlayer.position.x !== this.expectedMovementTile.x || localPlayer.position.y !== this.expectedMovementTile.y)
+    ) {
+      return;
+    }
+
+    this.movementStepInFlight = false;
+    this.expectedMovementTile = null;
+    this.movementTimer?.remove(false);
+    this.movementTimer = this.time.delayedCall(190, () => {
+      this.movementTimer = undefined;
+      this.advanceMovementQueue();
+    });
+  }
+
   private clearMovementQueue() {
     this.movementQueue = [];
     this.queuedInteraction = false;
+    this.expectedMovementTile = null;
+    this.movementStepInFlight = false;
     this.movementTimer?.remove(false);
     this.movementTimer = undefined;
   }
@@ -418,11 +505,11 @@ export class VillageScene extends Phaser.Scene {
     const { tileSize } = this.map;
     this.map.tiles.forEach((row, y) => {
       row.forEach((tile, x) => {
-        const assetKey = this.getTerrainAssetKey(tile);
-        if (!assetKey || !this.shouldDrawTerrainSprite(tile, x, y)) return;
+        const terrainSprite = this.getTerrainSprite(tile, x, y);
+        if (!terrainSprite || !this.shouldDrawTerrainSprite(tile, x, y)) return;
 
-        const image = this.addSpriteOverlay(sprites, assetKey, x * tileSize, y * tileSize, tileSize, tileSize);
-        image.setAlpha(tile === 'field' ? 0.72 : 0.96);
+        const image = this.addSpriteOverlay(sprites, terrainSprite.key, x * tileSize, y * tileSize, tileSize, tileSize);
+        image.setAlpha(terrainSprite.alpha ?? 0.96);
       });
     });
   }
@@ -505,14 +592,15 @@ export class VillageScene extends Phaser.Scene {
   }
 
   private shouldDrawTerrainSprite(tile: TileType, x: number, y: number): boolean {
+    if (tile === 'road' || tile === 'bridge' || tile === 'water') return true;
+    if (tile === 'grass') return this.map.kind === 'world-map' ? (x + 3 * y) % 16 === 0 : (x + 2 * y) % 3 === 0;
+
     if (this.map.kind === 'world-map') {
-      if (tile === 'water') return (x + y) % 6 === 0;
-      if (tile === 'field') return (x + 2 * y) % 10 === 0;
-      if (tile === 'forest' || tile === 'mountain') return (x + y) % 8 === 0;
+      if (tile === 'field') return (x + 2 * y) % 8 === 0;
+      if (tile === 'forest' || tile === 'mountain') return (x + y) % 6 === 0;
     }
 
-    if (tile === 'water') return (x + y) % 2 === 0;
-    if (tile === 'field') return (x + 2 * y) % 4 === 0;
+    if (tile === 'field' || tile === 'forest' || tile === 'mountain' || tile === 'tree') return true;
     return true;
   }
 
@@ -612,10 +700,8 @@ export class VillageScene extends Phaser.Scene {
 
   private createEncounterView(id: string): EncounterView {
     const container = this.add.container(0, 0);
-    const shadow = this.add.rectangle(0, 4, 14, 5, 0x1b1c24, 0.28);
-    const body = this.add.circle(0, 0, 7, 0x7ddf8a).setStrokeStyle(2, 0x17351f);
-    const crest = this.add.triangle(0, -8, 0, 8, 5, 0, -5, 0, 0xf7dc6f).setStrokeStyle(1, 0x17351f);
-    const shine = this.add.circle(-2, -3, 2, 0xf7ffd8, 0.85);
+    const shadow = this.add.ellipse(0, 5, 16, 5, 0x1b1c24, 0.24);
+    const sprite = this.add.sprite(0, 0, monsterRpgAssetKeys.creatureEncounters, 0);
     const label = this.add
       .text(0, 10, '', {
         color: '#fff8d6',
@@ -625,27 +711,22 @@ export class VillageScene extends Phaser.Scene {
         strokeThickness: 3
       })
       .setOrigin(0.5, 0);
-    container.add([shadow, crest, body, shine, label]);
+    container.add([shadow, sprite, label]);
     container.setDepth(4);
-    this.encounters.set(id, { container, shadow, body, crest, shine, label });
-    return { container, shadow, body, crest, shine, label };
+    this.encounters.set(id, { container, label, shadow, sprite });
+    return { container, label, shadow, sprite };
   }
 
   private syncEncounterView(view: EncounterView, encounter: WildEncounterState) {
     const { tileSize } = this.map;
-    const radius = this.map.kind === 'world-map' ? tileSize * 0.34 : tileSize * 0.3;
-    const color = getSpeciesIconColor(encounter.speciesId);
+    const spriteSize = this.map.kind === 'world-map' ? tileSize * 1.45 : tileSize * 1.32;
+    const animationKey = this.getEncounterAnimationKey(encounter.speciesId);
     view.container.setPosition(encounter.x * tileSize + tileSize / 2, encounter.y * tileSize + tileSize / 2);
-    view.shadow.setSize(radius * 1.75, Math.max(3, radius * 0.44));
-    view.shadow.setY(radius * 0.5);
-    view.body.setRadius(radius);
-    view.body.setFillStyle(color, 1);
-    view.crest.setPosition(0, -radius * 0.7);
-    view.crest.setScale(Math.max(0.75, radius / 8));
-    view.crest.setFillStyle(getSpeciesAccentColor(encounter.speciesId), 0.95);
-    view.shine.setRadius(Math.max(2, radius * 0.24));
-    view.shine.setPosition(-radius * 0.26, -radius * 0.38);
-    view.label.setY(radius + 2);
+    view.shadow.setSize(spriteSize * 0.72, Math.max(3, spriteSize * 0.16));
+    view.shadow.setY(spriteSize * 0.32);
+    view.sprite.setDisplaySize(spriteSize, spriteSize);
+    view.sprite.play(animationKey, true);
+    view.label.setY(spriteSize * 0.36 + 2);
     view.label.setFontSize(this.map.kind === 'world-map' ? '6px' : '7px');
     view.label.setText(getSpeciesById(encounter.speciesId)?.displayName ?? `Species #${encounter.speciesId}`);
   }
@@ -716,7 +797,40 @@ export class VillageScene extends Phaser.Scene {
   private syncPlayerView(view: PlayerView, player: LocationPlayerState, isLocal: boolean) {
     const { tileSize } = this.map;
     const metrics = this.getRenderMetrics();
-    view.container.setPosition(player.position.x * tileSize + tileSize / 2, player.position.y * tileSize + tileSize / 2);
+    const targetX = player.position.x * tileSize + tileSize / 2;
+    const targetY = player.position.y * tileSize + tileSize / 2;
+    const movedFromPreviousTile =
+      view.lastTileX !== undefined &&
+      view.lastTileY !== undefined &&
+      (view.lastTileX !== player.position.x || view.lastTileY !== player.position.y);
+    const adjacentMove =
+      movedFromPreviousTile &&
+      Math.abs(view.lastTileX! - player.position.x) + Math.abs(view.lastTileY! - player.position.y) === 1;
+
+    if (movedFromPreviousTile) {
+      view.moveTween?.stop();
+      view.moveTween = undefined;
+      if (adjacentMove) {
+        view.moveTween = this.tweens.add({
+          targets: view.container,
+          x: targetX,
+          y: targetY,
+          duration: 170,
+          ease: 'Linear',
+          onComplete: () => {
+            view.moveTween = undefined;
+          }
+        });
+      } else {
+        view.container.setPosition(targetX, targetY);
+      }
+      view.lastTileX = player.position.x;
+      view.lastTileY = player.position.y;
+    } else if (!view.moveTween) {
+      view.container.setPosition(targetX, targetY);
+      view.lastTileX = player.position.x;
+      view.lastTileY = player.position.y;
+    }
     view.container.setAlpha(player.inBattle ? 0.52 : 1);
     view.body.setSize(metrics.playerBodyWidth, metrics.playerBodyHeight);
     view.body.setFillStyle(avatarColors[player.profile.avatar], 1);
@@ -855,17 +969,60 @@ export class VillageScene extends Phaser.Scene {
     return 'Home';
   }
 
-  private getTerrainAssetKey(tile: TileType): MonsterRpgAssetKey | undefined {
-    return terrainAssetKeys[tile as keyof typeof terrainAssetKeys];
+  private getEncounterAnimationKey(speciesId: number): string {
+    const row = Math.abs(speciesId - 1) % CREATURE_ENCOUNTER_ROWS;
+    return `monster-rpg.creature.encounter.${row}`;
   }
-}
 
-function getSpeciesIconColor(speciesId: number): number {
-  const colors = [0x7ddf8a, 0xff9f5f, 0x69c6ff, 0xb9a37a, 0xf7dc6f, 0xb987ff];
-  return colors[Math.abs(speciesId) % colors.length];
-}
+  private getTerrainSprite(
+    tile: TileType,
+    x: number,
+    y: number
+  ): { alpha?: number; key: MonsterRpgAssetKey } | undefined {
+    if (tile === 'road') {
+      return {
+        key: this.isVerticalRoadAt(x, y)
+          ? monsterRpgAssetKeys.terrainRoadVertical
+          : monsterRpgAssetKeys.terrainRoadHorizontal
+      };
+    }
 
-function getSpeciesAccentColor(speciesId: number): number {
-  const colors = [0xf7dc6f, 0x95c46d, 0xfff8d6, 0xd95f3d, 0x69c6ff, 0x26351f];
-  return colors[Math.abs(speciesId + 2) % colors.length];
+    if (tile === 'bridge') return { key: monsterRpgAssetKeys.terrainBridgeWater };
+    if (tile === 'water') {
+      return { key: (x + y) % 2 === 0 ? monsterRpgAssetKeys.terrainWaterAi1 : monsterRpgAssetKeys.terrainWaterAi2 };
+    }
+
+    if (tile === 'grass' || tile === 'field' || tile === 'forest' || tile === 'tree' || tile === 'mountain') {
+      return { alpha: tile === 'field' ? 0.9 : 0.96, key: this.getTerrainVariantKey(tile, x, y) };
+    }
+
+    const key = terrainAssetKeys[tile as keyof typeof terrainAssetKeys];
+    if (!key) return undefined;
+    return { alpha: 0.96, key };
+  }
+
+  private getTerrainVariantKey(tile: TileType, x: number, y: number): MonsterRpgAssetKey {
+    const keys = terrainVariantKeys[tile as keyof typeof terrainVariantKeys];
+    if (!keys?.length) return terrainAssetKeys[tile as keyof typeof terrainAssetKeys] ?? monsterRpgAssetKeys.terrainGrass1;
+    return keys[this.hashTile(x, y) % keys.length];
+  }
+
+  private hashTile(x: number, y: number): number {
+    return Math.abs((x * 73856093) ^ (y * 19349663) ^ (this.map.id.length * 83492791));
+  }
+
+  private isVerticalRoadAt(x: number, y: number): boolean {
+    const north = this.isRoadLikeTile(x, y - 1);
+    const south = this.isRoadLikeTile(x, y + 1);
+    const east = this.isRoadLikeTile(x + 1, y);
+    const west = this.isRoadLikeTile(x - 1, y);
+    if ((north || south) && !(east || west)) return true;
+    if ((east || west) && !(north || south)) return false;
+    return north || south;
+  }
+
+  private isRoadLikeTile(x: number, y: number): boolean {
+    const tile = this.map.tiles[y]?.[x];
+    return tile === 'road' || tile === 'plaza' || tile === 'bridge' || tile === 'exit' || tile === 'villageFootprint';
+  }
 }
