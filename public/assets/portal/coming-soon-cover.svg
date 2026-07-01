@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-label="Coming soon game cover art">
+  <rect width="640" height="420" fill="#202f5a"/>
+  <rect x="60" y="70" width="520" height="280" rx="18" fill="#2e3f75" stroke="#ffbf24" stroke-width="10"/>
+  <path d="M180 252h280M180 180h180" stroke="#f7f8ff" stroke-width="24" stroke-linecap="round"/>
+  <circle cx="472" cy="174" r="38" fill="#ffbf24"/>
+</svg>

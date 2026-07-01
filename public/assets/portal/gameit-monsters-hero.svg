@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 520" role="img" aria-label="GameIt Monsters hero art">
+  <rect width="1280" height="520" fill="#20351f"/>
+  <rect y="330" width="1280" height="190" fill="#6aa061"/>
+  <path d="M0 310c170-80 296-70 430 0s268 72 430 0 278-82 420 0v210H0z" fill="#355f38"/>
+  <rect x="740" y="172" width="190" height="150" fill="#e5b95e" stroke="#26351f" stroke-width="12"/>
+  <path d="M714 182l122-92 122 92z" fill="#d95f3d" stroke="#26351f" stroke-width="12"/>
+  <circle cx="1030" cy="294" r="92" fill="#95c46d" stroke="#26351f" stroke-width="12"/>
+  <circle cx="1004" cy="274" r="12" fill="#26351f"/>
+  <circle cx="1058" cy="274" r="12" fill="#26351f"/>
+  <path d="M992 328q38 26 78 0" fill="none" stroke="#26351f" stroke-width="12" stroke-linecap="round"/>
+</svg>
