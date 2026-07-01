@@ -1,5 +1,11 @@
 # Monster RPG Work Summary
 
+## 2026-07-01 - Portal Registry Metadata And Local Assets
+
+- Added shared portal registry metadata for genre, status, featured selection, accent, and stable cover/hero asset keys.
+- Added local portal image assets with role-specific fallback lookup and focused registry tests.
+- Projected legacy default game cards from the shared registry and documented portal glossary terms.
+
 ## 2026-06-13 - Phase 0 Foundation
 
 - Added durable project rules in `AGENTS.md`: Game Studio workflow, caveman brevity, English-only future work, summary habit, and browser-game architecture boundaries.

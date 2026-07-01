@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-label="GameIt fallback cover art">
+  <rect width="640" height="420" fill="#161f3f"/>
+  <rect x="70" y="64" width="500" height="292" rx="22" fill="#2e3f75" stroke="#ffe588" stroke-width="10"/>
+  <path d="M208 250l84-84 66 66 58-58 88 88" fill="none" stroke="#f7f8ff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

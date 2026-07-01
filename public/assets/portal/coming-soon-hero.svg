@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 520" role="img" aria-label="Coming soon game hero art">
+  <rect width="1280" height="520" fill="#202f5a"/>
+  <path d="M120 390h1040" stroke="#2e3f75" stroke-width="170" stroke-linecap="round"/>
+  <path d="M690 260h260M690 190h170" stroke="#f7f8ff" stroke-width="28" stroke-linecap="round"/>
+  <circle cx="1000" cy="188" r="48" fill="#ffbf24"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 520" role="img" aria-label="Snake game hero art">
+  <rect width="1280" height="520" fill="#0c1c13"/>
+  <path d="M0 420h1280" stroke="#214f31" stroke-width="160"/>
+  <path d="M520 360h120v-96h120v-96h180v96h140" fill="none" stroke="#9df871" stroke-width="58" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="1088" cy="264" r="24" fill="#f8fff2"/>
+  <circle cx="960" cy="126" r="40" fill="#ffcf4a"/>
+  <path d="M944 126h32M960 110v32" stroke="#7b4b00" stroke-width="10" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-label="GameIt Monsters cover art">
+  <rect width="640" height="420" fill="#22351f"/>
+  <rect y="250" width="640" height="170" fill="#6aa061"/>
+  <rect x="76" y="96" width="150" height="120" fill="#e5b95e" stroke="#26351f" stroke-width="10"/>
+  <path d="M58 106l94-70 94 70z" fill="#d95f3d" stroke="#26351f" stroke-width="10"/>
+  <circle cx="410" cy="238" r="74" fill="#95c46d" stroke="#26351f" stroke-width="10"/>
+  <circle cx="388" cy="224" r="10" fill="#26351f"/>
+  <circle cx="434" cy="224" r="10" fill="#26351f"/>
+  <path d="M380 268q30 24 62 0" fill="none" stroke="#26351f" stroke-width="10" stroke-linecap="round"/>
+  <path d="M490 174q46-44 86 6" fill="none" stroke="#f2e6b8" stroke-width="18" stroke-linecap="round"/>
+</svg>

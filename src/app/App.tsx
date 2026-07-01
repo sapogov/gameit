@@ -1,6 +1,7 @@
 import { lazy, Suspense, useMemo, useState } from 'react';
 import { Link, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
-import { gameRegistry } from '../config/games';
+import { gameRegistry, getFeaturedGame } from '../config/games';
+import { getPortalImageAsset } from '../config/portalAssets';
 import { GameTile } from '../components/GameTile';
 import { LeaderboardModal } from '../components/LeaderboardModal';
 import { useTheme } from '../hooks/useTheme';
@@ -21,6 +22,8 @@ const Home = () => {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const logoIndex = useMemo(() => Math.floor(Math.random() * 4), []);
+  const featuredGame = getFeaturedGame();
+  const featuredHero = getPortalImageAsset(featuredGame.assets.hero, 'hero');
 
   return (
     <main className="page">
@@ -39,6 +42,17 @@ const Home = () => {
           <IconCircleButton label="Open admin settings" onClick={() => navigate('/admin')} icon="👑" />
         </div>
       </header>
+
+      <Link
+        to={featuredGame.route}
+        className="featured-game"
+        style={{ backgroundImage: `linear-gradient(90deg, rgb(8 10 22 / 84%), rgb(8 10 22 / 18%)), url(${featuredHero.src})` }}
+      >
+        <span className="badge">Featured</span>
+        <h1>{featuredGame.name}</h1>
+        <p>{featuredGame.description}</p>
+        <span className="pixel-btn">Enter</span>
+      </Link>
 
       <section className="tile-grid">
         {gameRegistry.map((game) => <GameTile key={game.id} game={game} />)}
