@@ -1,5 +1,10 @@
 # Monster RPG Work Summary
 
+## 2026-07-02 - Issue #46: Library Catalog Route
+
+- Added `/library` as a registry-backed GameIt Portal catalog with search, genre/status filters, local cover assets, and non-launching coming-soon cards.
+- Added focused Library filtering tests for default registry coverage, search, genre/status filters, and local asset fallback behavior.
+
 ## 2026-07-02 - Issue #45: Launch-First Home Dashboard
 
 - Reworked the portal Home surface around the registry-selected featured playable game as the primary launch action.

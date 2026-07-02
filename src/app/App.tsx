@@ -7,6 +7,7 @@ import { useTheme } from '../hooks/useTheme';
 import { AdminPage } from '../admin/AdminPage';
 import { PortalLogo } from '../components/PortalLogo';
 import { IconCircleButton } from '../components/IconCircleButton';
+import { LibraryPage } from '../pages/LibraryPage';
 
 const SnakeGamePage = lazy(() => import('../games/snake/SnakeGamePage').then((m) => ({ default: m.SnakeGamePage })));
 const MonsterRpgGame = lazy(() =>
@@ -33,6 +34,13 @@ const TrophyIcon = () => (
   <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
     <path d="M8 4h8v3a4 4 0 0 1-8 0V4Z" />
     <path d="M8 6H5a3 3 0 0 0 3 3M16 6h3a3 3 0 0 1-3 3M12 11v5M9 20h6M10 16h4" />
+  </svg>
+);
+
+const LibraryIcon = () => (
+  <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+    <path d="M5 4h5a4 4 0 0 1 4 4v12a4 4 0 0 0-4-4H5V4Z" />
+    <path d="M14 8a4 4 0 0 1 4-4h1v12h-1a4 4 0 0 0-4 4" />
   </svg>
 );
 
@@ -79,6 +87,7 @@ const Home = () => {
             icon={<ThemeIcon mode={theme} />}
           />
           <IconCircleButton label="Open leaderboard" onClick={() => setShowLeaderboard(true)} icon={<TrophyIcon />} />
+          <IconCircleButton label="Open library" onClick={() => navigate('/library')} icon={<LibraryIcon />} />
           <IconCircleButton label="Open admin settings" onClick={() => navigate('/admin')} icon={<CrownIcon />} />
         </div>
       </header>
@@ -140,6 +149,7 @@ export const App = () => (
   <Suspense fallback={<main className="page"><p>Loading…</p></main>}>
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/library" element={<LibraryPage />} />
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/games/snake" element={<SnakeGamePage />} />
       <Route path="/games/gameit-monsters" element={<MonsterRpgGame />} />
