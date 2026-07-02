@@ -1,5 +1,11 @@
 # Monster RPG Work Summary
 
+## 2026-07-02 - Issue #48: Admin Registry Override
+
+- Added a localStorage-backed Registry Override for display-only game metadata, with source defaults recovered when override data is absent or invalid.
+- Extended Admin into a passcode-gated control center that edits registry names, descriptions, genre, status, featured state, accent, and bundled cover asset keys while protecting IDs and routes.
+- Wired Home and Library to consume the merged registry and added focused override tests for load, save, merge, reset, and invalid data recovery.
+
 ## 2026-07-02 - Issue #47: Full Leaderboard Route
 
 - Reworked `/leaderboard` into a full route in the app shell and changed Home’s trophy action to navigate there.

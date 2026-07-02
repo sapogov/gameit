@@ -1,13 +1,15 @@
-import { lazy, Suspense, useMemo } from 'react';
+import { lazy, Suspense, useMemo, useState } from 'react';
 import { Link, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
-import { gameRegistry, getFeaturedGame } from '../config/games';
+import { getFeaturedGame } from '../config/games';
 import { getPortalImageAsset } from '../config/portalAssets';
+import { loadGameRegistry } from '../config/registryOverride';
 import { useTheme } from '../hooks/useTheme';
 import { AdminPage } from '../admin/AdminPage';
 import { PortalLogo } from '../components/PortalLogo';
 import { IconCircleButton } from '../components/IconCircleButton';
 import { LibraryPage } from '../pages/LibraryPage';
 import { LeaderboardPage } from '../pages/LeaderboardPage';
+import type { GameDefinition } from '../types/game';
 
 const SnakeGamePage = lazy(() => import('../games/snake/SnakeGamePage').then((m) => ({ default: m.SnakeGamePage })));
 const MonsterRpgGame = lazy(() =>
@@ -63,14 +65,14 @@ const ChevronIcon = () => (
   </svg>
 );
 
-const Home = () => {
+const Home = ({ games }: { games: GameDefinition[] }) => {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const logoIndex = useMemo(() => Math.floor(Math.random() * 4), []);
-  const featuredGame = getFeaturedGame();
+  const featuredGame = getFeaturedGame(games);
   const featuredHero = getPortalImageAsset(featuredGame.assets.hero, 'hero');
-  const launchGames = gameRegistry.filter((game) => game.status === 'playable' && game.id !== featuredGame.id);
-  const queuedGames = gameRegistry.filter((game) => game.status !== 'playable').slice(0, 2);
+  const launchGames = games.filter((game) => game.status === 'playable' && game.id !== featuredGame.id);
+  const queuedGames = games.filter((game) => game.status !== 'playable').slice(0, 2);
 
   return (
     <main className="page">
@@ -142,17 +144,22 @@ const Home = () => {
   );
 };
 
-export const App = () => (
-  <Suspense fallback={<main className="page"><p>Loading…</p></main>}>
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/library" element={<LibraryPage />} />
-      <Route path="/leaderboard" element={<LeaderboardPage />} />
-      <Route path="/admin" element={<AdminPage />} />
-      <Route path="/games/snake" element={<SnakeGamePage />} />
-      <Route path="/games/gameit-monsters" element={<MonsterRpgGame />} />
-      <Route path="/games/:gameId" element={<ComingSoonPage />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
-  </Suspense>
-);
+export const App = () => {
+  const [games, setGames] = useState(() => loadGameRegistry());
+  const refreshRegistry = () => setGames(loadGameRegistry());
+
+  return (
+    <Suspense fallback={<main className="page"><p>Loading...</p></main>}>
+      <Routes>
+        <Route path="/" element={<Home games={games} />} />
+        <Route path="/library" element={<LibraryPage games={games} />} />
+        <Route path="/leaderboard" element={<LeaderboardPage />} />
+        <Route path="/admin" element={<AdminPage onRegistryChange={refreshRegistry} />} />
+        <Route path="/games/snake" element={<SnakeGamePage />} />
+        <Route path="/games/gameit-monsters" element={<MonsterRpgGame />} />
+        <Route path="/games/:gameId" element={<ComingSoonPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Suspense>
+  );
+};

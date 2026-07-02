@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { gameRegistry } from '../config/games';
 import { getPortalImageAsset } from '../config/portalAssets';
 import type { GameDefinition } from '../types/game';
 import {
@@ -13,6 +12,10 @@ import {
 } from './libraryCatalog';
 
 const statusOptions: LibraryStatusFilter[] = ['all', 'playable', 'coming-soon'];
+
+interface LibraryPageProps {
+  games: GameDefinition[];
+}
 
 function LibraryGameCard({ game }: { game: GameDefinition }) {
   const cover = getPortalImageAsset(game.assets.cover, 'cover');
@@ -42,15 +45,15 @@ function LibraryGameCard({ game }: { game: GameDefinition }) {
   );
 }
 
-export function LibraryPage() {
+export function LibraryPage({ games }: LibraryPageProps) {
   const [query, setQuery] = useState(defaultLibraryFilters.query);
   const [genre, setGenre] = useState<LibraryGenreFilter>(defaultLibraryFilters.genre);
   const [status, setStatus] = useState<LibraryStatusFilter>(defaultLibraryFilters.status);
 
-  const genres = useMemo(() => getLibraryGenres(gameRegistry), []);
+  const genres = useMemo(() => getLibraryGenres(games), [games]);
   const filteredGames = useMemo(
-    () => filterLibraryGames(gameRegistry, { genre, query, status }),
-    [genre, query, status],
+    () => filterLibraryGames(games, { genre, query, status }),
+    [games, genre, query, status],
   );
 
   return (
