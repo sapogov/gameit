@@ -64,7 +64,6 @@ export function LibraryPage({ games }: LibraryPageProps) {
           <h1>Game catalog</h1>
           <p>Browse every registered GameIt title.</p>
         </div>
-        <Link to="/" className="pixel-btn secondary">Portal</Link>
       </section>
 
       <section className="arcade-panel library-filters" aria-label="Library filters">
