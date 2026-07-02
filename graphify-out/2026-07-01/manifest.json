@@ -65,8 +65,8 @@
     "semantic_hash": "e76c60a62af2d2d664e5653cce7a6b44"
   },
   "src/app/App.tsx": {
-    "mtime": 1782957731.7589793,
-    "ast_hash": "b0bf6d599ef12bf84f843f23061057e6",
+    "mtime": 1782958050.2335205,
+    "ast_hash": "12f4b101c0e4a2132276dd25d4e0f9d4",
     "semantic_hash": ""
   },
   "src/components/GameCard.tsx": {

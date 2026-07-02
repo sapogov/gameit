@@ -1887,7 +1887,7 @@
       "label": "SnakeGamePage",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L12",
+      "source_location": "L11",
       "_origin": "ast",
       "id": "app_app_snakegamepage",
       "community": 40,
@@ -1897,7 +1897,7 @@
       "label": "MonsterRpgGame",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L13",
+      "source_location": "L12",
       "_origin": "ast",
       "id": "app_app_monsterrpggame",
       "community": 40,
@@ -1907,7 +1907,7 @@
       "label": "ComingSoonPage",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L16",
+      "source_location": "L15",
       "_origin": "ast",
       "id": "app_app_comingsoonpage",
       "community": 40,
@@ -1917,7 +1917,7 @@
       "label": "ThemeIcon()",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L20",
+      "source_location": "L19",
       "_origin": "ast",
       "id": "app_app_themeicon",
       "community": 40,
@@ -1927,7 +1927,7 @@
       "label": "TrophyIcon()",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L33",
+      "source_location": "L32",
       "_origin": "ast",
       "id": "app_app_trophyicon",
       "community": 40,
@@ -1937,7 +1937,7 @@
       "label": "CrownIcon()",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L40",
+      "source_location": "L39",
       "_origin": "ast",
       "id": "app_app_crownicon",
       "community": 40,
@@ -1947,7 +1947,7 @@
       "label": "LaunchIcon()",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L47",
+      "source_location": "L46",
       "_origin": "ast",
       "id": "app_app_launchicon",
       "community": 40,
@@ -1957,7 +1957,7 @@
       "label": "ChevronIcon()",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L53",
+      "source_location": "L52",
       "_origin": "ast",
       "id": "app_app_chevronicon",
       "community": 40,
@@ -1967,7 +1967,7 @@
       "label": "Home()",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L59",
+      "source_location": "L58",
       "_origin": "ast",
       "id": "app_app_home",
       "community": 40,
@@ -1977,7 +1977,7 @@
       "label": "App()",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L142",
+      "source_location": "L139",
       "_origin": "ast",
       "id": "app_app_app",
       "community": 40,
@@ -16736,9 +16736,9 @@
       "source_file": "src/app/App.tsx",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_app",
-      "target": "app_app_chevronicon",
-      "confidence_score": 1.0
+      "target": "app_app_chevronicon"
     },
     {
       "relation": "contains",
@@ -16756,9 +16756,9 @@
       "source_file": "src/app/App.tsx",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_app",
-      "target": "app_app_crownicon",
-      "confidence_score": 1.0
+      "target": "app_app_crownicon"
     },
     {
       "relation": "contains",
@@ -16776,9 +16776,9 @@
       "source_file": "src/app/App.tsx",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_app",
-      "target": "app_app_launchicon",
-      "confidence_score": 1.0
+      "target": "app_app_launchicon"
     },
     {
       "relation": "contains",
@@ -16806,9 +16806,9 @@
       "source_file": "src/app/App.tsx",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_app",
-      "target": "app_app_themeicon",
-      "confidence_score": 1.0
+      "target": "app_app_themeicon"
     },
     {
       "relation": "contains",
@@ -16816,9 +16816,9 @@
       "source_file": "src/app/App.tsx",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_app",
-      "target": "app_app_trophyicon",
-      "confidence_score": 1.0
+      "target": "app_app_trophyicon"
     },
     {
       "relation": "imports_from",
@@ -16992,9 +16992,9 @@
       "source_file": "src/app/App.tsx",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_app",
-      "target": "types_game",
-      "confidence_score": 1.0
+      "target": "types_game"
     },
     {
       "relation": "imports",
@@ -17003,9 +17003,9 @@
       "source_file": "src/app/App.tsx",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_app",
-      "target": "types_game_gamedefinition",
-      "confidence_score": 1.0
+      "target": "types_game_gamedefinition"
     },
     {
       "relation": "imports_from",
@@ -40884,9 +40884,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_07_02_issue_45_launch_first_home_dashboard",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_07_02_issue_45_launch_first_home_dashboard"
     },
     {
       "relation": "contains",
@@ -40904,9 +40904,9 @@
       "source_file": "docs/portal-glossary.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "private_tmp_gameit_issue_44_docs_portal_glossary_md",
-      "target": "docs_portal_glossary_portal_glossary",
-      "confidence_score": 1.0
+      "target": "docs_portal_glossary_portal_glossary"
     },
     {
       "relation": "contains",
