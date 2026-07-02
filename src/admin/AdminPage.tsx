@@ -1,5 +1,4 @@
 import { FormEvent, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { gameRegistry } from '../config/games';
 import { getPortalImageAsset, portalCoverAssetKeys } from '../config/portalAssets';
 import {
@@ -23,7 +22,6 @@ interface AdminPageProps {
 }
 
 export const AdminPage = ({ onRegistryChange }: AdminPageProps) => {
-  const navigate = useNavigate();
   const [granted, setGranted] = useState(false);
   const [code, setCode] = useState('');
   const [config, setConfig] = useState<SnakeConfig>(loadSnakeConfig());
@@ -40,7 +38,6 @@ export const AdminPage = ({ onRegistryChange }: AdminPageProps) => {
   if (!granted) {
     return (
       <main className="page panel">
-        <button className="ghost-btn" onClick={() => navigate('/')}>← Portal</button>
         <h2>Admin Access</h2>
         <p>Dev-only passcode gate. Not secure for production.</p>
         <form onSubmit={submit} className="row">
@@ -75,7 +72,6 @@ export const AdminPage = ({ onRegistryChange }: AdminPageProps) => {
 
   return (
     <main className="page panel">
-      <button className="ghost-btn" onClick={() => navigate('/')}>← Portal</button>
       <h2>Admin Control Center</h2>
       <section className="admin-section">
         <div className="admin-section-head">

@@ -1,5 +1,5 @@
-import { lazy, Suspense, useMemo, useState } from 'react';
-import { Link, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { lazy, Suspense, useMemo, useState, type ReactNode } from 'react';
+import { Link, NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { getFeaturedGame } from '../config/games';
 import { getPortalImageAsset } from '../config/portalAssets';
 import { loadGameRegistry } from '../config/registryOverride';
@@ -10,6 +10,7 @@ import { IconCircleButton } from '../components/IconCircleButton';
 import { LibraryPage } from '../pages/LibraryPage';
 import { LeaderboardPage } from '../pages/LeaderboardPage';
 import type { GameDefinition } from '../types/game';
+import { portalNavigationItems, portalRouteSet } from './portalNavigation';
 
 const SnakeGamePage = lazy(() => import('../games/snake/SnakeGamePage').then((m) => ({ default: m.SnakeGamePage })));
 const MonsterRpgGame = lazy(() =>
@@ -53,6 +54,14 @@ const CrownIcon = () => (
   </svg>
 );
 
+const HomeIcon = () => (
+  <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+    <path d="M4 11.5 12 4l8 7.5" />
+    <path d="M6.5 10.5V20h11v-9.5" />
+    <path d="M10 20v-5h4v5" />
+  </svg>
+);
+
 const LaunchIcon = () => (
   <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
     <path d="M5 19 19 5M9 5h10v10" />
@@ -65,34 +74,21 @@ const ChevronIcon = () => (
   </svg>
 );
 
+const navIcons = {
+  '/': <HomeIcon />,
+  '/library': <LibraryIcon />,
+  '/leaderboard': <TrophyIcon />,
+  '/admin': <CrownIcon />,
+} as const;
+
 const Home = ({ games }: { games: GameDefinition[] }) => {
-  const { theme, toggleTheme } = useTheme();
-  const navigate = useNavigate();
-  const logoIndex = useMemo(() => Math.floor(Math.random() * 4), []);
   const featuredGame = getFeaturedGame(games);
   const featuredHero = getPortalImageAsset(featuredGame.assets.hero, 'hero');
   const launchGames = games.filter((game) => game.status === 'playable' && game.id !== featuredGame.id);
   const queuedGames = games.filter((game) => game.status !== 'playable').slice(0, 2);
 
   return (
-    <main className="page">
-      <header className="portal-header arcade-panel header-shell">
-        <div className="logo-wrap">
-          <PortalLogo index={logoIndex} />
-        </div>
-
-        <div className="header-actions" role="toolbar" aria-label="Portal actions">
-          <IconCircleButton
-            label={theme === 'light' ? 'Light mode enabled' : 'Dark mode enabled'}
-            onClick={toggleTheme}
-            icon={<ThemeIcon mode={theme} />}
-          />
-          <IconCircleButton label="Open leaderboard" onClick={() => navigate('/leaderboard')} icon={<TrophyIcon />} />
-          <IconCircleButton label="Open library" onClick={() => navigate('/library')} icon={<LibraryIcon />} />
-          <IconCircleButton label="Open admin settings" onClick={() => navigate('/admin')} icon={<CrownIcon />} />
-        </div>
-      </header>
-
+    <>
       <Link
         to={featuredGame.route}
         className="featured-game launch-hero"
@@ -140,26 +136,78 @@ const Home = ({ games }: { games: GameDefinition[] }) => {
           </div>
         </aside>
       </section>
-    </main>
+    </>
+  );
+};
+
+const PortalNav = ({ variant }: { variant: 'desktop' | 'mobile' }) => (
+  <nav className={`portal-nav portal-nav-${variant}`} aria-label={variant === 'desktop' ? 'Portal navigation' : 'Mobile portal navigation'}>
+    {portalNavigationItems.map((item) => (
+      <NavLink
+        key={item.route}
+        to={item.route}
+        end={item.route === '/'}
+        className={({ isActive }) => `portal-nav-link${isActive ? ' active' : ''}`}
+        aria-label={item.ariaLabel}
+      >
+        <span className="portal-nav-icon" aria-hidden="true">{navIcons[item.route]}</span>
+        <span>{variant === 'mobile' ? item.shortLabel : item.label}</span>
+      </NavLink>
+    ))}
+  </nav>
+);
+
+const PortalShell = ({ children }: { children: ReactNode }) => {
+  const { theme, toggleTheme } = useTheme();
+  const logoIndex = useMemo(() => Math.floor(Math.random() * 4), []);
+
+  return (
+    <div className="page portal-shell">
+      <header className="portal-header arcade-panel header-shell">
+        <div className="logo-wrap">
+          <Link to="/" aria-label="Go to portal home">
+            <PortalLogo index={logoIndex} />
+          </Link>
+        </div>
+
+        <div className="header-actions">
+          <PortalNav variant="desktop" />
+          <IconCircleButton
+            label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+            onClick={toggleTheme}
+            icon={<ThemeIcon mode={theme} />}
+          />
+        </div>
+      </header>
+
+      {children}
+      <PortalNav variant="mobile" />
+    </div>
   );
 };
 
 export const App = () => {
   const [games, setGames] = useState(() => loadGameRegistry());
+  const { pathname } = useLocation();
   const refreshRegistry = () => setGames(loadGameRegistry());
+  const normalizedPathname = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
+  const isPortalRoute = portalRouteSet.has(normalizedPathname);
+  const routes = (
+    <Routes>
+      <Route path="/" element={<Home games={games} />} />
+      <Route path="/library" element={<LibraryPage games={games} />} />
+      <Route path="/leaderboard" element={<LeaderboardPage games={games} />} />
+      <Route path="/admin" element={<AdminPage onRegistryChange={refreshRegistry} />} />
+      <Route path="/games/snake" element={<SnakeGamePage />} />
+      <Route path="/games/gameit-monsters" element={<MonsterRpgGame />} />
+      <Route path="/games/:gameId" element={<ComingSoonPage />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
 
   return (
     <Suspense fallback={<main className="page"><p>Loading...</p></main>}>
-      <Routes>
-        <Route path="/" element={<Home games={games} />} />
-        <Route path="/library" element={<LibraryPage games={games} />} />
-        <Route path="/leaderboard" element={<LeaderboardPage />} />
-        <Route path="/admin" element={<AdminPage onRegistryChange={refreshRegistry} />} />
-        <Route path="/games/snake" element={<SnakeGamePage />} />
-        <Route path="/games/gameit-monsters" element={<MonsterRpgGame />} />
-        <Route path="/games/:gameId" element={<ComingSoonPage />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      {isPortalRoute ? <PortalShell>{routes}</PortalShell> : routes}
     </Suspense>
   );
 };

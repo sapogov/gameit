@@ -1,5 +1,11 @@
 # Monster RPG Work Summary
 
+## 2026-07-02 - Issue #49: Portal Navigation And Final Responsive QA
+
+- Added a shared portal shell with desktop/tablet/mobile navigation for Home, Library, Scores, and Admin only, with Store and Community left hidden.
+- Kept game launch routes outside the portal shell while making Snake and GameIt Monsters reachable from Home and Library.
+- Added focused navigation contract coverage and prepared final responsive/browser QA around portal routes and playable launches.
+
 ## 2026-07-02 - Issue #48: Admin Registry Override
 
 - Added a localStorage-backed Registry Override for display-only game metadata, with source defaults recovered when override data is absent or invalid.

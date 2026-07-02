@@ -1,16 +1,16 @@
-# Graph Report - issue-47  (2026-07-02)
+# Graph Report - gameit-issue-48  (2026-07-02)
 
 ## Corpus Check
-- 109 files · ~213,595 words
+- 111 files · ~214,720 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1127 nodes · 2869 edges · 81 communities (46 shown, 35 thin omitted)
+- 1146 nodes · 2934 edges · 82 communities (45 shown, 37 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f2785934`
+- Built from commit: `f4a48cb5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -89,6 +89,7 @@
 - [[_COMMUNITY_Community 74|Community 74]]
 - [[_COMMUNITY_Community 75|Community 75]]
 - [[_COMMUNITY_Community 76|Community 76]]
+- [[_COMMUNITY_Community 77|Community 77]]
 - [[_COMMUNITY_Community 78|Community 78]]
 - [[_COMMUNITY_Community 79|Community 79]]
 - [[_COMMUNITY_Community 80|Community 80]]
@@ -97,8 +98,8 @@
 ## God Nodes (most connected - your core abstractions)
 1. `VillageScene` - 66 edges
 2. `MonsterRpgSaveState` - 36 edges
-3. `getGameMap()` - 35 edges
-4. `Monster RPG Work Summary` - 35 edges
+3. `Monster RPG Work Summary` - 36 edges
+4. `getGameMap()` - 35 edges
 5. `canEnterTile()` - 24 edges
 6. `getSpeciesById()` - 24 edges
 7. `createInitialSave()` - 23 edges
@@ -113,87 +114,87 @@
   scripts/monster-rpg-phase4-checks.ts → src/games/monster-rpg/sim/maps.ts
 - `checkInitialSaveStartsInHomeVillage()` --calls--> `createInitialSave()`  [EXTRACTED]
   scripts/monster-rpg-phase4-checks.ts → src/games/monster-rpg/sim/saveState.ts
-- `checkOverworldVillageEntry()` --calls--> `getGameMap()`  [EXTRACTED]
+- `checkHomeVillageEastGateExit()` --calls--> `getVillageDefinition()`  [EXTRACTED]
   scripts/monster-rpg-phase4-checks.ts → src/games/monster-rpg/sim/maps.ts
-- `checkHomeVillageEastGateExit()` --calls--> `getGameMap()`  [EXTRACTED]
-  scripts/monster-rpg-phase4-checks.ts → src/games/monster-rpg/sim/maps.ts
+- `checkGen1SpeciesCatalog()` --calls--> `validateSpeciesCatalog()`  [EXTRACTED]
+  scripts/monster-rpg-phase4-checks.ts → src/games/monster-rpg/sim/speciesCatalog.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (81 total, 35 thin omitted)
+## Communities (82 total, 37 thin omitted)
 
 ### Community 0 - "Map and Movement Logic"
-Cohesion: 0.12
-Nodes (39): checkBlockedMovement(), checkBlockedTerrainRejectedOnline(), checkBuildingEntryAndExit(), checkCreatureJournalStates(), checkGen1SpeciesCatalog(), checkHomeVillageEastGateExit(), checkInitialSaveStartsInHomeVillage(), checkInvalidMapIdRejected() (+31 more)
+Cohesion: 0.24
+Nodes (22): checkBlockedTerrainRejectedOnline(), checkInitialSaveStartsInHomeVillage(), checkInvalidMapIdRejected(), checkSdkMultiplayerFlow(), checkSharedWildEncounterClaimFlow(), checkTwoClientsShareBuildingInterior(), checkTwoClientsShareWorldMap(), checkWorldToVillageRoomHandoff() (+14 more)
 
 ### Community 1 - "Village Scene and Assets"
-Cohesion: 0.07
-Nodes (8): MonsterRpgAssetKey, VillageScene, Direction, FarmSaveRecord, LocationPlayerState, RoomPlayerId, TileType, WildEncounterState
+Cohesion: 0.05
+Nodes (21): MonsterRpgAssetKey, monsterRpgAssetKeys, monsterRpgAssetManifest, monsterRpgSpriteSheetManifest, avatarColors, directionDeltas, EncounterView, FarmView (+13 more)
 
 ### Community 2 - "Battle Room Management"
-Cohesion: 0.13
-Nodes (30): BattleClaim, abandonDisconnectedBattle(), advanceAfterEnemyAction(), appendBattleLog(), applyAttack(), BattleActionResult, BattleResolution, canUseBattleAttack() (+22 more)
+Cohesion: 0.18
+Nodes (22): abandonDisconnectedBattle(), advanceAfterEnemyAction(), appendBattleLog(), applyAttack(), canUseBattleAttack(), chooseEnemyAttack(), choosePlayerBattleAttack(), completeBattle() (+14 more)
 
 ### Community 3 - "Card Activation and Types"
-Cohesion: 0.06
-Nodes (51): activateBuffCard(), activateCreatureCardViaElder(), activateMaterialCard(), BuffCardDefinition, buildFarmCardViaElder(), CARD_PACK_RARITY_TIERS, CardActionResultReason, cardBuffTypes (+43 more)
+Cohesion: 0.10
+Nodes (32): activateBuffCard(), activateMaterialCard(), BuffCardDefinition, buildFarmCardViaElder(), CARD_PACK_RARITY_TIERS, CardActionResultReason, cardBuffTypes, CardDefinition (+24 more)
 
 ### Community 4 - "Game and Admin Pages"
 Cohesion: 0.12
 Nodes (23): GameCard(), Layout(), LayoutProps, defaultGames, AdminGameConfigPage(), Props, AdminPage(), Props (+15 more)
 
 ### Community 5 - "Creature Journal and Profile"
-Cohesion: 0.18
-Nodes (12): monsterRpgAssetKeys, monsterRpgAssetManifest, monsterRpgSpriteSheetManifest, avatarColors, directionDeltas, EncounterView, FarmView, MapRenderMetrics (+4 more)
+Cohesion: 0.16
+Nodes (22): ApplyBattleRewardsResult, BattleActionResult, getCardRewardTable(), getCardRewardTableForSource(), PackOpenTrace, PackOpenTraceCard, CreatureCardDefinitionLike, FarmCardUpgradeRequirement (+14 more)
 
 ### Community 6 - "Project Dependencies"
 Cohesion: 0.06
 Nodes (34): dependencies, colyseus, @colyseus/schema, @colyseus/sdk, phaser, react, react-dom, react-router-dom (+26 more)
 
 ### Community 7 - "State Validation and Schema"
-Cohesion: 0.08
-Nodes (45): toLocationRoomState(), cardRarities, isValidCreatureContainerLayout(), getMapById(), isMapId(), hasUnsupportedSchemaVersion(), isAvatarId(), isBooleanRecord() (+37 more)
+Cohesion: 0.05
+Nodes (72): isValidCreatureContainerLayout(), getMapById(), getVillageDefinition(), createEmptySaveContainers(), hasUnsupportedSchemaVersion(), isAvatarId(), isBooleanRecord(), isCardBuffRecord() (+64 more)
 
 ### Community 8 - "Save State and Rewards"
-Cohesion: 0.13
-Nodes (27): attackByPoolId, consumeRequirements(), convertCreatureCardViaElder(), createCreatureCardInstance(), createCreatureRecord(), createNextId(), CreatureLifecycleFailureReason, CreatureLifecycleResult (+19 more)
+Cohesion: 0.12
+Nodes (30): sanitizeBattleCreature(), activateCreatureCardViaElder(), attackByPoolId, consumeRequirements(), convertCreatureCardViaElder(), createCreatureCardInstance(), createCreatureRecord(), createNextId() (+22 more)
 
 ### Community 9 - "Onboarding and Starter Packs"
-Cohesion: 0.17
-Nodes (23): MAGIC_DUST_CURRENCY_ID, STARTER_CREATURE_CARD_IDS, buildStarterMagicDustFarm(), completeVillageElderDialog(), completeVillageElderOnboarding(), convertStarterCreatureCards(), decrementStack(), getStarterCreatureConversionCost() (+15 more)
+Cohesion: 0.14
+Nodes (27): MonsterRpgGame(), MAGIC_DUST_CURRENCY_ID, STARTER_CREATURE_CARD_IDS, isAtVillageHospital(), createFarmSaveRecord(), buildStarterMagicDustFarm(), completeVillageElderDialog(), completeVillageElderOnboarding() (+19 more)
 
 ### Community 10 - "Creature Lifecycle and Attacks"
-Cohesion: 0.08
-Nodes (44): FarmDefinition, attackPoolIds, capitalize(), createPlaceholderSpecies(), creatureRarities, creatureTypes, getPlaceholderAttackPools(), getPlaceholderRarity() (+36 more)
+Cohesion: 0.06
+Nodes (40): BattleAttackSchema, BattleCreatureSchema, BattleLogEntrySchema, BattleParticipantSchema, BattleStateSchema, BattleStatsSchema, checkGen1SpeciesCatalog(), attackPoolIds (+32 more)
 
 ### Community 11 - "UI Components and Formatting"
-Cohesion: 0.36
-Nodes (6): defaultMonsterRpgSettings, loadMonsterRpgSettings(), MonsterRpgSettings, normalizeSettings(), saveMonsterRpgSettings(), CreatureLabelMode
+Cohesion: 0.39
+Nodes (5): defaultMonsterRpgSettings, loadMonsterRpgSettings(), MonsterRpgSettings, normalizeSettings(), saveMonsterRpgSettings()
 
 ### Community 12 - "Game Outcome Formatting"
-Cohesion: 0.08
-Nodes (13): getInitialState(), MonsterRpgGame(), moveDeltaByDirection, checkSaveReset(), isAtVillageHospital(), isVillageElderDialogComplete(), clearProgress(), loadProfile() (+5 more)
+Cohesion: 0.10
+Nodes (6): getInitialState(), moveDeltaByDirection, checkSaveReset(), clearProgress(), loadProfile(), loadSave()
 
 ### Community 13 - "Multiplayer Connection Handling"
-Cohesion: 0.14
-Nodes (15): avatarIds, cleanupExpiredTransitions(), consumePendingTransition(), createPendingTransition(), directions, hashString(), isFacingFarmPosition(), pendingTransitions (+7 more)
+Cohesion: 0.09
+Nodes (26): avatarIds, cleanupExpiredTransitions(), consumePendingTransition(), createPendingTransition(), directions, getEncounterCooldownKey(), hashString(), isFacingFarmPosition() (+18 more)
 
 ### Community 14 - "Farm Management and Theft"
-Cohesion: 0.12
-Nodes (19): CardDefinition, FarmUpgradePlan, getNextPlayerLevelThreshold(), CardRow, CreatureRow, FarmRow, formatBattleStatus(), formatBlockedBy() (+11 more)
+Cohesion: 0.05
+Nodes (62): setCreatureHp(), attemptFacingFarmTheft(), clearFarmGuard(), collectFacingFarm(), consumeFarmCardRequirements(), consumeMaterialRequirements(), createFarmTheftLogEntry(), FarmCollectionFailureReason (+54 more)
 
 ### Community 15 - "Species Catalog and Stats"
-Cohesion: 0.06
-Nodes (35): 2026-06-13 - Phase 0 Foundation, 2026-06-13 - Phase 1 Playable Client Slice, 2026-06-13 - Phase 2 Input Follow-Up, 2026-06-13 - Phase 2 Multiplayer Presence, 2026-06-13 - Phase 3 World + Villages, 2026-06-18 - Full Vision Finish Plan, 2026-06-18 - Phase 4 Final QA, 2026-06-18 - Phase 4 Multiplayer Transitions (+27 more)
+Cohesion: 0.05
+Nodes (36): 2026-06-13 - Phase 0 Foundation, 2026-06-13 - Phase 1 Playable Client Slice, 2026-06-13 - Phase 2 Input Follow-Up, 2026-06-13 - Phase 2 Multiplayer Presence, 2026-06-13 - Phase 3 World + Villages, 2026-06-18 - Full Vision Finish Plan, 2026-06-18 - Phase 4 Final QA, 2026-06-18 - Phase 4 Multiplayer Transitions (+28 more)
 
 ### Community 16 - "Colyseus Client Connections"
 Cohesion: 0.17
-Nodes (21): BattleConnection, BattleConnectionHandlers, ColyseusRoom, ConnectionHandlers, connectToBattle(), connectToLocation(), getServerUrl(), MultiplayerConnection (+13 more)
+Nodes (21): BattleConnection, BattleConnectionHandlers, ColyseusRoom, ConnectionHandlers, connectToBattle(), connectToLocation(), getServerUrl(), LocationTransitionMessage (+13 more)
 
 ### Community 17 - "Type Definitions and States"
-Cohesion: 0.10
-Nodes (24): applyInteriorTemplate(), buildingDefinitions, buildingNames, buildingTiles, createInteriorMap(), createInteriorSpawn(), createVillageMap(), createWorldMap() (+16 more)
+Cohesion: 0.09
+Nodes (27): toLocationRoomState(), applyInteriorTemplate(), buildingDefinitions, buildingNames, buildingTiles, createInteriorMap(), createInteriorSpawn(), createVillageMap() (+19 more)
 
 ### Community 18 - "Main App and UI Pages"
 Cohesion: 0.11
@@ -204,40 +205,36 @@ Cohesion: 0.09
 Nodes (14): App(), ComingSoonPage, MonsterRpgGame, SnakeGamePage, IconCircleButton(), Props, PortalLogo(), Props (+6 more)
 
 ### Community 20 - "Snake Game Engine"
-Cohesion: 0.09
-Nodes (26): AdminPage(), readLocal(), writeLocal(), defaultSnakeConfig, SnakeConfig, snakeConfigSchema, Direction, dirVec (+18 more)
+Cohesion: 0.11
+Nodes (28): AdminPage(), AdminPageProps, portalCoverAssetKeys, RegistryOverride, readLocal(), writeLocal(), defaultSnakeConfig, SnakeConfig (+20 more)
 
 ### Community 21 - "Wild Encounter Spawning"
-Cohesion: 0.11
-Nodes (32): LocationTransitionMessage, PendingTransition, resolveJoinPosition(), checkTapToWalkPathing(), LocationTransition, canEnterTile(), getAllowedSpawnsForMap(), getGameMap() (+24 more)
+Cohesion: 0.27
+Nodes (11): canTargetEncounter(), clamp01(), createWildEncounterSpawn(), EncounterRng, getFacingTile(), getWalkableZoneTiles(), getWildEncounterZonesForMap(), isPositionInsideEncounterZone() (+3 more)
 
 ### Community 22 - "Battle Rewards and Updates"
 Cohesion: 0.24
-Nodes (9): battleClaims, battleResultListeners, cleanupExpiredBattleClaims(), createBattleClaim(), createGuardBattleClaim(), getBattleClaim(), getResolvedBattleOutcome(), removeBattleClaim() (+1 more)
+Nodes (11): BattleClaim, battleClaims, battleResultListeners, cleanupExpiredBattleClaims(), createBattleClaim(), createGuardBattleClaim(), getBattleClaim(), BattleResolution (+3 more)
 
 ### Community 23 - "Leaderboard Management"
-Cohesion: 0.12
-Nodes (17): copyBattleStateToSchema(), toAttackSchema(), toBattleStateSchema(), toCreatureSchema(), toParticipantSchema(), BattleAttackSchema, BattleCreatureSchema, BattleLogEntrySchema (+9 more)
+Cohesion: 0.19
+Nodes (20): checkBlockedMovement(), checkBuildingEntryAndExit(), checkHomeVillageEastGateExit(), checkOverworldVillageEntry(), checkTapToWalkPathing(), createState(), findPath(), findPathToAdjacentFacing() (+12 more)
 
 ### Community 24 - "Battle Claim and Resolution"
-Cohesion: 0.17
-Nodes (21): getVillageDefinition(), isValidStation(), confirmStationTravel(), createInitialStationContainer(), createPlayerVillageStationDestination(), discoverCurrentStationDestination(), discoverPlayerVillageForStation(), getDefaultVillageStationLevel() (+13 more)
+Cohesion: 0.33
+Nodes (11): isAccent(), isKnownValue(), isRecord(), loadGameRegistry(), loadRegistryOverride(), mergeRegistryOverride(), optionalText(), resetRegistryOverride() (+3 more)
 
 ### Community 25 - "Game Initialization and Settings"
 Cohesion: 0.11
 Nodes (18): compilerOptions, allowImportingTsExtensions, isolatedModules, jsx, lib, module, moduleResolution, noEmit (+10 more)
 
 ### Community 26 - "Creature Party Management"
-Cohesion: 0.15
-Nodes (16): bootGame(), BootGameOptions, MonsterRpgGameRuntime, VillageSceneOptions, ApplyBattleRewardsResult, CardActionResult, OpenPackResult, PackOpenTrace (+8 more)
-
-### Community 27 - "Admin and Snake Config"
-Cohesion: 0.11
-Nodes (19): clearFarmGuard(), consumeFarmCardRequirements(), consumeMaterialRequirements(), FarmCollectionFailureReason, FarmCollectionResult, farmDefinitions, FarmGuardAssignmentResult, FarmGuardFailureReason (+11 more)
+Cohesion: 0.26
+Nodes (10): bootGame(), BootGameOptions, MonsterRpgGameRuntime, VillageSceneOptions, CreatureLabelMode, InputAction, LocationRoomState, controls (+2 more)
 
 ### Community 28 - "Location Room and Encounters"
-Cohesion: 0.27
-Nodes (4): getEncounterCooldownKey(), LocationRoom, gameServer, port
+Cohesion: 0.47
+Nodes (7): checkCreatureJournalStates(), assertKnownSpecies(), getJournalSpeciesViewState(), recordCreatureDiscovered(), recordWildCreatureSeen(), withJournalSpeciesState(), JournalSpeciesViewState
 
 ### Community 29 - "Location and Player Schema"
 Cohesion: 0.22
@@ -248,32 +245,32 @@ Cohesion: 0.25
 Nodes (7): Architecture Boundaries, GameIt Monster RPG Phase 0 Foundation, Initial Contracts, Roadmap, Stack Decisions, Summary, Test Strategy
 
 ### Community 31 - "Snake Engine Core Logic"
-Cohesion: 0.22
-Nodes (17): sanitizeBattleCreature(), applyBattleRewardsToSave(), applyRewardNumbers(), generateWildBattleRewards(), getBattleRewardFlag(), getMaterialIdForType(), getRarityRank(), hashString() (+9 more)
+Cohesion: 0.33
+Nodes (11): applyBattleRewardsToSave(), applyRewardNumbers(), generateWildBattleRewards(), getBattleRewardFlag(), getMaterialIdForType(), getRarityRank(), hashString(), updateBattleCreatureOutcome() (+3 more)
 
 ### Community 32 - "TypeScript Compiler Settings"
 Cohesion: 0.17
 Nodes (11): compilerOptions, experimentalDecorators, module, moduleResolution, noEmit, skipLibCheck, strict, target (+3 more)
 
 ### Community 33 - "Battle State and Schema"
-Cohesion: 0.18
-Nodes (7): LocationPlayerSchema, LocationStateSchema, PlayerProfileSchema, WildEncounterSchema, WorldPositionSchema, MapKind, WildEncounterStatus
+Cohesion: 0.16
+Nodes (12): PendingTransition, LocationPlayerSchema, LocationStateSchema, WildEncounterSchema, WorldPositionSchema, LocationTransition, MapId, MapKind (+4 more)
 
 ### Community 34 - "Community 34"
-Cohesion: 0.17
-Nodes (7): setCreatureHp(), assignFarmGuard(), collectFacingFarm(), getAccruedFarmRecord(), getFacingFarm(), getFacingPosition(), getFarmStoredQuantity()
+Cohesion: 0.33
+Nodes (5): PlayerProfileSchema, AvatarId, avatarOptions, CharacterCreator(), CharacterCreatorProps
 
 ### Community 35 - "Save State Management"
 Cohesion: 0.12
-Nodes (18): createProfileState(), CreaturePartyFailureReason, CreaturePartyResult, CreatureUseRole, healAllCreaturesAtHospital(), isCreatureFainted(), moveCreatureToActiveParty(), moveCreatureToStorage() (+10 more)
+Nodes (20): getCreatureCardById(), createProfileState(), canCreatureUseRole(), CreaturePartyFailureReason, CreaturePartyResult, CreatureUseRole, healAllCreaturesAtHospital(), isCreatureFainted() (+12 more)
 
 ### Community 36 - "Asset Generation Scripts"
 Cohesion: 0.27
 Nodes (8): assetDir, buildings, chunk(), crc32(), crcTable, png(), root, write()
 
 ### Community 37 - "Community 37"
-Cohesion: 0.26
-Nodes (13): attemptFacingFarmTheft(), createFarmTheftLogEntry(), getFarmTheftAttemptCost(), getFarmTheftCooldown(), getFarmTheftCooldownKey(), getFarmTheftStolenQuantity(), getFarmTheftSuccessChance(), getTargetVillageLevel() (+5 more)
+Cohesion: 0.47
+Nodes (6): createBattleRoomState(), createGuardBattleRoomState(), createWildBattleCreature(), hashString(), toBattleCreature(), getSpeciesById()
 
 ### Community 38 - "Node TypeScript Config"
 Cohesion: 0.14
@@ -281,39 +278,39 @@ Nodes (13): Adding a New Game, Admin Access (MVP), Architecture Overview, Build 
 
 ### Community 40 - "UI Logo and Sprites"
 Cohesion: 0.15
-Nodes (22): Home(), GameTile(), gameRegistry, getFeaturedGame(), getPortalImageAsset(), getPortalImageSrc(), portalImageAssets, defaultLibraryFilters (+14 more)
+Nodes (24): Home(), GameTile(), gameRegistry, getFeaturedGame(), getPortalImageAsset(), getPortalImageSrc(), portalImageAssets, RegistryOverrideEntry (+16 more)
 
 ### Community 41 - "Farm Definitions and Upgrades"
 Cohesion: 0.22
 Nodes (8): compilerOptions, allowSyntheticDefaultImports, composite, module, moduleResolution, noEmit, skipLibCheck, include
 
 ### Community 44 - "Community 44"
-Cohesion: 0.32
-Nodes (5): BattleRoom, markBattleClaimResolved(), createBattleRoomState(), BattleRoomState, JoinBattleOptions
+Cohesion: 0.18
+Nodes (13): BattleRoom, copyBattleStateToSchema(), toAttackSchema(), toBattleStateSchema(), toCreatureSchema(), toParticipantSchema(), markBattleClaimResolved(), gameServer (+5 more)
 
 ### Community 75 - "Community 75"
 Cohesion: 0.40
-Nodes (6): getFarmDefinition(), getFarmUpgradePlan(), getFarmUpgradePreview(), formatFarmUpgradeRequirement(), formatMaterialId(), toFarmRow()
+Nodes (5): CardActionResult, OpenPackResult, MonsterRpgSaveRepository, MonsterRpgSaveState, VillageElderOnboardingProps
 
 ## Knowledge Gaps
-- **246 isolated node(s):** `name`, `version`, `private`, `type`, `dev` (+241 more)
+- **249 isolated node(s):** `name`, `version`, `private`, `type`, `dev` (+244 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **35 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **37 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `VillageScene` connect `Village Scene and Assets` to `Creature Journal and Profile`, `UI Components and Formatting`, `Colyseus Client Connections`, `Type Definitions and States`, `Creature Party Management`?**
-  _High betweenness centrality (0.054) - this node is a cross-community bridge._
-- **Why does `MonsterRpgSaveState` connect `Creature Party Management` to `Map and Movement Logic`, `Village Scene and Assets`, `Battle Room Management`, `Card Activation and Types`, `Save State Management`, `Creature Journal and Profile`, `State Validation and Schema`, `Save State and Rewards`, `Onboarding and Starter Packs`, `Creature Lifecycle and Attacks`, `Game Outcome Formatting`, `Multiplayer Connection Handling`, `Farm Management and Theft`, `Type Definitions and States`, `Battle Claim and Resolution`, `Admin and Snake Config`, `Snake Engine Core Logic`?**
-  _High betweenness centrality (0.037) - this node is a cross-community bridge._
-- **Why does `Direction` connect `Village Scene and Assets` to `Map and Movement Logic`, `Battle State and Schema`, `Creature Journal and Profile`, `Creature Lifecycle and Attacks`, `Game Outcome Formatting`, `Multiplayer Connection Handling`, `Type Definitions and States`, `Wild Encounter Spawning`, `Creature Party Management`?**
-  _High betweenness centrality (0.019) - this node is a cross-community bridge._
+- **Why does `VillageScene` connect `Village Scene and Assets` to `Creature Party Management`, `Community 75`?**
+  _High betweenness centrality (0.043) - this node is a cross-community bridge._
+- **Why does `MonsterRpgSaveState` connect `Community 75` to `Map and Movement Logic`, `Village Scene and Assets`, `Battle Room Management`, `Card Activation and Types`, `Save State Management`, `Creature Journal and Profile`, `State Validation and Schema`, `Save State and Rewards`, `Onboarding and Starter Packs`, `Creature Lifecycle and Attacks`, `Game Outcome Formatting`, `Multiplayer Connection Handling`, `Farm Management and Theft`, `Community 77`, `Leaderboard Management`, `Creature Party Management`, `Location Room and Encounters`, `Snake Engine Core Logic`?**
+  _High betweenness centrality (0.031) - this node is a cross-community bridge._
+- **Why does `getGameMap()` connect `Leaderboard Management` to `Map and Movement Logic`, `Village Scene and Assets`, `Creature Journal and Profile`, `State Validation and Schema`, `Onboarding and Starter Packs`, `Game Outcome Formatting`, `Multiplayer Connection Handling`, `Colyseus Client Connections`, `Type Definitions and States`, `Wild Encounter Spawning`, `Creature Party Management`?**
+  _High betweenness centrality (0.012) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `private` to the rest of the system?**
-  _246 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `Map and Movement Logic` be split into smaller, more focused modules?**
-  _Cohesion score 0.12050739957716702 - nodes in this community are weakly interconnected._
+  _249 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Village Scene and Assets` be split into smaller, more focused modules?**
-  _Cohesion score 0.06713286713286713 - nodes in this community are weakly interconnected._
-- **Should `Battle Room Management` be split into smaller, more focused modules?**
-  _Cohesion score 0.13012477718360071 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05308641975308642 - nodes in this community are weakly interconnected._
+- **Should `Card Activation and Types` be split into smaller, more focused modules?**
+  _Cohesion score 0.0960960960960961 - nodes in this community are weakly interconnected._
+- **Should `Game and Admin Pages` be split into smaller, more focused modules?**
+  _Cohesion score 0.12477718360071301 - nodes in this community are weakly interconnected._

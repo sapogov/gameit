@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import { gameRegistry } from '../config/games';
 import { LocalStorageLeaderboardProvider, type LeaderboardProvider } from '../providers/leaderboardProvider';
@@ -83,12 +82,6 @@ const TrophyIcon = () => (
   </svg>
 );
 
-const ArrowLeftIcon = () => (
-  <svg viewBox="0 0 24 24" role="img" aria-hidden="true" className="leaderboard-icon">
-    <path d="m13 18-5-5 5-5M9 13H20" />
-  </svg>
-);
-
 export const LeaderboardPage = ({
   provider = defaultProvider,
   games = gameRegistry,
@@ -119,10 +112,6 @@ export const LeaderboardPage = ({
   return (
     <main className="page leaderboard-page">
       <header className="leaderboard-header">
-        <Link className="ghost-btn leaderboard-back" to="/" aria-label="Back to portal home">
-          <ArrowLeftIcon />
-          Back to portal
-        </Link>
         <div>
           <h1>
             <TrophyIcon /> Leaderboard
