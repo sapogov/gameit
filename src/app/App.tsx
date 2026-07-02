@@ -1,11 +1,9 @@
-import { lazy, Suspense, useMemo, useState, type ReactNode } from 'react';
+import { lazy, Suspense, useState, type ReactNode } from 'react';
 import { Link, NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { getFeaturedGame } from '../config/games';
-import { getPortalImageAsset } from '../config/portalAssets';
 import { loadGameRegistry } from '../config/registryOverride';
 import { useTheme } from '../hooks/useTheme';
 import { AdminPage } from '../admin/AdminPage';
-import { PortalLogo } from '../components/PortalLogo';
+import { GameTile } from '../components/GameTile';
 import { IconCircleButton } from '../components/IconCircleButton';
 import { LibraryPage } from '../pages/LibraryPage';
 import { LeaderboardPage } from '../pages/LeaderboardPage';
@@ -62,18 +60,6 @@ const HomeIcon = () => (
   </svg>
 );
 
-const LaunchIcon = () => (
-  <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
-    <path d="M5 19 19 5M9 5h10v10" />
-  </svg>
-);
-
-const ChevronIcon = () => (
-  <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
-    <path d="m9 18 6-6-6-6" />
-  </svg>
-);
-
 const navIcons = {
   '/': <HomeIcon />,
   '/library': <LibraryIcon />,
@@ -82,59 +68,36 @@ const navIcons = {
 } as const;
 
 const Home = ({ games }: { games: GameDefinition[] }) => {
-  const featuredGame = getFeaturedGame(games);
-  const featuredHero = getPortalImageAsset(featuredGame.assets.hero, 'hero');
-  const launchGames = games.filter((game) => game.status === 'playable' && game.id !== featuredGame.id);
-  const queuedGames = games.filter((game) => game.status !== 'playable').slice(0, 2);
-
   return (
     <>
-      <Link
-        to={featuredGame.route}
-        className="featured-game launch-hero"
-        style={{ backgroundImage: `linear-gradient(90deg, rgb(8 10 22 / 84%), rgb(8 10 22 / 18%)), url(${featuredHero.src})` }}
-        aria-label={`Launch ${featuredGame.name}`}
+      <a className="skip-link" href="#collection">Skip to games</a>
+      <section
+        className="kinetic-hero"
+        aria-labelledby="portal-title"
       >
-        <span className="badge">Featured Launch</span>
-        <div className="launch-hero-copy">
-          <h1>{featuredGame.name}</h1>
-          <p>{featuredGame.description}</p>
+        <div className="kinetic-hero-copy">
+          <h1 id="portal-title">GameIt</h1>
+          <p>Step into the Kinetic Portal. A curated universe of fast browser games built for instant play.</p>
+          <a className="portal-primary-action" href="#collection">Explore Vault</a>
         </div>
-        <span className="pixel-btn launch-action">
-          <span>Play now</span>
-          <LaunchIcon />
-        </span>
-      </Link>
+      </section>
 
-      <section className="launch-dashboard" aria-label="Portal launch dashboard">
-        <div className="arcade-panel launch-panel">
-          <p className="section-kicker">Ready</p>
-          <h2>Jump straight in</h2>
-          <div className="quick-launch-list">
-            {launchGames.map((game) => (
-              <Link key={game.id} to={game.route} className="quick-launch" style={{ borderColor: game.accent }}>
-                <span>
-                  <strong>{game.name}</strong>
-                  <small>{game.description}</small>
-                </span>
-                <ChevronIcon />
-              </Link>
-            ))}
+      <section className="portal-collection" id="collection" aria-labelledby="collection-title">
+        <div className="collection-heading">
+          <div>
+            <span className="section-kicker">Featured Titles</span>
+            <h2 id="collection-title">The Kinetic Collection</h2>
+          </div>
+          <div className="collection-tags" aria-label="Game categories">
+            <span>Arcade</span>
+            <span>RPG</span>
+            <span>Indie</span>
           </div>
         </div>
 
-        <aside className="arcade-panel portal-status" aria-label="Portal status">
-          <p className="section-kicker">On deck</p>
-          <h2>Next arenas</h2>
-          <div className="queued-list">
-            {queuedGames.map((game) => (
-              <span key={game.id} className="queued-game">
-                <span>{game.name}</span>
-                <small>{game.genre}</small>
-              </span>
-            ))}
-          </div>
-        </aside>
+        <div className="kinetic-grid">
+          {games.map((game, index) => <GameTile key={game.id} game={game} featured={index === 0} />)}
+        </div>
       </section>
     </>
   );
@@ -159,16 +122,11 @@ const PortalNav = ({ variant }: { variant: 'desktop' | 'mobile' }) => (
 
 const PortalShell = ({ children }: { children: ReactNode }) => {
   const { theme, toggleTheme } = useTheme();
-  const logoIndex = useMemo(() => Math.floor(Math.random() * 4), []);
 
   return (
     <div className="page portal-shell">
       <header className="portal-header arcade-panel header-shell">
-        <div className="logo-wrap">
-          <Link to="/" aria-label="Go to portal home">
-            <PortalLogo index={logoIndex} />
-          </Link>
-        </div>
+        <Link to="/" className="portal-brand" aria-label="Go to portal home">GameIt</Link>
 
         <div className="header-actions">
           <PortalNav variant="desktop" />
