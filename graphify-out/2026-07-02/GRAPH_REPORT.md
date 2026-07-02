@@ -1,11 +1,11 @@
 # Graph Report - gameit  (2026-07-02)
 
 ## Corpus Check
-- 212 files · ~886,741 words
+- 212 files · ~879,956 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2213 nodes · 2903 edges · 226 communities (146 shown, 80 thin omitted)
+- 2212 nodes · 2904 edges · 226 communities (144 shown, 82 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 3 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
@@ -212,7 +212,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (226 total, 80 thin omitted)
+## Communities (226 total, 82 thin omitted)
 
 ### Community 0 - "Map and Movement Logic"
 Cohesion: 0.02
@@ -221,14 +221,6 @@ Nodes (81): AttackPoolId, AvatarId, BaseStatTendencies, BattleAttackIntentMessag
 ### Community 1 - "Village Scene and Assets"
 Cohesion: 0.02
 Nodes (81): AttackPoolId, AvatarId, BaseStatTendencies, BattleAttackIntentMessage, BattleCreatureState, BattleKind, BattleMaterialReward, BattleParticipantKind (+73 more)
-
-### Community 2 - "Battle Room Management"
-Cohesion: 0.05
-Nodes (10): avatarColors, directionDeltas, EncounterView, FarmView, MapRenderMetrics, MovementKeyMap, PlayerView, tileColors (+2 more)
-
-### Community 3 - "Card Activation and Types"
-Cohesion: 0.05
-Nodes (10): avatarColors, directionDeltas, EncounterView, FarmView, MapRenderMetrics, MovementKeyMap, PlayerView, tileColors (+2 more)
 
 ### Community 5 - "Creature Journal and Profile"
 Cohesion: 0.07
@@ -347,8 +339,8 @@ Cohesion: 0.14
 Nodes (8): Direction, dirVec, Effects, Item, ItemKind, Point, SnakeEngine, SnakeSnapshot
 
 ### Community 35 - "Save State Management"
-Cohesion: 0.40
-Nodes (4): MonsterRpgAssetKey, monsterRpgAssetKeys, monsterRpgAssetManifest, monsterRpgSpriteSheetManifest
+Cohesion: 0.08
+Nodes (22): monsterRpgSpriteSheetManifest, MonsterRpgAssetKey, monsterRpgAssetKeys, monsterRpgAssetManifest, avatarColors, directionDeltas, EncounterView, FarmView (+14 more)
 
 ### Community 36 - "Asset Generation Scripts"
 Cohesion: 0.18
@@ -563,32 +555,32 @@ Cohesion: 0.50
 Nodes (3): logoSpriteSheet, SpriteRegion, uiSpriteSheet
 
 ### Community 125 - "Community 125"
-Cohesion: 0.40
-Nodes (4): MonsterRpgAssetKey, monsterRpgAssetKeys, monsterRpgAssetManifest, monsterRpgSpriteSheetManifest
+Cohesion: 0.50
+Nodes (3): MonsterRpgAssetKey, monsterRpgAssetKeys, monsterRpgAssetManifest
 
 ### Community 130 - "Community 130"
 Cohesion: 0.50
 Nodes (3): defaultSnakeConfig, SnakeConfig, snakeConfigSchema
 
 ## Knowledge Gaps
-- **838 isolated node(s):** `name`, `version`, `private`, `type`, `dev` (+833 more)
+- **836 isolated node(s):** `name`, `version`, `private`, `type`, `dev` (+831 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **80 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **82 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
+- **Why does `VillageScene` connect `Battle Room Management` to `Save State Management`?**
+  _High betweenness centrality (0.004) - this node is a cross-community bridge._
+- **Why does `VillageScene` connect `Card Activation and Types` to `Save State Management`?**
+  _High betweenness centrality (0.002) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `private` to the rest of the system?**
-  _838 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _836 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Map and Movement Logic` be split into smaller, more focused modules?**
   _Cohesion score 0.024390243902439025 - nodes in this community are weakly interconnected._
 - **Should `Village Scene and Assets` be split into smaller, more focused modules?**
   _Cohesion score 0.024390243902439025 - nodes in this community are weakly interconnected._
 - **Should `Battle Room Management` be split into smaller, more focused modules?**
-  _Cohesion score 0.05413469735720375 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06838106370543542 - nodes in this community are weakly interconnected._
 - **Should `Card Activation and Types` be split into smaller, more focused modules?**
-  _Cohesion score 0.05413469735720375 - nodes in this community are weakly interconnected._
-- **Should `Creature Journal and Profile` be split into smaller, more focused modules?**
-  _Cohesion score 0.07137254901960784 - nodes in this community are weakly interconnected._
-- **Should `Project Dependencies` be split into smaller, more focused modules?**
-  _Cohesion score 0.05714285714285714 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06838106370543542 - nodes in this community are weakly interconnected._

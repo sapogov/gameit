@@ -120,8 +120,8 @@
     "semantic_hash": ""
   },
   "src/games/monster-rpg/client/assets/monsterRpgAssets.ts": {
-    "mtime": 1783018832.6333168,
-    "ast_hash": "8a7df20d12a231340c153631993ccad0",
+    "mtime": 1783011653.4151063,
+    "ast_hash": "e9078e7909c16cf66cfcc9731dbfd987",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/client/bootGame.ts": {
@@ -535,77 +535,77 @@
     "semantic_hash": ""
   },
   "src/games/monster-rpg/client/assets/pixel/building-clinic.png": {
-    "mtime": 1782964077.0,
+    "mtime": 1781983313.4484913,
     "ast_hash": "467cd400ecc4a90a6ce55f431e1d0173",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/client/assets/pixel/building-house.png": {
-    "mtime": 1782964077.0,
+    "mtime": 1781983313.4494305,
     "ast_hash": "faf812974fb6976ed12f9f7235dc51ff",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/client/assets/pixel/building-post-office.png": {
-    "mtime": 1782964077.0,
+    "mtime": 1781983313.450185,
     "ast_hash": "06bbba88520daa36f6be7c34f4619767",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/client/assets/pixel/building-shop.png": {
-    "mtime": 1782964077.0,
+    "mtime": 1781983313.4511912,
     "ast_hash": "b72ceff1d64bcf614de0f38bc6254d68",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/client/assets/pixel/building-tavern.png": {
-    "mtime": 1782964077.0,
+    "mtime": 1781983313.45241,
     "ast_hash": "f1f451fe40f27fdc672e8504d9c2ece9",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/client/assets/pixel/building-town-hall.png": {
-    "mtime": 1782964077.0,
+    "mtime": 1781983313.4533627,
     "ast_hash": "58c5af14b8056c0f6104ae2471e093ee",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/client/assets/pixel/marker-door.png": {
-    "mtime": 1782964077.0,
+    "mtime": 1781983313.4544747,
     "ast_hash": "ab47a0bf2473365d5a0702dc3b065211",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/client/assets/pixel/marker-sign.png": {
-    "mtime": 1782964077.0,
+    "mtime": 1781983313.4556136,
     "ast_hash": "590a3fe2cf022f21238b27ac0c2d8ebf",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/client/assets/pixel/terrain-field.png": {
-    "mtime": 1782964077.0,
+    "mtime": 1781983313.4565449,
     "ast_hash": "552b72945bcde3b1ec5cfe17e8a91be9",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/client/assets/pixel/terrain-forest.png": {
-    "mtime": 1782964077.0,
+    "mtime": 1781983313.457406,
     "ast_hash": "cddda751383082815e23f649763f3648",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/client/assets/pixel/terrain-mountain.png": {
-    "mtime": 1782964077.0,
+    "mtime": 1781983313.4581392,
     "ast_hash": "86528ae24ff9e53e29a56e1e36a95dd5",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/client/assets/pixel/terrain-tree.png": {
-    "mtime": 1782964077.0,
+    "mtime": 1781983313.4592373,
     "ast_hash": "3a0234b7ab05ca2734f1310bc97d13fa",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/client/assets/pixel/terrain-water.png": {
-    "mtime": 1782964077.0,
+    "mtime": 1781983313.4600198,
     "ast_hash": "8c9e2a5e07186868207a28113fbe5c8b",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/client/assets/pixel/village-large.png": {
-    "mtime": 1782964077.0,
+    "mtime": 1781983313.4608586,
     "ast_hash": "44ab44cda8a69164b16c83934f8da4f4",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/client/assets/pixel/village-small.png": {
-    "mtime": 1782964077.0,
+    "mtime": 1781983313.463558,
     "ast_hash": "7aac7d6b0085d90eddec86df1dc842aa",
     "semantic_hash": ""
   },
@@ -1442,116 +1442,6 @@
   "public/assets/portal-hero.png": {
     "mtime": 1783013767.2252495,
     "ast_hash": "32c4612ce5fbbb173d42bddd6b670031",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/creature-encounters.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "a2be42ab17c76224c4cc7e1eeed3c9d8",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-bridge-water.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "9f844807ba8e2fc41b4262be721c721f",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-field-ai-1.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "759e0d32d2091488d014f2937d23e0ec",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-field-ai-2.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "323a7c9dd29467313fb18ec493486118",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-field-ai-3.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "562b076bed7fb776030c5cab343fed75",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-forest-ai-1.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "16780ac0556f2da694291cc1d92c6a74",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-forest-ai-2.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "dd5b575012370b4aed99fddc1f4f8fa4",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-forest-ai-3.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "3fe326a65a00ae948411dd78174a8cbb",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-grass-1.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "e0924c4a955dc3379b2cf8cce085414f",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-grass-2.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "88345c62395d7f2ce55721240c1a250b",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-grass-3.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "af82f671a070205eb4a4309658bf68ad",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-mountain-ai-1.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "81a813965453b725e47095f0aa7c3193",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-mountain-ai-2.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "32d613d319b8ea1b7b83b24625829f80",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-road-curve.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "761f9241111f308862c61efcdc6c640e",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-road-end.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "f08e639e74b9c4acad306d91d65a3dbd",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-road-horizontal.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "f6aeee8d378429e87fd3f34d31aa78ae",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-road-vertical.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "5cafc5f99069f2ce446c4472b934b818",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-shoreline.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "9871c74f959c46406550c2da47f0edae",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-tree-ai-1.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "d4d43a795cb57a9520e6b70f61cca039",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-tree-ai-2.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "976a274eef1ad5588862ec6c6f726ecb",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-water-ai-1.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "fbab6dba3f8b8317a0659da0c55760a4",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-water-ai-2.png": {
-    "mtime": 1782964077.0,
-    "ast_hash": "b60756315828296756946c42eea6fdae",
     "semantic_hash": ""
   }
 }

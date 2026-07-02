@@ -480,7 +480,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_checksavereset",
-      "community": 35,
+      "community": 12,
       "norm_label": "checksavereset()"
     },
     {
@@ -560,7 +560,7 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_checkcreaturejournalstates",
-      "community": 10,
+      "community": 0,
       "norm_label": "checkcreaturejournalstates()"
     },
     {
@@ -780,7 +780,7 @@
       "source_location": "L549",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_locationtransition",
-      "community": 17,
+      "community": 0,
       "norm_label": "locationtransition"
     },
     {
@@ -830,7 +830,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "server_battleregistry",
-      "community": 2,
+      "community": 22,
       "norm_label": "battleregistry.ts"
     },
     {
@@ -840,7 +840,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "server_battleregistry_battleclaim",
-      "community": 2,
+      "community": 22,
       "norm_label": "battleclaim"
     },
     {
@@ -850,7 +850,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "server_battleregistry_battleclaims",
-      "community": 2,
+      "community": 22,
       "norm_label": "battleclaims"
     },
     {
@@ -860,7 +860,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "server_battleregistry_battleresultlisteners",
-      "community": 2,
+      "community": 22,
       "norm_label": "battleresultlisteners"
     },
     {
@@ -870,7 +870,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "server_battleregistry_createbattleclaim",
-      "community": 2,
+      "community": 22,
       "norm_label": "createbattleclaim()"
     },
     {
@@ -880,7 +880,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "server_battleregistry_createguardbattleclaim",
-      "community": 2,
+      "community": 22,
       "norm_label": "createguardbattleclaim()"
     },
     {
@@ -890,7 +890,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "server_battleregistry_getbattleclaim",
-      "community": 2,
+      "community": 22,
       "norm_label": "getbattleclaim()"
     },
     {
@@ -910,7 +910,7 @@
       "source_location": "L122",
       "_origin": "ast",
       "id": "server_battleregistry_getresolvedbattleoutcome",
-      "community": 2,
+      "community": 22,
       "norm_label": "getresolvedbattleoutcome()"
     },
     {
@@ -920,7 +920,7 @@
       "source_location": "L135",
       "_origin": "ast",
       "id": "server_battleregistry_removebattleclaim",
-      "community": 28,
+      "community": 22,
       "norm_label": "removebattleclaim()"
     },
     {
@@ -940,7 +940,7 @@
       "source_location": "L151",
       "_origin": "ast",
       "id": "server_battleregistry_getbattlestateseed",
-      "community": 2,
+      "community": 22,
       "norm_label": "getbattlestateseed()"
     },
     {
@@ -950,7 +950,7 @@
       "source_location": "L162",
       "_origin": "ast",
       "id": "server_battleregistry_cleanupexpiredbattleclaims",
-      "community": 2,
+      "community": 22,
       "norm_label": "cleanupexpiredbattleclaims()"
     },
     {
@@ -960,7 +960,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "server_index",
-      "community": 2,
+      "community": 28,
       "norm_label": "index.ts"
     },
     {
@@ -970,7 +970,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "server_index_port",
-      "community": 2,
+      "community": 28,
       "norm_label": "port"
     },
     {
@@ -980,7 +980,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "server_index_gameserver",
-      "community": 2,
+      "community": 28,
       "norm_label": "gameserver"
     },
     {
@@ -1130,7 +1130,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "rooms_homevillageroom",
-      "community": 13,
+      "community": 28,
       "norm_label": "homevillageroom.ts"
     },
     {
@@ -1190,7 +1190,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "rooms_locationroom_pendingtransition",
-      "community": 17,
+      "community": 0,
       "norm_label": "pendingtransition"
     },
     {
@@ -1210,7 +1210,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "rooms_locationroom_locationroom_oncreate",
-      "community": 28,
+      "community": 34,
       "norm_label": ".oncreate()"
     },
     {
@@ -1220,7 +1220,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "rooms_locationroom_locationroom_onjoin",
-      "community": 0,
+      "community": 34,
       "norm_label": ".onjoin()"
     },
     {
@@ -1270,7 +1270,7 @@
       "source_location": "L301",
       "_origin": "ast",
       "id": "rooms_locationroom_locationroom_handleresolvewildencounter",
-      "community": 28,
+      "community": 22,
       "norm_label": ".handleresolvewildencounter()"
     },
     {
@@ -1280,7 +1280,7 @@
       "source_location": "L325",
       "_origin": "ast",
       "id": "rooms_locationroom_locationroom_spawninitialwildencounters",
-      "community": 28,
+      "community": 34,
       "norm_label": ".spawninitialwildencounters()"
     },
     {
@@ -1340,7 +1340,7 @@
       "source_location": "L431",
       "_origin": "ast",
       "id": "rooms_locationroom_sanitizeprofile",
-      "community": 0,
+      "community": 34,
       "norm_label": "sanitizeprofile()"
     },
     {
@@ -1350,7 +1350,7 @@
       "source_location": "L447",
       "_origin": "ast",
       "id": "rooms_locationroom_resolvejoinposition",
-      "community": 0,
+      "community": 34,
       "norm_label": "resolvejoinposition()"
     },
     {
@@ -1440,7 +1440,7 @@
       "source_location": "L576",
       "_origin": "ast",
       "id": "rooms_locationroom_sanitizebattlecreature",
-      "community": 10,
+      "community": 2,
       "norm_label": "sanitizebattlecreature()"
     },
     {
@@ -1470,7 +1470,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "schema_battlestate",
-      "community": 2,
+      "community": 5,
       "norm_label": "battlestate.ts"
     },
     {
@@ -1480,7 +1480,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "schema_battlestate_battlestatsschema",
-      "community": 2,
+      "community": 5,
       "norm_label": "battlestatsschema"
     },
     {
@@ -1490,7 +1490,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "schema_battlestate_battlestatsschema_constructor",
-      "community": 2,
+      "community": 5,
       "norm_label": ".constructor()"
     },
     {
@@ -1500,7 +1500,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "schema_battlestate_battleattackschema",
-      "community": 2,
+      "community": 5,
       "norm_label": "battleattackschema"
     },
     {
@@ -1510,7 +1510,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "schema_battlestate_battleattackschema_constructor",
-      "community": 2,
+      "community": 5,
       "norm_label": ".constructor()"
     },
     {
@@ -1520,7 +1520,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "schema_battlestate_battlecreatureschema",
-      "community": 2,
+      "community": 5,
       "norm_label": "battlecreatureschema"
     },
     {
@@ -1530,7 +1530,7 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "schema_battlestate_battlecreatureschema_constructor",
-      "community": 2,
+      "community": 5,
       "norm_label": ".constructor()"
     },
     {
@@ -1540,7 +1540,7 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "schema_battlestate_battleparticipantschema",
-      "community": 2,
+      "community": 5,
       "norm_label": "battleparticipantschema"
     },
     {
@@ -1550,7 +1550,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "schema_battlestate_battleparticipantschema_constructor",
-      "community": 2,
+      "community": 5,
       "norm_label": ".constructor()"
     },
     {
@@ -1560,7 +1560,7 @@
       "source_location": "L124",
       "_origin": "ast",
       "id": "schema_battlestate_battlelogentryschema",
-      "community": 2,
+      "community": 5,
       "norm_label": "battlelogentryschema"
     },
     {
@@ -1570,7 +1570,7 @@
       "source_location": "L128",
       "_origin": "ast",
       "id": "schema_battlestate_battlelogentryschema_constructor",
-      "community": 2,
+      "community": 5,
       "norm_label": ".constructor()"
     },
     {
@@ -1580,7 +1580,7 @@
       "source_location": "L139",
       "_origin": "ast",
       "id": "schema_battlestate_battlestateschema",
-      "community": 2,
+      "community": 5,
       "norm_label": "battlestateschema"
     },
     {
@@ -1590,7 +1590,7 @@
       "source_location": "L155",
       "_origin": "ast",
       "id": "schema_battlestate_battlestateschema_constructor",
-      "community": 2,
+      "community": 5,
       "norm_label": ".constructor()"
     },
     {
@@ -1600,7 +1600,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "schema_locationstate",
-      "community": 17,
+      "community": 33,
       "norm_label": "locationstate.ts"
     },
     {
@@ -1610,7 +1610,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "schema_locationstate_playerprofileschema",
-      "community": 12,
+      "community": 75,
       "norm_label": "playerprofileschema"
     },
     {
@@ -1620,7 +1620,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "schema_locationstate_playerprofileschema_constructor",
-      "community": 12,
+      "community": 75,
       "norm_label": ".constructor()"
     },
     {
@@ -1630,7 +1630,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "schema_locationstate_worldpositionschema",
-      "community": 17,
+      "community": 33,
       "norm_label": "worldpositionschema"
     },
     {
@@ -1640,7 +1640,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "schema_locationstate_worldpositionschema_constructor",
-      "community": 17,
+      "community": 33,
       "norm_label": ".constructor()"
     },
     {
@@ -1650,7 +1650,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "schema_locationstate_locationplayerschema",
-      "community": 13,
+      "community": 33,
       "norm_label": "locationplayerschema"
     },
     {
@@ -1660,7 +1660,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "schema_locationstate_locationplayerschema_constructor",
-      "community": 13,
+      "community": 33,
       "norm_label": ".constructor()"
     },
     {
@@ -1670,7 +1670,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "schema_locationstate_wildencounterschema",
-      "community": 17,
+      "community": 33,
       "norm_label": "wildencounterschema"
     },
     {
@@ -1680,7 +1680,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "schema_locationstate_wildencounterschema_constructor",
-      "community": 17,
+      "community": 33,
       "norm_label": ".constructor()"
     },
     {
@@ -1690,7 +1690,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "schema_locationstate_locationstateschema",
-      "community": 17,
+      "community": 33,
       "norm_label": "locationstateschema"
     },
     {
@@ -1700,7 +1700,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "schema_locationstate_locationstateschema_constructor",
-      "community": 17,
+      "community": 33,
       "norm_label": ".constructor()"
     },
     {
@@ -2187,37 +2187,57 @@
       "label": "getInitialState()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
-      "source_location": "L63",
+      "source_location": "L65",
       "_origin": "ast",
       "id": "monster_rpg_monsterrpggame_getinitialstate",
-      "community": 35,
+      "community": 12,
       "norm_label": "getinitialstate()"
     },
     {
       "label": "MonsterRpgGame()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
-      "source_location": "L71",
+      "source_location": "L73",
       "_origin": "ast",
       "id": "monster_rpg_monsterrpggame_monsterrpggame",
-      "community": 9,
+      "community": 12,
       "norm_label": "monsterrpggame()"
     },
     {
       "label": "formatImportFailure()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
-      "source_location": "L956",
+      "source_location": "L970",
       "_origin": "ast",
       "id": "monster_rpg_monsterrpggame_formatimportfailure",
       "community": 12,
       "norm_label": "formatimportfailure()"
     },
     {
+      "label": "moveDeltaByDirection",
+      "file_type": "code",
+      "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
+      "source_location": "L976",
+      "_origin": "ast",
+      "id": "monster_rpg_monsterrpggame_movedeltabydirection",
+      "community": 12,
+      "norm_label": "movedeltabydirection"
+    },
+    {
+      "label": "getFarmFootprintMoveBlock()",
+      "file_type": "code",
+      "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
+      "source_location": "L983",
+      "_origin": "ast",
+      "id": "monster_rpg_monsterrpggame_getfarmfootprintmoveblock",
+      "community": 12,
+      "norm_label": "getfarmfootprintmoveblock()"
+    },
+    {
       "label": "formatStarterConversionFailure()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
-      "source_location": "L962",
+      "source_location": "L1013",
       "_origin": "ast",
       "id": "monster_rpg_monsterrpggame_formatstarterconversionfailure",
       "community": 12,
@@ -2227,7 +2247,7 @@
       "label": "formatStarterFarmFailure()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
-      "source_location": "L968",
+      "source_location": "L1019",
       "_origin": "ast",
       "id": "monster_rpg_monsterrpggame_formatstarterfarmfailure",
       "community": 12,
@@ -2237,7 +2257,7 @@
       "label": "formatCardFailure()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
-      "source_location": "L973",
+      "source_location": "L1024",
       "_origin": "ast",
       "id": "monster_rpg_monsterrpggame_formatcardfailure",
       "community": 12,
@@ -2247,7 +2267,7 @@
       "label": "formatCreaturePartyFailure()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
-      "source_location": "L984",
+      "source_location": "L1035",
       "_origin": "ast",
       "id": "monster_rpg_monsterrpggame_formatcreaturepartyfailure",
       "community": 12,
@@ -2257,7 +2277,7 @@
       "label": "formatWildEncounterClaimFailure()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
-      "source_location": "L995",
+      "source_location": "L1046",
       "_origin": "ast",
       "id": "monster_rpg_monsterrpggame_formatwildencounterclaimfailure",
       "community": 12,
@@ -2267,7 +2287,7 @@
       "label": "formatFarmCollectionFailure()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
-      "source_location": "L1004",
+      "source_location": "L1055",
       "_origin": "ast",
       "id": "monster_rpg_monsterrpggame_formatfarmcollectionfailure",
       "community": 12,
@@ -2277,7 +2297,7 @@
       "label": "formatFarmTheftAttempt()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
-      "source_location": "L1010",
+      "source_location": "L1061",
       "_origin": "ast",
       "id": "monster_rpg_monsterrpggame_formatfarmtheftattempt",
       "community": 12,
@@ -2287,7 +2307,7 @@
       "label": "formatFarmTheftFailure()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
-      "source_location": "L1017",
+      "source_location": "L1068",
       "_origin": "ast",
       "id": "monster_rpg_monsterrpggame_formatfarmtheftfailure",
       "community": 12,
@@ -2297,7 +2317,7 @@
       "label": "formatGuardedFarmTheftClaimFailure()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
-      "source_location": "L1031",
+      "source_location": "L1082",
       "_origin": "ast",
       "id": "monster_rpg_monsterrpggame_formatguardedfarmtheftclaimfailure",
       "community": 12,
@@ -2307,7 +2327,7 @@
       "label": "formatFarmUpgradeFailure()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
-      "source_location": "L1040",
+      "source_location": "L1091",
       "_origin": "ast",
       "id": "monster_rpg_monsterrpggame_formatfarmupgradefailure",
       "community": 12,
@@ -2317,7 +2337,7 @@
       "label": "formatFarmGuardFailure()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
-      "source_location": "L1049",
+      "source_location": "L1100",
       "_origin": "ast",
       "id": "monster_rpg_monsterrpggame_formatfarmguardfailure",
       "community": 12,
@@ -2327,7 +2347,7 @@
       "label": "formatStationTravelFailure()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
-      "source_location": "L1057",
+      "source_location": "L1108",
       "_origin": "ast",
       "id": "monster_rpg_monsterrpggame_formatstationtravelfailure",
       "community": 12,
@@ -2337,7 +2357,7 @@
       "label": "formatBattleOutcome()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
-      "source_location": "L1068",
+      "source_location": "L1119",
       "_origin": "ast",
       "id": "monster_rpg_monsterrpggame_formatbattleoutcome",
       "community": 12,
@@ -2347,7 +2367,7 @@
       "label": "getFacingEncounter()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
-      "source_location": "L1085",
+      "source_location": "L1136",
       "_origin": "ast",
       "id": "monster_rpg_monsterrpggame_getfacingencounter",
       "community": 12,
@@ -2400,7 +2420,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "client_bootgame",
-      "community": 25,
+      "community": 35,
       "norm_label": "bootgame.ts"
     },
     {
@@ -2410,7 +2430,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "client_bootgame_monsterrpggameruntime",
-      "community": 25,
+      "community": 35,
       "norm_label": "monsterrpggameruntime"
     },
     {
@@ -2420,7 +2440,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "client_bootgame_bootgameoptions",
-      "community": 25,
+      "community": 35,
       "norm_label": "bootgameoptions"
     },
     {
@@ -2430,7 +2450,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "client_bootgame_bootgame",
-      "community": 25,
+      "community": 35,
       "norm_label": "bootgame()"
     },
     {
@@ -2440,7 +2460,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "client_index",
-      "community": 25,
+      "community": 35,
       "norm_label": "index.ts"
     },
     {
@@ -2457,17 +2477,17 @@
       "label": "VillageSceneOptions",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L19",
+      "source_location": "L27",
       "_origin": "ast",
       "id": "scenes_villagescene_villagesceneoptions",
-      "community": 24,
+      "community": 41,
       "norm_label": "villagesceneoptions"
     },
     {
       "label": "MovementKeyMap",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L26",
+      "source_location": "L34",
       "_origin": "ast",
       "id": "scenes_villagescene_movementkeymap",
       "community": 24,
@@ -2477,7 +2497,7 @@
       "label": "tileColors",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L35",
+      "source_location": "L43",
       "_origin": "ast",
       "id": "scenes_villagescene_tilecolors",
       "community": 24,
@@ -2487,7 +2507,7 @@
       "label": "avatarColors",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L62",
+      "source_location": "L70",
       "_origin": "ast",
       "id": "scenes_villagescene_avatarcolors",
       "community": 24,
@@ -2497,7 +2517,7 @@
       "label": "MapRenderMetrics",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L85",
+      "source_location": "L93",
       "_origin": "ast",
       "id": "scenes_villagescene_maprendermetrics",
       "community": 24,
@@ -2507,7 +2527,7 @@
       "label": "PlayerView",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L95",
+      "source_location": "L103",
       "_origin": "ast",
       "id": "scenes_villagescene_playerview",
       "community": 24,
@@ -2517,7 +2537,7 @@
       "label": "EncounterView",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L102",
+      "source_location": "L110",
       "_origin": "ast",
       "id": "scenes_villagescene_encounterview",
       "community": 24,
@@ -2527,7 +2547,7 @@
       "label": "FarmView",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L111",
+      "source_location": "L119",
       "_origin": "ast",
       "id": "scenes_villagescene_farmview",
       "community": 24,
@@ -2537,7 +2557,7 @@
       "label": "VillageScene",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L119",
+      "source_location": "L127",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene",
       "community": 1,
@@ -2547,7 +2567,7 @@
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L134",
+      "source_location": "L145",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_constructor",
       "community": 1,
@@ -2557,7 +2577,7 @@
       "label": ".preload()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L142",
+      "source_location": "L153",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_preload",
       "community": 1,
@@ -2567,7 +2587,7 @@
       "label": ".create()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L150",
+      "source_location": "L161",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_create",
       "community": 1,
@@ -2577,17 +2597,17 @@
       "label": ".update()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L161",
+      "source_location": "L172",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_update",
-      "community": 1,
+      "community": 76,
       "norm_label": ".update()"
     },
     {
       "label": ".setCreatureLabelMode()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L179",
+      "source_location": "L191",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_setcreaturelabelmode",
       "community": 1,
@@ -2597,7 +2617,7 @@
       "label": ".setSaveState()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L184",
+      "source_location": "L196",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_setsavestate",
       "community": 1,
@@ -2607,7 +2627,7 @@
       "label": ".setRoomState()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L193",
+      "source_location": "L205",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_setroomstate",
       "community": 1,
@@ -2617,7 +2637,7 @@
       "label": ".configureInput()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L202",
+      "source_location": "L214",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_configureinput",
       "community": 1,
@@ -2627,47 +2647,87 @@
       "label": ".configureCamera()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L209",
+      "source_location": "L221",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_configurecamera",
-      "community": 1,
+      "community": 37,
       "norm_label": ".configurecamera()"
     },
     {
       "label": ".setActiveMap()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L218",
+      "source_location": "L230",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_setactivemap",
-      "community": 1,
+      "community": 41,
       "norm_label": ".setactivemap()"
     },
     {
       "label": ".handleResize()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L234",
+      "source_location": "L246",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_handleresize",
-      "community": 1,
+      "community": 37,
       "norm_label": ".handleresize()"
     },
     {
       "label": ".handlePointerDown()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L240",
+      "source_location": "L252",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_handlepointerdown",
       "community": 0,
       "norm_label": ".handlepointerdown()"
     },
     {
+      "label": ".dispatchManualMove()",
+      "file_type": "code",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L283",
+      "_origin": "ast",
+      "id": "scenes_villagescene_villagescene_dispatchmanualmove",
+      "community": 76,
+      "norm_label": ".dispatchmanualmove()"
+    },
+    {
+      "label": ".queueMovement()",
+      "file_type": "code",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L288",
+      "_origin": "ast",
+      "id": "scenes_villagescene_villagescene_queuemovement",
+      "community": 76,
+      "norm_label": ".queuemovement()"
+    },
+    {
+      "label": ".advanceMovementQueue()",
+      "file_type": "code",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L307",
+      "_origin": "ast",
+      "id": "scenes_villagescene_villagescene_advancemovementqueue",
+      "community": 76,
+      "norm_label": ".advancemovementqueue()"
+    },
+    {
+      "label": ".clearMovementQueue()",
+      "file_type": "code",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L319",
+      "_origin": "ast",
+      "id": "scenes_villagescene_villagescene_clearmovementqueue",
+      "community": 76,
+      "norm_label": ".clearmovementqueue()"
+    },
+    {
       "label": ".drawMap()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L261",
+      "source_location": "L326",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_drawmap",
       "community": 1,
@@ -2677,7 +2737,7 @@
       "label": ".drawMapGrid()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L284",
+      "source_location": "L349",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_drawmapgrid",
       "community": 1,
@@ -2687,7 +2747,7 @@
       "label": ".drawTileDetail()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L301",
+      "source_location": "L366",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_drawtiledetail",
       "community": 26,
@@ -2697,7 +2757,7 @@
       "label": ".drawTerrainSprites()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L352",
+      "source_location": "L417",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_drawterrainsprites",
       "community": 1,
@@ -2707,7 +2767,7 @@
       "label": ".drawMapMarkers()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L365",
+      "source_location": "L430",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_drawmapmarkers",
       "community": 1,
@@ -2717,7 +2777,7 @@
       "label": ".addSpriteOverlay()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L412",
+      "source_location": "L477",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_addspriteoverlay",
       "community": 26,
@@ -2727,7 +2787,7 @@
       "label": ".addMapLabel()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L426",
+      "source_location": "L491",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_addmaplabel",
       "community": 1,
@@ -2737,7 +2797,7 @@
       "label": ".shouldDrawTerrainSprite()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L442",
+      "source_location": "L507",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_shoulddrawterrainsprite",
       "community": 26,
@@ -2747,7 +2807,7 @@
       "label": ".renderEncounters()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L454",
+      "source_location": "L519",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_renderencounters",
       "community": 1,
@@ -2757,7 +2817,7 @@
       "label": ".renderFarms()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L475",
+      "source_location": "L540",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_renderfarms",
       "community": 1,
@@ -2767,7 +2827,7 @@
       "label": ".renderPlayers()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L494",
+      "source_location": "L559",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_renderplayers",
       "community": 1,
@@ -2777,7 +2837,7 @@
       "label": ".getRenderableEncounters()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L515",
+      "source_location": "L580",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_getrenderableencounters",
       "community": 24,
@@ -2787,7 +2847,7 @@
       "label": ".getRenderableFarms()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L525",
+      "source_location": "L590",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_getrenderablefarms",
       "community": 1,
@@ -2797,7 +2857,7 @@
       "label": ".getRenderablePlayers()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L531",
+      "source_location": "L596",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_getrenderableplayers",
       "community": 37,
@@ -2807,7 +2867,7 @@
       "label": ".createEncounterView()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L548",
+      "source_location": "L613",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_createencounterview",
       "community": 1,
@@ -2817,7 +2877,7 @@
       "label": ".syncEncounterView()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L569",
+      "source_location": "L634",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_syncencounterview",
       "community": 24,
@@ -2827,7 +2887,7 @@
       "label": ".createFarmView()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L588",
+      "source_location": "L653",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_createfarmview",
       "community": 1,
@@ -2837,7 +2897,7 @@
       "label": ".syncFarmView()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L610",
+      "source_location": "L675",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_syncfarmview",
       "community": 1,
@@ -2847,7 +2907,7 @@
       "label": ".createPlayerView()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L627",
+      "source_location": "L695",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_createplayerview",
       "community": 37,
@@ -2857,37 +2917,37 @@
       "label": ".syncPlayerView()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L648",
+      "source_location": "L716",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_syncplayerview",
-      "community": 1,
+      "community": 37,
       "norm_label": ".syncplayerview()"
     },
     {
       "label": ".getRenderMetrics()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L674",
+      "source_location": "L742",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_getrendermetrics",
-      "community": 1,
+      "community": 37,
       "norm_label": ".getrendermetrics()"
     },
     {
       "label": ".getCameraZoom()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L701",
+      "source_location": "L769",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_getcamerazoom",
-      "community": 1,
+      "community": 37,
       "norm_label": ".getcamerazoom()"
     },
     {
       "label": ".getLocalPlayerId()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L710",
+      "source_location": "L778",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_getlocalplayerid",
       "community": 37,
@@ -2897,7 +2957,7 @@
       "label": ".getLocalPlayer()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L714",
+      "source_location": "L782",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_getlocalplayer",
       "community": 37,
@@ -2907,7 +2967,7 @@
       "label": ".getEncounterAt()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L718",
+      "source_location": "L786",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_getencounterat",
       "community": 24,
@@ -2917,27 +2977,37 @@
       "label": ".getFarmAt()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L722",
+      "source_location": "L790",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_getfarmat",
       "community": 1,
       "norm_label": ".getfarmat()"
     },
     {
+      "label": ".isFarmTileAt()",
+      "file_type": "code",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L794",
+      "_origin": "ast",
+      "id": "scenes_villagescene_villagescene_isfarmtileat",
+      "community": 1,
+      "norm_label": ".isfarmtileat()"
+    },
+    {
       "label": ".updateEncounterLabelVisibility()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L726",
+      "source_location": "L798",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_updateencounterlabelvisibility",
-      "community": 1,
+      "community": 76,
       "norm_label": ".updateencounterlabelvisibility()"
     },
     {
       "label": ".worldToScreen()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L734",
+      "source_location": "L806",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_worldtoscreen",
       "community": 1,
@@ -2947,7 +3017,7 @@
       "label": ".isInReservedHudArea()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L742",
+      "source_location": "L814",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_isinreservedhudarea",
       "community": 1,
@@ -2957,17 +3027,17 @@
       "label": ".followLocalPlayer()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L755",
+      "source_location": "L827",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_followlocalplayer",
-      "community": 1,
+      "community": 37,
       "norm_label": ".followlocalplayer()"
     },
     {
       "label": ".isBuildingTile()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L762",
+      "source_location": "L834",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_isbuildingtile",
       "community": 26,
@@ -2977,7 +3047,7 @@
       "label": ".getBuildingAssetKey()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L773",
+      "source_location": "L845",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_getbuildingassetkey",
       "community": 26,
@@ -2987,7 +3057,7 @@
       "label": ".getBuildingLabel()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L777",
+      "source_location": "L849",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_getbuildinglabel",
       "community": 26,
@@ -2997,7 +3067,7 @@
       "label": ".getTerrainAssetKey()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L786",
+      "source_location": "L858",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_getterrainassetkey",
       "community": 26,
@@ -3007,7 +3077,7 @@
       "label": "getSpeciesIconColor()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L791",
+      "source_location": "L863",
       "_origin": "ast",
       "id": "scenes_villagescene_getspeciesiconcolor",
       "community": 24,
@@ -3017,7 +3087,7 @@
       "label": "getSpeciesAccentColor()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
-      "source_location": "L796",
+      "source_location": "L868",
       "_origin": "ast",
       "id": "scenes_villagescene_getspeciesaccentcolor",
       "community": 24,
@@ -3090,7 +3160,7 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "network_colyseusclient_locationtransitionmessage",
-      "community": 17,
+      "community": 16,
       "norm_label": "locationtransitionmessage"
     },
     {
@@ -3130,7 +3200,7 @@
       "source_location": "L174",
       "_origin": "ast",
       "id": "network_colyseusclient_tolocationroomstate",
-      "community": 0,
+      "community": 7,
       "norm_label": "tolocationroomstate()"
     },
     {
@@ -3140,7 +3210,7 @@
       "source_location": "L232",
       "_origin": "ast",
       "id": "network_colyseusclient_tobattleroomstate",
-      "community": 16,
+      "community": 77,
       "norm_label": "tobattleroomstate()"
     },
     {
@@ -3150,7 +3220,7 @@
       "source_location": "L255",
       "_origin": "ast",
       "id": "network_colyseusclient_tobattleparticipant",
-      "community": 16,
+      "community": 77,
       "norm_label": "tobattleparticipant()"
     },
     {
@@ -3160,7 +3230,7 @@
       "source_location": "L289",
       "_origin": "ast",
       "id": "network_colyseusclient_tobattlestatus",
-      "community": 16,
+      "community": 77,
       "norm_label": "tobattlestatus()"
     },
     {
@@ -3170,7 +3240,7 @@
       "source_location": "L303",
       "_origin": "ast",
       "id": "network_colyseusclient_toarray",
-      "community": 16,
+      "community": 77,
       "norm_label": "toarray()"
     },
     {
@@ -3180,7 +3250,7 @@
       "source_location": "L314",
       "_origin": "ast",
       "id": "network_colyseusclient_numberorzero",
-      "community": 16,
+      "community": 77,
       "norm_label": "numberorzero()"
     },
     {
@@ -3200,7 +3270,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_battlerewards",
-      "community": 22,
+      "community": 2,
       "norm_label": "battlerewards.ts"
     },
     {
@@ -3210,7 +3280,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "sim_battlerewards_applybattlerewardsresult",
-      "community": 22,
+      "community": 8,
       "norm_label": "applybattlerewardsresult"
     },
     {
@@ -3220,7 +3290,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "sim_battlerewards_generatewildbattlerewards",
-      "community": 22,
+      "community": 2,
       "norm_label": "generatewildbattlerewards()"
     },
     {
@@ -3230,7 +3300,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "sim_battlerewards_applybattlerewardstosave",
-      "community": 22,
+      "community": 2,
       "norm_label": "applybattlerewardstosave()"
     },
     {
@@ -3240,7 +3310,7 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "sim_battlerewards_updatebattlecreatureoutcome",
-      "community": 22,
+      "community": 2,
       "norm_label": "updatebattlecreatureoutcome()"
     },
     {
@@ -3250,7 +3320,7 @@
       "source_location": "L144",
       "_origin": "ast",
       "id": "sim_battlerewards_applyrewardnumbers",
-      "community": 22,
+      "community": 2,
       "norm_label": "applyrewardnumbers()"
     },
     {
@@ -3260,7 +3330,7 @@
       "source_location": "L195",
       "_origin": "ast",
       "id": "sim_battlerewards_getbattlerewardflag",
-      "community": 22,
+      "community": 2,
       "norm_label": "getbattlerewardflag()"
     },
     {
@@ -3270,7 +3340,7 @@
       "source_location": "L199",
       "_origin": "ast",
       "id": "sim_battlerewards_withupdatedat",
-      "community": 22,
+      "community": 2,
       "norm_label": "withupdatedat()"
     },
     {
@@ -3280,7 +3350,7 @@
       "source_location": "L206",
       "_origin": "ast",
       "id": "sim_battlerewards_getrarityrank",
-      "community": 22,
+      "community": 2,
       "norm_label": "getrarityrank()"
     },
     {
@@ -3290,7 +3360,7 @@
       "source_location": "L218",
       "_origin": "ast",
       "id": "sim_battlerewards_getmaterialidfortype",
-      "community": 22,
+      "community": 2,
       "norm_label": "getmaterialidfortype()"
     },
     {
@@ -3300,7 +3370,7 @@
       "source_location": "L222",
       "_origin": "ast",
       "id": "sim_battlerewards_hashstring",
-      "community": 22,
+      "community": 2,
       "norm_label": "hashstring()"
     },
     {
@@ -3360,7 +3430,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "sim_battles_battleresolution",
-      "community": 2,
+      "community": 22,
       "norm_label": "battleresolution"
     },
     {
@@ -3620,7 +3690,7 @@
       "source_location": "L409",
       "_origin": "ast",
       "id": "sim_battles_createwildbattlecreature",
-      "community": 10,
+      "community": 2,
       "norm_label": "createwildbattlecreature()"
     },
     {
@@ -3630,7 +3700,7 @@
       "source_location": "L431",
       "_origin": "ast",
       "id": "sim_battles_hashstring",
-      "community": 10,
+      "community": 2,
       "norm_label": "hashstring()"
     },
     {
@@ -3640,7 +3710,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_cards_test",
-      "community": 10,
+      "community": 3,
       "norm_label": "cards.test.ts"
     },
     {
@@ -3650,7 +3720,7 @@
       "source_location": "L212",
       "_origin": "ast",
       "id": "sim_cards_test_createprofilestate",
-      "community": 10,
+      "community": 12,
       "norm_label": "createprofilestate()"
     },
     {
@@ -3660,7 +3730,7 @@
       "source_location": "L216",
       "_origin": "ast",
       "id": "sim_cards_test_setcardstack",
-      "community": 10,
+      "community": 3,
       "norm_label": "setcardstack()"
     },
     {
@@ -3670,7 +3740,7 @@
       "source_location": "L233",
       "_origin": "ast",
       "id": "sim_cards_test_setcreaturecardinstance",
-      "community": 10,
+      "community": 3,
       "norm_label": "setcreaturecardinstance()"
     },
     {
@@ -3680,7 +3750,7 @@
       "source_location": "L249",
       "_origin": "ast",
       "id": "sim_cards_test_withmagicdust",
-      "community": 10,
+      "community": 3,
       "norm_label": "withmagicdust()"
     },
     {
@@ -3740,7 +3810,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "sim_cards_starter_creature_card_ids",
-      "community": 9,
+      "community": 3,
       "norm_label": "starter_creature_card_ids"
     },
     {
@@ -3800,7 +3870,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "sim_cards_carddefinition",
-      "community": 11,
+      "community": 3,
       "norm_label": "carddefinition"
     },
     {
@@ -3820,7 +3890,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "sim_cards_cardactionresult",
-      "community": 3,
+      "community": 35,
       "norm_label": "cardactionresult"
     },
     {
@@ -3830,7 +3900,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "sim_cards_packopentracecard",
-      "community": 3,
+      "community": 8,
       "norm_label": "packopentracecard"
     },
     {
@@ -3840,7 +3910,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "sim_cards_packopentrace",
-      "community": 22,
+      "community": 8,
       "norm_label": "packopentrace"
     },
     {
@@ -3850,7 +3920,7 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "sim_cards_openpackresult",
-      "community": 3,
+      "community": 35,
       "norm_label": "openpackresult"
     },
     {
@@ -3910,7 +3980,7 @@
       "source_location": "L237",
       "_origin": "ast",
       "id": "sim_cards_getcardcatalog",
-      "community": 10,
+      "community": 3,
       "norm_label": "getcardcatalog()"
     },
     {
@@ -3970,7 +4040,7 @@
       "source_location": "L263",
       "_origin": "ast",
       "id": "sim_cards_getcreaturecardbyid",
-      "community": 10,
+      "community": 12,
       "norm_label": "getcreaturecardbyid()"
     },
     {
@@ -3990,7 +4060,7 @@
       "source_location": "L273",
       "_origin": "ast",
       "id": "sim_cards_openpack",
-      "community": 22,
+      "community": 3,
       "norm_label": "openpack()"
     },
     {
@@ -4020,7 +4090,7 @@
       "source_location": "L401",
       "_origin": "ast",
       "id": "sim_cards_activatecreaturecardviaelder",
-      "community": 10,
+      "community": 3,
       "norm_label": "activatecreaturecardviaelder()"
     },
     {
@@ -4040,7 +4110,7 @@
       "source_location": "L447",
       "_origin": "ast",
       "id": "sim_cards_createemptyraritycounts",
-      "community": 22,
+      "community": 3,
       "norm_label": "createemptyraritycounts()"
     },
     {
@@ -4060,7 +4130,7 @@
       "source_location": "L475",
       "_origin": "ast",
       "id": "sim_cards_createrng",
-      "community": 22,
+      "community": 3,
       "norm_label": "createrng()"
     },
     {
@@ -4070,7 +4140,7 @@
       "source_location": "L483",
       "_origin": "ast",
       "id": "sim_cards_withcardstack",
-      "community": 22,
+      "community": 3,
       "norm_label": "withcardstack()"
     },
     {
@@ -4090,7 +4160,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_creaturejournal_test",
-      "community": 10,
+      "community": 0,
       "norm_label": "creaturejournal.test.ts"
     },
     {
@@ -4100,7 +4170,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_creaturejournal",
-      "community": 10,
+      "community": 0,
       "norm_label": "creaturejournal.ts"
     },
     {
@@ -4110,7 +4180,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "sim_creaturejournal_getjournalspeciesviewstate",
-      "community": 10,
+      "community": 0,
       "norm_label": "getjournalspeciesviewstate()"
     },
     {
@@ -4120,7 +4190,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "sim_creaturejournal_recordwildcreatureseen",
-      "community": 10,
+      "community": 0,
       "norm_label": "recordwildcreatureseen()"
     },
     {
@@ -4130,7 +4200,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "sim_creaturejournal_recordcreaturediscovered",
-      "community": 10,
+      "community": 0,
       "norm_label": "recordcreaturediscovered()"
     },
     {
@@ -4140,7 +4210,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "sim_creaturejournal_withjournalspeciesstate",
-      "community": 10,
+      "community": 0,
       "norm_label": "withjournalspeciesstate()"
     },
     {
@@ -4150,7 +4220,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "sim_creaturejournal_assertknownspecies",
-      "community": 10,
+      "community": 0,
       "norm_label": "assertknownspecies()"
     },
     {
@@ -4160,7 +4230,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_creaturelifecycle",
-      "community": 10,
+      "community": 2,
       "norm_label": "creaturelifecycle.ts"
     },
     {
@@ -4170,7 +4240,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_creaturecarddefinitionlike",
-      "community": 3,
+      "community": 8,
       "norm_label": "creaturecarddefinitionlike"
     },
     {
@@ -4180,7 +4250,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_creaturelifecyclefailurereason",
-      "community": 10,
+      "community": 2,
       "norm_label": "creaturelifecyclefailurereason"
     },
     {
@@ -4190,7 +4260,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_creaturelifecycleresult",
-      "community": 10,
+      "community": 2,
       "norm_label": "creaturelifecycleresult"
     },
     {
@@ -4200,7 +4270,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_createcreaturecardinstance",
-      "community": 10,
+      "community": 2,
       "norm_label": "createcreaturecardinstance()"
     },
     {
@@ -4210,7 +4280,7 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_convertcreaturecardviaelder",
-      "community": 10,
+      "community": 2,
       "norm_label": "convertcreaturecardviaelder()"
     },
     {
@@ -4220,7 +4290,7 @@
       "source_location": "L152",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_createdirectdropegg",
-      "community": 10,
+      "community": 2,
       "norm_label": "createdirectdropegg()"
     },
     {
@@ -4230,7 +4300,7 @@
       "source_location": "L190",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_hatchegg",
-      "community": 10,
+      "community": 2,
       "norm_label": "hatchegg()"
     },
     {
@@ -4240,7 +4310,7 @@
       "source_location": "L248",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_geteggdescription",
-      "community": 10,
+      "community": 3,
       "norm_label": "geteggdescription()"
     },
     {
@@ -4250,7 +4320,7 @@
       "source_location": "L257",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_getcreaturecreationrequirements",
-      "community": 10,
+      "community": 2,
       "norm_label": "getcreaturecreationrequirements()"
     },
     {
@@ -4260,7 +4330,7 @@
       "source_location": "L271",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_rollstats",
-      "community": 10,
+      "community": 2,
       "norm_label": "rollstats()"
     },
     {
@@ -4270,7 +4340,7 @@
       "source_location": "L281",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_selectcreatureattacks",
-      "community": 10,
+      "community": 2,
       "norm_label": "selectcreatureattacks()"
     },
     {
@@ -4280,7 +4350,7 @@
       "source_location": "L307",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_createrng",
-      "community": 10,
+      "community": 2,
       "norm_label": "createrng()"
     },
     {
@@ -4290,7 +4360,7 @@
       "source_location": "L315",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_findcreaturecardinstance",
-      "community": 10,
+      "community": 2,
       "norm_label": "findcreaturecardinstance()"
     },
     {
@@ -4300,7 +4370,7 @@
       "source_location": "L322",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_createcreaturerecord",
-      "community": 10,
+      "community": 2,
       "norm_label": "createcreaturerecord()"
     },
     {
@@ -4310,7 +4380,7 @@
       "source_location": "L350",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_recorddiscovered",
-      "community": 10,
+      "community": 2,
       "norm_label": "recorddiscovered()"
     },
     {
@@ -4320,7 +4390,7 @@
       "source_location": "L360",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_hasrequirements",
-      "community": 10,
+      "community": 2,
       "norm_label": "hasrequirements()"
     },
     {
@@ -4330,7 +4400,7 @@
       "source_location": "L367",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_consumerequirements",
-      "community": 10,
+      "community": 2,
       "norm_label": "consumerequirements()"
     },
     {
@@ -4340,7 +4410,7 @@
       "source_location": "L385",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_getmagicdustrequirement",
-      "community": 10,
+      "community": 2,
       "norm_label": "getmagicdustrequirement()"
     },
     {
@@ -4350,7 +4420,7 @@
       "source_location": "L397",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_rollstat",
-      "community": 10,
+      "community": 2,
       "norm_label": "rollstat()"
     },
     {
@@ -4360,7 +4430,7 @@
       "source_location": "L401",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_gettopstatkeys",
-      "community": 10,
+      "community": 2,
       "norm_label": "gettopstatkeys()"
     },
     {
@@ -4370,7 +4440,7 @@
       "source_location": "L408",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_getattackcandidates",
-      "community": 10,
+      "community": 2,
       "norm_label": "getattackcandidates()"
     },
     {
@@ -4380,7 +4450,7 @@
       "source_location": "L431",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_createnextid",
-      "community": 10,
+      "community": 2,
       "norm_label": "createnextid()"
     },
     {
@@ -4390,7 +4460,7 @@
       "source_location": "L437",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_hashstring",
-      "community": 10,
+      "community": 2,
       "norm_label": "hashstring()"
     },
     {
@@ -4400,7 +4470,7 @@
       "source_location": "L447",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_attackbypoolid",
-      "community": 10,
+      "community": 2,
       "norm_label": "attackbypoolid"
     },
     {
@@ -4410,7 +4480,7 @@
       "source_location": "L469",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_typeattacks",
-      "community": 10,
+      "community": 2,
       "norm_label": "typeattacks"
     },
     {
@@ -4420,7 +4490,7 @@
       "source_location": "L484",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_statattacks",
-      "community": 10,
+      "community": 2,
       "norm_label": "statattacks"
     },
     {
@@ -4430,7 +4500,7 @@
       "source_location": "L492",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_rareattacks",
-      "community": 10,
+      "community": 2,
       "norm_label": "rareattacks"
     },
     {
@@ -4440,7 +4510,7 @@
       "source_location": "L497",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_highrarityattacks",
-      "community": 10,
+      "community": 2,
       "norm_label": "highrarityattacks"
     },
     {
@@ -4450,7 +4520,7 @@
       "source_location": "L502",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_attack",
-      "community": 10,
+      "community": 2,
       "norm_label": "attack()"
     },
     {
@@ -4460,7 +4530,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_creatureparty_test",
-      "community": 10,
+      "community": 12,
       "norm_label": "creatureparty.test.ts"
     },
     {
@@ -4470,7 +4540,7 @@
       "source_location": "L179",
       "_origin": "ast",
       "id": "sim_creatureparty_test_createstatewithmagicdust",
-      "community": 10,
+      "community": 12,
       "norm_label": "createstatewithmagicdust()"
     },
     {
@@ -4480,7 +4550,7 @@
       "source_location": "L193",
       "_origin": "ast",
       "id": "sim_creatureparty_test_createcommoncreatures",
-      "community": 10,
+      "community": 12,
       "norm_label": "createcommoncreatures()"
     },
     {
@@ -4490,7 +4560,7 @@
       "source_location": "L220",
       "_origin": "ast",
       "id": "sim_creatureparty_test_withreviveitems",
-      "community": 10,
+      "community": 12,
       "norm_label": "withreviveitems()"
     },
     {
@@ -4500,7 +4570,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_creatureparty",
-      "community": 8,
+      "community": 12,
       "norm_label": "creatureparty.ts"
     },
     {
@@ -4510,7 +4580,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "sim_creatureparty_creatureuserole",
-      "community": 8,
+      "community": 12,
       "norm_label": "creatureuserole"
     },
     {
@@ -4520,7 +4590,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "sim_creatureparty_creaturepartyfailurereason",
-      "community": 8,
+      "community": 12,
       "norm_label": "creaturepartyfailurereason"
     },
     {
@@ -4530,7 +4600,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "sim_creatureparty_creaturepartyresult",
-      "community": 8,
+      "community": 12,
       "norm_label": "creaturepartyresult"
     },
     {
@@ -4540,7 +4610,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "sim_creatureparty_placenewcreature",
-      "community": 10,
+      "community": 2,
       "norm_label": "placenewcreature()"
     },
     {
@@ -4550,7 +4620,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "sim_creatureparty_movecreaturetoactiveparty",
-      "community": 8,
+      "community": 12,
       "norm_label": "movecreaturetoactiveparty()"
     },
     {
@@ -4560,7 +4630,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "sim_creatureparty_movecreaturetostorage",
-      "community": 8,
+      "community": 12,
       "norm_label": "movecreaturetostorage()"
     },
     {
@@ -4570,7 +4640,7 @@
       "source_location": "L91",
       "_origin": "ast",
       "id": "sim_creatureparty_setcreaturehp",
-      "community": 8,
+      "community": 14,
       "norm_label": "setcreaturehp()"
     },
     {
@@ -4580,7 +4650,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "sim_creatureparty_healallcreaturesathospital",
-      "community": 8,
+      "community": 12,
       "norm_label": "healallcreaturesathospital()"
     },
     {
@@ -4590,7 +4660,7 @@
       "source_location": "L140",
       "_origin": "ast",
       "id": "sim_creatureparty_isatvillagehospital",
-      "community": 9,
+      "community": 12,
       "norm_label": "isatvillagehospital()"
     },
     {
@@ -4600,7 +4670,7 @@
       "source_location": "L144",
       "_origin": "ast",
       "id": "sim_creatureparty_usereviveitem",
-      "community": 8,
+      "community": 12,
       "norm_label": "usereviveitem()"
     },
     {
@@ -4610,7 +4680,7 @@
       "source_location": "L187",
       "_origin": "ast",
       "id": "sim_creatureparty_cancreatureuserole",
-      "community": 8,
+      "community": 12,
       "norm_label": "cancreatureuserole()"
     },
     {
@@ -4620,7 +4690,7 @@
       "source_location": "L191",
       "_origin": "ast",
       "id": "sim_creatureparty_iscreaturefainted",
-      "community": 8,
+      "community": 12,
       "norm_label": "iscreaturefainted()"
     },
     {
@@ -4647,7 +4717,7 @@
       "label": "createFarm()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.test.ts",
-      "source_location": "L456",
+      "source_location": "L471",
       "_origin": "ast",
       "id": "sim_farms_test_createfarm",
       "community": 14,
@@ -4657,7 +4727,7 @@
       "label": "withFarm()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.test.ts",
-      "source_location": "L478",
+      "source_location": "L493",
       "_origin": "ast",
       "id": "sim_farms_test_withfarm",
       "community": 14,
@@ -4667,7 +4737,7 @@
       "label": "withCreature()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.test.ts",
-      "source_location": "L490",
+      "source_location": "L505",
       "_origin": "ast",
       "id": "sim_farms_test_withcreature",
       "community": 14,
@@ -4677,7 +4747,7 @@
       "label": "withMagicDust()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.test.ts",
-      "source_location": "L504",
+      "source_location": "L519",
       "_origin": "ast",
       "id": "sim_farms_test_withmagicdust",
       "community": 14,
@@ -4687,7 +4757,7 @@
       "label": "createCreature()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.test.ts",
-      "source_location": "L517",
+      "source_location": "L532",
       "_origin": "ast",
       "id": "sim_farms_test_createcreature",
       "community": 14,
@@ -4707,7 +4777,7 @@
       "label": "FarmCollectionFailureReason",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L19",
+      "source_location": "L20",
       "_origin": "ast",
       "id": "sim_farms_farmcollectionfailurereason",
       "community": 14,
@@ -4717,7 +4787,7 @@
       "label": "FarmUpgradeFailureReason",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L20",
+      "source_location": "L21",
       "_origin": "ast",
       "id": "sim_farms_farmupgradefailurereason",
       "community": 14,
@@ -4727,7 +4797,7 @@
       "label": "FarmGuardFailureReason",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L21",
+      "source_location": "L22",
       "_origin": "ast",
       "id": "sim_farms_farmguardfailurereason",
       "community": 14,
@@ -4737,7 +4807,7 @@
       "label": "FarmTheftFailureReason",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L22",
+      "source_location": "L23",
       "_origin": "ast",
       "id": "sim_farms_farmtheftfailurereason",
       "community": 14,
@@ -4747,7 +4817,7 @@
       "label": "GuardedFarmTheftResolutionFailureReason",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L30",
+      "source_location": "L31",
       "_origin": "ast",
       "id": "sim_farms_guardedfarmtheftresolutionfailurereason",
       "community": 14,
@@ -4757,7 +4827,7 @@
       "label": "FarmCollectionResult",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L38",
+      "source_location": "L39",
       "_origin": "ast",
       "id": "sim_farms_farmcollectionresult",
       "community": 14,
@@ -4767,7 +4837,7 @@
       "label": "FarmUpgradeResult",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L42",
+      "source_location": "L43",
       "_origin": "ast",
       "id": "sim_farms_farmupgraderesult",
       "community": 14,
@@ -4777,7 +4847,7 @@
       "label": "FarmGuardAssignmentResult",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L46",
+      "source_location": "L47",
       "_origin": "ast",
       "id": "sim_farms_farmguardassignmentresult",
       "community": 14,
@@ -4787,7 +4857,7 @@
       "label": "FarmTheftAttemptResult",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L50",
+      "source_location": "L51",
       "_origin": "ast",
       "id": "sim_farms_farmtheftattemptresult",
       "community": 14,
@@ -4797,7 +4867,7 @@
       "label": "GuardedFarmTheftResolutionResult",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L71",
+      "source_location": "L72",
       "_origin": "ast",
       "id": "sim_farms_guardedfarmtheftresolutionresult",
       "community": 14,
@@ -4807,57 +4877,57 @@
       "label": "FarmCardUpgradeRequirement",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L91",
+      "source_location": "L92",
       "_origin": "ast",
       "id": "sim_farms_farmcardupgraderequirement",
-      "community": 3,
+      "community": 8,
       "norm_label": "farmcardupgraderequirement"
     },
     {
       "label": "FarmUpgradeRequirements",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L100",
+      "source_location": "L101",
       "_origin": "ast",
       "id": "sim_farms_farmupgraderequirements",
-      "community": 14,
+      "community": 8,
       "norm_label": "farmupgraderequirements"
     },
     {
       "label": "FarmUpgradePlan",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L105",
+      "source_location": "L106",
       "_origin": "ast",
       "id": "sim_farms_farmupgradeplan",
-      "community": 11,
+      "community": 14,
       "norm_label": "farmupgradeplan"
     },
     {
       "label": "FarmUpgradePreview",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L113",
+      "source_location": "L114",
       "_origin": "ast",
       "id": "sim_farms_farmupgradepreview",
-      "community": 14,
+      "community": 8,
       "norm_label": "farmupgradepreview"
     },
     {
       "label": "FarmDefinition",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L121",
+      "source_location": "L122",
       "_origin": "ast",
       "id": "sim_farms_farmdefinition",
-      "community": 14,
+      "community": 8,
       "norm_label": "farmdefinition"
     },
     {
       "label": "farmDefinitions",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L132",
+      "source_location": "L133",
       "_origin": "ast",
       "id": "sim_farms_farmdefinitions",
       "community": 14,
@@ -4867,17 +4937,17 @@
       "label": "getFarmDefinition()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L159",
+      "source_location": "L160",
       "_origin": "ast",
       "id": "sim_farms_getfarmdefinition",
-      "community": 11,
+      "community": 14,
       "norm_label": "getfarmdefinition()"
     },
     {
       "label": "createFarmSaveRecord()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L163",
+      "source_location": "L164",
       "_origin": "ast",
       "id": "sim_farms_createfarmsaverecord",
       "community": 3,
@@ -4887,17 +4957,17 @@
       "label": "getFarmUpgradePreview()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L202",
+      "source_location": "L203",
       "_origin": "ast",
       "id": "sim_farms_getfarmupgradepreview",
-      "community": 11,
+      "community": 14,
       "norm_label": "getfarmupgradepreview()"
     },
     {
       "label": "upgradeFarm()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L232",
+      "source_location": "L233",
       "_origin": "ast",
       "id": "sim_farms_upgradefarm",
       "community": 14,
@@ -4907,47 +4977,47 @@
       "label": "assignFarmGuard()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L281",
+      "source_location": "L282",
       "_origin": "ast",
       "id": "sim_farms_assignfarmguard",
-      "community": 8,
+      "community": 12,
       "norm_label": "assignfarmguard()"
     },
     {
       "label": "clearFarmGuard()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L321",
+      "source_location": "L322",
       "_origin": "ast",
       "id": "sim_farms_clearfarmguard",
-      "community": 14,
+      "community": 12,
       "norm_label": "clearfarmguard()"
     },
     {
       "label": "isFarmGuardActive()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L349",
+      "source_location": "L350",
       "_origin": "ast",
       "id": "sim_farms_isfarmguardactive",
-      "community": 11,
+      "community": 14,
       "norm_label": "isfarmguardactive()"
     },
     {
       "label": "getFarmUpgradePlan()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L354",
+      "source_location": "L355",
       "_origin": "ast",
       "id": "sim_farms_getfarmupgradeplan",
-      "community": 11,
+      "community": 14,
       "norm_label": "getfarmupgradeplan()"
     },
     {
       "label": "getAccruedFarmRecord()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L358",
+      "source_location": "L359",
       "_origin": "ast",
       "id": "sim_farms_getaccruedfarmrecord",
       "community": 14,
@@ -4957,7 +5027,7 @@
       "label": "getFarmStoredQuantity()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L393",
+      "source_location": "L394",
       "_origin": "ast",
       "id": "sim_farms_getfarmstoredquantity",
       "community": 14,
@@ -4967,7 +5037,7 @@
       "label": "collectFacingFarm()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L398",
+      "source_location": "L399",
       "_origin": "ast",
       "id": "sim_farms_collectfacingfarm",
       "community": 14,
@@ -4977,7 +5047,7 @@
       "label": "attemptFacingFarmTheft()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L442",
+      "source_location": "L443",
       "_origin": "ast",
       "id": "sim_farms_attemptfacingfarmtheft",
       "community": 14,
@@ -4987,7 +5057,7 @@
       "label": "resolveGuardedFarmTheft()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L527",
+      "source_location": "L528",
       "_origin": "ast",
       "id": "sim_farms_resolveguardedfarmtheft",
       "community": 14,
@@ -4997,7 +5067,7 @@
       "label": "getFarmTheftCooldown()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L652",
+      "source_location": "L653",
       "_origin": "ast",
       "id": "sim_farms_getfarmtheftcooldown",
       "community": 14,
@@ -5007,17 +5077,17 @@
       "label": "getFarmTheftAttemptCost()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L662",
+      "source_location": "L663",
       "_origin": "ast",
       "id": "sim_farms_getfarmtheftattemptcost",
-      "community": 11,
+      "community": 14,
       "norm_label": "getfarmtheftattemptcost()"
     },
     {
       "label": "getFarmTheftSuccessChance()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L668",
+      "source_location": "L669",
       "_origin": "ast",
       "id": "sim_farms_getfarmtheftsuccesschance",
       "community": 14,
@@ -5027,27 +5097,37 @@
       "label": "isFarmGuardBlockingTheft()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L674",
+      "source_location": "L675",
       "_origin": "ast",
       "id": "sim_farms_isfarmguardblockingtheft",
-      "community": 11,
+      "community": 14,
       "norm_label": "isfarmguardblockingtheft()"
     },
     {
       "label": "getFacingFarm()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L680",
+      "source_location": "L681",
       "_origin": "ast",
       "id": "sim_farms_getfacingfarm",
       "community": 14,
       "norm_label": "getfacingfarm()"
     },
     {
+      "label": "isFarmTile()",
+      "file_type": "code",
+      "source_file": "src/games/monster-rpg/sim/farms.ts",
+      "source_location": "L689",
+      "_origin": "ast",
+      "id": "sim_farms_isfarmtile",
+      "community": 12,
+      "norm_label": "isfarmtile()"
+    },
+    {
       "label": "getFacingPosition()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L688",
+      "source_location": "L698",
       "_origin": "ast",
       "id": "sim_farms_getfacingposition",
       "community": 14,
@@ -5057,7 +5137,7 @@
       "label": "getFarmTheftCooldownKey()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L704",
+      "source_location": "L714",
       "_origin": "ast",
       "id": "sim_farms_getfarmtheftcooldownkey",
       "community": 14,
@@ -5067,7 +5147,7 @@
       "label": "getTargetVillageLevel()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L708",
+      "source_location": "L718",
       "_origin": "ast",
       "id": "sim_farms_gettargetvillagelevel",
       "community": 14,
@@ -5077,7 +5157,7 @@
       "label": "getFarmTheftStolenQuantity()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L713",
+      "source_location": "L723",
       "_origin": "ast",
       "id": "sim_farms_getfarmtheftstolenquantity",
       "community": 14,
@@ -5087,7 +5167,7 @@
       "label": "createFarmTheftLogEntry()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L717",
+      "source_location": "L727",
       "_origin": "ast",
       "id": "sim_farms_createfarmtheftlogentry",
       "community": 14,
@@ -5097,7 +5177,7 @@
       "label": "createMagicDustFarmUpgradePlan()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L751",
+      "source_location": "L761",
       "_origin": "ast",
       "id": "sim_farms_createmagicdustfarmupgradeplan",
       "community": 14,
@@ -5107,7 +5187,7 @@
       "label": "consumeMaterialRequirements()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L785",
+      "source_location": "L795",
       "_origin": "ast",
       "id": "sim_farms_consumematerialrequirements",
       "community": 14,
@@ -5117,7 +5197,7 @@
       "label": "consumeFarmCardRequirements()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
-      "source_location": "L798",
+      "source_location": "L808",
       "_origin": "ast",
       "id": "sim_farms_consumefarmcardrequirements",
       "community": 14,
@@ -5250,7 +5330,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "sim_maps_getgamemap",
-      "community": 0,
+      "community": 34,
       "norm_label": "getgamemap()"
     },
     {
@@ -5260,7 +5340,7 @@
       "source_location": "L99",
       "_origin": "ast",
       "id": "sim_maps_getmapbyid",
-      "community": 0,
+      "community": 7,
       "norm_label": "getmapbyid()"
     },
     {
@@ -5270,7 +5350,7 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "sim_maps_ismapid",
-      "community": 0,
+      "community": 7,
       "norm_label": "ismapid()"
     },
     {
@@ -5280,7 +5360,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "sim_maps_normalizemapid",
-      "community": 0,
+      "community": 34,
       "norm_label": "normalizemapid()"
     },
     {
@@ -5310,7 +5390,7 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "sim_maps_getallowedspawnsformap",
-      "community": 0,
+      "community": 34,
       "norm_label": "getallowedspawnsformap()"
     },
     {
@@ -5320,7 +5400,7 @@
       "source_location": "L136",
       "_origin": "ast",
       "id": "sim_maps_issameworldposition",
-      "community": 0,
+      "community": 34,
       "norm_label": "issameworldposition()"
     },
     {
@@ -5330,7 +5410,7 @@
       "source_location": "L145",
       "_origin": "ast",
       "id": "sim_maps_isvalidspawnposition",
-      "community": 0,
+      "community": 34,
       "norm_label": "isvalidspawnposition()"
     },
     {
@@ -5360,7 +5440,7 @@
       "source_location": "L236",
       "_origin": "ast",
       "id": "sim_maps_getvillagedefinition",
-      "community": 0,
+      "community": 7,
       "norm_label": "getvillagedefinition()"
     },
     {
@@ -5784,10 +5864,20 @@
       "norm_label": "steps"
     },
     {
-      "label": "findWalkPath()",
+      "label": "PathOptions",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/pathfinding.ts",
       "source_location": "L11",
+      "_origin": "ast",
+      "id": "sim_pathfinding_pathoptions",
+      "community": 0,
+      "norm_label": "pathoptions"
+    },
+    {
+      "label": "findWalkPath()",
+      "file_type": "code",
+      "source_file": "src/games/monster-rpg/sim/pathfinding.ts",
+      "source_location": "L15",
       "_origin": "ast",
       "id": "sim_pathfinding_findwalkpath",
       "community": 0,
@@ -5797,17 +5887,27 @@
       "label": "findWalkPathToInteractionDistance()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/pathfinding.ts",
-      "source_location": "L46",
+      "source_location": "L56",
       "_origin": "ast",
       "id": "sim_pathfinding_findwalkpathtointeractiondistance",
       "community": 0,
       "norm_label": "findwalkpathtointeractiondistance()"
     },
     {
+      "label": "canStandOnTile()",
+      "file_type": "code",
+      "source_file": "src/games/monster-rpg/sim/pathfinding.ts",
+      "source_location": "L104",
+      "_origin": "ast",
+      "id": "sim_pathfinding_canstandontile",
+      "community": 0,
+      "norm_label": "canstandontile()"
+    },
+    {
       "label": "positionKey()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/sim/pathfinding.ts",
-      "source_location": "L77",
+      "source_location": "L108",
       "_origin": "ast",
       "id": "sim_pathfinding_positionkey",
       "community": 0,
@@ -5970,7 +6070,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_savestate_test",
-      "community": 35,
+      "community": 12,
       "norm_label": "savestate.test.ts"
     },
     {
@@ -5980,7 +6080,7 @@
       "source_location": "L225",
       "_origin": "ast",
       "id": "sim_savestate_test_creatememorystorage",
-      "community": 35,
+      "community": 12,
       "norm_label": "creatememorystorage()"
     },
     {
@@ -5990,7 +6090,7 @@
       "source_location": "L250",
       "_origin": "ast",
       "id": "sim_savestate_test_createvalidcreature",
-      "community": 35,
+      "community": 12,
       "norm_label": "createvalidcreature()"
     },
     {
@@ -6020,7 +6120,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "sim_savestate_monsterrpgsaverepository",
-      "community": 25,
+      "community": 22,
       "norm_label": "monsterrpgsaverepository"
     },
     {
@@ -6090,7 +6190,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "sim_savestate_createplayerprofile",
-      "community": 10,
+      "community": 12,
       "norm_label": "createplayerprofile()"
     },
     {
@@ -6100,7 +6200,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "sim_savestate_createinitialsave",
-      "community": 10,
+      "community": 12,
       "norm_label": "createinitialsave()"
     },
     {
@@ -6110,7 +6210,7 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "sim_savestate_loadprofile",
-      "community": 35,
+      "community": 12,
       "norm_label": "loadprofile()"
     },
     {
@@ -6120,7 +6220,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "sim_savestate_loadsave",
-      "community": 35,
+      "community": 12,
       "norm_label": "loadsave()"
     },
     {
@@ -6130,7 +6230,7 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "sim_savestate_saveprogress",
-      "community": 35,
+      "community": 12,
       "norm_label": "saveprogress()"
     },
     {
@@ -6140,7 +6240,7 @@
       "source_location": "L117",
       "_origin": "ast",
       "id": "sim_savestate_exportsave",
-      "community": 9,
+      "community": 12,
       "norm_label": "exportsave()"
     },
     {
@@ -6150,7 +6250,7 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "sim_savestate_importsavepayload",
-      "community": 35,
+      "community": 12,
       "norm_label": "importsavepayload()"
     },
     {
@@ -6170,7 +6270,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "sim_savestate_createemptysavecontainers",
-      "community": 5,
+      "community": 12,
       "norm_label": "createemptysavecontainers()"
     },
     {
@@ -6220,7 +6320,7 @@
       "source_location": "L249",
       "_origin": "ast",
       "id": "sim_savestate_isvalidinventory",
-      "community": 33,
+      "community": 7,
       "norm_label": "isvalidinventory()"
     },
     {
@@ -6230,7 +6330,7 @@
       "source_location": "L263",
       "_origin": "ast",
       "id": "sim_savestate_iscreaturecardrecord",
-      "community": 33,
+      "community": 7,
       "norm_label": "iscreaturecardrecord()"
     },
     {
@@ -6240,7 +6340,7 @@
       "source_location": "L282",
       "_origin": "ast",
       "id": "sim_savestate_iseggrecord",
-      "community": 33,
+      "community": 7,
       "norm_label": "iseggrecord()"
     },
     {
@@ -6260,7 +6360,7 @@
       "source_location": "L319",
       "_origin": "ast",
       "id": "sim_savestate_isvalidcreaturerecord",
-      "community": 34,
+      "community": 7,
       "norm_label": "isvalidcreaturerecord()"
     },
     {
@@ -6280,7 +6380,7 @@
       "source_location": "L359",
       "_origin": "ast",
       "id": "sim_savestate_isvalidstation",
-      "community": 41,
+      "community": 7,
       "norm_label": "isvalidstation()"
     },
     {
@@ -6300,7 +6400,7 @@
       "source_location": "L386",
       "_origin": "ast",
       "id": "sim_savestate_isvalidfarmrecord",
-      "community": 34,
+      "community": 7,
       "norm_label": "isvalidfarmrecord()"
     },
     {
@@ -6320,7 +6420,7 @@
       "source_location": "L447",
       "_origin": "ast",
       "id": "sim_savestate_isvalidfarmposition",
-      "community": 34,
+      "community": 7,
       "norm_label": "isvalidfarmposition()"
     },
     {
@@ -6330,7 +6430,7 @@
       "source_location": "L460",
       "_origin": "ast",
       "id": "sim_savestate_isvalidjournal",
-      "community": 33,
+      "community": 7,
       "norm_label": "isvalidjournal()"
     },
     {
@@ -6380,7 +6480,7 @@
       "source_location": "L512",
       "_origin": "ast",
       "id": "sim_savestate_isstackrecord",
-      "community": 33,
+      "community": 7,
       "norm_label": "isstackrecord()"
     },
     {
@@ -6390,7 +6490,7 @@
       "source_location": "L525",
       "_origin": "ast",
       "id": "sim_savestate_isquantityrecord",
-      "community": 33,
+      "community": 7,
       "norm_label": "isquantityrecord()"
     },
     {
@@ -6400,7 +6500,7 @@
       "source_location": "L531",
       "_origin": "ast",
       "id": "sim_savestate_isvalidstats",
-      "community": 34,
+      "community": 7,
       "norm_label": "isvalidstats()"
     },
     {
@@ -6410,7 +6510,7 @@
       "source_location": "L545",
       "_origin": "ast",
       "id": "sim_savestate_isvalidattackrecord",
-      "community": 34,
+      "community": 7,
       "norm_label": "isvalidattackrecord()"
     },
     {
@@ -6420,7 +6520,7 @@
       "source_location": "L559",
       "_origin": "ast",
       "id": "sim_savestate_isvalidcreationrequirement",
-      "community": 34,
+      "community": 7,
       "norm_label": "isvalidcreationrequirement()"
     },
     {
@@ -6430,7 +6530,7 @@
       "source_location": "L578",
       "_origin": "ast",
       "id": "sim_savestate_iscooldownrecord",
-      "community": 34,
+      "community": 7,
       "norm_label": "iscooldownrecord()"
     },
     {
@@ -6460,7 +6560,7 @@
       "source_location": "L595",
       "_origin": "ast",
       "id": "sim_savestate_isnonemptystring",
-      "community": 34,
+      "community": 7,
       "norm_label": "isnonemptystring()"
     },
     {
@@ -6480,7 +6580,7 @@
       "source_location": "L603",
       "_origin": "ast",
       "id": "sim_savestate_isnonnegativeinteger",
-      "community": 34,
+      "community": 7,
       "norm_label": "isnonnegativeinteger()"
     },
     {
@@ -6490,7 +6590,7 @@
       "source_location": "L607",
       "_origin": "ast",
       "id": "sim_savestate_ispositivefinitenumber",
-      "community": 34,
+      "community": 7,
       "norm_label": "ispositivefinitenumber()"
     },
     {
@@ -6660,7 +6760,7 @@
       "source_location": "L112",
       "_origin": "ast",
       "id": "sim_speciescatalog_getspeciesbyid",
-      "community": 10,
+      "community": 2,
       "norm_label": "getspeciesbyid()"
     },
     {
@@ -6680,7 +6780,7 @@
       "source_location": "L120",
       "_origin": "ast",
       "id": "sim_speciescatalog_isknownspeciesid",
-      "community": 33,
+      "community": 7,
       "norm_label": "isknownspeciesid()"
     },
     {
@@ -6770,7 +6870,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_stations_test",
-      "community": 5,
+      "community": 7,
       "norm_label": "stations.test.ts"
     },
     {
@@ -6780,7 +6880,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_stations",
-      "community": 5,
+      "community": 7,
       "norm_label": "stations.ts"
     },
     {
@@ -6790,7 +6890,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "sim_stations_stationtravelfailurereason",
-      "community": 5,
+      "community": 7,
       "norm_label": "stationtravelfailurereason"
     },
     {
@@ -6800,7 +6900,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "sim_stations_stationtravelquote",
-      "community": 5,
+      "community": 7,
       "norm_label": "stationtravelquote"
     },
     {
@@ -6810,7 +6910,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "sim_stations_stationtravelresult",
-      "community": 5,
+      "community": 7,
       "norm_label": "stationtravelresult"
     },
     {
@@ -6820,7 +6920,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "sim_stations_createinitialstationcontainer",
-      "community": 5,
+      "community": 7,
       "norm_label": "createinitialstationcontainer()"
     },
     {
@@ -6830,7 +6930,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "sim_stations_createplayervillagestationdestination",
-      "community": 5,
+      "community": 7,
       "norm_label": "createplayervillagestationdestination()"
     },
     {
@@ -6840,7 +6940,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "sim_stations_getplayervillagestationdestinationid",
-      "community": 5,
+      "community": 7,
       "norm_label": "getplayervillagestationdestinationid()"
     },
     {
@@ -6850,7 +6950,7 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "sim_stations_getstationdestinations",
-      "community": 5,
+      "community": 7,
       "norm_label": "getstationdestinations()"
     },
     {
@@ -6860,7 +6960,7 @@
       "source_location": "L92",
       "_origin": "ast",
       "id": "sim_stations_discovercurrentstationdestination",
-      "community": 5,
+      "community": 7,
       "norm_label": "discovercurrentstationdestination()"
     },
     {
@@ -6870,7 +6970,7 @@
       "source_location": "L97",
       "_origin": "ast",
       "id": "sim_stations_discoverplayervillageforstation",
-      "community": 5,
+      "community": 7,
       "norm_label": "discoverplayervillageforstation()"
     },
     {
@@ -6880,7 +6980,7 @@
       "source_location": "L131",
       "_origin": "ast",
       "id": "sim_stations_getstationtravelcost",
-      "community": 5,
+      "community": 7,
       "norm_label": "getstationtravelcost()"
     },
     {
@@ -6890,7 +6990,7 @@
       "source_location": "L135",
       "_origin": "ast",
       "id": "sim_stations_getstationcontextlevel",
-      "community": 5,
+      "community": 7,
       "norm_label": "getstationcontextlevel()"
     },
     {
@@ -6900,7 +7000,7 @@
       "source_location": "L140",
       "_origin": "ast",
       "id": "sim_stations_quotestationtravel",
-      "community": 5,
+      "community": 7,
       "norm_label": "quotestationtravel()"
     },
     {
@@ -6910,7 +7010,7 @@
       "source_location": "L185",
       "_origin": "ast",
       "id": "sim_stations_confirmstationtravel",
-      "community": 5,
+      "community": 7,
       "norm_label": "confirmstationtravel()"
     },
     {
@@ -6920,7 +7020,7 @@
       "source_location": "L219",
       "_origin": "ast",
       "id": "sim_stations_isvalidstationdestination",
-      "community": 41,
+      "community": 7,
       "norm_label": "isvalidstationdestination()"
     },
     {
@@ -6930,7 +7030,7 @@
       "source_location": "L241",
       "_origin": "ast",
       "id": "sim_stations_issafestationspawn",
-      "community": 5,
+      "community": 7,
       "norm_label": "issafestationspawn()"
     },
     {
@@ -6940,7 +7040,7 @@
       "source_location": "L246",
       "_origin": "ast",
       "id": "sim_stations_isvillageid",
-      "community": 5,
+      "community": 7,
       "norm_label": "isvillageid()"
     },
     {
@@ -6950,7 +7050,7 @@
       "source_location": "L250",
       "_origin": "ast",
       "id": "sim_stations_getdefaultvillagestationlevel",
-      "community": 5,
+      "community": 7,
       "norm_label": "getdefaultvillagestationlevel()"
     },
     {
@@ -6960,7 +7060,7 @@
       "source_location": "L255",
       "_origin": "ast",
       "id": "sim_stations_isvalidfuturehooks",
-      "community": 41,
+      "community": 7,
       "norm_label": "isvalidfuturehooks()"
     },
     {
@@ -6970,7 +7070,7 @@
       "source_location": "L266",
       "_origin": "ast",
       "id": "sim_stations_isnonemptystring",
-      "community": 41,
+      "community": 7,
       "norm_label": "isnonemptystring()"
     },
     {
@@ -6990,7 +7090,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_types_direction",
-      "community": 17,
+      "community": 33,
       "norm_label": "direction"
     },
     {
@@ -7000,7 +7100,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "sim_types_avatarid",
-      "community": 12,
+      "community": 75,
       "norm_label": "avatarid"
     },
     {
@@ -7040,7 +7140,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "sim_types_villageid",
-      "community": 14,
+      "community": 8,
       "norm_label": "villageid"
     },
     {
@@ -7070,7 +7170,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "sim_types_mapid",
-      "community": 17,
+      "community": 33,
       "norm_label": "mapid"
     },
     {
@@ -7080,7 +7180,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "sim_types_mapkind",
-      "community": 17,
+      "community": 33,
       "norm_label": "mapkind"
     },
     {
@@ -7100,7 +7200,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "sim_types_playerprofile",
-      "community": 2,
+      "community": 22,
       "norm_label": "playerprofile"
     },
     {
@@ -7120,7 +7220,7 @@
       "source_location": "L64",
       "_origin": "ast",
       "id": "sim_types_cardrarity",
-      "community": 3,
+      "community": 8,
       "norm_label": "cardrarity"
     },
     {
@@ -7170,7 +7270,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "sim_types_creaturetype",
-      "community": 2,
+      "community": 5,
       "norm_label": "creaturetype"
     },
     {
@@ -7200,7 +7300,7 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "sim_types_creaturestatkey",
-      "community": 2,
+      "community": 5,
       "norm_label": "creaturestatkey"
     },
     {
@@ -7230,7 +7330,7 @@
       "source_location": "L134",
       "_origin": "ast",
       "id": "sim_types_savestack",
-      "community": 9,
+      "community": 3,
       "norm_label": "savestack"
     },
     {
@@ -7250,7 +7350,7 @@
       "source_location": "L146",
       "_origin": "ast",
       "id": "sim_types_creationrequirement",
-      "community": 14,
+      "community": 8,
       "norm_label": "creationrequirement"
     },
     {
@@ -7260,7 +7360,7 @@
       "source_location": "L152",
       "_origin": "ast",
       "id": "sim_types_creaturecardinstance",
-      "community": 7,
+      "community": 2,
       "norm_label": "creaturecardinstance"
     },
     {
@@ -7280,7 +7380,7 @@
       "source_location": "L164",
       "_origin": "ast",
       "id": "sim_types_eggsaverecord",
-      "community": 7,
+      "community": 2,
       "norm_label": "eggsaverecord"
     },
     {
@@ -7310,7 +7410,7 @@
       "source_location": "L199",
       "_origin": "ast",
       "id": "sim_types_battlekind",
-      "community": 2,
+      "community": 5,
       "norm_label": "battlekind"
     },
     {
@@ -7320,7 +7420,7 @@
       "source_location": "L201",
       "_origin": "ast",
       "id": "sim_types_battleparticipantkind",
-      "community": 2,
+      "community": 5,
       "norm_label": "battleparticipantkind"
     },
     {
@@ -7330,7 +7430,7 @@
       "source_location": "L203",
       "_origin": "ast",
       "id": "sim_types_battlestatus",
-      "community": 2,
+      "community": 5,
       "norm_label": "battlestatus"
     },
     {
@@ -7400,7 +7500,7 @@
       "source_location": "L265",
       "_origin": "ast",
       "id": "sim_types_creaturesavecontainer",
-      "community": 8,
+      "community": 12,
       "norm_label": "creaturesavecontainer"
     },
     {
@@ -7440,7 +7540,7 @@
       "source_location": "L287",
       "_origin": "ast",
       "id": "sim_types_stationdestination",
-      "community": 5,
+      "community": 11,
       "norm_label": "stationdestination"
     },
     {
@@ -7450,7 +7550,7 @@
       "source_location": "L298",
       "_origin": "ast",
       "id": "sim_types_stationsavecontainer",
-      "community": 5,
+      "community": 7,
       "norm_label": "stationsavecontainer"
     },
     {
@@ -7470,7 +7570,7 @@
       "source_location": "L309",
       "_origin": "ast",
       "id": "sim_types_farmsaverecord",
-      "community": 14,
+      "community": 1,
       "norm_label": "farmsaverecord"
     },
     {
@@ -7520,7 +7620,7 @@
       "source_location": "L351",
       "_origin": "ast",
       "id": "sim_types_journalspeciesviewstate",
-      "community": 10,
+      "community": 0,
       "norm_label": "journalspeciesviewstate"
     },
     {
@@ -7530,7 +7630,7 @@
       "source_location": "L353",
       "_origin": "ast",
       "id": "sim_types_journalsavecontainer",
-      "community": 17,
+      "community": 7,
       "norm_label": "journalsavecontainer"
     },
     {
@@ -7550,7 +7650,7 @@
       "source_location": "L369",
       "_origin": "ast",
       "id": "sim_types_worldposition",
-      "community": 17,
+      "community": 0,
       "norm_label": "worldposition"
     },
     {
@@ -7590,7 +7690,7 @@
       "source_location": "L413",
       "_origin": "ast",
       "id": "sim_types_gamemap",
-      "community": 24,
+      "community": 41,
       "norm_label": "gamemap"
     },
     {
@@ -7610,7 +7710,7 @@
       "source_location": "L427",
       "_origin": "ast",
       "id": "sim_types_inputaction",
-      "community": 12,
+      "community": 41,
       "norm_label": "inputaction"
     },
     {
@@ -7640,7 +7740,7 @@
       "source_location": "L453",
       "_origin": "ast",
       "id": "sim_types_wildencounterstatus",
-      "community": 17,
+      "community": 33,
       "norm_label": "wildencounterstatus"
     },
     {
@@ -7650,7 +7750,7 @@
       "source_location": "L455",
       "_origin": "ast",
       "id": "sim_types_wildencounteroutcome",
-      "community": 2,
+      "community": 22,
       "norm_label": "wildencounteroutcome"
     },
     {
@@ -7690,7 +7790,7 @@
       "source_location": "L480",
       "_origin": "ast",
       "id": "sim_types_resolvewildencountermessage",
-      "community": 28,
+      "community": 16,
       "norm_label": "resolvewildencountermessage"
     },
     {
@@ -7750,7 +7850,7 @@
       "source_location": "L521",
       "_origin": "ast",
       "id": "sim_types_locationroomstate",
-      "community": 25,
+      "community": 35,
       "norm_label": "locationroomstate"
     },
     {
@@ -7760,7 +7860,7 @@
       "source_location": "L532",
       "_origin": "ast",
       "id": "sim_types_monsterrpgsavestate",
-      "community": 25,
+      "community": 35,
       "norm_label": "monsterrpgsavestate"
     },
     {
@@ -7770,7 +7870,7 @@
       "source_location": "L547",
       "_origin": "ast",
       "id": "sim_types_movementresult",
-      "community": 0,
+      "community": 11,
       "norm_label": "movementresult"
     },
     {
@@ -7780,7 +7880,7 @@
       "source_location": "L558",
       "_origin": "ast",
       "id": "sim_types_moveintentmessage",
-      "community": 13,
+      "community": 16,
       "norm_label": "moveintentmessage"
     },
     {
@@ -7790,7 +7890,7 @@
       "source_location": "L563",
       "_origin": "ast",
       "id": "sim_types_joinlocationoptions",
-      "community": 28,
+      "community": 34,
       "norm_label": "joinlocationoptions"
     },
     {
@@ -7830,7 +7930,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "sim_wildencounters_wildencounterzone",
-      "community": 21,
+      "community": 33,
       "norm_label": "wildencounterzone"
     },
     {
@@ -7840,7 +7940,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "sim_wildencounters_wildencounterspawn",
-      "community": 21,
+      "community": 33,
       "norm_label": "wildencounterspawn"
     },
     {
@@ -7960,7 +8060,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "ui_charactercreator",
-      "community": 12,
+      "community": 75,
       "norm_label": "charactercreator.tsx"
     },
     {
@@ -7970,7 +8070,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "ui_charactercreator_charactercreatorprops",
-      "community": 12,
+      "community": 75,
       "norm_label": "charactercreatorprops"
     },
     {
@@ -7980,7 +8080,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "ui_charactercreator_avataroptions",
-      "community": 12,
+      "community": 75,
       "norm_label": "avataroptions"
     },
     {
@@ -7990,7 +8090,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "ui_charactercreator_charactercreator",
-      "community": 12,
+      "community": 75,
       "norm_label": "charactercreator()"
     },
     {
@@ -8010,7 +8110,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "ui_gamehud_gamehudprops",
-      "community": 25,
+      "community": 11,
       "norm_label": "gamehudprops"
     },
     {
@@ -8027,7 +8127,7 @@
       "label": "BattleMeter()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L455",
+      "source_location": "L477",
       "_origin": "ast",
       "id": "ui_gamehud_battlemeter",
       "community": 11,
@@ -8037,7 +8137,7 @@
       "label": "formatBattleStatus()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L490",
+      "source_location": "L512",
       "_origin": "ast",
       "id": "ui_gamehud_formatbattlestatus",
       "community": 11,
@@ -8047,7 +8147,7 @@
       "label": "JournalSpeciesRow()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L497",
+      "source_location": "L519",
       "_origin": "ast",
       "id": "ui_gamehud_journalspeciesrow",
       "community": 11,
@@ -8057,7 +8157,7 @@
       "label": "formatMapKind()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L518",
+      "source_location": "L540",
       "_origin": "ast",
       "id": "ui_gamehud_formatmapkind",
       "community": 11,
@@ -8067,17 +8167,37 @@
       "label": "formatCurrencySummary()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L524",
+      "source_location": "L546",
       "_origin": "ast",
       "id": "ui_gamehud_formatcurrencysummary",
       "community": 11,
       "norm_label": "formatcurrencysummary()"
     },
     {
+      "label": "getInventoryRows()",
+      "file_type": "code",
+      "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
+      "source_location": "L553",
+      "_origin": "ast",
+      "id": "ui_gamehud_getinventoryrows",
+      "community": 11,
+      "norm_label": "getinventoryrows()"
+    },
+    {
+      "label": "getActivityRows()",
+      "file_type": "code",
+      "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
+      "source_location": "L571",
+      "_origin": "ast",
+      "id": "ui_gamehud_getactivityrows",
+      "community": 11,
+      "norm_label": "getactivityrows()"
+    },
+    {
       "label": "formatMaterialId()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L531",
+      "source_location": "L597",
       "_origin": "ast",
       "id": "ui_gamehud_formatmaterialid",
       "community": 11,
@@ -8087,7 +8207,7 @@
       "label": "getStatusText()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L536",
+      "source_location": "L602",
       "_origin": "ast",
       "id": "ui_gamehud_getstatustext",
       "community": 11,
@@ -8097,7 +8217,7 @@
       "label": "CardRow",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L542",
+      "source_location": "L608",
       "_origin": "ast",
       "id": "ui_gamehud_cardrow",
       "community": 11,
@@ -8107,7 +8227,7 @@
       "label": "getCardRows()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L575",
+      "source_location": "L641",
       "_origin": "ast",
       "id": "ui_gamehud_getcardrows",
       "community": 11,
@@ -8117,7 +8237,7 @@
       "label": "CreatureRow",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L635",
+      "source_location": "L701",
       "_origin": "ast",
       "id": "ui_gamehud_creaturerow",
       "community": 11,
@@ -8127,7 +8247,7 @@
       "label": "FarmRow",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L642",
+      "source_location": "L708",
       "_origin": "ast",
       "id": "ui_gamehud_farmrow",
       "community": 11,
@@ -8137,7 +8257,7 @@
       "label": "StationRow",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L660",
+      "source_location": "L726",
       "_origin": "ast",
       "id": "ui_gamehud_stationrow",
       "community": 11,
@@ -8147,17 +8267,17 @@
       "label": "getStationRows()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L667",
+      "source_location": "L733",
       "_origin": "ast",
       "id": "ui_gamehud_getstationrows",
-      "community": 5,
+      "community": 11,
       "norm_label": "getstationrows()"
     },
     {
       "label": "formatStationDestinationKind()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L681",
+      "source_location": "L747",
       "_origin": "ast",
       "id": "ui_gamehud_formatstationdestinationkind",
       "community": 11,
@@ -8167,7 +8287,7 @@
       "label": "formatStationTravelStatus()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L686",
+      "source_location": "L752",
       "_origin": "ast",
       "id": "ui_gamehud_formatstationtravelstatus",
       "community": 11,
@@ -8177,7 +8297,7 @@
       "label": "getFarmRows()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L694",
+      "source_location": "L760",
       "_origin": "ast",
       "id": "ui_gamehud_getfarmrows",
       "community": 11,
@@ -8187,27 +8307,27 @@
       "label": "toFarmRow()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L700",
+      "source_location": "L766",
       "_origin": "ast",
       "id": "ui_gamehud_tofarmrow",
-      "community": 11,
+      "community": 14,
       "norm_label": "tofarmrow()"
     },
     {
       "label": "formatVisitorFarmAccess()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L734",
+      "source_location": "L800",
       "_origin": "ast",
       "id": "ui_gamehud_formatvisitorfarmaccess",
-      "community": 11,
+      "community": 14,
       "norm_label": "formatvisitorfarmaccess()"
     },
     {
       "label": "formatDuration()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L750",
+      "source_location": "L816",
       "_origin": "ast",
       "id": "ui_gamehud_formatduration",
       "community": 11,
@@ -8217,7 +8337,7 @@
       "label": "formatFarmUpgradeRequirement()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L758",
+      "source_location": "L824",
       "_origin": "ast",
       "id": "ui_gamehud_formatfarmupgraderequirement",
       "community": 11,
@@ -8227,7 +8347,7 @@
       "label": "getCreatureRows()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L769",
+      "source_location": "L835",
       "_origin": "ast",
       "id": "ui_gamehud_getcreaturerows",
       "community": 11,
@@ -8237,7 +8357,7 @@
       "label": "getCardAction()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L784",
+      "source_location": "L850",
       "_origin": "ast",
       "id": "ui_gamehud_getcardaction",
       "community": 11,
@@ -8247,7 +8367,7 @@
       "label": "formatBlockedBy()",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
-      "source_location": "L793",
+      "source_location": "L859",
       "_origin": "ast",
       "id": "ui_gamehud_formatblockedby",
       "community": 11,
@@ -8260,7 +8380,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "ui_mobiledpad",
-      "community": 12,
+      "community": 41,
       "norm_label": "mobiledpad.tsx"
     },
     {
@@ -8270,7 +8390,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "ui_mobiledpad_mobiledpadprops",
-      "community": 12,
+      "community": 41,
       "norm_label": "mobiledpadprops"
     },
     {
@@ -8280,7 +8400,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "ui_mobiledpad_controls",
-      "community": 12,
+      "community": 41,
       "norm_label": "controls"
     },
     {
@@ -8290,7 +8410,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "ui_mobiledpad_mobiledpad",
-      "community": 12,
+      "community": 41,
       "norm_label": "mobiledpad()"
     },
     {
@@ -8310,7 +8430,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "ui_villageelderonboarding_villageelderonboardingprops",
-      "community": 9,
+      "community": 35,
       "norm_label": "villageelderonboardingprops"
     },
     {
@@ -10264,10 +10384,30 @@
       "norm_label": "2026-06-21 - issue #22: mvp art and hud polish pass"
     },
     {
-      "label": "Next Work",
+      "label": "2026-06-21 - GitHub Pages CI Diagnosis",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L341",
+      "_origin": "ast",
+      "id": "monster_rpg_work_summary_2026_06_21_github_pages_ci_diagnosis",
+      "community": 15,
+      "norm_label": "2026-06-21 - github pages ci diagnosis"
+    },
+    {
+      "label": "2026-06-21 - HUD Cleanup, 2x2 Farms, And Click-Walk",
+      "file_type": "document",
+      "source_file": "docs/monster-rpg/work-summary.md",
+      "source_location": "L346",
+      "_origin": "ast",
+      "id": "monster_rpg_work_summary_2026_06_21_hud_cleanup_2x2_farms_and_click_walk",
+      "community": 15,
+      "norm_label": "2026-06-21 - hud cleanup, 2x2 farms, and click-walk"
+    },
+    {
+      "label": "Next Work",
+      "file_type": "document",
+      "source_file": "docs/monster-rpg/work-summary.md",
+      "source_location": "L355",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_next_work",
       "community": 15,
@@ -17106,6 +17246,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
+      "source_location": "L983",
+      "weight": 1.0,
+      "source": "monster_rpg_monsterrpggame",
+      "target": "monster_rpg_monsterrpggame_getfarmfootprintmoveblock",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
       "source_location": "L63",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -17121,6 +17271,16 @@
       "confidence_score": 1.0,
       "source": "monster_rpg_monsterrpggame",
       "target": "monster_rpg_monsterrpggame_monsterrpggame"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
+      "source_location": "L976",
+      "weight": 1.0,
+      "source": "monster_rpg_monsterrpggame",
+      "target": "monster_rpg_monsterrpggame_movedeltabydirection",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -17396,6 +17556,17 @@
       "confidence_score": 1.0,
       "source": "monster_rpg_monsterrpggame",
       "target": "sim_farms_getfacingfarm"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "monster_rpg_monsterrpggame",
+      "target": "sim_farms_isfarmtile",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -17682,6 +17853,17 @@
       "confidence_score": 1.0,
       "source": "monster_rpg_monsterrpggame",
       "target": "sim_types_creaturelabelmode"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/MonsterRpgGame.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "monster_rpg_monsterrpggame",
+      "target": "sim_types_direction",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -18263,9 +18445,9 @@
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
       "source_location": "L796",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scenes_villagescene",
-      "target": "scenes_villagescene_getspeciesaccentcolor",
-      "confidence_score": 1.0
+      "target": "scenes_villagescene_getspeciesaccentcolor"
     },
     {
       "relation": "contains",
@@ -18336,6 +18518,17 @@
       "confidence_score": 1.0,
       "source": "scenes_villagescene",
       "target": "scenes_villagescene_villagesceneoptions"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "scenes_villagescene",
+      "target": "sim_farms_isfarmtile",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -18413,6 +18606,17 @@
       "confidence_score": 1.0,
       "source": "scenes_villagescene",
       "target": "sim_types_creaturelabelmode"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "scenes_villagescene",
+      "target": "sim_types_direction",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -18574,9 +18778,9 @@
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
       "source_location": "L426",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scenes_villagescene_villagescene",
-      "target": "scenes_villagescene_villagescene_addmaplabel",
-      "confidence_score": 1.0
+      "target": "scenes_villagescene_villagescene_addmaplabel"
     },
     {
       "relation": "method",
@@ -18587,6 +18791,26 @@
       "confidence_score": 1.0,
       "source": "scenes_villagescene_villagescene",
       "target": "scenes_villagescene_villagescene_addspriteoverlay"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L307",
+      "weight": 1.0,
+      "source": "scenes_villagescene_villagescene",
+      "target": "scenes_villagescene_villagescene_advancemovementqueue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L319",
+      "weight": 1.0,
+      "source": "scenes_villagescene_villagescene",
+      "target": "scenes_villagescene_villagescene_clearmovementqueue",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -18657,6 +18881,16 @@
       "confidence_score": 1.0,
       "source": "scenes_villagescene_villagescene",
       "target": "scenes_villagescene_villagescene_createplayerview"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L283",
+      "weight": 1.0,
+      "source": "scenes_villagescene_villagescene",
+      "target": "scenes_villagescene_villagescene_dispatchmanualmove",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -18734,9 +18968,9 @@
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
       "source_location": "L777",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scenes_villagescene_villagescene",
-      "target": "scenes_villagescene_villagescene_getbuildinglabel",
-      "confidence_score": 1.0
+      "target": "scenes_villagescene_villagescene_getbuildinglabel"
     },
     {
       "relation": "method",
@@ -18872,6 +19106,16 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L794",
+      "weight": 1.0,
+      "source": "scenes_villagescene_villagescene",
+      "target": "scenes_villagescene_villagescene_isfarmtileat",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
       "source_location": "L700",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -18887,6 +19131,16 @@
       "confidence_score": 1.0,
       "source": "scenes_villagescene_villagescene",
       "target": "scenes_villagescene_villagescene_preload"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L288",
+      "weight": 1.0,
+      "source": "scenes_villagescene_villagescene",
+      "target": "scenes_villagescene_villagescene_queuemovement",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -19044,6 +19298,17 @@
       "context": "field",
       "confidence": "EXTRACTED",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L142",
+      "weight": 1.0,
+      "source": "scenes_villagescene_villagescene",
+      "target": "sim_types_direction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
       "source_location": "L120",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -19148,6 +19413,28 @@
       "confidence_score": 1.0,
       "source": "scenes_villagescene_villagescene_create",
       "target": "scenes_villagescene_villagescene_renderplayers"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L184",
+      "weight": 1.0,
+      "source": "scenes_villagescene_villagescene_update",
+      "target": "scenes_villagescene_villagescene_clearmovementqueue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L176",
+      "weight": 1.0,
+      "source": "scenes_villagescene_villagescene_update",
+      "target": "scenes_villagescene_villagescene_dispatchmanualmove",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -19406,6 +19693,17 @@
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L280",
+      "weight": 1.0,
+      "source": "scenes_villagescene_villagescene_handlepointerdown",
+      "target": "scenes_villagescene_villagescene_queuemovement",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
       "source_location": "L251",
@@ -19423,6 +19721,72 @@
       "weight": 1.0,
       "source": "scenes_villagescene_villagescene_handlepointerdown",
       "target": "sim_pathfinding_findwalkpathtointeractiondistance"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L284",
+      "weight": 1.0,
+      "source": "scenes_villagescene_villagescene_dispatchmanualmove",
+      "target": "scenes_villagescene_villagescene_clearmovementqueue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L283",
+      "weight": 1.0,
+      "source": "scenes_villagescene_villagescene_dispatchmanualmove",
+      "target": "sim_types_direction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L299",
+      "weight": 1.0,
+      "source": "scenes_villagescene_villagescene_queuemovement",
+      "target": "scenes_villagescene_villagescene_advancemovementqueue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L289",
+      "weight": 1.0,
+      "source": "scenes_villagescene_villagescene_queuemovement",
+      "target": "scenes_villagescene_villagescene_clearmovementqueue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L288",
+      "weight": 1.0,
+      "source": "scenes_villagescene_villagescene_queuemovement",
+      "target": "sim_types_direction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L315",
+      "weight": 1.0,
+      "source": "scenes_villagescene_villagescene_advancemovementqueue",
+      "target": "scenes_villagescene_villagescene_clearmovementqueue",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -19594,6 +19958,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L795",
+      "weight": 1.0,
+      "source": "scenes_villagescene_villagescene_isfarmtileat",
+      "target": "scenes_villagescene_villagescene_getrenderablefarms",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
       "source_location": "L673",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -19629,9 +20004,9 @@
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
       "source_location": "L580",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scenes_villagescene_villagescene_syncencounterview",
-      "target": "scenes_villagescene_getspeciesaccentcolor",
-      "confidence_score": 1.0
+      "target": "scenes_villagescene_getspeciesaccentcolor"
     },
     {
       "relation": "calls",
@@ -19838,9 +20213,9 @@
       "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
       "source_location": "L777",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scenes_villagescene_villagescene_getbuildinglabel",
-      "target": "sim_types_tiletype",
-      "confidence_score": 1.0
+      "target": "sim_types_tiletype"
     },
     {
       "relation": "references",
@@ -26747,6 +27122,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/games/monster-rpg/sim/farms.ts",
+      "source_location": "L689",
+      "weight": 1.0,
+      "source": "sim_farms",
+      "target": "sim_farms_isfarmtile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/sim/farms.ts",
       "source_location": "L527",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -27796,6 +28181,17 @@
       "confidence_score": 1.0,
       "source": "sim_index",
       "target": "sim_farms_getfacingfarm"
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/sim/index.ts",
+      "source_location": "L211",
+      "weight": 1.0,
+      "source": "sim_index",
+      "target": "sim_farms_isfarmtile",
+      "confidence_score": 1.0
     },
     {
       "relation": "re_exports",
@@ -30813,6 +31209,17 @@
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/sim/pathfinding.ts",
+      "source_location": "L105",
+      "weight": 1.0,
+      "source": "sim_pathfinding_canstandontile",
+      "target": "sim_maps_canentertile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/games/monster-rpg/sim/pathfinding.ts",
       "source_location": "L14",
@@ -32011,6 +32418,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/games/monster-rpg/sim/pathfinding.ts",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "sim_pathfinding",
+      "target": "sim_pathfinding_canstandontile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/sim/pathfinding.ts",
       "source_location": "L11",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -32026,6 +32443,16 @@
       "confidence_score": 1.0,
       "source": "sim_pathfinding",
       "target": "sim_pathfinding_findwalkpathtointeractiondistance"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/sim/pathfinding.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "sim_pathfinding",
+      "target": "sim_pathfinding_pathoptions",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -32096,6 +32523,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/games/monster-rpg/sim/pathfinding.ts",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "sim_pathfinding_findwalkpath",
+      "target": "sim_pathfinding_canstandontile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/sim/pathfinding.ts",
       "source_location": "L20",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -32112,6 +32550,17 @@
       "confidence_score": 1.0,
       "source": "sim_pathfinding_findwalkpathtointeractiondistance",
       "target": "sim_pathfinding_findwalkpath"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/sim/pathfinding.ts",
+      "source_location": "L82",
+      "weight": 1.0,
+      "source": "sim_pathfinding_findwalkpathtointeractiondistance",
+      "target": "sim_pathfinding_canstandontile",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -36551,6 +37000,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
+      "source_location": "L571",
+      "weight": 1.0,
+      "source": "ui_gamehud",
+      "target": "ui_gamehud_getactivityrows",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
       "source_location": "L728",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -36586,6 +37045,16 @@
       "confidence_score": 1.0,
       "source": "ui_gamehud",
       "target": "ui_gamehud_getfarmrows"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
+      "source_location": "L553",
+      "weight": 1.0,
+      "source": "ui_gamehud",
+      "target": "ui_gamehud_getinventoryrows",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -36675,6 +37144,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
+      "source_location": "L115",
+      "weight": 1.0,
+      "source": "ui_gamehud_gamehud",
+      "target": "ui_gamehud_getactivityrows",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
       "source_location": "L110",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -36708,6 +37188,17 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
+      "source_location": "L114",
+      "weight": 1.0,
+      "source": "ui_gamehud_gamehud",
+      "target": "ui_gamehud_getinventoryrows",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
       "source_location": "L113",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -36724,6 +37215,17 @@
       "confidence_score": 1.0,
       "source": "ui_gamehud_gamehud",
       "target": "ui_gamehud_getstatustext"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/ui/GameHud.tsx",
+      "source_location": "L583",
+      "weight": 1.0,
+      "source": "ui_gamehud_getactivityrows",
+      "target": "ui_gamehud_formatblockedby",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -38824,9 +39326,9 @@
       "source_file": "README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme",
-      "target": "readme_gameit_portal_mvp",
-      "confidence_score": 1.0
+      "target": "readme_gameit_portal_mvp"
     },
     {
       "relation": "references",
@@ -38904,9 +39406,9 @@
       "source_file": "README.md",
       "source_location": "L78",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_adding_a_new_game",
-      "confidence_score": 1.0
+      "target": "readme_adding_a_new_game"
     },
     {
       "relation": "contains",
@@ -38914,9 +39416,9 @@
       "source_file": "README.md",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_admin_access_mvp",
-      "confidence_score": 1.0
+      "target": "readme_admin_access_mvp"
     },
     {
       "relation": "contains",
@@ -38924,9 +39426,9 @@
       "source_file": "README.md",
       "source_location": "L52",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_architecture_overview",
-      "confidence_score": 1.0
+      "target": "readme_architecture_overview"
     },
     {
       "relation": "contains",
@@ -38934,9 +39436,9 @@
       "source_file": "README.md",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_build_preview",
-      "confidence_score": 1.0
+      "target": "readme_build_preview"
     },
     {
       "relation": "contains",
@@ -38944,9 +39446,9 @@
       "source_file": "README.md",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_deploy_to_github_pages",
-      "confidence_score": 1.0
+      "target": "readme_deploy_to_github_pages"
     },
     {
       "relation": "contains",
@@ -38954,9 +39456,9 @@
       "source_file": "README.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_features",
-      "confidence_score": 1.0
+      "target": "readme_features"
     },
     {
       "relation": "contains",
@@ -38964,9 +39466,9 @@
       "source_file": "README.md",
       "source_location": "L93",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_future_improvements",
-      "confidence_score": 1.0
+      "target": "readme_future_improvements"
     },
     {
       "relation": "contains",
@@ -38974,9 +39476,9 @@
       "source_file": "README.md",
       "source_location": "L85",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_known_limitations",
-      "confidence_score": 1.0
+      "target": "readme_known_limitations"
     },
     {
       "relation": "contains",
@@ -38984,9 +39486,9 @@
       "source_file": "README.md",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_local_run",
-      "confidence_score": 1.0
+      "target": "readme_local_run"
     },
     {
       "relation": "contains",
@@ -38994,9 +39496,9 @@
       "source_file": "README.md",
       "source_location": "L65",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_monster_rpg_foundation",
-      "confidence_score": 1.0
+      "target": "readme_monster_rpg_foundation"
     },
     {
       "relation": "contains",
@@ -39004,9 +39506,9 @@
       "source_file": "README.md",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_multiplayer_dev",
-      "confidence_score": 1.0
+      "target": "readme_multiplayer_dev"
     },
     {
       "relation": "contains",
@@ -39014,9 +39516,9 @@
       "source_file": "README.md",
       "source_location": "L102",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_ui_asset_integration",
-      "confidence_score": 1.0
+      "target": "readme_ui_asset_integration"
     },
     {
       "relation": "contains",
@@ -39024,9 +39526,9 @@
       "source_file": "docs/adr/0001-card-egg-acquisition-model.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "adr_0001_card_egg_acquisition_model",
-      "target": "adr_0001_card_egg_acquisition_model_card_and_egg_acquisition_model",
-      "confidence_score": 1.0
+      "target": "adr_0001_card_egg_acquisition_model_card_and_egg_acquisition_model"
     },
     {
       "relation": "contains",
@@ -39034,9 +39536,9 @@
       "source_file": "docs/adr/0002-shared-server-wild-encounters.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "adr_0002_shared_server_wild_encounters",
-      "target": "adr_0002_shared_server_wild_encounters_shared_server_wild_encounters",
-      "confidence_score": 1.0
+      "target": "adr_0002_shared_server_wild_encounters_shared_server_wild_encounters"
     },
     {
       "relation": "contains",
@@ -39044,9 +39546,9 @@
       "source_file": "docs/adr/0003-server-authoritative-economy-and-theft.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "adr_0003_server_authoritative_economy_and_theft",
-      "target": "adr_0003_server_authoritative_economy_and_theft_server_authoritative_economy_and_theft",
-      "confidence_score": 1.0
+      "target": "adr_0003_server_authoritative_economy_and_theft_server_authoritative_economy_and_theft"
     },
     {
       "relation": "contains",
@@ -39054,9 +39556,9 @@
       "source_file": "docs/adr/0004-local-first-persistence-until-gameplay-proof.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "adr_0004_local_first_persistence_until_gameplay_proof",
-      "target": "adr_0004_local_first_persistence_until_gameplay_proof_local_first_persistence_until_gameplay_proof",
-      "confidence_score": 1.0
+      "target": "adr_0004_local_first_persistence_until_gameplay_proof_local_first_persistence_until_gameplay_proof"
     },
     {
       "relation": "contains",
@@ -39064,9 +39566,9 @@
       "source_file": "docs/adr/0005-separate-location-and-battle-rooms.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "adr_0005_separate_location_and_battle_rooms",
-      "target": "adr_0005_separate_location_and_battle_rooms_separate_location_and_battle_rooms",
-      "confidence_score": 1.0
+      "target": "adr_0005_separate_location_and_battle_rooms_separate_location_and_battle_rooms"
     },
     {
       "relation": "contains",
@@ -39074,9 +39576,9 @@
       "source_file": "docs/monster-rpg/phase-0-foundation.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_phase_0_foundation",
-      "target": "monster_rpg_phase_0_foundation_gameit_monster_rpg_phase_0_foundation",
-      "confidence_score": 1.0
+      "target": "monster_rpg_phase_0_foundation_gameit_monster_rpg_phase_0_foundation"
     },
     {
       "relation": "contains",
@@ -39084,9 +39586,9 @@
       "source_file": "docs/monster-rpg/phase-0-foundation.md",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_phase_0_foundation_gameit_monster_rpg_phase_0_foundation",
-      "target": "monster_rpg_phase_0_foundation_architecture_boundaries",
-      "confidence_score": 1.0
+      "target": "monster_rpg_phase_0_foundation_architecture_boundaries"
     },
     {
       "relation": "contains",
@@ -39094,9 +39596,9 @@
       "source_file": "docs/monster-rpg/phase-0-foundation.md",
       "source_location": "L39",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_phase_0_foundation_gameit_monster_rpg_phase_0_foundation",
-      "target": "monster_rpg_phase_0_foundation_initial_contracts",
-      "confidence_score": 1.0
+      "target": "monster_rpg_phase_0_foundation_initial_contracts"
     },
     {
       "relation": "contains",
@@ -39104,9 +39606,9 @@
       "source_file": "docs/monster-rpg/phase-0-foundation.md",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_phase_0_foundation_gameit_monster_rpg_phase_0_foundation",
-      "target": "monster_rpg_phase_0_foundation_roadmap",
-      "confidence_score": 1.0
+      "target": "monster_rpg_phase_0_foundation_roadmap"
     },
     {
       "relation": "contains",
@@ -39114,9 +39616,9 @@
       "source_file": "docs/monster-rpg/phase-0-foundation.md",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_phase_0_foundation_gameit_monster_rpg_phase_0_foundation",
-      "target": "monster_rpg_phase_0_foundation_stack_decisions",
-      "confidence_score": 1.0
+      "target": "monster_rpg_phase_0_foundation_stack_decisions"
     },
     {
       "relation": "contains",
@@ -39124,9 +39626,9 @@
       "source_file": "docs/monster-rpg/phase-0-foundation.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_phase_0_foundation_gameit_monster_rpg_phase_0_foundation",
-      "target": "monster_rpg_phase_0_foundation_summary",
-      "confidence_score": 1.0
+      "target": "monster_rpg_phase_0_foundation_summary"
     },
     {
       "relation": "contains",
@@ -39134,9 +39636,9 @@
       "source_file": "docs/monster-rpg/phase-0-foundation.md",
       "source_location": "L51",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_phase_0_foundation_gameit_monster_rpg_phase_0_foundation",
-      "target": "monster_rpg_phase_0_foundation_test_strategy",
-      "confidence_score": 1.0
+      "target": "monster_rpg_phase_0_foundation_test_strategy"
     },
     {
       "relation": "contains",
@@ -39144,9 +39646,9 @@
       "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_prd_gameit_monsters_mvp",
-      "target": "monster_rpg_prd_gameit_monsters_mvp_prd_gameit_monsters_mvp",
-      "confidence_score": 1.0
+      "target": "monster_rpg_prd_gameit_monsters_mvp_prd_gameit_monsters_mvp"
     },
     {
       "relation": "contains",
@@ -39154,9 +39656,9 @@
       "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
       "source_location": "L180",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_prd_gameit_monsters_mvp_prd_gameit_monsters_mvp",
-      "target": "monster_rpg_prd_gameit_monsters_mvp_further_notes",
-      "confidence_score": 1.0
+      "target": "monster_rpg_prd_gameit_monsters_mvp_further_notes"
     },
     {
       "relation": "contains",
@@ -39164,9 +39666,9 @@
       "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
       "source_location": "L123",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_prd_gameit_monsters_mvp_prd_gameit_monsters_mvp",
-      "target": "monster_rpg_prd_gameit_monsters_mvp_implementation_decisions",
-      "confidence_score": 1.0
+      "target": "monster_rpg_prd_gameit_monsters_mvp_implementation_decisions"
     },
     {
       "relation": "contains",
@@ -39174,9 +39676,9 @@
       "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
       "source_location": "L163",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_prd_gameit_monsters_mvp_prd_gameit_monsters_mvp",
-      "target": "monster_rpg_prd_gameit_monsters_mvp_out_of_scope",
-      "confidence_score": 1.0
+      "target": "monster_rpg_prd_gameit_monsters_mvp_out_of_scope"
     },
     {
       "relation": "contains",
@@ -39184,9 +39686,9 @@
       "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_prd_gameit_monsters_mvp_prd_gameit_monsters_mvp",
-      "target": "monster_rpg_prd_gameit_monsters_mvp_problem_statement",
-      "confidence_score": 1.0
+      "target": "monster_rpg_prd_gameit_monsters_mvp_problem_statement"
     },
     {
       "relation": "contains",
@@ -39194,9 +39696,9 @@
       "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_prd_gameit_monsters_mvp_prd_gameit_monsters_mvp",
-      "target": "monster_rpg_prd_gameit_monsters_mvp_solution",
-      "confidence_score": 1.0
+      "target": "monster_rpg_prd_gameit_monsters_mvp_solution"
     },
     {
       "relation": "contains",
@@ -39204,9 +39706,9 @@
       "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
       "source_location": "L153",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_prd_gameit_monsters_mvp_prd_gameit_monsters_mvp",
-      "target": "monster_rpg_prd_gameit_monsters_mvp_testing_decisions",
-      "confidence_score": 1.0
+      "target": "monster_rpg_prd_gameit_monsters_mvp_testing_decisions"
     },
     {
       "relation": "contains",
@@ -39214,9 +39716,9 @@
       "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_prd_gameit_monsters_mvp_prd_gameit_monsters_mvp",
-      "target": "monster_rpg_prd_gameit_monsters_mvp_user_stories",
-      "confidence_score": 1.0
+      "target": "monster_rpg_prd_gameit_monsters_mvp_user_stories"
     },
     {
       "relation": "contains",
@@ -39224,9 +39726,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_monster_rpg_work_summary"
     },
     {
       "relation": "contains",
@@ -39234,9 +39736,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_13_phase_0_foundation",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_06_13_phase_0_foundation"
     },
     {
       "relation": "contains",
@@ -39244,9 +39746,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_13_phase_1_playable_client_slice",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_06_13_phase_1_playable_client_slice"
     },
     {
       "relation": "contains",
@@ -39254,9 +39756,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_13_phase_2_input_follow_up",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_06_13_phase_2_input_follow_up"
     },
     {
       "relation": "contains",
@@ -39264,9 +39766,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_13_phase_2_multiplayer_presence",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_06_13_phase_2_multiplayer_presence"
     },
     {
       "relation": "contains",
@@ -39274,9 +39776,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_13_phase_3_world_villages",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_06_13_phase_3_world_villages"
     },
     {
       "relation": "contains",
@@ -39284,9 +39786,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L84",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_18_full_vision_finish_plan",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_06_18_full_vision_finish_plan"
     },
     {
       "relation": "contains",
@@ -39294,9 +39796,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L76",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_18_phase_4_final_qa",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_06_18_phase_4_final_qa"
     },
     {
       "relation": "contains",
@@ -39304,9 +39806,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L67",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_18_phase_4_multiplayer_transitions",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_06_18_phase_4_multiplayer_transitions"
     },
     {
       "relation": "contains",
@@ -39314,9 +39816,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L48",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_18_phase_4_overworld_foundation",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_06_18_phase_4_overworld_foundation"
     },
     {
       "relation": "contains",
@@ -39324,9 +39826,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L58",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_18_phase_4_rendering_assets",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_06_18_phase_4_rendering_assets"
     },
     {
       "relation": "contains",
@@ -39334,9 +39836,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L238",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_10_active_party_storage_fainted_hospital_and_revive_item",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_06_20_issue_10_active_party_storage_fainted_hospital_and_revive_item"
     },
     {
       "relation": "contains",
@@ -39344,9 +39846,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L245",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_11_visible_shared_wild_encounter_claim_flow",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_06_20_issue_11_visible_shared_wild_encounter_claim_flow"
     },
     {
       "relation": "contains",
@@ -39354,9 +39856,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L252",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_12_tap_to_walk_and_creature_label_setting",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_06_20_issue_12_tap_to_walk_and_creature_label_setting"
     },
     {
       "relation": "contains",
@@ -39364,9 +39866,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L260",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_13_battle_room_tracer_with_manual_attacks_and_enemy_ai",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_06_20_issue_13_battle_room_tracer_with_manual_attacks_and_enemy_ai"
     },
     {
       "relation": "contains",
@@ -39374,9 +39876,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L268",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_14_run_away_and_wild_battle_exit_outcomes",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_06_20_issue_14_run_away_and_wild_battle_exit_outcomes"
     },
     {
       "relation": "contains",
@@ -39384,9 +39886,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L275",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_15_wild_battle_rewards_xp_and_direct_drop_eggs",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_06_20_issue_15_wild_battle_rewards_xp_and_direct_drop_eggs"
     },
     {
       "relation": "contains",
@@ -39394,9 +39896,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L282",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_16_magic_dust_farm_production_and_owner_collection",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_06_20_issue_16_magic_dust_farm_production_and_owner_collection"
     },
     {
       "relation": "contains",
@@ -39404,9 +39906,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L291",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_17_farm_upgrades_and_guard_assignment",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_06_20_issue_17_farm_upgrades_and_guard_assignment"
     },
     {
       "relation": "contains",
@@ -39414,9 +39916,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L298",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_18_visitor_permissions_and_theft_from_unguarded_farms",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_06_20_issue_18_visitor_permissions_and_theft_from_unguarded_farms"
     },
     {
       "relation": "contains",
@@ -39424,9 +39926,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L218",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_8_inventory_cards_and_pack_opening_tracer",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_06_20_issue_8_inventory_cards_and_pack_opening_tracer"
     },
     {
       "relation": "contains",
@@ -39434,49 +39936,9 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L227",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_9_creature_card_egg_and_creature_lifecycle",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L306",
-      "weight": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_21_issue_19_guard_battle_theft_flow",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L313",
-      "weight": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_21_issue_20_station_discovery_and_travel",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L322",
-      "weight": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_21_issue_21_player_level_pack_milestones_and_reward_tables",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L331",
-      "weight": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_21_issue_22_mvp_art_and_hud_polish_pass",
-      "confidence_score": 1.0
+      "target": "monster_rpg_work_summary_2026_06_20_issue_9_creature_card_egg_and_creature_lifecycle"
     },
     {
       "relation": "contains",
@@ -39485,8 +39947,68 @@
       "source_location": "L341",
       "weight": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_next_work",
+      "target": "monster_rpg_work_summary_2026_06_21_github_pages_ci_diagnosis",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/monster-rpg/work-summary.md",
+      "source_location": "L346",
+      "weight": 1.0,
+      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
+      "target": "monster_rpg_work_summary_2026_06_21_hud_cleanup_2x2_farms_and_click_walk",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/monster-rpg/work-summary.md",
+      "source_location": "L306",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
+      "target": "monster_rpg_work_summary_2026_06_21_issue_19_guard_battle_theft_flow"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/monster-rpg/work-summary.md",
+      "source_location": "L313",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
+      "target": "monster_rpg_work_summary_2026_06_21_issue_20_station_discovery_and_travel"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/monster-rpg/work-summary.md",
+      "source_location": "L322",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
+      "target": "monster_rpg_work_summary_2026_06_21_issue_21_player_level_pack_milestones_and_reward_tables"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/monster-rpg/work-summary.md",
+      "source_location": "L331",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
+      "target": "monster_rpg_work_summary_2026_06_21_issue_22_mvp_art_and_hud_polish_pass"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/monster-rpg/work-summary.md",
+      "source_location": "L341",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
+      "target": "monster_rpg_work_summary_next_work"
     },
     {
       "relation": "contains",
@@ -39494,9 +40016,9 @@
       "source_file": "src/games/monster-rpg/client/README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "client_readme",
-      "target": "client_readme_monster_rpg_client",
-      "confidence_score": 1.0
+      "target": "client_readme_monster_rpg_client"
     },
     {
       "relation": "contains",
@@ -39504,11 +40026,11 @@
       "source_file": "src/games/monster-rpg/ui/README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_readme",
-      "target": "ui_readme_monster_rpg_ui",
-      "confidence_score": 1.0
+      "target": "ui_readme_monster_rpg_ui"
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "f7e9144ca1ba9e2589e05e9b117993143c71330a"
+  "built_at_commit": "21c582bb9f3f75f774399ca28887a49f821576c6"
 }

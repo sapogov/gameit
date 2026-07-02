@@ -2539,7 +2539,7 @@
       "source_file": ".codex-worktrees/issue-47/src/games/monster-rpg/client/assets/monsterRpgAssets.ts",
       "source_location": "L120",
       "_origin": "ast",
-      "id": "codex_worktrees_issue_47_src_games_monster_rpg_client_assets_monsterrpgassets_ts_assets_monsterrpgassets_monsterrpgspritesheetmanifest",
+      "id": "assets_monsterrpgassets_monsterrpgspritesheetmanifest",
       "community": 35,
       "norm_label": "monsterrpgspritesheetmanifest"
     },
@@ -2600,7 +2600,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "codex_worktrees_issue_47_src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene",
-      "community": 2,
+      "community": 35,
       "norm_label": "villagescene.ts"
     },
     {
@@ -2610,7 +2610,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "codex_worktrees_issue_47_src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene_villagesceneoptions",
-      "community": 2,
+      "community": 35,
       "norm_label": "villagesceneoptions"
     },
     {
@@ -2620,7 +2620,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "codex_worktrees_issue_47_src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene_movementkeymap",
-      "community": 2,
+      "community": 35,
       "norm_label": "movementkeymap"
     },
     {
@@ -2630,7 +2630,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "codex_worktrees_issue_47_src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene_tilecolors",
-      "community": 2,
+      "community": 35,
       "norm_label": "tilecolors"
     },
     {
@@ -2640,7 +2640,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "codex_worktrees_issue_47_src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene_avatarcolors",
-      "community": 2,
+      "community": 35,
       "norm_label": "avatarcolors"
     },
     {
@@ -2650,7 +2650,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "codex_worktrees_issue_47_src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene_directiondeltas",
-      "community": 2,
+      "community": 35,
       "norm_label": "directiondeltas"
     },
     {
@@ -2660,7 +2660,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "codex_worktrees_issue_47_src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene_maprendermetrics",
-      "community": 2,
+      "community": 35,
       "norm_label": "maprendermetrics"
     },
     {
@@ -2670,7 +2670,7 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "codex_worktrees_issue_47_src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene_playerview",
-      "community": 2,
+      "community": 35,
       "norm_label": "playerview"
     },
     {
@@ -2680,7 +2680,7 @@
       "source_location": "L136",
       "_origin": "ast",
       "id": "codex_worktrees_issue_47_src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene_encounterview",
-      "community": 2,
+      "community": 35,
       "norm_label": "encounterview"
     },
     {
@@ -2690,7 +2690,7 @@
       "source_location": "L143",
       "_origin": "ast",
       "id": "codex_worktrees_issue_47_src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene_farmview",
-      "community": 2,
+      "community": 35,
       "norm_label": "farmview"
     },
     {
@@ -12847,7 +12847,7 @@
       "label": "monsterRpgAssetKeys",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/assets/monsterRpgAssets.ts",
-      "source_location": "L39",
+      "source_location": "L17",
       "_origin": "ast",
       "id": "src_games_monster_rpg_client_assets_monsterrpgassets_ts_assets_monsterrpgassets_monsterrpgassetkeys",
       "community": 125,
@@ -12857,7 +12857,7 @@
       "label": "MonsterRpgAssetKey",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/assets/monsterRpgAssets.ts",
-      "source_location": "L79",
+      "source_location": "L35",
       "_origin": "ast",
       "id": "src_games_monster_rpg_client_assets_monsterrpgassets_ts_assets_monsterrpgassets_monsterrpgassetkey",
       "community": 125,
@@ -12867,21 +12867,11 @@
       "label": "monsterRpgAssetManifest",
       "file_type": "code",
       "source_file": "src/games/monster-rpg/client/assets/monsterRpgAssets.ts",
-      "source_location": "L81",
+      "source_location": "L37",
       "_origin": "ast",
       "id": "src_games_monster_rpg_client_assets_monsterrpgassets_ts_assets_monsterrpgassets_monsterrpgassetmanifest",
       "community": 125,
       "norm_label": "monsterrpgassetmanifest"
-    },
-    {
-      "label": "monsterRpgSpriteSheetManifest",
-      "file_type": "code",
-      "source_file": "src/games/monster-rpg/client/assets/monsterRpgAssets.ts",
-      "source_location": "L120",
-      "_origin": "ast",
-      "id": "src_games_monster_rpg_client_assets_monsterrpgassets_ts_assets_monsterrpgassets_monsterrpgspritesheetmanifest",
-      "community": 125,
-      "norm_label": "monsterrpgspritesheetmanifest"
     },
     {
       "label": "bootGame.ts",
@@ -12940,7 +12930,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene",
-      "community": 3,
+      "community": 35,
       "norm_label": "villagescene.ts"
     },
     {
@@ -12950,7 +12940,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene_villagesceneoptions",
-      "community": 3,
+      "community": 35,
       "norm_label": "villagesceneoptions"
     },
     {
@@ -12960,7 +12950,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene_movementkeymap",
-      "community": 3,
+      "community": 35,
       "norm_label": "movementkeymap"
     },
     {
@@ -12970,7 +12960,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene_tilecolors",
-      "community": 3,
+      "community": 35,
       "norm_label": "tilecolors"
     },
     {
@@ -12980,7 +12970,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene_avatarcolors",
-      "community": 3,
+      "community": 35,
       "norm_label": "avatarcolors"
     },
     {
@@ -12990,7 +12980,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene_directiondeltas",
-      "community": 3,
+      "community": 35,
       "norm_label": "directiondeltas"
     },
     {
@@ -13000,7 +12990,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene_maprendermetrics",
-      "community": 3,
+      "community": 35,
       "norm_label": "maprendermetrics"
     },
     {
@@ -13010,7 +13000,7 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene_playerview",
-      "community": 3,
+      "community": 35,
       "norm_label": "playerview"
     },
     {
@@ -13020,7 +13010,7 @@
       "source_location": "L136",
       "_origin": "ast",
       "id": "src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene_encounterview",
-      "community": 3,
+      "community": 35,
       "norm_label": "encounterview"
     },
     {
@@ -13030,7 +13020,7 @@
       "source_location": "L143",
       "_origin": "ast",
       "id": "src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene_farmview",
-      "community": 3,
+      "community": 35,
       "norm_label": "farmview"
     },
     {
@@ -25826,6 +25816,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": ".codex-worktrees/issue-47/src/games/monster-rpg/client/assets/monsterRpgAssets.ts",
+      "source_location": "L120",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "codex_worktrees_issue_47_src_games_monster_rpg_client_assets_monsterrpgassets_ts_assets_monsterrpgassets",
+      "target": "assets_monsterrpgassets_monsterrpgspritesheetmanifest"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".codex-worktrees/issue-47/src/games/monster-rpg/client/assets/monsterRpgAssets.ts",
       "source_location": "L79",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -25853,14 +25853,26 @@
       "target": "codex_worktrees_issue_47_src_games_monster_rpg_client_assets_monsterrpgassets_ts_assets_monsterrpgassets_monsterrpgassetmanifest"
     },
     {
-      "relation": "contains",
+      "relation": "imports",
+      "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": ".codex-worktrees/issue-47/src/games/monster-rpg/client/assets/monsterRpgAssets.ts",
-      "source_location": "L120",
+      "source_file": ".codex-worktrees/issue-47/src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L25",
       "weight": 1.0,
-      "source": "codex_worktrees_issue_47_src_games_monster_rpg_client_assets_monsterrpgassets_ts_assets_monsterrpgassets",
-      "target": "codex_worktrees_issue_47_src_games_monster_rpg_client_assets_monsterrpgassets_ts_assets_monsterrpgassets_monsterrpgspritesheetmanifest",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "codex_worktrees_issue_47_src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene",
+      "target": "assets_monsterrpgassets_monsterrpgspritesheetmanifest"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/monster-rpg/client/scenes/VillageScene.ts",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_games_monster_rpg_client_scenes_villagescene_ts_scenes_villagescene",
+      "target": "assets_monsterrpgassets_monsterrpgspritesheetmanifest"
     },
     {
       "relation": "contains",
@@ -40423,16 +40435,6 @@
       "confidence_score": 1.0,
       "source": "src_games_monster_rpg_client_assets_monsterrpgassets_ts_assets_monsterrpgassets",
       "target": "src_games_monster_rpg_client_assets_monsterrpgassets_ts_assets_monsterrpgassets_monsterrpgassetmanifest"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/games/monster-rpg/client/assets/monsterRpgAssets.ts",
-      "source_location": "L120",
-      "weight": 1.0,
-      "source": "src_games_monster_rpg_client_assets_monsterrpgassets_ts_assets_monsterrpgassets",
-      "target": "src_games_monster_rpg_client_assets_monsterrpgassets_ts_assets_monsterrpgassets_monsterrpgspritesheetmanifest",
-      "confidence_score": 1.0
     },
     {
       "relation": "contains",
