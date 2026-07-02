@@ -1,4 +1,5 @@
 import { FormEvent, useMemo, useState } from 'react';
+import type { CSSProperties } from 'react';
 import { gameRegistry } from '../config/games';
 import { getPortalImageAsset, portalCoverAssetKeys } from '../config/portalAssets';
 import {
@@ -99,7 +100,11 @@ export const AdminPage = ({ onRegistryChange }: AdminPageProps) => {
           {registryGames.map((game) => {
             const cover = getPortalImageAsset(game.assets.cover, 'cover');
             return (
-              <article className="admin-registry-card" key={game.id} style={{ borderColor: game.accent }}>
+              <article
+                className="admin-registry-card"
+                key={game.id}
+                style={{ borderColor: game.accent, '--game-accent': game.accent } as CSSProperties}
+              >
                 <div className="admin-code-row">
                   <label>
                     <span>Game ID</span>

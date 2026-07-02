@@ -2583,3 +2583,421 @@ textarea { min-height: 88px; resize: vertical; }
     min-height: 330px;
   }
 }
+
+/* Portal-wide kinetic page pass. */
+.portal-shell .library-page,
+.portal-shell .leaderboard-page,
+.portal-shell main.panel {
+  width: min(1280px, 100%);
+  max-width: none;
+  margin: 0 auto;
+  padding: 7rem 2rem 5rem;
+  background: transparent;
+}
+
+.portal-shell .library-page,
+.portal-shell .leaderboard-page {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.portal-shell .library-header,
+.portal-shell .leaderboard-header,
+.portal-shell main.panel > h2:first-child {
+  border: 1px solid rgb(184 159 255 / 18%);
+  border-radius: 1.5rem;
+  background:
+    radial-gradient(circle at 12% 16%, rgb(184 159 255 / 28%), transparent 20rem),
+    linear-gradient(135deg, rgb(36 14 59 / 92%), rgb(18 3 31 / 96%));
+  box-shadow: 0 24px 70px rgb(0 0 0 / 24%);
+}
+
+.portal-shell .library-header,
+.portal-shell .leaderboard-header {
+  padding: clamp(1.4rem, 4vw, 2.75rem);
+}
+
+.portal-shell .library-header h1,
+.portal-shell .leaderboard-header h1,
+.portal-shell main.panel > h2:first-child {
+  margin: 0;
+  color: #f1dfff;
+  font-family: "Space Grotesk", Manrope, system-ui, sans-serif;
+  font-size: clamp(2rem, 5vw, 4.5rem);
+  line-height: .95;
+  letter-spacing: 0;
+}
+
+.portal-shell .library-header p:not(.section-kicker),
+.portal-shell .leaderboard-subtitle,
+.portal-shell main.panel > p {
+  max-width: 740px;
+  color: #d9c8eb;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.portal-shell .section-kicker {
+  color: #56f4df;
+  font-family: "Space Grotesk", Manrope, system-ui, sans-serif;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.portal-shell .library-filters,
+.portal-shell .leaderboard-controls,
+.portal-shell .leaderboard-summary,
+.portal-shell .admin-section,
+.portal-shell main.panel > form {
+  border: 1px solid rgb(184 159 255 / 16%);
+  border-radius: 1.25rem;
+  padding: 1rem;
+  background: rgb(36 14 59 / 70%);
+  box-shadow: 0 18px 50px rgb(0 0 0 / 18%);
+  backdrop-filter: blur(16px);
+}
+
+.portal-shell .library-filters {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.3fr) repeat(2, minmax(180px, .85fr));
+  gap: .85rem;
+}
+
+.portal-shell label,
+.portal-shell .leaderboard-control-group {
+  min-width: 0;
+}
+
+.portal-shell label span,
+.portal-shell .leaderboard-control-group h2,
+.portal-shell .admin-section h3 {
+  color: #f1dfff;
+  font-family: "Space Grotesk", Manrope, system-ui, sans-serif;
+  font-size: .86rem;
+  font-weight: 800;
+}
+
+.portal-shell input,
+.portal-shell select,
+.portal-shell textarea {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid rgb(184 159 255 / 20%);
+  border-radius: .85rem;
+  color: #f6ebff;
+  background: rgb(18 3 31 / 76%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 6%);
+}
+
+.portal-shell textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.portal-shell input:focus,
+.portal-shell select:focus,
+.portal-shell textarea:focus,
+.portal-shell button:focus-visible,
+.portal-shell a:focus-visible {
+  outline: 3px solid rgb(86 244 223 / 70%);
+  outline-offset: 3px;
+}
+
+.portal-shell .library-results {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.portal-shell .library-card,
+.portal-shell .admin-registry-card {
+  overflow: hidden;
+  border: 1px solid rgb(184 159 255 / 18%);
+  border-radius: 1.25rem;
+  background:
+    radial-gradient(circle at 18% 12%, color-mix(in srgb, var(--game-accent, #b89fff), white 18%) 0 6%, transparent 28%),
+    linear-gradient(160deg, rgb(36 14 59 / 88%), rgb(18 3 31 / 96%));
+  box-shadow: 0 22px 60px rgb(0 0 0 / 22%);
+}
+
+.portal-shell .library-card {
+  display: grid;
+  min-height: 100%;
+}
+
+.portal-shell .library-card-cover,
+.portal-shell .admin-cover-preview img {
+  width: 100%;
+  object-fit: cover;
+  background: #12031f;
+}
+
+.portal-shell .library-card-cover {
+  height: 220px;
+  border: 0;
+  border-radius: 0;
+}
+
+.portal-shell .library-card-body {
+  display: grid;
+  align-content: start;
+  gap: .75rem;
+  padding: 1rem;
+}
+
+.portal-shell .badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+}
+
+.portal-shell .badge,
+.portal-shell .collection-tags span {
+  border: 1px solid rgb(86 244 223 / 24%);
+  border-radius: 999px;
+  padding: .34rem .58rem;
+  color: #56f4df;
+  background: rgb(86 244 223 / 8%);
+  font-size: .72rem;
+  font-weight: 800;
+}
+
+.portal-shell .library-card h2,
+.portal-shell .leaderboard-summary-label,
+.portal-shell .admin-section h3 {
+  margin: 0;
+  color: #f1dfff;
+}
+
+.portal-shell .library-card p,
+.portal-shell .leaderboard-empty,
+.portal-shell .admin-message,
+.portal-shell .admin-section label {
+  color: #d9c8eb;
+  line-height: 1.55;
+}
+
+.portal-shell .library-launch {
+  width: max-content;
+  max-width: 100%;
+  margin-top: auto;
+}
+
+.portal-shell .pixel-btn,
+.portal-shell .ghost-btn {
+  min-height: 44px;
+  border: 0;
+  border-radius: .9rem;
+  color: #240e3b;
+  background: linear-gradient(135deg, #56f4df, #b89fff);
+  box-shadow: 0 14px 34px rgb(86 244 223 / 16%);
+  font-family: "Space Grotesk", Manrope, system-ui, sans-serif;
+  font-weight: 900;
+  text-transform: none;
+}
+
+.portal-shell .pixel-btn.secondary,
+.portal-shell .ghost-btn {
+  color: #f1dfff;
+  background: rgb(184 159 255 / 12%);
+  box-shadow: none;
+}
+
+.portal-shell .pixel-btn.active,
+.portal-shell .pixel-btn:hover,
+.portal-shell .ghost-btn:hover {
+  transform: translateY(-1px);
+  color: #240e3b;
+  background: linear-gradient(135deg, #b89fff, #56f4df);
+}
+
+.portal-shell .leaderboard-header h1 {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+.portal-shell .leaderboard-icon {
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+
+.portal-shell .leaderboard-controls {
+  display: grid;
+  gap: 1rem;
+}
+
+.portal-shell .leaderboard-segment {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+}
+
+.portal-shell .leaderboard-summary {
+  display: grid;
+  gap: .9rem;
+}
+
+.portal-shell .leaderboard-summary-label strong {
+  color: #56f4df;
+}
+
+.portal-shell .leaderboard-table-wrap {
+  overflow-x: auto;
+  border: 1px solid rgb(184 159 255 / 14%);
+  border-radius: 1rem;
+}
+
+.portal-shell .leaderboard-table {
+  width: 100%;
+  min-width: 680px;
+  border-collapse: collapse;
+  color: #f6ebff;
+}
+
+.portal-shell .leaderboard-table th,
+.portal-shell .leaderboard-table td {
+  padding: .9rem;
+  text-align: left;
+  border-bottom: 1px solid rgb(184 159 255 / 12%);
+}
+
+.portal-shell .leaderboard-table th {
+  color: #56f4df;
+  background: rgb(18 3 31 / 72%);
+}
+
+.portal-shell .leaderboard-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.portal-shell main.panel {
+  display: grid;
+  gap: 1rem;
+  border: 0;
+  box-shadow: none;
+}
+
+.portal-shell main.panel > h2:first-child {
+  padding: clamp(1.4rem, 4vw, 2.75rem);
+}
+
+.portal-shell .admin-section {
+  display: grid;
+  gap: 1rem;
+}
+
+.portal-shell .admin-section-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.portal-shell .admin-registry-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.portal-shell .admin-registry-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.portal-shell .admin-code-row,
+.portal-shell .admin-registry-fields,
+.portal-shell .admin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .75rem;
+}
+
+.portal-shell .admin-registry-fields label:first-child,
+.portal-shell .admin-registry-fields label:nth-child(2) {
+  grid-column: 1 / -1;
+}
+
+.portal-shell .admin-code-row code {
+  display: block;
+  overflow-wrap: anywhere;
+  border-radius: .7rem;
+  padding: .6rem;
+  color: #56f4df;
+  background: rgb(18 3 31 / 76%);
+}
+
+.portal-shell .admin-check {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+}
+
+.portal-shell .admin-check input {
+  width: 22px;
+  min-height: 22px;
+}
+
+.portal-shell .admin-cover-preview {
+  display: grid;
+  gap: .75rem;
+  align-content: start;
+}
+
+.portal-shell .admin-cover-preview img {
+  aspect-ratio: 4 / 3;
+  border-radius: 1rem;
+}
+
+.portal-shell .row.wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+}
+
+@media (max-width: 900px) {
+  .portal-shell .library-page,
+  .portal-shell .leaderboard-page,
+  .portal-shell main.panel {
+    padding: 6rem 1rem 8rem;
+  }
+
+  .portal-shell .library-filters,
+  .portal-shell .library-results,
+  .portal-shell .admin-registry-card,
+  .portal-shell .admin-code-row,
+  .portal-shell .admin-registry-fields,
+  .portal-shell .admin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .portal-shell .admin-section-head {
+    display: grid;
+  }
+}
+
+@media (max-width: 640px) {
+  .portal-shell .library-header,
+  .portal-shell .leaderboard-header,
+  .portal-shell .library-filters,
+  .portal-shell .leaderboard-controls,
+  .portal-shell .leaderboard-summary,
+  .portal-shell .admin-section,
+  .portal-shell main.panel > form {
+    border-radius: 1rem;
+  }
+
+  .portal-shell .leaderboard-header h1 {
+    align-items: flex-start;
+  }
+
+  .portal-shell .leaderboard-segment .pixel-btn {
+    flex: 1 1 140px;
+  }
+}

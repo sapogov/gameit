@@ -1860,27 +1860,27 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "admin_adminpage",
-      "community": 20,
+      "community": 24,
       "norm_label": "adminpage.tsx"
     },
     {
       "label": "AdminPageProps",
       "file_type": "code",
       "source_file": "src/admin/AdminPage.tsx",
-      "source_location": "L20",
+      "source_location": "L21",
       "_origin": "ast",
       "id": "admin_adminpage_adminpageprops",
-      "community": 20,
+      "community": 24,
       "norm_label": "adminpageprops"
     },
     {
       "label": "AdminPage()",
       "file_type": "code",
       "source_file": "src/admin/AdminPage.tsx",
-      "source_location": "L24",
+      "source_location": "L25",
       "_origin": "ast",
       "id": "admin_adminpage_adminpage",
-      "community": 20,
+      "community": 24,
       "norm_label": "adminpage()"
     },
     {
@@ -1897,7 +1897,7 @@
       "label": "SnakeGamePage",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L15",
+      "source_location": "L13",
       "_origin": "ast",
       "id": "app_app_snakegamepage",
       "community": 19,
@@ -1907,7 +1907,7 @@
       "label": "MonsterRpgGame",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L16",
+      "source_location": "L14",
       "_origin": "ast",
       "id": "app_app_monsterrpggame",
       "community": 19,
@@ -1917,7 +1917,7 @@
       "label": "ComingSoonPage",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L19",
+      "source_location": "L17",
       "_origin": "ast",
       "id": "app_app_comingsoonpage",
       "community": 19,
@@ -1927,7 +1927,7 @@
       "label": "ThemeIcon()",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L23",
+      "source_location": "L21",
       "_origin": "ast",
       "id": "app_app_themeicon",
       "community": 19,
@@ -1937,7 +1937,7 @@
       "label": "TrophyIcon()",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L36",
+      "source_location": "L34",
       "_origin": "ast",
       "id": "app_app_trophyicon",
       "community": 19,
@@ -1947,7 +1947,7 @@
       "label": "LibraryIcon()",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L43",
+      "source_location": "L41",
       "_origin": "ast",
       "id": "app_app_libraryicon",
       "community": 19,
@@ -1957,7 +1957,7 @@
       "label": "CrownIcon()",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L50",
+      "source_location": "L48",
       "_origin": "ast",
       "id": "app_app_crownicon",
       "community": 19,
@@ -1967,37 +1967,17 @@
       "label": "HomeIcon()",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L57",
+      "source_location": "L55",
       "_origin": "ast",
       "id": "app_app_homeicon",
       "community": 19,
       "norm_label": "homeicon()"
     },
     {
-      "label": "LaunchIcon()",
-      "file_type": "code",
-      "source_file": "src/app/App.tsx",
-      "source_location": "L65",
-      "_origin": "ast",
-      "id": "app_app_launchicon",
-      "community": 19,
-      "norm_label": "launchicon()"
-    },
-    {
-      "label": "ChevronIcon()",
-      "file_type": "code",
-      "source_file": "src/app/App.tsx",
-      "source_location": "L71",
-      "_origin": "ast",
-      "id": "app_app_chevronicon",
-      "community": 19,
-      "norm_label": "chevronicon()"
-    },
-    {
       "label": "navIcons",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L77",
+      "source_location": "L63",
       "_origin": "ast",
       "id": "app_app_navicons",
       "community": 19,
@@ -2007,7 +1987,7 @@
       "label": "Home()",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L84",
+      "source_location": "L70",
       "_origin": "ast",
       "id": "app_app_home",
       "community": 19,
@@ -2017,7 +1997,7 @@
       "label": "PortalNav()",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L143",
+      "source_location": "L106",
       "_origin": "ast",
       "id": "app_app_portalnav",
       "community": 19,
@@ -2027,7 +2007,7 @@
       "label": "PortalShell()",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L160",
+      "source_location": "L123",
       "_origin": "ast",
       "id": "app_app_portalshell",
       "community": 19,
@@ -2037,7 +2017,7 @@
       "label": "App()",
       "file_type": "code",
       "source_file": "src/app/App.tsx",
-      "source_location": "L189",
+      "source_location": "L147",
       "_origin": "ast",
       "id": "app_app_app",
       "community": 19,
@@ -2127,7 +2107,7 @@
       "label": "GameTile()",
       "file_type": "code",
       "source_file": "src/components/GameTile.tsx",
-      "source_location": "L5",
+      "source_location": "L6",
       "_origin": "ast",
       "id": "components_gametile_gametile",
       "community": 40,
@@ -2320,7 +2300,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "config_portalassets_portalcoverassetkeys",
-      "community": 40,
+      "community": 24,
       "norm_label": "portalcoverassetkeys"
     },
     {
@@ -2380,7 +2360,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "config_registryoverride_registryoverrideentry",
-      "community": 40,
+      "community": 24,
       "norm_label": "registryoverrideentry"
     },
     {
@@ -2390,7 +2370,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "config_registryoverride_registryoverride",
-      "community": 20,
+      "community": 24,
       "norm_label": "registryoverride"
     },
     {
@@ -2540,7 +2520,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "data_defaultgames",
-      "community": 4,
+      "community": 40,
       "norm_label": "defaultgames.ts"
     },
     {
@@ -2550,7 +2530,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "data_defaultgames_defaultgames",
-      "community": 4,
+      "community": 40,
       "norm_label": "defaultgames"
     },
     {
@@ -8990,7 +8970,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "snake_config_test",
-      "community": 20,
+      "community": 2,
       "norm_label": "config.test.ts"
     },
     {
@@ -9000,7 +8980,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "snake_config",
-      "community": 20,
+      "community": 2,
       "norm_label": "config.ts"
     },
     {
@@ -9010,7 +8990,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "snake_config_snakeconfigschema",
-      "community": 20,
+      "community": 2,
       "norm_label": "snakeconfigschema"
     },
     {
@@ -9020,7 +9000,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "snake_config_snakeconfig",
-      "community": 20,
+      "community": 2,
       "norm_label": "snakeconfig"
     },
     {
@@ -9030,7 +9010,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "snake_config_defaultsnakeconfig",
-      "community": 20,
+      "community": 2,
       "norm_label": "defaultsnakeconfig"
     },
     {
@@ -9250,7 +9230,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "snake_storage",
-      "community": 20,
+      "community": 2,
       "norm_label": "storage.ts"
     },
     {
@@ -9280,7 +9260,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "snake_storage_loadsnakeconfig",
-      "community": 20,
+      "community": 24,
       "norm_label": "loadsnakeconfig()"
     },
     {
@@ -9290,7 +9270,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "snake_storage_savesnakeconfig",
-      "community": 20,
+      "community": 2,
       "norm_label": "savesnakeconfig()"
     },
     {
@@ -9300,7 +9280,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "snake_storage_resetsnakeconfig",
-      "community": 20,
+      "community": 2,
       "norm_label": "resetsnakeconfig()"
     },
     {
@@ -9320,7 +9300,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "snake_storage_saveprofile",
-      "community": 20,
+      "community": 2,
       "norm_label": "saveprofile()"
     },
     {
@@ -9360,7 +9340,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_storage",
-      "community": 20,
+      "community": 18,
       "norm_label": "storage.ts"
     },
     {
@@ -9370,7 +9350,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_storage_readlocal",
-      "community": 20,
+      "community": 18,
       "norm_label": "readlocal()"
     },
     {
@@ -9380,7 +9360,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "lib_storage_writelocal",
-      "community": 20,
+      "community": 2,
       "norm_label": "writelocal()"
     },
     {
@@ -9540,7 +9520,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "pages_leaderboardpage",
-      "community": 4,
+      "community": 18,
       "norm_label": "leaderboardpage.tsx"
     },
     {
@@ -9550,7 +9530,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "pages_leaderboardpage_ranges",
-      "community": 4,
+      "community": 18,
       "norm_label": "ranges"
     },
     {
@@ -9560,7 +9540,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "pages_leaderboardpage_defaultprovider",
-      "community": 4,
+      "community": 18,
       "norm_label": "defaultprovider"
     },
     {
@@ -9570,7 +9550,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "pages_leaderboardpage_leaderboardrowvm",
-      "community": 4,
+      "community": 18,
       "norm_label": "leaderboardrowvm"
     },
     {
@@ -9580,7 +9560,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "pages_leaderboardpage_leaderboardpageviewmodel",
-      "community": 4,
+      "community": 18,
       "norm_label": "leaderboardpageviewmodel"
     },
     {
@@ -9590,7 +9570,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "pages_leaderboardpage_getrangelabel",
-      "community": 4,
+      "community": 18,
       "norm_label": "getrangelabel()"
     },
     {
@@ -9600,7 +9580,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "pages_leaderboardpage_datelabel",
-      "community": 4,
+      "community": 18,
       "norm_label": "datelabel()"
     },
     {
@@ -9610,7 +9590,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "pages_leaderboardpage_buildleaderboardviewmodel",
-      "community": 4,
+      "community": 18,
       "norm_label": "buildleaderboardviewmodel()"
     },
     {
@@ -9620,7 +9600,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "pages_leaderboardpage_trophyicon",
-      "community": 4,
+      "community": 18,
       "norm_label": "trophyicon()"
     },
     {
@@ -9630,7 +9610,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "pages_leaderboardpage_leaderboardpage",
-      "community": 4,
+      "community": 18,
       "norm_label": "leaderboardpage()"
     },
     {
@@ -9647,7 +9627,7 @@
       "label": "statusOptions",
       "file_type": "code",
       "source_file": "src/pages/LibraryPage.tsx",
-      "source_location": "L14",
+      "source_location": "L15",
       "_origin": "ast",
       "id": "pages_librarypage_statusoptions",
       "community": 40,
@@ -9657,7 +9637,7 @@
       "label": "LibraryPageProps",
       "file_type": "code",
       "source_file": "src/pages/LibraryPage.tsx",
-      "source_location": "L16",
+      "source_location": "L17",
       "_origin": "ast",
       "id": "pages_librarypage_librarypageprops",
       "community": 40,
@@ -9667,7 +9647,7 @@
       "label": "LibraryGameCard()",
       "file_type": "code",
       "source_file": "src/pages/LibraryPage.tsx",
-      "source_location": "L20",
+      "source_location": "L21",
       "_origin": "ast",
       "id": "pages_librarypage_librarygamecard",
       "community": 40,
@@ -9677,10 +9657,10 @@
       "label": "LibraryPage()",
       "file_type": "code",
       "source_file": "src/pages/LibraryPage.tsx",
-      "source_location": "L48",
+      "source_location": "L52",
       "_origin": "ast",
       "id": "pages_librarypage_librarypage",
-      "community": 19,
+      "community": 40,
       "norm_label": "librarypage()"
     },
     {
@@ -9830,7 +9810,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "providers_leaderboardprovider_localstorageleaderboardprovider_addentry",
-      "community": 20,
+      "community": 18,
       "norm_label": ".addentry()"
     },
     {
@@ -10030,7 +10010,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "types_game_gamestatus",
-      "community": 40,
+      "community": 24,
       "norm_label": "gamestatus"
     },
     {
@@ -10040,7 +10020,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "types_game_gamegenre",
-      "community": 40,
+      "community": 24,
       "norm_label": "gamegenre"
     },
     {
@@ -10864,10 +10844,20 @@
       "norm_label": "monster rpg work summary"
     },
     {
-      "label": "2026-07-02 - Issue #49: Portal Navigation And Final Responsive QA",
+      "label": "2026-07-02 - Portal-Wide Kinetic Design Pass",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L3",
+      "_origin": "ast",
+      "id": "monster_rpg_work_summary_2026_07_02_portal_wide_kinetic_design_pass",
+      "community": 15,
+      "norm_label": "2026-07-02 - portal-wide kinetic design pass"
+    },
+    {
+      "label": "2026-07-02 - Issue #49: Portal Navigation And Final Responsive QA",
+      "file_type": "document",
+      "source_file": "docs/monster-rpg/work-summary.md",
+      "source_location": "L9",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_07_02_issue_49_portal_navigation_and_final_responsive_qa",
       "community": 15,
@@ -10877,7 +10867,7 @@
       "label": "2026-07-02 - Issue #48: Admin Registry Override",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L9",
+      "source_location": "L15",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_07_02_issue_48_admin_registry_override",
       "community": 15,
@@ -10887,7 +10877,7 @@
       "label": "2026-07-02 - Issue #47: Full Leaderboard Route",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L15",
+      "source_location": "L21",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_07_02_issue_47_full_leaderboard_route",
       "community": 15,
@@ -10897,7 +10887,7 @@
       "label": "2026-07-02 - Issue #46: Library Catalog Route",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L22",
+      "source_location": "L28",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_07_02_issue_46_library_catalog_route",
       "community": 15,
@@ -10907,7 +10897,7 @@
       "label": "2026-07-02 - Issue #45: Launch-First Home Dashboard",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L27",
+      "source_location": "L33",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_07_02_issue_45_launch_first_home_dashboard",
       "community": 15,
@@ -10917,7 +10907,7 @@
       "label": "2026-07-01 - Portal Registry Metadata And Local Assets",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L33",
+      "source_location": "L39",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_07_01_portal_registry_metadata_and_local_assets",
       "community": 15,
@@ -10927,7 +10917,7 @@
       "label": "2026-06-13 - Phase 0 Foundation",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L39",
+      "source_location": "L45",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_13_phase_0_foundation",
       "community": 15,
@@ -10937,7 +10927,7 @@
       "label": "2026-06-13 - Phase 1 Playable Client Slice",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L47",
+      "source_location": "L53",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_13_phase_1_playable_client_slice",
       "community": 15,
@@ -10947,7 +10937,7 @@
       "label": "2026-06-13 - Phase 2 Multiplayer Presence",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L56",
+      "source_location": "L62",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_13_phase_2_multiplayer_presence",
       "community": 15,
@@ -10957,7 +10947,7 @@
       "label": "2026-06-13 - Phase 2 Input Follow-Up",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L68",
+      "source_location": "L74",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_13_phase_2_input_follow_up",
       "community": 15,
@@ -10967,7 +10957,7 @@
       "label": "2026-06-13 - Phase 3 World + Villages",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L73",
+      "source_location": "L79",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_13_phase_3_world_villages",
       "community": 15,
@@ -10977,7 +10967,7 @@
       "label": "2026-06-18 - Phase 4 Overworld Foundation",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L84",
+      "source_location": "L90",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_18_phase_4_overworld_foundation",
       "community": 15,
@@ -10987,7 +10977,7 @@
       "label": "2026-06-18 - Phase 4 Rendering Assets",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L94",
+      "source_location": "L100",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_18_phase_4_rendering_assets",
       "community": 15,
@@ -10997,7 +10987,7 @@
       "label": "2026-06-18 - Phase 4 Multiplayer Transitions",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L103",
+      "source_location": "L109",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_18_phase_4_multiplayer_transitions",
       "community": 15,
@@ -11007,7 +10997,7 @@
       "label": "2026-06-18 - Phase 4 Final QA",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L112",
+      "source_location": "L118",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_18_phase_4_final_qa",
       "community": 15,
@@ -11017,7 +11007,7 @@
       "label": "2026-06-18 - Full Vision Finish Plan",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L120",
+      "source_location": "L126",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_18_full_vision_finish_plan",
       "community": 15,
@@ -11027,7 +11017,7 @@
       "label": "2026-06-20 - Issue #8: Inventory Cards and Pack Opening Tracer",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L254",
+      "source_location": "L260",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_8_inventory_cards_and_pack_opening_tracer",
       "community": 15,
@@ -11037,7 +11027,7 @@
       "label": "2026-06-20 - Issue #9: Creature Card, Egg, and Creature Lifecycle",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L263",
+      "source_location": "L269",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_9_creature_card_egg_and_creature_lifecycle",
       "community": 15,
@@ -11047,7 +11037,7 @@
       "label": "2026-06-20 - Issue #10: Active Party, Storage, Fainted, Hospital, And Revive Item",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L274",
+      "source_location": "L280",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_10_active_party_storage_fainted_hospital_and_revive_item",
       "community": 15,
@@ -11057,7 +11047,7 @@
       "label": "2026-06-20 - Issue #11: Visible Shared Wild Encounter Claim Flow",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L281",
+      "source_location": "L287",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_11_visible_shared_wild_encounter_claim_flow",
       "community": 15,
@@ -11067,7 +11057,7 @@
       "label": "2026-06-20 - Issue #12: Tap-to-Walk and Creature Label Setting",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L288",
+      "source_location": "L294",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_12_tap_to_walk_and_creature_label_setting",
       "community": 15,
@@ -11077,7 +11067,7 @@
       "label": "2026-06-20 - Issue #13: Battle Room Tracer With Manual Attacks And Enemy AI",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L296",
+      "source_location": "L302",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_13_battle_room_tracer_with_manual_attacks_and_enemy_ai",
       "community": 15,
@@ -11087,7 +11077,7 @@
       "label": "2026-06-20 - Issue #14: Run Away And Wild Battle Exit Outcomes",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L304",
+      "source_location": "L310",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_14_run_away_and_wild_battle_exit_outcomes",
       "community": 15,
@@ -11097,7 +11087,7 @@
       "label": "2026-06-20 - Issue #15: Wild Battle Rewards, XP, And Direct-Drop Eggs",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L311",
+      "source_location": "L317",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_15_wild_battle_rewards_xp_and_direct_drop_eggs",
       "community": 15,
@@ -11107,7 +11097,7 @@
       "label": "2026-06-20 - Issue #16: Magic Dust Farm Production And Owner Collection",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L318",
+      "source_location": "L324",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_16_magic_dust_farm_production_and_owner_collection",
       "community": 15,
@@ -11117,7 +11107,7 @@
       "label": "2026-06-20 - Issue #17: Farm Upgrades And Guard Assignment",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L327",
+      "source_location": "L333",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_17_farm_upgrades_and_guard_assignment",
       "community": 15,
@@ -11127,7 +11117,7 @@
       "label": "2026-06-20 - Issue #18: Visitor Permissions And Theft From Unguarded Farms",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L334",
+      "source_location": "L340",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_18_visitor_permissions_and_theft_from_unguarded_farms",
       "community": 15,
@@ -11137,7 +11127,7 @@
       "label": "2026-06-21 - Issue #19: Guard Battle Theft Flow",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L342",
+      "source_location": "L348",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_21_issue_19_guard_battle_theft_flow",
       "community": 15,
@@ -11147,7 +11137,7 @@
       "label": "2026-06-21 - Issue #20: Station Discovery And Travel",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L349",
+      "source_location": "L355",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_21_issue_20_station_discovery_and_travel",
       "community": 15,
@@ -11157,7 +11147,7 @@
       "label": "2026-06-21 - Issue #21: Player Level, Pack Milestones, And Reward Tables",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L358",
+      "source_location": "L364",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_21_issue_21_player_level_pack_milestones_and_reward_tables",
       "community": 15,
@@ -11167,7 +11157,7 @@
       "label": "2026-06-21 - Issue #22: MVP Art And HUD Polish Pass",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L367",
+      "source_location": "L373",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_21_issue_22_mvp_art_and_hud_polish_pass",
       "community": 15,
@@ -11177,7 +11167,7 @@
       "label": "2026-06-21 - GitHub Pages CI Diagnosis",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L377",
+      "source_location": "L383",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_21_github_pages_ci_diagnosis",
       "community": 15,
@@ -11187,7 +11177,7 @@
       "label": "2026-06-21 - HUD Cleanup, 2x2 Farms, And Click-Walk",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L382",
+      "source_location": "L388",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_21_hud_cleanup_2x2_farms_and_click_walk",
       "community": 15,
@@ -11197,7 +11187,7 @@
       "label": "2026-06-22 - AI Art Approval Sheets",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L391",
+      "source_location": "L397",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_22_ai_art_approval_sheets",
       "community": 15,
@@ -11207,17 +11197,27 @@
       "label": "2026-06-27 - Mobile HUD And Tap Movement Polish",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L402",
+      "source_location": "L408",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_27_mobile_hud_and_tap_movement_polish",
       "community": 15,
       "norm_label": "2026-06-27 - mobile hud and tap movement polish"
     },
     {
+      "label": "2026-07-02 - Portal Kinetic Design Pass",
+      "file_type": "document",
+      "source_file": "docs/monster-rpg/work-summary.md",
+      "source_location": "L414",
+      "_origin": "ast",
+      "id": "monster_rpg_work_summary_2026_07_02_portal_kinetic_design_pass",
+      "community": 15,
+      "norm_label": "2026-07-02 - portal kinetic design pass"
+    },
+    {
       "label": "Next Work",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L408",
+      "source_location": "L421",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_next_work",
       "community": 15,
@@ -17449,16 +17449,6 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/App.tsx",
-      "source_location": "L53",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "app_app",
-      "target": "app_app_chevronicon"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/App.tsx",
       "source_location": "L15",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -17491,19 +17481,9 @@
       "source_file": "src/app/App.tsx",
       "source_location": "L57",
       "weight": 1.0,
-      "source": "app_app",
-      "target": "app_app_homeicon",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/App.tsx",
-      "source_location": "L47",
-      "weight": 1.0,
       "confidence_score": 1.0,
       "source": "app_app",
-      "target": "app_app_launchicon"
+      "target": "app_app_homeicon"
     },
     {
       "relation": "contains",
@@ -17531,9 +17511,9 @@
       "source_file": "src/app/App.tsx",
       "source_location": "L77",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_app",
-      "target": "app_app_navicons",
-      "confidence_score": 1.0
+      "target": "app_app_navicons"
     },
     {
       "relation": "contains",
@@ -17541,9 +17521,9 @@
       "source_file": "src/app/App.tsx",
       "source_location": "L143",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_app",
-      "target": "app_app_portalnav",
-      "confidence_score": 1.0
+      "target": "app_app_portalnav"
     },
     {
       "relation": "contains",
@@ -17551,9 +17531,9 @@
       "source_file": "src/app/App.tsx",
       "source_location": "L160",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_app",
-      "target": "app_app_portalshell",
-      "confidence_score": 1.0
+      "target": "app_app_portalshell"
     },
     {
       "relation": "contains",
@@ -17592,9 +17572,9 @@
       "source_file": "src/app/App.tsx",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_app",
-      "target": "app_portalnavigation",
-      "confidence_score": 1.0
+      "target": "app_portalnavigation"
     },
     {
       "relation": "imports",
@@ -17603,9 +17583,9 @@
       "source_file": "src/app/App.tsx",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_app",
-      "target": "app_portalnavigation_portalnavigationitems",
-      "confidence_score": 1.0
+      "target": "app_portalnavigation_portalnavigationitems"
     },
     {
       "relation": "imports",
@@ -17614,9 +17594,9 @@
       "source_file": "src/app/App.tsx",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_app",
-      "target": "app_portalnavigation_portalrouteset",
-      "confidence_score": 1.0
+      "target": "app_portalnavigation_portalrouteset"
     },
     {
       "relation": "imports_from",
@@ -17944,9 +17924,9 @@
       "source_file": "src/app/portalNavigation.test.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_portalnavigation_test",
-      "target": "app_portalnavigation",
-      "confidence_score": 1.0
+      "target": "app_portalnavigation"
     },
     {
       "relation": "imports",
@@ -17955,9 +17935,9 @@
       "source_file": "src/app/portalNavigation.test.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_portalnavigation_test",
-      "target": "app_portalnavigation_portalnavigationitems",
-      "confidence_score": 1.0
+      "target": "app_portalnavigation_portalnavigationitems"
     },
     {
       "relation": "contains",
@@ -17965,9 +17945,9 @@
       "source_file": "src/app/portalNavigation.ts",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_portalnavigation",
-      "target": "app_portalnavigation_portalnavigationitems",
-      "confidence_score": 1.0
+      "target": "app_portalnavigation_portalnavigationitems"
     },
     {
       "relation": "contains",
@@ -17975,9 +17955,9 @@
       "source_file": "src/app/portalNavigation.ts",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_portalnavigation",
-      "target": "app_portalnavigation_portalnavigationroute",
-      "confidence_score": 1.0
+      "target": "app_portalnavigation_portalnavigationroute"
     },
     {
       "relation": "contains",
@@ -17985,9 +17965,9 @@
       "source_file": "src/app/portalNavigation.ts",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_portalnavigation",
-      "target": "app_portalnavigation_portalrouteset",
-      "confidence_score": 1.0
+      "target": "app_portalnavigation_portalrouteset"
     },
     {
       "relation": "contains",
@@ -18758,10 +18738,10 @@
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
       "source_file": "src/pages/LibraryPage.tsx",
       "source_location": "L18",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "pages_librarypage_librarygamecard",
       "target": "config_portalassets_getportalimageasset"
     },
@@ -43017,8 +42997,28 @@
       "source_file": "docs/monster-rpg/work-summary.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_07_02_issue_49_portal_navigation_and_final_responsive_qa",
+      "target": "monster_rpg_work_summary_2026_07_02_issue_49_portal_navigation_and_final_responsive_qa"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/monster-rpg/work-summary.md",
+      "source_location": "L414",
+      "weight": 1.0,
+      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
+      "target": "monster_rpg_work_summary_2026_07_02_portal_kinetic_design_pass",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/monster-rpg/work-summary.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
+      "target": "monster_rpg_work_summary_2026_07_02_portal_wide_kinetic_design_pass",
       "confidence_score": 1.0
     },
     {
@@ -43063,5 +43063,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "fa83c6166e1af21ed7734d69aa66a12de169f882"
+  "built_at_commit": "8a9198f44d3423faeb5f18d245072b1efb503e00"
 }

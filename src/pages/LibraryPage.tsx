@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import type { CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
 import { getPortalImageAsset } from '../config/portalAssets';
 import type { GameDefinition } from '../types/game';
@@ -22,7 +23,10 @@ function LibraryGameCard({ game }: { game: GameDefinition }) {
   const isPlayable = game.status === 'playable';
 
   return (
-    <article className="library-card" style={{ borderColor: game.accent }}>
+    <article
+      className="library-card"
+      style={{ borderColor: game.accent, '--game-accent': game.accent } as CSSProperties}
+    >
       <img className="library-card-cover" src={cover.src} alt={cover.alt} width={cover.width} height={cover.height} />
       <div className="library-card-body">
         <div className="badge-row">

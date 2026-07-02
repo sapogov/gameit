@@ -1,5 +1,11 @@
 # Monster RPG Work Summary
 
+## 2026-07-02 - Portal-Wide Kinetic Design Pass
+
+- Extended the kinetic GameIt portal design across Home, Library, Leaderboard, and Admin routes.
+- Restyled catalog cards, filters, leaderboard controls/tables, admin forms, and responsive states with the same dark neon system.
+- Kept the portal pass scoped to React/DOM pages so game runtime routes remain lightweight.
+
 ## 2026-07-02 - Issue #49: Portal Navigation And Final Responsive QA
 
 - Added a shared portal shell with desktop/tablet/mobile navigation for Home, Library, Scores, and Admin only, with Store and Community left hidden.
