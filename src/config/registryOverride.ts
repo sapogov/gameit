@@ -2,7 +2,8 @@ import { gameRegistry } from './games';
 import { portalCoverAssetKeys } from './portalAssets';
 import type { GameDefinition, GameGenre, GameId, GameStatus, PortalImageAssetKey } from '../types/game';
 
-export const REGISTRY_OVERRIDE_KEY = 'gameit.portal.registryOverride.v1';
+export const LEGACY_REGISTRY_OVERRIDE_KEYS = ['gameit.portal.registryOverride.v1'] as const;
+export const REGISTRY_OVERRIDE_KEY = 'gameit.portal.registryOverride.v2';
 
 export const registryGenres = ['arcade', 'monster-rpg', 'platformer', 'fighting'] satisfies GameGenre[];
 export const registryStatuses = ['playable', 'coming-soon'] satisfies GameStatus[];
@@ -90,6 +91,7 @@ export function mergeRegistryOverride(
 
 export function loadRegistryOverride(defaults: readonly GameDefinition[] = gameRegistry): RegistryOverride {
   try {
+    for (const legacyKey of LEGACY_REGISTRY_OVERRIDE_KEYS) localStorage.removeItem(legacyKey);
     const raw = localStorage.getItem(REGISTRY_OVERRIDE_KEY);
     return raw ? sanitizeRegistryOverride(JSON.parse(raw), defaults) : {};
   } catch {

@@ -505,8 +505,8 @@
     "semantic_hash": ""
   },
   "docs/monster-rpg/work-summary.md": {
-    "mtime": 1783025559.3462315,
-    "ast_hash": "84f1f3c3081976bf7748efe0377de461",
+    "mtime": 1783027179.4669077,
+    "ast_hash": "5c1163e1b4f8971afa74299c98532216",
     "semantic_hash": ""
   },
   "index.html": {
@@ -800,8 +800,8 @@
     "semantic_hash": ""
   },
   "src/config/registryOverride.ts": {
-    "mtime": 1783019293.3697102,
-    "ast_hash": "1222c835780c9fb86ea9f717093d388b",
+    "mtime": 1783027170.8344448,
+    "ast_hash": "2dde50e97ecf174de72d691011814b92",
     "semantic_hash": ""
   },
   "src/app/portalNavigation.test.ts": {
