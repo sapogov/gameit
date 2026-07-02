@@ -1,5 +1,11 @@
 # Monster RPG Work Summary
 
+## 2026-07-02 - Issue #45: Launch-First Home Dashboard
+
+- Reworked the portal Home surface around the registry-selected featured playable game as the primary launch action.
+- Replaced the full registry grid with a focused launch dashboard that keeps Snake and GameIt Monsters reachable while showing only a small on-deck preview.
+- Swapped Home header controls to inline SVG icons and tightened focus, responsive, and reduced-motion states for the dashboard.
+
 ## 2026-07-01 - Portal Registry Metadata And Local Assets
 
 - Added shared portal registry metadata for genre, status, featured selection, accent, and stable cover/hero asset keys.
