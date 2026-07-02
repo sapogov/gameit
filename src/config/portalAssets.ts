@@ -70,6 +70,10 @@ export const portalImageAssets: Record<PortalImageAssetKey, PortalImageAsset> = 
   },
 };
 
+export const portalCoverAssetKeys = Object.values(portalImageAssets)
+  .filter((asset) => asset.role === 'cover')
+  .map((asset) => asset.key);
+
 export function getPortalImageAsset(key: string | undefined, role: PortalImageRole = 'cover'): PortalImageAsset {
   if (key && Object.hasOwn(portalImageAssets, key)) return portalImageAssets[key as PortalImageAssetKey];
 
