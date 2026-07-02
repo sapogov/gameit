@@ -9,7 +9,7 @@
     "dev:server": "tsx watch server/index.ts",
     "dev:multiplayer": "concurrently -k -n client,server -c cyan,magenta \"npm run dev:client\" \"npm run dev:server\"",
     "build": "npm run build:client && npm run build:server",
-    "build:client": "tsc -b && vite build",
+    "build:client": "tsc -b && vite build && node scripts/copy-spa-fallback.mjs",
     "build:server": "tsc -p server/tsconfig.json",
     "check:monster-rpg": "tsx scripts/monster-rpg-phase4-checks.ts",
     "preview": "vite preview",

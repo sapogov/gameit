@@ -1,16 +1,16 @@
-# Graph Report - gameit-issue-49  (2026-07-02)
+# Graph Report - gameit-publish-main  (2026-07-02)
 
 ## Corpus Check
-- 113 files · ~214,999 words
+- 113 files · ~293,882 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1155 nodes · 2947 edges · 74 communities (38 shown, 36 thin omitted)
+- 1155 nodes · 2947 edges · 73 communities (37 shown, 36 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `fa83c616`
+- Built from commit: `8a9198f4`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -35,7 +35,6 @@
 - [[_COMMUNITY_Type Definitions and States|Type Definitions and States]]
 - [[_COMMUNITY_Main App and UI Pages|Main App and UI Pages]]
 - [[_COMMUNITY_TypeScript Configuration|TypeScript Configuration]]
-- [[_COMMUNITY_Snake Game Engine|Snake Game Engine]]
 - [[_COMMUNITY_Wild Encounter Spawning|Wild Encounter Spawning]]
 - [[_COMMUNITY_Battle Rewards and Updates|Battle Rewards and Updates]]
 - [[_COMMUNITY_Battle Claim and Resolution|Battle Claim and Resolution]]
@@ -89,7 +88,7 @@
 
 ## God Nodes (most connected - your core abstractions)
 1. `VillageScene` - 66 edges
-2. `Monster RPG Work Summary` - 37 edges
+2. `Monster RPG Work Summary` - 39 edges
 3. `MonsterRpgSaveState` - 36 edges
 4. `getGameMap()` - 35 edges
 5. `canEnterTile()` - 24 edges
@@ -114,7 +113,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (74 total, 36 thin omitted)
+## Communities (73 total, 36 thin omitted)
 
 ### Community 0 - "Map and Movement Logic"
 Cohesion: 0.08
@@ -125,16 +124,16 @@ Cohesion: 0.05
 Nodes (20): MonsterRpgAssetKey, monsterRpgAssetKeys, monsterRpgAssetManifest, monsterRpgSpriteSheetManifest, avatarColors, directionDeltas, EncounterView, FarmView (+12 more)
 
 ### Community 2 - "Battle Room Management"
-Cohesion: 0.16
-Nodes (15): Direction, dirVec, Effects, Item, ItemKind, Point, SnakeSnapshot, colors (+7 more)
+Cohesion: 0.13
+Nodes (22): writeLocal(), defaultSnakeConfig, SnakeConfig, snakeConfigSchema, Direction, dirVec, Effects, Item (+14 more)
 
 ### Community 3 - "Card Activation and Types"
 Cohesion: 0.05
 Nodes (87): ApplyBattleRewardsResult, activateBuffCard(), activateCreatureCardViaElder(), activateMaterialCard(), BuffCardDefinition, buildFarmCardViaElder(), CARD_PACK_RARITY_TIERS, CardActionResult (+79 more)
 
 ### Community 4 - "Game and Admin Pages"
-Cohesion: 0.09
-Nodes (30): GameCard(), Layout(), LayoutProps, defaultGames, AdminGameConfigPage(), Props, AdminPage(), Props (+22 more)
+Cohesion: 0.13
+Nodes (22): GameCard(), Layout(), LayoutProps, AdminGameConfigPage(), Props, AdminPage(), Props, GamePage() (+14 more)
 
 ### Community 5 - "Creature Journal and Profile"
 Cohesion: 0.12
@@ -178,7 +177,7 @@ Nodes (23): clearFarmGuard(), consumeFarmCardRequirements(), consumeMaterialRequ
 
 ### Community 15 - "Species Catalog and Stats"
 Cohesion: 0.05
-Nodes (37): 2026-06-13 - Phase 0 Foundation, 2026-06-13 - Phase 1 Playable Client Slice, 2026-06-13 - Phase 2 Input Follow-Up, 2026-06-13 - Phase 2 Multiplayer Presence, 2026-06-13 - Phase 3 World + Villages, 2026-06-18 - Full Vision Finish Plan, 2026-06-18 - Phase 4 Final QA, 2026-06-18 - Phase 4 Multiplayer Transitions (+29 more)
+Nodes (39): 2026-06-13 - Phase 0 Foundation, 2026-06-13 - Phase 1 Playable Client Slice, 2026-06-13 - Phase 2 Input Follow-Up, 2026-06-13 - Phase 2 Multiplayer Presence, 2026-06-13 - Phase 3 World + Villages, 2026-06-18 - Full Vision Finish Plan, 2026-06-18 - Phase 4 Final QA, 2026-06-18 - Phase 4 Multiplayer Transitions (+31 more)
 
 ### Community 16 - "Colyseus Client Connections"
 Cohesion: 0.05
@@ -189,16 +188,12 @@ Cohesion: 0.08
 Nodes (28): applyInteriorTemplate(), buildingDefinitions, buildingNames, buildingTiles, createInteriorMap(), createInteriorSpawn(), createVillageMap(), createWorldMap() (+20 more)
 
 ### Community 18 - "Main App and UI Pages"
-Cohesion: 0.18
-Nodes (9): LeaderboardModal(), provider, entriesByRange, LeaderboardProvider, LocalStorageLeaderboardProvider, RemoteLeaderboardProviderStub, GameId, LeaderboardEntry (+1 more)
+Cohesion: 0.11
+Nodes (17): LeaderboardModal(), provider, readLocal(), buildLeaderboardViewModel(), defaultProvider, getRangeLabel(), LeaderboardPage(), LeaderboardPageViewModel (+9 more)
 
 ### Community 19 - "TypeScript Configuration"
-Cohesion: 0.09
-Nodes (15): App(), ComingSoonPage, Home(), MonsterRpgGame, navIcons, PortalShell(), SnakeGamePage, portalNavigationItems (+7 more)
-
-### Community 20 - "Snake Game Engine"
-Cohesion: 0.24
-Nodes (12): AdminPage(), AdminPageProps, RegistryOverride, readLocal(), writeLocal(), defaultSnakeConfig, SnakeConfig, snakeConfigSchema (+4 more)
+Cohesion: 0.10
+Nodes (14): App(), ComingSoonPage, Home(), MonsterRpgGame, navIcons, PortalShell(), SnakeGamePage, portalNavigationItems (+6 more)
 
 ### Community 21 - "Wild Encounter Spawning"
 Cohesion: 0.24
@@ -209,8 +204,8 @@ Cohesion: 0.20
 Nodes (12): BattleClaim, battleClaims, battleResultListeners, cleanupExpiredBattleClaims(), createBattleClaim(), createGuardBattleClaim(), getBattleClaim(), getResolvedBattleOutcome() (+4 more)
 
 ### Community 24 - "Battle Claim and Resolution"
-Cohesion: 0.33
-Nodes (11): isAccent(), isKnownValue(), isRecord(), loadGameRegistry(), loadRegistryOverride(), mergeRegistryOverride(), optionalText(), resetRegistryOverride() (+3 more)
+Cohesion: 0.20
+Nodes (19): AdminPage(), AdminPageProps, portalCoverAssetKeys, isAccent(), isKnownValue(), isRecord(), loadGameRegistry(), loadRegistryOverride() (+11 more)
 
 ### Community 25 - "Game Initialization and Settings"
 Cohesion: 0.11
@@ -246,7 +241,7 @@ Nodes (13): Adding a New Game, Admin Access (MVP), Architecture Overview, Build 
 
 ### Community 40 - "UI Logo and Sprites"
 Cohesion: 0.15
-Nodes (24): GameTile(), gameRegistry, getFeaturedGame(), getPortalImageAsset(), getPortalImageSrc(), portalCoverAssetKeys, portalImageAssets, RegistryOverrideEntry (+16 more)
+Nodes (22): GameTile(), gameRegistry, getFeaturedGame(), getPortalImageAsset(), getPortalImageSrc(), portalImageAssets, defaultGames, defaultLibraryFilters (+14 more)
 
 ### Community 41 - "Farm Definitions and Upgrades"
 Cohesion: 0.22
@@ -257,7 +252,7 @@ Cohesion: 0.27
 Nodes (3): LocationRoom, gameServer, port
 
 ## Knowledge Gaps
-- **252 isolated node(s):** `name`, `version`, `private`, `type`, `dev` (+247 more)
+- **254 isolated node(s):** `name`, `version`, `private`, `type`, `dev` (+249 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **36 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -265,16 +260,16 @@ Nodes (3): LocationRoom, gameServer, port
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `VillageScene` connect `Village Scene and Assets` to `Colyseus Client Connections`, `Map and Movement Logic`, `Battle State and Schema`?**
-  _High betweenness centrality (0.043) - this node is a cross-community bridge._
+  _High betweenness centrality (0.050) - this node is a cross-community bridge._
 - **Why does `MonsterRpgSaveState` connect `Colyseus Client Connections` to `Map and Movement Logic`, `Village Scene and Assets`, `Card Activation and Types`, `Creature Journal and Profile`, `State Validation and Schema`, `Save State and Rewards`, `Creature Lifecycle and Attacks`, `Multiplayer Connection Handling`, `Farm Management and Theft`, `Type Definitions and States`?**
   _High betweenness centrality (0.027) - this node is a cross-community bridge._
-- **Why does `getGameMap()` connect `Map and Movement Logic` to `Village Scene and Assets`, `Card Activation and Types`, `State Validation and Schema`, `Multiplayer Connection Handling`, `Colyseus Client Connections`, `Type Definitions and States`, `Wild Encounter Spawning`?**
+- **Why does `Direction` connect `Battle State and Schema` to `Map and Movement Logic`, `Village Scene and Assets`, `Card Activation and Types`, `Creature Lifecycle and Attacks`, `Multiplayer Connection Handling`, `Colyseus Client Connections`, `Type Definitions and States`, `Wild Encounter Spawning`?**
   _High betweenness centrality (0.013) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `private` to the rest of the system?**
-  _252 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _254 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Map and Movement Logic` be split into smaller, more focused modules?**
   _Cohesion score 0.07525150905432595 - nodes in this community are weakly interconnected._
 - **Should `Village Scene and Assets` be split into smaller, more focused modules?**
   _Cohesion score 0.05290490100616683 - nodes in this community are weakly interconnected._
-- **Should `Card Activation and Types` be split into smaller, more focused modules?**
-  _Cohesion score 0.052121212121212124 - nodes in this community are weakly interconnected._
+- **Should `Battle Room Management` be split into smaller, more focused modules?**
+  _Cohesion score 0.12962962962962962 - nodes in this community are weakly interconnected._

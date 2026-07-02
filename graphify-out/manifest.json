@@ -1,8 +1,8 @@
 {
   "package.json": {
-    "mtime": 1783019293.2920082,
-    "ast_hash": "2376771d6d196b08899647b3bc1bde48",
-    "semantic_hash": "2376771d6d196b08899647b3bc1bde48"
+    "mtime": 1783023545.8610613,
+    "ast_hash": "3ed850246cc77d88173bd8683966c09d",
+    "semantic_hash": ""
   },
   "scripts/generate-monster-rpg-pixel-assets.mjs": {
     "mtime": 1783019293.3466866,
@@ -505,8 +505,8 @@
     "semantic_hash": ""
   },
   "docs/monster-rpg/work-summary.md": {
-    "mtime": 1783022879.6516874,
-    "ast_hash": "9ea438e997cecaad5b6d53cd2fe451c4",
+    "mtime": 1783023553.9757729,
+    "ast_hash": "619ae1283400b337f79e73182713e068",
     "semantic_hash": ""
   },
   "index.html": {
@@ -817,6 +817,11 @@
   "public/assets/portal-hero.png": {
     "mtime": 1783019305.431757,
     "ast_hash": "32c4612ce5fbbb173d42bddd6b670031",
+    "semantic_hash": ""
+  },
+  "scripts/copy-spa-fallback.mjs": {
+    "mtime": 1783023538.5864651,
+    "ast_hash": "f9414782a0382e698c4714370eed8c2e",
     "semantic_hash": ""
   }
 }
