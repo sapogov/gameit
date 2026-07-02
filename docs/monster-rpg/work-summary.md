@@ -1,5 +1,10 @@
 # Monster RPG Work Summary
 
+## 2026-06-27 - Git Ignore Maintenance
+
+- Created branch `chore-gitignore-graphify-agent-md` from `main`.
+- Updated `.gitignore` to ignore Graphify output directories and agent-maintained Markdown files across the repo.
+
 ## 2026-06-13 - Phase 0 Foundation
 
 - Added durable project rules in `AGENTS.md`: Game Studio workflow, caveman brevity, English-only future work, summary habit, and browser-game architecture boundaries.
