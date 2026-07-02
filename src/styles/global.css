@@ -2764,6 +2764,48 @@ textarea { min-height: 88px; resize: vertical; }
   font-weight: 800;
 }
 
+.portal-shell .status-badge-live {
+  border-color: rgb(86 244 223 / 34%);
+  color: #56f4df;
+  background: rgb(86 244 223 / 11%);
+}
+
+.portal-shell .status-badge-soon {
+  border-color: rgb(244 63 94 / 34%);
+  color: #ff9aad;
+  background: rgb(244 63 94 / 12%);
+}
+
+.portal-shell .game-tile-coming-soon,
+.portal-shell .library-card-coming-soon {
+  border-style: dashed;
+}
+
+.portal-shell .game-tile-coming-soon .game-tile-cover {
+  opacity: .58;
+}
+
+.portal-shell .game-tile-coming-soon .pixel-btn.secondary,
+.portal-shell .library-card-coming-soon .pixel-btn.secondary {
+  border: 1px solid rgb(244 63 94 / 24%);
+  color: #ffbdc9;
+  background: rgb(244 63 94 / 12%);
+}
+
+.portal-shell .game-tile-coming-soon:hover .pixel-btn.secondary,
+.portal-shell .game-tile-coming-soon:focus-visible .pixel-btn.secondary {
+  color: #240e3b;
+  background: linear-gradient(135deg, #ff9aad, #b89fff);
+}
+
+.portal-shell .library-card {
+  transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
+}
+
+.portal-shell .library-card-playable:hover {
+  box-shadow: 0 26px 70px rgb(86 244 223 / 12%);
+}
+
 .portal-shell .library-card h2,
 .portal-shell .leaderboard-summary-label,
 .portal-shell .admin-section h3 {
@@ -2999,5 +3041,111 @@ textarea { min-height: 88px; resize: vertical; }
 
   .portal-shell .leaderboard-segment .pixel-btn {
     flex: 1 1 140px;
+  }
+}
+
+/* Coming-soon game preview pages use the same generated portal assets. */
+.coming-soon-page {
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  padding: 1.25rem 1.25rem 4rem;
+  background:
+    radial-gradient(circle at 12% 8%, rgb(184 159 255 / 22%), transparent 30rem),
+    linear-gradient(180deg, #16052a 0%, #12031f 100%);
+}
+
+.coming-soon-back {
+  width: max-content;
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  margin-bottom: 1rem;
+  border: 1px solid rgb(184 159 255 / 18%);
+  border-radius: .9rem;
+  color: #f1dfff;
+  background: rgb(36 14 59 / 72%);
+  text-decoration: none;
+}
+
+.coming-soon-back svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.coming-soon-hero {
+  position: relative;
+  min-height: min(72vh, 640px);
+  overflow: hidden;
+  display: grid;
+  align-items: end;
+  border: 1px solid rgb(184 159 255 / 18%);
+  border-radius: 1.5rem;
+  background: #12031f;
+  box-shadow: 0 28px 90px rgb(0 0 0 / 34%);
+}
+
+.coming-soon-hero img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .72;
+}
+
+.coming-soon-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgb(18 3 31 / 96%) 0%, rgb(18 3 31 / 68%) 44%, rgb(18 3 31 / 10%) 100%);
+}
+
+.coming-soon-copy {
+  position: relative;
+  z-index: 1;
+  width: min(760px, 100%);
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1.25rem, 5vw, 3rem);
+}
+
+.coming-soon-copy h1 {
+  margin: 0;
+  color: #f1dfff;
+  font-family: "Space Grotesk", Manrope, system-ui, sans-serif;
+  font-size: clamp(2.2rem, 7vw, 5.5rem);
+  line-height: .95;
+  letter-spacing: 0;
+}
+
+.coming-soon-copy p:not(.section-kicker) {
+  max-width: 620px;
+  margin: 0;
+  color: #d9c8eb;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.65;
+}
+
+.coming-soon-copy .pixel-btn {
+  width: max-content;
+  max-width: 100%;
+  border: 0;
+  border-radius: .9rem;
+  color: #240e3b;
+  background: linear-gradient(135deg, #56f4df, #b89fff);
+}
+
+@media (max-width: 640px) {
+  .coming-soon-page {
+    padding: .85rem .85rem 2rem;
+  }
+
+  .coming-soon-hero {
+    min-height: 680px;
+    border-radius: 1rem;
   }
 }

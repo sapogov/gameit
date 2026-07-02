@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 520" role="img" aria-label="Flappy Bird hero art">
+  <defs>
+    <linearGradient id="heroSky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#12031f"/>
+      <stop offset=".45" stop-color="#282268"/>
+      <stop offset="1" stop-color="#f97316"/>
+    </linearGradient>
+    <linearGradient id="heroPipe" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#56f4df"/>
+      <stop offset="1" stop-color="#22c55e"/>
+    </linearGradient>
+    <filter id="heroGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="1280" height="520" fill="url(#heroSky)"/>
+  <path d="M0 346c170-65 310-36 446-8 160 34 310 28 468-42 142-63 257-58 366-12v236H0Z" fill="#0f0f23" opacity=".7"/>
+  <g stroke="#ffffff" stroke-opacity=".08" stroke-width="2">
+    <path d="M0 86h1280M0 166h1280M0 246h1280M0 326h1280"/>
+    <path d="M122 0v520M346 0v520M570 0v520M794 0v520M1018 0v520M1242 0v520"/>
+  </g>
+  <g fill="url(#heroPipe)" filter="url(#heroGlow)">
+    <rect x="92" y="-20" width="116" height="178" rx="18"/>
+    <rect x="860" y="332" width="116" height="210" rx="18"/>
+  </g>
+  <rect x="70" y="146" width="160" height="38" rx="12" fill="#8bffbb"/>
+  <rect x="838" y="294" width="160" height="38" rx="12" fill="#8bffbb"/>
+  <g filter="url(#heroGlow)">
+    <path d="M527 218c18-69 109-92 162-39 54 53 31 147-42 174-69 25-146-12-155-82-3-19 11-36 35-53Z" fill="#ffd166"/>
+    <path d="M603 188c60 9 95 49 94 106 49-13 81-44 84-86-49-7-99-24-145-52Z" fill="#ff9f1c"/>
+    <circle cx="646" cy="215" r="17" fill="#0f0f23"/>
+    <circle cx="652" cy="209" r="6" fill="#ffffff"/>
+    <path d="M496 242c-51-13-88 4-116 44 56 16 101 8 136-22Z" fill="#b89fff"/>
+  </g>
+  <path d="M500 424h280" stroke="#f1dfff" stroke-opacity=".66" stroke-width="14" stroke-linecap="round"/>
+</svg>

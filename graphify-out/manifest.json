@@ -75,8 +75,8 @@
     "semantic_hash": "a5a67122c07675186caddce718aa4205"
   },
   "src/components/GameTile.tsx": {
-    "mtime": 1783020228.8965323,
-    "ast_hash": "4c0e7abee122a6dc9c90ed8d8892c87c",
+    "mtime": 1783025518.3082108,
+    "ast_hash": "40629d2ddd103c56ee7a70bb9bcd5c9b",
     "semantic_hash": ""
   },
   "src/components/IconCircleButton.tsx": {
@@ -100,8 +100,8 @@
     "semantic_hash": "f3eeabc0145d5352bbe0b5b57c2b8606"
   },
   "src/config/games.ts": {
-    "mtime": 1783019293.3678071,
-    "ast_hash": "047630d513c537f1cfbf79c4c17257a7",
+    "mtime": 1783025337.7021804,
+    "ast_hash": "350c1a0f0a9f0a577198d2d12a206f28",
     "semantic_hash": ""
   },
   "src/config/uiAssets.ts": {
@@ -335,9 +335,9 @@
     "semantic_hash": "704320566253d98352bdec21e2c8dca1"
   },
   "src/games/placeholders/ComingSoonGamePage.tsx": {
-    "mtime": 1783019293.4423573,
-    "ast_hash": "4985cceeeb1e301a3c7b77e551bcd835",
-    "semantic_hash": "4985cceeeb1e301a3c7b77e551bcd835"
+    "mtime": 1783025506.0342927,
+    "ast_hash": "2b4395c43fe609f03a917c7ee6f9cb43",
+    "semantic_hash": ""
   },
   "src/games/snake/SnakeCanvas.tsx": {
     "mtime": 1783019293.4426024,
@@ -425,8 +425,8 @@
     "semantic_hash": "6d1a5b0e490e7cadf1fad11b7c75761f"
   },
   "src/types/game.ts": {
-    "mtime": 1783019293.4588695,
-    "ast_hash": "53b5e838442d0b8c5cc97025ad530938",
+    "mtime": 1783025310.6607783,
+    "ast_hash": "d4aca136f3d9177c9af8a7138a81b851",
     "semantic_hash": ""
   },
   "src/vite-env.d.ts": {
@@ -505,8 +505,8 @@
     "semantic_hash": ""
   },
   "docs/monster-rpg/work-summary.md": {
-    "mtime": 1783023553.9757729,
-    "ast_hash": "619ae1283400b337f79e73182713e068",
+    "mtime": 1783025559.3462315,
+    "ast_hash": "84f1f3c3081976bf7748efe0377de461",
     "semantic_hash": ""
   },
   "index.html": {
@@ -615,8 +615,8 @@
     "semantic_hash": ""
   },
   "src/config/portalAssets.ts": {
-    "mtime": 1783019293.3686361,
-    "ast_hash": "e726ab36d4d15094f5a13e0cfc246db8",
+    "mtime": 1783025325.4391506,
+    "ast_hash": "83502292ef39cac4b0d32887767a2bd1",
     "semantic_hash": ""
   },
   "docs/portal-glossary.md": {
@@ -775,8 +775,8 @@
     "semantic_hash": ""
   },
   "src/pages/LibraryPage.tsx": {
-    "mtime": 1783022911.9992864,
-    "ast_hash": "4200b39b46b0d3a1a280c96691e9a32f",
+    "mtime": 1783025445.4823768,
+    "ast_hash": "a95b06f5b8ca25830ec386fc4b6e2a5c",
     "semantic_hash": ""
   },
   "src/pages/libraryCatalog.test.ts": {
@@ -822,6 +822,26 @@
   "scripts/copy-spa-fallback.mjs": {
     "mtime": 1783023538.5864651,
     "ast_hash": "f9414782a0382e698c4714370eed8c2e",
+    "semantic_hash": ""
+  },
+  "public/assets/portal/flappy-bird-cover.svg": {
+    "mtime": 1783025359.9853308,
+    "ast_hash": "91be44e3b02fde5bdfe50923f51b781f",
+    "semantic_hash": ""
+  },
+  "public/assets/portal/flappy-bird-hero.svg": {
+    "mtime": 1783025381.4067419,
+    "ast_hash": "4350c0864fde9843c01e9ef500353723",
+    "semantic_hash": ""
+  },
+  "public/assets/portal/stickman-fight-cover.svg": {
+    "mtime": 1783025398.4264061,
+    "ast_hash": "fef0ba93e38b95cd96b6044ca5abbf55",
+    "semantic_hash": ""
+  },
+  "public/assets/portal/stickman-fight-hero.svg": {
+    "mtime": 1783025417.0219343,
+    "ast_hash": "ff0da1232bcf2af769534d56c879b015",
     "semantic_hash": ""
   }
 }

@@ -5,6 +5,7 @@
 - Extended the kinetic GameIt portal design across Home, Library, Leaderboard, and Admin routes.
 - Restyled catalog cards, filters, leaderboard controls/tables, admin forms, and responsive states with the same dark neon system.
 - Added a GitHub Pages SPA fallback so direct portal routes such as `/library`, `/leaderboard`, and `/admin` load the React app.
+- Added original Flappy Bird and Stickman Fight cover/hero portal assets, wired them into the registry, and upgraded preview cards/pages so coming-soon entries read as intentional queue items.
 - Kept the portal pass scoped to React/DOM pages so game runtime routes remain lightweight.
 
 ## 2026-07-02 - Issue #49: Portal Navigation And Final Responsive QA

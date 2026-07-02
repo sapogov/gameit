@@ -500,7 +500,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_checksavereset",
-      "community": 37,
+      "community": 35,
       "norm_label": "checksavereset()"
     },
     {
@@ -510,7 +510,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_checkinitialsavestartsinhomevillage",
-      "community": 26,
+      "community": 0,
       "norm_label": "checkinitialsavestartsinhomevillage()"
     },
     {
@@ -520,7 +520,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_checkoverworldvillageentry",
-      "community": 9,
+      "community": 0,
       "norm_label": "checkoverworldvillageentry()"
     },
     {
@@ -530,7 +530,7 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_checkhomevillageeastgateexit",
-      "community": 9,
+      "community": 0,
       "norm_label": "checkhomevillageeastgateexit()"
     },
     {
@@ -550,7 +550,7 @@
       "source_location": "L139",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_checkblockedmovement",
-      "community": 9,
+      "community": 0,
       "norm_label": "checkblockedmovement()"
     },
     {
@@ -580,7 +580,7 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_checkcreaturejournalstates",
-      "community": 26,
+      "community": 0,
       "norm_label": "checkcreaturejournalstates()"
     },
     {
@@ -820,7 +820,7 @@
       "source_location": "L561",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_createstate",
-      "community": 9,
+      "community": 0,
       "norm_label": "createstate()"
     },
     {
@@ -850,7 +850,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "server_battleregistry",
-      "community": 10,
+      "community": 31,
       "norm_label": "battleregistry.ts"
     },
     {
@@ -860,7 +860,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "server_battleregistry_battleclaim",
-      "community": 10,
+      "community": 31,
       "norm_label": "battleclaim"
     },
     {
@@ -870,7 +870,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "server_battleregistry_battleclaims",
-      "community": 10,
+      "community": 31,
       "norm_label": "battleclaims"
     },
     {
@@ -880,7 +880,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "server_battleregistry_battleresultlisteners",
-      "community": 10,
+      "community": 31,
       "norm_label": "battleresultlisteners"
     },
     {
@@ -890,7 +890,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "server_battleregistry_createbattleclaim",
-      "community": 13,
+      "community": 31,
       "norm_label": "createbattleclaim()"
     },
     {
@@ -900,7 +900,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "server_battleregistry_createguardbattleclaim",
-      "community": 13,
+      "community": 31,
       "norm_label": "createguardbattleclaim()"
     },
     {
@@ -930,7 +930,7 @@
       "source_location": "L122",
       "_origin": "ast",
       "id": "server_battleregistry_getresolvedbattleoutcome",
-      "community": 10,
+      "community": 31,
       "norm_label": "getresolvedbattleoutcome()"
     },
     {
@@ -940,7 +940,7 @@
       "source_location": "L135",
       "_origin": "ast",
       "id": "server_battleregistry_removebattleclaim",
-      "community": 44,
+      "community": 31,
       "norm_label": "removebattleclaim()"
     },
     {
@@ -950,7 +950,7 @@
       "source_location": "L140",
       "_origin": "ast",
       "id": "server_battleregistry_onbattleclaimresolved",
-      "community": 13,
+      "community": 44,
       "norm_label": "onbattleclaimresolved()"
     },
     {
@@ -960,7 +960,7 @@
       "source_location": "L151",
       "_origin": "ast",
       "id": "server_battleregistry_getbattlestateseed",
-      "community": 10,
+      "community": 31,
       "norm_label": "getbattlestateseed()"
     },
     {
@@ -970,7 +970,7 @@
       "source_location": "L162",
       "_origin": "ast",
       "id": "server_battleregistry_cleanupexpiredbattleclaims",
-      "community": 13,
+      "community": 31,
       "norm_label": "cleanupexpiredbattleclaims()"
     },
     {
@@ -980,7 +980,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "server_index",
-      "community": 44,
+      "community": 10,
       "norm_label": "index.ts"
     },
     {
@@ -990,7 +990,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "server_index_port",
-      "community": 44,
+      "community": 10,
       "norm_label": "port"
     },
     {
@@ -1000,7 +1000,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "server_index_gameserver",
-      "community": 44,
+      "community": 10,
       "norm_label": "gameserver"
     },
     {
@@ -1230,7 +1230,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "rooms_locationroom_locationroom_oncreate",
-      "community": 31,
+      "community": 13,
       "norm_label": ".oncreate()"
     },
     {
@@ -1240,7 +1240,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "rooms_locationroom_locationroom_onjoin",
-      "community": 31,
+      "community": 13,
       "norm_label": ".onjoin()"
     },
     {
@@ -1260,7 +1260,7 @@
       "source_location": "L140",
       "_origin": "ast",
       "id": "rooms_locationroom_locationroom_handlemoveintent",
-      "community": 9,
+      "community": 13,
       "norm_label": ".handlemoveintent()"
     },
     {
@@ -1270,7 +1270,7 @@
       "source_location": "L174",
       "_origin": "ast",
       "id": "rooms_locationroom_locationroom_handleclaimwildencounter",
-      "community": 13,
+      "community": 44,
       "norm_label": ".handleclaimwildencounter()"
     },
     {
@@ -1290,7 +1290,7 @@
       "source_location": "L301",
       "_origin": "ast",
       "id": "rooms_locationroom_locationroom_handleresolvewildencounter",
-      "community": 44,
+      "community": 31,
       "norm_label": ".handleresolvewildencounter()"
     },
     {
@@ -1300,7 +1300,7 @@
       "source_location": "L325",
       "_origin": "ast",
       "id": "rooms_locationroom_locationroom_spawninitialwildencounters",
-      "community": 31,
+      "community": 21,
       "norm_label": ".spawninitialwildencounters()"
     },
     {
@@ -1360,7 +1360,7 @@
       "source_location": "L431",
       "_origin": "ast",
       "id": "rooms_locationroom_sanitizeprofile",
-      "community": 31,
+      "community": 13,
       "norm_label": "sanitizeprofile()"
     },
     {
@@ -1420,7 +1420,7 @@
       "source_location": "L511",
       "_origin": "ast",
       "id": "rooms_locationroom_getencountercooldownkey",
-      "community": 13,
+      "community": 44,
       "norm_label": "getencountercooldownkey()"
     },
     {
@@ -1450,7 +1450,7 @@
       "source_location": "L558",
       "_origin": "ast",
       "id": "rooms_locationroom_sanitizeguardcreature",
-      "community": 35,
+      "community": 13,
       "norm_label": "sanitizeguardcreature()"
     },
     {
@@ -2124,10 +2124,20 @@
       "norm_label": "gametile.tsx"
     },
     {
-      "label": "GameTile()",
+      "label": "genreLabels",
       "file_type": "code",
       "source_file": "src/components/GameTile.tsx",
       "source_location": "L6",
+      "_origin": "ast",
+      "id": "components_gametile_genrelabels",
+      "community": 40,
+      "norm_label": "genrelabels"
+    },
+    {
+      "label": "GameTile()",
+      "file_type": "code",
+      "source_file": "src/components/GameTile.tsx",
+      "source_location": "L13",
       "_origin": "ast",
       "id": "components_gametile_gametile",
       "community": 40,
@@ -2317,7 +2327,7 @@
       "label": "portalCoverAssetKeys",
       "file_type": "code",
       "source_file": "src/config/portalAssets.ts",
-      "source_location": "L73",
+      "source_location": "L105",
       "_origin": "ast",
       "id": "config_portalassets_portalcoverassetkeys",
       "community": 2,
@@ -2327,7 +2337,7 @@
       "label": "getPortalImageAsset()",
       "file_type": "code",
       "source_file": "src/config/portalAssets.ts",
-      "source_location": "L77",
+      "source_location": "L109",
       "_origin": "ast",
       "id": "config_portalassets_getportalimageasset",
       "community": 40,
@@ -2337,7 +2347,7 @@
       "label": "getPortalImageSrc()",
       "file_type": "code",
       "source_file": "src/config/portalAssets.ts",
-      "source_location": "L83",
+      "source_location": "L115",
       "_origin": "ast",
       "id": "config_portalassets_getportalimagesrc",
       "community": 40,
@@ -2550,7 +2560,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "data_defaultgames_defaultgames",
-      "community": 4,
+      "community": 40,
       "norm_label": "defaultgames"
     },
     {
@@ -2570,7 +2580,7 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "monster_rpg_monsterrpggame_getinitialstate",
-      "community": 37,
+      "community": 35,
       "norm_label": "getinitialstate()"
     },
     {
@@ -2870,7 +2880,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "scenes_villagescene_villagesceneoptions",
-      "community": 23,
+      "community": 9,
       "norm_label": "villagesceneoptions"
     },
     {
@@ -3090,7 +3100,7 @@
       "source_location": "L307",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_handlepointerdown",
-      "community": 1,
+      "community": 9,
       "norm_label": ".handlepointerdown()"
     },
     {
@@ -3580,7 +3590,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "network_colyseusclient_multiplayerconnection",
-      "community": 11,
+      "community": 13,
       "norm_label": "multiplayerconnection"
     },
     {
@@ -3610,7 +3620,7 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "network_colyseusclient_locationtransitionmessage",
-      "community": 33,
+      "community": 11,
       "norm_label": "locationtransitionmessage"
     },
     {
@@ -3650,7 +3660,7 @@
       "source_location": "L174",
       "_origin": "ast",
       "id": "network_colyseusclient_tolocationroomstate",
-      "community": 17,
+      "community": 34,
       "norm_label": "tolocationroomstate()"
     },
     {
@@ -3880,7 +3890,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "sim_battles_battleresolution",
-      "community": 10,
+      "community": 31,
       "norm_label": "battleresolution"
     },
     {
@@ -4170,7 +4180,7 @@
       "source_location": "L212",
       "_origin": "ast",
       "id": "sim_cards_test_createprofilestate",
-      "community": 35,
+      "community": 0,
       "norm_label": "createprofilestate()"
     },
     {
@@ -4260,7 +4270,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "sim_cards_starter_creature_card_ids",
-      "community": 20,
+      "community": 3,
       "norm_label": "starter_creature_card_ids"
     },
     {
@@ -4320,7 +4330,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "sim_cards_carddefinition",
-      "community": 3,
+      "community": 5,
       "norm_label": "carddefinition"
     },
     {
@@ -4490,7 +4500,7 @@
       "source_location": "L263",
       "_origin": "ast",
       "id": "sim_cards_getcreaturecardbyid",
-      "community": 3,
+      "community": 20,
       "norm_label": "getcreaturecardbyid()"
     },
     {
@@ -4610,7 +4620,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_creaturejournal_test",
-      "community": 26,
+      "community": 0,
       "norm_label": "creaturejournal.test.ts"
     },
     {
@@ -4620,7 +4630,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_creaturejournal",
-      "community": 26,
+      "community": 0,
       "norm_label": "creaturejournal.ts"
     },
     {
@@ -4630,7 +4640,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "sim_creaturejournal_getjournalspeciesviewstate",
-      "community": 26,
+      "community": 0,
       "norm_label": "getjournalspeciesviewstate()"
     },
     {
@@ -4640,7 +4650,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "sim_creaturejournal_recordwildcreatureseen",
-      "community": 26,
+      "community": 0,
       "norm_label": "recordwildcreatureseen()"
     },
     {
@@ -4650,7 +4660,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "sim_creaturejournal_recordcreaturediscovered",
-      "community": 26,
+      "community": 0,
       "norm_label": "recordcreaturediscovered()"
     },
     {
@@ -4660,7 +4670,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "sim_creaturejournal_withjournalspeciesstate",
-      "community": 26,
+      "community": 0,
       "norm_label": "withjournalspeciesstate()"
     },
     {
@@ -4670,7 +4680,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "sim_creaturejournal_assertknownspecies",
-      "community": 26,
+      "community": 0,
       "norm_label": "assertknownspecies()"
     },
     {
@@ -4980,7 +4990,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_creatureparty_test",
-      "community": 35,
+      "community": 8,
       "norm_label": "creatureparty.test.ts"
     },
     {
@@ -4990,7 +5000,7 @@
       "source_location": "L179",
       "_origin": "ast",
       "id": "sim_creatureparty_test_createstatewithmagicdust",
-      "community": 35,
+      "community": 0,
       "norm_label": "createstatewithmagicdust()"
     },
     {
@@ -5000,7 +5010,7 @@
       "source_location": "L193",
       "_origin": "ast",
       "id": "sim_creatureparty_test_createcommoncreatures",
-      "community": 3,
+      "community": 8,
       "norm_label": "createcommoncreatures()"
     },
     {
@@ -5010,7 +5020,7 @@
       "source_location": "L220",
       "_origin": "ast",
       "id": "sim_creatureparty_test_withreviveitems",
-      "community": 35,
+      "community": 8,
       "norm_label": "withreviveitems()"
     },
     {
@@ -5020,7 +5030,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_creatureparty",
-      "community": 35,
+      "community": 22,
       "norm_label": "creatureparty.ts"
     },
     {
@@ -5030,7 +5040,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "sim_creatureparty_creatureuserole",
-      "community": 35,
+      "community": 22,
       "norm_label": "creatureuserole"
     },
     {
@@ -5040,7 +5050,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "sim_creatureparty_creaturepartyfailurereason",
-      "community": 35,
+      "community": 22,
       "norm_label": "creaturepartyfailurereason"
     },
     {
@@ -5050,7 +5060,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "sim_creatureparty_creaturepartyresult",
-      "community": 35,
+      "community": 22,
       "norm_label": "creaturepartyresult"
     },
     {
@@ -5070,7 +5080,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "sim_creatureparty_movecreaturetoactiveparty",
-      "community": 35,
+      "community": 22,
       "norm_label": "movecreaturetoactiveparty()"
     },
     {
@@ -5080,7 +5090,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "sim_creatureparty_movecreaturetostorage",
-      "community": 35,
+      "community": 22,
       "norm_label": "movecreaturetostorage()"
     },
     {
@@ -5090,7 +5100,7 @@
       "source_location": "L91",
       "_origin": "ast",
       "id": "sim_creatureparty_setcreaturehp",
-      "community": 35,
+      "community": 22,
       "norm_label": "setcreaturehp()"
     },
     {
@@ -5100,7 +5110,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "sim_creatureparty_healallcreaturesathospital",
-      "community": 35,
+      "community": 22,
       "norm_label": "healallcreaturesathospital()"
     },
     {
@@ -5120,7 +5130,7 @@
       "source_location": "L144",
       "_origin": "ast",
       "id": "sim_creatureparty_usereviveitem",
-      "community": 35,
+      "community": 22,
       "norm_label": "usereviveitem()"
     },
     {
@@ -5130,7 +5140,7 @@
       "source_location": "L187",
       "_origin": "ast",
       "id": "sim_creatureparty_cancreatureuserole",
-      "community": 35,
+      "community": 22,
       "norm_label": "cancreatureuserole()"
     },
     {
@@ -5140,7 +5150,7 @@
       "source_location": "L191",
       "_origin": "ast",
       "id": "sim_creatureparty_iscreaturefainted",
-      "community": 35,
+      "community": 22,
       "norm_label": "iscreaturefainted()"
     },
     {
@@ -5150,7 +5160,7 @@
       "source_location": "L195",
       "_origin": "ast",
       "id": "sim_creatureparty_isvalidcreaturecontainerlayout",
-      "community": 7,
+      "community": 34,
       "norm_label": "isvalidcreaturecontainerlayout()"
     },
     {
@@ -5340,7 +5350,7 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "sim_farms_farmupgraderequirements",
-      "community": 35,
+      "community": 14,
       "norm_label": "farmupgraderequirements"
     },
     {
@@ -5360,7 +5370,7 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "sim_farms_farmupgradepreview",
-      "community": 35,
+      "community": 14,
       "norm_label": "farmupgradepreview"
     },
     {
@@ -5370,7 +5380,7 @@
       "source_location": "L122",
       "_origin": "ast",
       "id": "sim_farms_farmdefinition",
-      "community": 35,
+      "community": 14,
       "norm_label": "farmdefinition"
     },
     {
@@ -5390,7 +5400,7 @@
       "source_location": "L160",
       "_origin": "ast",
       "id": "sim_farms_getfarmdefinition",
-      "community": 14,
+      "community": 5,
       "norm_label": "getfarmdefinition()"
     },
     {
@@ -5400,7 +5410,7 @@
       "source_location": "L164",
       "_origin": "ast",
       "id": "sim_farms_createfarmsaverecord",
-      "community": 14,
+      "community": 3,
       "norm_label": "createfarmsaverecord()"
     },
     {
@@ -5410,7 +5420,7 @@
       "source_location": "L203",
       "_origin": "ast",
       "id": "sim_farms_getfarmupgradepreview",
-      "community": 14,
+      "community": 5,
       "norm_label": "getfarmupgradepreview()"
     },
     {
@@ -5430,7 +5440,7 @@
       "source_location": "L282",
       "_origin": "ast",
       "id": "sim_farms_assignfarmguard",
-      "community": 35,
+      "community": 22,
       "norm_label": "assignfarmguard()"
     },
     {
@@ -5440,7 +5450,7 @@
       "source_location": "L322",
       "_origin": "ast",
       "id": "sim_farms_clearfarmguard",
-      "community": 16,
+      "community": 14,
       "norm_label": "clearfarmguard()"
     },
     {
@@ -5460,7 +5470,7 @@
       "source_location": "L355",
       "_origin": "ast",
       "id": "sim_farms_getfarmupgradeplan",
-      "community": 14,
+      "community": 5,
       "norm_label": "getfarmupgradeplan()"
     },
     {
@@ -5570,7 +5580,7 @@
       "source_location": "L689",
       "_origin": "ast",
       "id": "sim_farms_isfarmtile",
-      "community": 1,
+      "community": 14,
       "norm_label": "isfarmtile()"
     },
     {
@@ -5660,7 +5670,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_index",
-      "community": 35,
+      "community": 22,
       "norm_label": "index.ts"
     },
     {
@@ -5780,7 +5790,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "sim_maps_getgamemap",
-      "community": 9,
+      "community": 13,
       "norm_label": "getgamemap()"
     },
     {
@@ -5790,7 +5800,7 @@
       "source_location": "L99",
       "_origin": "ast",
       "id": "sim_maps_getmapbyid",
-      "community": 17,
+      "community": 34,
       "norm_label": "getmapbyid()"
     },
     {
@@ -5800,7 +5810,7 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "sim_maps_ismapid",
-      "community": 17,
+      "community": 34,
       "norm_label": "ismapid()"
     },
     {
@@ -5810,7 +5820,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "sim_maps_normalizemapid",
-      "community": 31,
+      "community": 13,
       "norm_label": "normalizemapid()"
     },
     {
@@ -5840,7 +5850,7 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "sim_maps_getallowedspawnsformap",
-      "community": 9,
+      "community": 13,
       "norm_label": "getallowedspawnsformap()"
     },
     {
@@ -5890,7 +5900,7 @@
       "source_location": "L236",
       "_origin": "ast",
       "id": "sim_maps_getvillagedefinition",
-      "community": 17,
+      "community": 0,
       "norm_label": "getvillagedefinition()"
     },
     {
@@ -6100,7 +6110,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "sim_onboarding_startercreaturecards",
-      "community": 34,
+      "community": 20,
       "norm_label": "startercreaturecards"
     },
     {
@@ -6200,7 +6210,7 @@
       "source_location": "L67",
       "_origin": "ast",
       "id": "sim_onboarding_getstartercreatureconversioncost",
-      "community": 34,
+      "community": 20,
       "norm_label": "getstartercreatureconversioncost()"
     },
     {
@@ -6500,7 +6510,7 @@
       "source_location": "L219",
       "_origin": "ast",
       "id": "sim_playerprogression_getnextplayerlevelthreshold",
-      "community": 22,
+      "community": 5,
       "norm_label": "getnextplayerlevelthreshold()"
     },
     {
@@ -6640,7 +6650,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "sim_savestate_createplayerprofile",
-      "community": 35,
+      "community": 0,
       "norm_label": "createplayerprofile()"
     },
     {
@@ -6650,7 +6660,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "sim_savestate_createinitialsave",
-      "community": 26,
+      "community": 0,
       "norm_label": "createinitialsave()"
     },
     {
@@ -6660,7 +6670,7 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "sim_savestate_loadprofile",
-      "community": 37,
+      "community": 35,
       "norm_label": "loadprofile()"
     },
     {
@@ -6670,7 +6680,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "sim_savestate_loadsave",
-      "community": 37,
+      "community": 35,
       "norm_label": "loadsave()"
     },
     {
@@ -6720,7 +6730,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "sim_savestate_createemptysavecontainers",
-      "community": 5,
+      "community": 7,
       "norm_label": "createemptysavecontainers()"
     },
     {
@@ -6760,7 +6770,7 @@
       "source_location": "L222",
       "_origin": "ast",
       "id": "sim_savestate_isvalidsavestate",
-      "community": 7,
+      "community": 34,
       "norm_label": "isvalidsavestate()"
     },
     {
@@ -6770,7 +6780,7 @@
       "source_location": "L249",
       "_origin": "ast",
       "id": "sim_savestate_isvalidinventory",
-      "community": 7,
+      "community": 45,
       "norm_label": "isvalidinventory()"
     },
     {
@@ -6780,7 +6790,7 @@
       "source_location": "L263",
       "_origin": "ast",
       "id": "sim_savestate_iscreaturecardrecord",
-      "community": 7,
+      "community": 45,
       "norm_label": "iscreaturecardrecord()"
     },
     {
@@ -6790,7 +6800,7 @@
       "source_location": "L282",
       "_origin": "ast",
       "id": "sim_savestate_iseggrecord",
-      "community": 7,
+      "community": 45,
       "norm_label": "iseggrecord()"
     },
     {
@@ -6800,7 +6810,7 @@
       "source_location": "L305",
       "_origin": "ast",
       "id": "sim_savestate_isvalidcreatures",
-      "community": 7,
+      "community": 34,
       "norm_label": "isvalidcreatures()"
     },
     {
@@ -6810,7 +6820,7 @@
       "source_location": "L319",
       "_origin": "ast",
       "id": "sim_savestate_isvalidcreaturerecord",
-      "community": 7,
+      "community": 37,
       "norm_label": "isvalidcreaturerecord()"
     },
     {
@@ -6820,7 +6830,7 @@
       "source_location": "L345",
       "_origin": "ast",
       "id": "sim_savestate_isvalidvillage",
-      "community": 7,
+      "community": 34,
       "norm_label": "isvalidvillage()"
     },
     {
@@ -6830,7 +6840,7 @@
       "source_location": "L359",
       "_origin": "ast",
       "id": "sim_savestate_isvalidstation",
-      "community": 5,
+      "community": 83,
       "norm_label": "isvalidstation()"
     },
     {
@@ -6850,7 +6860,7 @@
       "source_location": "L386",
       "_origin": "ast",
       "id": "sim_savestate_isvalidfarmrecord",
-      "community": 7,
+      "community": 37,
       "norm_label": "isvalidfarmrecord()"
     },
     {
@@ -6870,7 +6880,7 @@
       "source_location": "L447",
       "_origin": "ast",
       "id": "sim_savestate_isvalidfarmposition",
-      "community": 7,
+      "community": 37,
       "norm_label": "isvalidfarmposition()"
     },
     {
@@ -6880,7 +6890,7 @@
       "source_location": "L460",
       "_origin": "ast",
       "id": "sim_savestate_isvalidjournal",
-      "community": 7,
+      "community": 45,
       "norm_label": "isvalidjournal()"
     },
     {
@@ -6890,7 +6900,7 @@
       "source_location": "L474",
       "_origin": "ast",
       "id": "sim_savestate_isvalidprogression",
-      "community": 7,
+      "community": 34,
       "norm_label": "isvalidprogression()"
     },
     {
@@ -6900,7 +6910,7 @@
       "source_location": "L491",
       "_origin": "ast",
       "id": "sim_savestate_iscardbuffrecord",
-      "community": 7,
+      "community": 34,
       "norm_label": "iscardbuffrecord()"
     },
     {
@@ -6930,7 +6940,7 @@
       "source_location": "L512",
       "_origin": "ast",
       "id": "sim_savestate_isstackrecord",
-      "community": 7,
+      "community": 45,
       "norm_label": "isstackrecord()"
     },
     {
@@ -6940,7 +6950,7 @@
       "source_location": "L525",
       "_origin": "ast",
       "id": "sim_savestate_isquantityrecord",
-      "community": 7,
+      "community": 45,
       "norm_label": "isquantityrecord()"
     },
     {
@@ -6950,7 +6960,7 @@
       "source_location": "L531",
       "_origin": "ast",
       "id": "sim_savestate_isvalidstats",
-      "community": 7,
+      "community": 37,
       "norm_label": "isvalidstats()"
     },
     {
@@ -6960,7 +6970,7 @@
       "source_location": "L545",
       "_origin": "ast",
       "id": "sim_savestate_isvalidattackrecord",
-      "community": 7,
+      "community": 37,
       "norm_label": "isvalidattackrecord()"
     },
     {
@@ -6970,7 +6980,7 @@
       "source_location": "L559",
       "_origin": "ast",
       "id": "sim_savestate_isvalidcreationrequirement",
-      "community": 7,
+      "community": 37,
       "norm_label": "isvalidcreationrequirement()"
     },
     {
@@ -6980,7 +6990,7 @@
       "source_location": "L578",
       "_origin": "ast",
       "id": "sim_savestate_iscooldownrecord",
-      "community": 7,
+      "community": 37,
       "norm_label": "iscooldownrecord()"
     },
     {
@@ -6990,7 +7000,7 @@
       "source_location": "L584",
       "_origin": "ast",
       "id": "sim_savestate_isbooleanrecord",
-      "community": 7,
+      "community": 34,
       "norm_label": "isbooleanrecord()"
     },
     {
@@ -7000,7 +7010,7 @@
       "source_location": "L590",
       "_origin": "ast",
       "id": "sim_savestate_isuniquestringarray",
-      "community": 7,
+      "community": 34,
       "norm_label": "isuniquestringarray()"
     },
     {
@@ -7010,7 +7020,7 @@
       "source_location": "L595",
       "_origin": "ast",
       "id": "sim_savestate_isnonemptystring",
-      "community": 7,
+      "community": 37,
       "norm_label": "isnonemptystring()"
     },
     {
@@ -7030,7 +7040,7 @@
       "source_location": "L603",
       "_origin": "ast",
       "id": "sim_savestate_isnonnegativeinteger",
-      "community": 7,
+      "community": 37,
       "norm_label": "isnonnegativeinteger()"
     },
     {
@@ -7040,7 +7050,7 @@
       "source_location": "L607",
       "_origin": "ast",
       "id": "sim_savestate_ispositivefinitenumber",
-      "community": 7,
+      "community": 37,
       "norm_label": "ispositivefinitenumber()"
     },
     {
@@ -7050,7 +7060,7 @@
       "source_location": "L611",
       "_origin": "ast",
       "id": "sim_savestate_isisodate",
-      "community": 7,
+      "community": 37,
       "norm_label": "isisodate()"
     },
     {
@@ -7230,7 +7240,7 @@
       "source_location": "L120",
       "_origin": "ast",
       "id": "sim_speciescatalog_isknownspeciesid",
-      "community": 7,
+      "community": 45,
       "norm_label": "isknownspeciesid()"
     },
     {
@@ -7320,7 +7330,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_stations_test",
-      "community": 5,
+      "community": 26,
       "norm_label": "stations.test.ts"
     },
     {
@@ -7330,7 +7340,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_stations",
-      "community": 5,
+      "community": 26,
       "norm_label": "stations.ts"
     },
     {
@@ -7340,7 +7350,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "sim_stations_stationtravelfailurereason",
-      "community": 5,
+      "community": 26,
       "norm_label": "stationtravelfailurereason"
     },
     {
@@ -7350,7 +7360,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "sim_stations_stationtravelquote",
-      "community": 5,
+      "community": 26,
       "norm_label": "stationtravelquote"
     },
     {
@@ -7360,7 +7370,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "sim_stations_stationtravelresult",
-      "community": 5,
+      "community": 26,
       "norm_label": "stationtravelresult"
     },
     {
@@ -7370,7 +7380,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "sim_stations_createinitialstationcontainer",
-      "community": 5,
+      "community": 26,
       "norm_label": "createinitialstationcontainer()"
     },
     {
@@ -7380,7 +7390,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "sim_stations_createplayervillagestationdestination",
-      "community": 5,
+      "community": 26,
       "norm_label": "createplayervillagestationdestination()"
     },
     {
@@ -7390,7 +7400,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "sim_stations_getplayervillagestationdestinationid",
-      "community": 5,
+      "community": 26,
       "norm_label": "getplayervillagestationdestinationid()"
     },
     {
@@ -7400,7 +7410,7 @@
       "source_location": "L86",
       "_origin": "ast",
       "id": "sim_stations_getstationdestinations",
-      "community": 5,
+      "community": 26,
       "norm_label": "getstationdestinations()"
     },
     {
@@ -7410,7 +7420,7 @@
       "source_location": "L92",
       "_origin": "ast",
       "id": "sim_stations_discovercurrentstationdestination",
-      "community": 5,
+      "community": 26,
       "norm_label": "discovercurrentstationdestination()"
     },
     {
@@ -7420,7 +7430,7 @@
       "source_location": "L97",
       "_origin": "ast",
       "id": "sim_stations_discoverplayervillageforstation",
-      "community": 5,
+      "community": 26,
       "norm_label": "discoverplayervillageforstation()"
     },
     {
@@ -7430,7 +7440,7 @@
       "source_location": "L131",
       "_origin": "ast",
       "id": "sim_stations_getstationtravelcost",
-      "community": 5,
+      "community": 26,
       "norm_label": "getstationtravelcost()"
     },
     {
@@ -7440,7 +7450,7 @@
       "source_location": "L135",
       "_origin": "ast",
       "id": "sim_stations_getstationcontextlevel",
-      "community": 5,
+      "community": 26,
       "norm_label": "getstationcontextlevel()"
     },
     {
@@ -7450,7 +7460,7 @@
       "source_location": "L140",
       "_origin": "ast",
       "id": "sim_stations_quotestationtravel",
-      "community": 5,
+      "community": 26,
       "norm_label": "quotestationtravel()"
     },
     {
@@ -7460,7 +7470,7 @@
       "source_location": "L185",
       "_origin": "ast",
       "id": "sim_stations_confirmstationtravel",
-      "community": 5,
+      "community": 26,
       "norm_label": "confirmstationtravel()"
     },
     {
@@ -7470,7 +7480,7 @@
       "source_location": "L219",
       "_origin": "ast",
       "id": "sim_stations_isvalidstationdestination",
-      "community": 5,
+      "community": 83,
       "norm_label": "isvalidstationdestination()"
     },
     {
@@ -7480,7 +7490,7 @@
       "source_location": "L241",
       "_origin": "ast",
       "id": "sim_stations_issafestationspawn",
-      "community": 5,
+      "community": 26,
       "norm_label": "issafestationspawn()"
     },
     {
@@ -7490,7 +7500,7 @@
       "source_location": "L246",
       "_origin": "ast",
       "id": "sim_stations_isvillageid",
-      "community": 5,
+      "community": 26,
       "norm_label": "isvillageid()"
     },
     {
@@ -7500,7 +7510,7 @@
       "source_location": "L250",
       "_origin": "ast",
       "id": "sim_stations_getdefaultvillagestationlevel",
-      "community": 5,
+      "community": 26,
       "norm_label": "getdefaultvillagestationlevel()"
     },
     {
@@ -7510,7 +7520,7 @@
       "source_location": "L255",
       "_origin": "ast",
       "id": "sim_stations_isvalidfuturehooks",
-      "community": 5,
+      "community": 83,
       "norm_label": "isvalidfuturehooks()"
     },
     {
@@ -7520,7 +7530,7 @@
       "source_location": "L266",
       "_origin": "ast",
       "id": "sim_stations_isnonemptystring",
-      "community": 5,
+      "community": 83,
       "norm_label": "isnonemptystring()"
     },
     {
@@ -7540,7 +7550,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_types_direction",
-      "community": 1,
+      "community": 33,
       "norm_label": "direction"
     },
     {
@@ -7550,7 +7560,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "sim_types_avatarid",
-      "community": 16,
+      "community": 33,
       "norm_label": "avatarid"
     },
     {
@@ -7580,7 +7590,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "sim_types_creaturelabelmode",
-      "community": 28,
+      "community": 23,
       "norm_label": "creaturelabelmode"
     },
     {
@@ -7590,7 +7600,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "sim_types_villageid",
-      "community": 35,
+      "community": 14,
       "norm_label": "villageid"
     },
     {
@@ -7650,7 +7660,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "sim_types_playerprofile",
-      "community": 10,
+      "community": 31,
       "norm_label": "playerprofile"
     },
     {
@@ -7780,7 +7790,7 @@
       "source_location": "L134",
       "_origin": "ast",
       "id": "sim_types_savestack",
-      "community": 20,
+      "community": 3,
       "norm_label": "savestack"
     },
     {
@@ -7800,7 +7810,7 @@
       "source_location": "L146",
       "_origin": "ast",
       "id": "sim_types_creationrequirement",
-      "community": 35,
+      "community": 14,
       "norm_label": "creationrequirement"
     },
     {
@@ -7810,7 +7820,7 @@
       "source_location": "L152",
       "_origin": "ast",
       "id": "sim_types_creaturecardinstance",
-      "community": 8,
+      "community": 7,
       "norm_label": "creaturecardinstance"
     },
     {
@@ -7830,7 +7840,7 @@
       "source_location": "L164",
       "_origin": "ast",
       "id": "sim_types_eggsaverecord",
-      "community": 8,
+      "community": 7,
       "norm_label": "eggsaverecord"
     },
     {
@@ -7850,7 +7860,7 @@
       "source_location": "L185",
       "_origin": "ast",
       "id": "sim_types_creaturesaverecord",
-      "community": 10,
+      "community": 31,
       "norm_label": "creaturesaverecord"
     },
     {
@@ -7950,7 +7960,7 @@
       "source_location": "L265",
       "_origin": "ast",
       "id": "sim_types_creaturesavecontainer",
-      "community": 35,
+      "community": 22,
       "norm_label": "creaturesavecontainer"
     },
     {
@@ -7990,7 +8000,7 @@
       "source_location": "L287",
       "_origin": "ast",
       "id": "sim_types_stationdestination",
-      "community": 5,
+      "community": 26,
       "norm_label": "stationdestination"
     },
     {
@@ -8000,7 +8010,7 @@
       "source_location": "L298",
       "_origin": "ast",
       "id": "sim_types_stationsavecontainer",
-      "community": 5,
+      "community": 7,
       "norm_label": "stationsavecontainer"
     },
     {
@@ -8020,7 +8030,7 @@
       "source_location": "L309",
       "_origin": "ast",
       "id": "sim_types_farmsaverecord",
-      "community": 1,
+      "community": 14,
       "norm_label": "farmsaverecord"
     },
     {
@@ -8040,7 +8050,7 @@
       "source_location": "L328",
       "_origin": "ast",
       "id": "sim_types_farmtheftlogentry",
-      "community": 14,
+      "community": 7,
       "norm_label": "farmtheftlogentry"
     },
     {
@@ -8070,7 +8080,7 @@
       "source_location": "L351",
       "_origin": "ast",
       "id": "sim_types_journalspeciesviewstate",
-      "community": 26,
+      "community": 0,
       "norm_label": "journalspeciesviewstate"
     },
     {
@@ -8080,7 +8090,7 @@
       "source_location": "L353",
       "_origin": "ast",
       "id": "sim_types_journalsavecontainer",
-      "community": 7,
+      "community": 10,
       "norm_label": "journalsavecontainer"
     },
     {
@@ -8140,7 +8150,7 @@
       "source_location": "L413",
       "_origin": "ast",
       "id": "sim_types_gamemap",
-      "community": 1,
+      "community": 9,
       "norm_label": "gamemap"
     },
     {
@@ -8160,7 +8170,7 @@
       "source_location": "L427",
       "_origin": "ast",
       "id": "sim_types_inputaction",
-      "community": 23,
+      "community": 82,
       "norm_label": "inputaction"
     },
     {
@@ -8200,7 +8210,7 @@
       "source_location": "L455",
       "_origin": "ast",
       "id": "sim_types_wildencounteroutcome",
-      "community": 10,
+      "community": 31,
       "norm_label": "wildencounteroutcome"
     },
     {
@@ -8220,7 +8230,7 @@
       "source_location": "L469",
       "_origin": "ast",
       "id": "sim_types_claimwildencountermessage",
-      "community": 11,
+      "community": 13,
       "norm_label": "claimwildencountermessage"
     },
     {
@@ -8230,7 +8240,7 @@
       "source_location": "L474",
       "_origin": "ast",
       "id": "sim_types_claimguardedfarmtheftmessage",
-      "community": 11,
+      "community": 13,
       "norm_label": "claimguardedfarmtheftmessage"
     },
     {
@@ -8240,7 +8250,7 @@
       "source_location": "L480",
       "_origin": "ast",
       "id": "sim_types_resolvewildencountermessage",
-      "community": 44,
+      "community": 13,
       "norm_label": "resolvewildencountermessage"
     },
     {
@@ -8320,7 +8330,7 @@
       "source_location": "L547",
       "_origin": "ast",
       "id": "sim_types_movementresult",
-      "community": 28,
+      "community": 5,
       "norm_label": "movementresult"
     },
     {
@@ -8330,7 +8340,7 @@
       "source_location": "L558",
       "_origin": "ast",
       "id": "sim_types_moveintentmessage",
-      "community": 9,
+      "community": 13,
       "norm_label": "moveintentmessage"
     },
     {
@@ -8340,7 +8350,7 @@
       "source_location": "L563",
       "_origin": "ast",
       "id": "sim_types_joinlocationoptions",
-      "community": 31,
+      "community": 13,
       "norm_label": "joinlocationoptions"
     },
     {
@@ -8510,7 +8520,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "ui_charactercreator",
-      "community": 16,
+      "community": 33,
       "norm_label": "charactercreator.tsx"
     },
     {
@@ -8520,7 +8530,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "ui_charactercreator_charactercreatorprops",
-      "community": 16,
+      "community": 33,
       "norm_label": "charactercreatorprops"
     },
     {
@@ -8530,7 +8540,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "ui_charactercreator_avataroptions",
-      "community": 16,
+      "community": 33,
       "norm_label": "avataroptions"
     },
     {
@@ -8540,7 +8550,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "ui_charactercreator_charactercreator",
-      "community": 16,
+      "community": 33,
       "norm_label": "charactercreator()"
     },
     {
@@ -8560,7 +8570,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "ui_gamehud_gamehudprops",
-      "community": 28,
+      "community": 5,
       "norm_label": "gamehudprops"
     },
     {
@@ -8720,7 +8730,7 @@
       "source_location": "L733",
       "_origin": "ast",
       "id": "ui_gamehud_getstationrows",
-      "community": 5,
+      "community": 26,
       "norm_label": "getstationrows()"
     },
     {
@@ -8760,7 +8770,7 @@
       "source_location": "L766",
       "_origin": "ast",
       "id": "ui_gamehud_tofarmrow",
-      "community": 14,
+      "community": 5,
       "norm_label": "tofarmrow()"
     },
     {
@@ -8780,7 +8790,7 @@
       "source_location": "L816",
       "_origin": "ast",
       "id": "ui_gamehud_formatduration",
-      "community": 5,
+      "community": 14,
       "norm_label": "formatduration()"
     },
     {
@@ -8830,7 +8840,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "ui_mobiledpad",
-      "community": 23,
+      "community": 82,
       "norm_label": "mobiledpad.tsx"
     },
     {
@@ -8840,7 +8850,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "ui_mobiledpad_mobiledpadprops",
-      "community": 23,
+      "community": 82,
       "norm_label": "mobiledpadprops"
     },
     {
@@ -8850,7 +8860,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "ui_mobiledpad_controls",
-      "community": 23,
+      "community": 82,
       "norm_label": "controls"
     },
     {
@@ -8860,7 +8870,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "ui_mobiledpad_mobiledpad",
-      "community": 23,
+      "community": 82,
       "norm_label": "mobiledpad()"
     },
     {
@@ -8870,7 +8880,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "ui_villageelderonboarding",
-      "community": 34,
+      "community": 20,
       "norm_label": "villageelderonboarding.tsx"
     },
     {
@@ -8880,7 +8890,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "ui_villageelderonboarding_villageelderonboardingprops",
-      "community": 34,
+      "community": 20,
       "norm_label": "villageelderonboardingprops"
     },
     {
@@ -8890,7 +8900,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "ui_villageelderonboarding_villageelderonboarding",
-      "community": 34,
+      "community": 20,
       "norm_label": "villageelderonboarding()"
     },
     {
@@ -8900,17 +8910,27 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "placeholders_comingsoongamepage",
-      "community": 45,
+      "community": 40,
       "norm_label": "comingsoongamepage.tsx"
+    },
+    {
+      "label": "BackIcon()",
+      "file_type": "code",
+      "source_file": "src/games/placeholders/ComingSoonGamePage.tsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "placeholders_comingsoongamepage_backicon",
+      "community": 40,
+      "norm_label": "backicon()"
     },
     {
       "label": "ComingSoonGamePage()",
       "file_type": "code",
       "source_file": "src/games/placeholders/ComingSoonGamePage.tsx",
-      "source_location": "L3",
+      "source_location": "L11",
       "_origin": "ast",
       "id": "placeholders_comingsoongamepage_comingsoongamepage",
-      "community": 45,
+      "community": 40,
       "norm_label": "comingsoongamepage()"
     },
     {
@@ -9360,7 +9380,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_storage",
-      "community": 2,
+      "community": 18,
       "norm_label": "storage.ts"
     },
     {
@@ -9370,7 +9390,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "lib_storage_readlocal",
-      "community": 2,
+      "community": 18,
       "norm_label": "readlocal()"
     },
     {
@@ -9630,7 +9650,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "pages_leaderboardpage_leaderboardpage",
-      "community": 18,
+      "community": 4,
       "norm_label": "leaderboardpage()"
     },
     {
@@ -9677,7 +9697,7 @@
       "label": "LibraryPage()",
       "file_type": "code",
       "source_file": "src/pages/LibraryPage.tsx",
-      "source_location": "L52",
+      "source_location": "L54",
       "_origin": "ast",
       "id": "pages_librarypage_librarypage",
       "community": 19,
@@ -9830,7 +9850,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "providers_leaderboardprovider_localstorageleaderboardprovider_addentry",
-      "community": 2,
+      "community": 18,
       "norm_label": ".addentry()"
     },
     {
@@ -10067,7 +10087,7 @@
       "label": "PortalImageAsset",
       "file_type": "code",
       "source_file": "src/types/game.ts",
-      "source_location": "L15",
+      "source_location": "L19",
       "_origin": "ast",
       "id": "types_game_portalimageasset",
       "community": 40,
@@ -10077,7 +10097,7 @@
       "label": "GameDefinition",
       "file_type": "code",
       "source_file": "src/types/game.ts",
-      "source_location": "L24",
+      "source_location": "L28",
       "_origin": "ast",
       "id": "types_game_gamedefinition",
       "community": 40,
@@ -10087,7 +10107,7 @@
       "label": "LeaderboardEntry",
       "file_type": "code",
       "source_file": "src/types/game.ts",
-      "source_location": "L39",
+      "source_location": "L43",
       "_origin": "ast",
       "id": "types_game_leaderboardentry",
       "community": 18,
@@ -10097,7 +10117,7 @@
       "label": "LeaderboardRange",
       "file_type": "code",
       "source_file": "src/types/game.ts",
-      "source_location": "L49",
+      "source_location": "L53",
       "_origin": "ast",
       "id": "types_game_leaderboardrange",
       "community": 18,
@@ -10877,7 +10897,7 @@
       "label": "2026-07-02 - Issue #49: Portal Navigation And Final Responsive QA",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L10",
+      "source_location": "L11",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_07_02_issue_49_portal_navigation_and_final_responsive_qa",
       "community": 15,
@@ -10887,7 +10907,7 @@
       "label": "2026-07-02 - Issue #48: Admin Registry Override",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L16",
+      "source_location": "L17",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_07_02_issue_48_admin_registry_override",
       "community": 15,
@@ -10897,7 +10917,7 @@
       "label": "2026-07-02 - Issue #47: Full Leaderboard Route",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L22",
+      "source_location": "L23",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_07_02_issue_47_full_leaderboard_route",
       "community": 15,
@@ -10907,7 +10927,7 @@
       "label": "2026-07-02 - Issue #46: Library Catalog Route",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L29",
+      "source_location": "L30",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_07_02_issue_46_library_catalog_route",
       "community": 15,
@@ -10917,7 +10937,7 @@
       "label": "2026-07-02 - Issue #45: Launch-First Home Dashboard",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L34",
+      "source_location": "L35",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_07_02_issue_45_launch_first_home_dashboard",
       "community": 15,
@@ -10927,7 +10947,7 @@
       "label": "2026-07-01 - Portal Registry Metadata And Local Assets",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L40",
+      "source_location": "L41",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_07_01_portal_registry_metadata_and_local_assets",
       "community": 15,
@@ -10937,7 +10957,7 @@
       "label": "2026-06-13 - Phase 0 Foundation",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L46",
+      "source_location": "L47",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_13_phase_0_foundation",
       "community": 15,
@@ -10947,7 +10967,7 @@
       "label": "2026-06-13 - Phase 1 Playable Client Slice",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L54",
+      "source_location": "L55",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_13_phase_1_playable_client_slice",
       "community": 15,
@@ -10957,7 +10977,7 @@
       "label": "2026-06-13 - Phase 2 Multiplayer Presence",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L63",
+      "source_location": "L64",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_13_phase_2_multiplayer_presence",
       "community": 15,
@@ -10967,7 +10987,7 @@
       "label": "2026-06-13 - Phase 2 Input Follow-Up",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L75",
+      "source_location": "L76",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_13_phase_2_input_follow_up",
       "community": 15,
@@ -10977,7 +10997,7 @@
       "label": "2026-06-13 - Phase 3 World + Villages",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L80",
+      "source_location": "L81",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_13_phase_3_world_villages",
       "community": 15,
@@ -10987,7 +11007,7 @@
       "label": "2026-06-18 - Phase 4 Overworld Foundation",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L91",
+      "source_location": "L92",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_18_phase_4_overworld_foundation",
       "community": 15,
@@ -10997,7 +11017,7 @@
       "label": "2026-06-18 - Phase 4 Rendering Assets",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L101",
+      "source_location": "L102",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_18_phase_4_rendering_assets",
       "community": 15,
@@ -11007,7 +11027,7 @@
       "label": "2026-06-18 - Phase 4 Multiplayer Transitions",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L110",
+      "source_location": "L111",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_18_phase_4_multiplayer_transitions",
       "community": 15,
@@ -11017,7 +11037,7 @@
       "label": "2026-06-18 - Phase 4 Final QA",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L119",
+      "source_location": "L120",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_18_phase_4_final_qa",
       "community": 15,
@@ -11027,7 +11047,7 @@
       "label": "2026-06-18 - Full Vision Finish Plan",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L127",
+      "source_location": "L128",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_18_full_vision_finish_plan",
       "community": 15,
@@ -11037,7 +11057,7 @@
       "label": "2026-06-20 - Issue #8: Inventory Cards and Pack Opening Tracer",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L261",
+      "source_location": "L262",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_8_inventory_cards_and_pack_opening_tracer",
       "community": 15,
@@ -11047,7 +11067,7 @@
       "label": "2026-06-20 - Issue #9: Creature Card, Egg, and Creature Lifecycle",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L270",
+      "source_location": "L271",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_9_creature_card_egg_and_creature_lifecycle",
       "community": 15,
@@ -11057,7 +11077,7 @@
       "label": "2026-06-20 - Issue #10: Active Party, Storage, Fainted, Hospital, And Revive Item",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L281",
+      "source_location": "L282",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_10_active_party_storage_fainted_hospital_and_revive_item",
       "community": 15,
@@ -11067,7 +11087,7 @@
       "label": "2026-06-20 - Issue #11: Visible Shared Wild Encounter Claim Flow",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L288",
+      "source_location": "L289",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_11_visible_shared_wild_encounter_claim_flow",
       "community": 15,
@@ -11077,7 +11097,7 @@
       "label": "2026-06-20 - Issue #12: Tap-to-Walk and Creature Label Setting",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L295",
+      "source_location": "L296",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_12_tap_to_walk_and_creature_label_setting",
       "community": 15,
@@ -11087,7 +11107,7 @@
       "label": "2026-06-20 - Issue #13: Battle Room Tracer With Manual Attacks And Enemy AI",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L303",
+      "source_location": "L304",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_13_battle_room_tracer_with_manual_attacks_and_enemy_ai",
       "community": 15,
@@ -11097,7 +11117,7 @@
       "label": "2026-06-20 - Issue #14: Run Away And Wild Battle Exit Outcomes",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L311",
+      "source_location": "L312",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_14_run_away_and_wild_battle_exit_outcomes",
       "community": 15,
@@ -11107,7 +11127,7 @@
       "label": "2026-06-20 - Issue #15: Wild Battle Rewards, XP, And Direct-Drop Eggs",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L318",
+      "source_location": "L319",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_15_wild_battle_rewards_xp_and_direct_drop_eggs",
       "community": 15,
@@ -11117,7 +11137,7 @@
       "label": "2026-06-20 - Issue #16: Magic Dust Farm Production And Owner Collection",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L325",
+      "source_location": "L326",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_16_magic_dust_farm_production_and_owner_collection",
       "community": 15,
@@ -11127,7 +11147,7 @@
       "label": "2026-06-20 - Issue #17: Farm Upgrades And Guard Assignment",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L334",
+      "source_location": "L335",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_17_farm_upgrades_and_guard_assignment",
       "community": 15,
@@ -11137,7 +11157,7 @@
       "label": "2026-06-20 - Issue #18: Visitor Permissions And Theft From Unguarded Farms",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L341",
+      "source_location": "L342",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_20_issue_18_visitor_permissions_and_theft_from_unguarded_farms",
       "community": 15,
@@ -11147,7 +11167,7 @@
       "label": "2026-06-21 - Issue #19: Guard Battle Theft Flow",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L349",
+      "source_location": "L350",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_21_issue_19_guard_battle_theft_flow",
       "community": 15,
@@ -11157,7 +11177,7 @@
       "label": "2026-06-21 - Issue #20: Station Discovery And Travel",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L356",
+      "source_location": "L357",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_21_issue_20_station_discovery_and_travel",
       "community": 15,
@@ -11167,7 +11187,7 @@
       "label": "2026-06-21 - Issue #21: Player Level, Pack Milestones, And Reward Tables",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L365",
+      "source_location": "L366",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_21_issue_21_player_level_pack_milestones_and_reward_tables",
       "community": 15,
@@ -11177,7 +11197,7 @@
       "label": "2026-06-21 - Issue #22: MVP Art And HUD Polish Pass",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L374",
+      "source_location": "L375",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_21_issue_22_mvp_art_and_hud_polish_pass",
       "community": 15,
@@ -11187,7 +11207,7 @@
       "label": "2026-06-21 - GitHub Pages CI Diagnosis",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L384",
+      "source_location": "L385",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_21_github_pages_ci_diagnosis",
       "community": 15,
@@ -11197,7 +11217,7 @@
       "label": "2026-06-21 - HUD Cleanup, 2x2 Farms, And Click-Walk",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L389",
+      "source_location": "L390",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_21_hud_cleanup_2x2_farms_and_click_walk",
       "community": 15,
@@ -11207,7 +11227,7 @@
       "label": "2026-06-22 - AI Art Approval Sheets",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L398",
+      "source_location": "L399",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_22_ai_art_approval_sheets",
       "community": 15,
@@ -11217,7 +11237,7 @@
       "label": "2026-06-27 - Mobile HUD And Tap Movement Polish",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L409",
+      "source_location": "L410",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_06_27_mobile_hud_and_tap_movement_polish",
       "community": 15,
@@ -11227,7 +11247,7 @@
       "label": "2026-07-02 - Portal Kinetic Design Pass",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L415",
+      "source_location": "L416",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_2026_07_02_portal_kinetic_design_pass",
       "community": 15,
@@ -11237,7 +11257,7 @@
       "label": "Next Work",
       "file_type": "document",
       "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L422",
+      "source_location": "L423",
       "_origin": "ast",
       "id": "monster_rpg_work_summary_next_work",
       "community": 15,
@@ -11685,9 +11705,9 @@
       "source_file": "package.json",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package",
-      "target": "package_dependencies",
-      "confidence_score": 1.0
+      "target": "package_dependencies"
     },
     {
       "relation": "contains",
@@ -11695,9 +11715,9 @@
       "source_file": "package.json",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package",
-      "target": "package_devdependencies",
-      "confidence_score": 1.0
+      "target": "package_devdependencies"
     },
     {
       "relation": "contains",
@@ -11705,9 +11725,9 @@
       "source_file": "package.json",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package",
-      "target": "package_name",
-      "confidence_score": 1.0
+      "target": "package_name"
     },
     {
       "relation": "contains",
@@ -11715,9 +11735,9 @@
       "source_file": "package.json",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package",
-      "target": "package_private",
-      "confidence_score": 1.0
+      "target": "package_private"
     },
     {
       "relation": "contains",
@@ -11725,9 +11745,9 @@
       "source_file": "package.json",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package",
-      "target": "package_scripts",
-      "confidence_score": 1.0
+      "target": "package_scripts"
     },
     {
       "relation": "contains",
@@ -11735,9 +11755,9 @@
       "source_file": "package.json",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package",
-      "target": "package_type",
-      "confidence_score": 1.0
+      "target": "package_type"
     },
     {
       "relation": "contains",
@@ -11745,9 +11765,9 @@
       "source_file": "package.json",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package",
-      "target": "package_version",
-      "confidence_score": 1.0
+      "target": "package_version"
     },
     {
       "relation": "contains",
@@ -11755,9 +11775,9 @@
       "source_file": "package.json",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_scripts",
-      "target": "package_scripts_build",
-      "confidence_score": 1.0
+      "target": "package_scripts_build"
     },
     {
       "relation": "contains",
@@ -11765,9 +11785,9 @@
       "source_file": "package.json",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_scripts",
-      "target": "package_scripts_build_client",
-      "confidence_score": 1.0
+      "target": "package_scripts_build_client"
     },
     {
       "relation": "contains",
@@ -11775,9 +11795,9 @@
       "source_file": "package.json",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_scripts",
-      "target": "package_scripts_build_server",
-      "confidence_score": 1.0
+      "target": "package_scripts_build_server"
     },
     {
       "relation": "contains",
@@ -11785,9 +11805,9 @@
       "source_file": "package.json",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_scripts",
-      "target": "package_scripts_check_monster_rpg",
-      "confidence_score": 1.0
+      "target": "package_scripts_check_monster_rpg"
     },
     {
       "relation": "contains",
@@ -11795,9 +11815,9 @@
       "source_file": "package.json",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_scripts",
-      "target": "package_scripts_dev",
-      "confidence_score": 1.0
+      "target": "package_scripts_dev"
     },
     {
       "relation": "contains",
@@ -11805,9 +11825,9 @@
       "source_file": "package.json",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_scripts",
-      "target": "package_scripts_dev_client",
-      "confidence_score": 1.0
+      "target": "package_scripts_dev_client"
     },
     {
       "relation": "contains",
@@ -11815,9 +11835,9 @@
       "source_file": "package.json",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_scripts",
-      "target": "package_scripts_dev_multiplayer",
-      "confidence_score": 1.0
+      "target": "package_scripts_dev_multiplayer"
     },
     {
       "relation": "contains",
@@ -11825,9 +11845,9 @@
       "source_file": "package.json",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_scripts",
-      "target": "package_scripts_dev_server",
-      "confidence_score": 1.0
+      "target": "package_scripts_dev_server"
     },
     {
       "relation": "contains",
@@ -11835,9 +11855,9 @@
       "source_file": "package.json",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_scripts",
-      "target": "package_scripts_preview",
-      "confidence_score": 1.0
+      "target": "package_scripts_preview"
     },
     {
       "relation": "contains",
@@ -11845,9 +11865,9 @@
       "source_file": "package.json",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_scripts",
-      "target": "package_scripts_test",
-      "confidence_score": 1.0
+      "target": "package_scripts_test"
     },
     {
       "relation": "contains",
@@ -11855,9 +11875,9 @@
       "source_file": "package.json",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_dependencies",
-      "target": "package_dependencies_colyseus",
-      "confidence_score": 1.0
+      "target": "package_dependencies_colyseus"
     },
     {
       "relation": "contains",
@@ -11865,9 +11885,9 @@
       "source_file": "package.json",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_dependencies",
-      "target": "package_dependencies_colyseus_schema",
-      "confidence_score": 1.0
+      "target": "package_dependencies_colyseus_schema"
     },
     {
       "relation": "contains",
@@ -11875,9 +11895,9 @@
       "source_file": "package.json",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_dependencies",
-      "target": "package_dependencies_colyseus_sdk",
-      "confidence_score": 1.0
+      "target": "package_dependencies_colyseus_sdk"
     },
     {
       "relation": "contains",
@@ -11885,9 +11905,9 @@
       "source_file": "package.json",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_dependencies",
-      "target": "package_dependencies_phaser",
-      "confidence_score": 1.0
+      "target": "package_dependencies_phaser"
     },
     {
       "relation": "contains",
@@ -11895,9 +11915,9 @@
       "source_file": "package.json",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_dependencies",
-      "target": "package_dependencies_react",
-      "confidence_score": 1.0
+      "target": "package_dependencies_react"
     },
     {
       "relation": "contains",
@@ -11905,9 +11925,9 @@
       "source_file": "package.json",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_dependencies",
-      "target": "package_dependencies_react_dom",
-      "confidence_score": 1.0
+      "target": "package_dependencies_react_dom"
     },
     {
       "relation": "contains",
@@ -11915,9 +11935,9 @@
       "source_file": "package.json",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_dependencies",
-      "target": "package_dependencies_react_router_dom",
-      "confidence_score": 1.0
+      "target": "package_dependencies_react_router_dom"
     },
     {
       "relation": "contains",
@@ -11925,9 +11945,9 @@
       "source_file": "package.json",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_dependencies",
-      "target": "package_dependencies_zod",
-      "confidence_score": 1.0
+      "target": "package_dependencies_zod"
     },
     {
       "relation": "contains",
@@ -11935,9 +11955,9 @@
       "source_file": "package.json",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_devdependencies",
-      "target": "package_devdependencies_concurrently",
-      "confidence_score": 1.0
+      "target": "package_devdependencies_concurrently"
     },
     {
       "relation": "contains",
@@ -11945,9 +11965,9 @@
       "source_file": "package.json",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_devdependencies",
-      "target": "package_devdependencies_tsx",
-      "confidence_score": 1.0
+      "target": "package_devdependencies_tsx"
     },
     {
       "relation": "contains",
@@ -11955,9 +11975,9 @@
       "source_file": "package.json",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_devdependencies",
-      "target": "package_devdependencies_types_node",
-      "confidence_score": 1.0
+      "target": "package_devdependencies_types_node"
     },
     {
       "relation": "contains",
@@ -11965,9 +11985,9 @@
       "source_file": "package.json",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_devdependencies",
-      "target": "package_devdependencies_types_react",
-      "confidence_score": 1.0
+      "target": "package_devdependencies_types_react"
     },
     {
       "relation": "contains",
@@ -11975,9 +11995,9 @@
       "source_file": "package.json",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_devdependencies",
-      "target": "package_devdependencies_types_react_dom",
-      "confidence_score": 1.0
+      "target": "package_devdependencies_types_react_dom"
     },
     {
       "relation": "contains",
@@ -11985,9 +12005,9 @@
       "source_file": "package.json",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_devdependencies",
-      "target": "package_devdependencies_typescript",
-      "confidence_score": 1.0
+      "target": "package_devdependencies_typescript"
     },
     {
       "relation": "contains",
@@ -11995,9 +12015,9 @@
       "source_file": "package.json",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_devdependencies",
-      "target": "package_devdependencies_vite",
-      "confidence_score": 1.0
+      "target": "package_devdependencies_vite"
     },
     {
       "relation": "contains",
@@ -12005,9 +12025,9 @@
       "source_file": "package.json",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_devdependencies",
-      "target": "package_devdependencies_vitejs_plugin_react",
-      "confidence_score": 1.0
+      "target": "package_devdependencies_vitejs_plugin_react"
     },
     {
       "relation": "contains",
@@ -12015,9 +12035,9 @@
       "source_file": "package.json",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_devdependencies",
-      "target": "package_devdependencies_vitest",
-      "confidence_score": 1.0
+      "target": "package_devdependencies_vitest"
     },
     {
       "relation": "contains",
@@ -12025,9 +12045,9 @@
       "source_file": "scripts/copy-spa-fallback.mjs",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_copy_spa_fallback",
-      "target": "scripts_copy_spa_fallback_distdir",
-      "confidence_score": 1.0
+      "target": "scripts_copy_spa_fallback_distdir"
     },
     {
       "relation": "contains",
@@ -18064,6 +18084,16 @@
       "target": "components_gametile_gametile"
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/GameTile.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "components_gametile",
+      "target": "components_gametile_genrelabels",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -18106,6 +18136,17 @@
       "confidence_score": 1.0,
       "source": "components_gametile",
       "target": "types_game_gamedefinition"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/GameTile.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "components_gametile",
+      "target": "types_game_gamegenre",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -18516,6 +18557,17 @@
       "target": "config_games"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/placeholders/ComingSoonGamePage.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "placeholders_comingsoongamepage",
+      "target": "config_games",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -18591,6 +18643,17 @@
       "confidence_score": 1.0,
       "source": "pages_librarypage",
       "target": "config_games_gameregistry"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/placeholders/ComingSoonGamePage.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "placeholders_comingsoongamepage",
+      "target": "config_games_gameregistry",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18721,6 +18784,17 @@
       "target": "config_portalassets"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/placeholders/ComingSoonGamePage.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "placeholders_comingsoongamepage",
+      "target": "config_portalassets",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -18768,11 +18842,33 @@
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
       "source_file": "src/pages/LibraryPage.tsx",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pages_librarypage_librarygamecard",
+      "target": "config_portalassets_getportalimageasset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/placeholders/ComingSoonGamePage.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "placeholders_comingsoongamepage",
+      "target": "config_portalassets_getportalimageasset",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/games/placeholders/ComingSoonGamePage.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "placeholders_comingsoongamepage_comingsoongamepage",
       "target": "config_portalassets_getportalimageasset"
     },
     {
@@ -39754,6 +39850,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/games/placeholders/ComingSoonGamePage.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "placeholders_comingsoongamepage",
+      "target": "placeholders_comingsoongamepage_backicon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/games/placeholders/ComingSoonGamePage.tsx",
       "source_location": "L3",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -43093,5 +43199,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "77f45035a4044cc1ad19a56d76d2e3003f8b7c91"
+  "built_at_commit": "c29d233dfeb88a168558ca22170bab91cc15d6f8"
 }

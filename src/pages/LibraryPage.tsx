@@ -24,14 +24,16 @@ function LibraryGameCard({ game }: { game: GameDefinition }) {
 
   return (
     <article
-      className="library-card"
+      className={`library-card ${isPlayable ? 'library-card-playable' : 'library-card-coming-soon'}`}
       style={{ borderColor: game.accent, '--game-accent': game.accent } as CSSProperties}
     >
       <img className="library-card-cover" src={cover.src} alt={cover.alt} width={cover.width} height={cover.height} />
       <div className="library-card-body">
         <div className="badge-row">
           <span className="badge">{formatLibraryLabel(game.genre)}</span>
-          <span className="badge">{isPlayable ? 'Playable' : 'Coming soon'}</span>
+          <span className={`badge status-badge ${isPlayable ? 'status-badge-live' : 'status-badge-soon'}`}>
+            {isPlayable ? 'Playable' : 'Coming soon'}
+          </span>
         </div>
         <h2>{game.name}</h2>
         <p>{game.description}</p>
@@ -40,7 +42,7 @@ function LibraryGameCard({ game }: { game: GameDefinition }) {
             Launch
           </Link>
         ) : (
-          <span className="pixel-btn secondary library-launch disabled" aria-disabled="true">
+          <span className="pixel-btn secondary library-launch disabled" aria-disabled="true" title="This game is in the portal queue.">
             Coming soon
           </span>
         )}
