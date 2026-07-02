@@ -405,6 +405,13 @@
 - Bounded opened mobile menu drawers to a small scrollable overlay instead of allowing farm/save/inventory panels to cover most of the playfield.
 - Added paced tap-to-walk dispatch and adjacent-tile Phaser tweens so clicked destinations move through visible grid steps instead of visually teleporting.
 
+## 2026-07-02 - Portal Kinetic Design Pass
+
+- Restyled the active GameIt portal home route toward the `design.html` kinetic mock with fixed glass navigation, generated image-backed hero, neon CTA, section tags, and bento-style game cards.
+- Replaced emoji toolbar actions with inline SVG icons and preserved existing game routes, leaderboard modal, admin route, and local sprite-sheet logo usage.
+- Kept shared game-screen styling compatible by retaining legacy UI variables used by Snake and Monster RPG surfaces.
+- Validated portal usability against UI/UX guidance and added a skip link, real navigation targets, clearer card labels, keyboard focus treatment, and reduced-motion safeguards.
+
 ## Next Work
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.

@@ -115,9 +115,9 @@
     "semantic_hash": "588dc53c8c4714dbfbc52b61863652b9"
   },
   "src/games/monster-rpg/MonsterRpgGame.tsx": {
-    "mtime": 1782070117.2733634,
-    "ast_hash": "5dd0ab902dc76babbe9e91b6f7f5d0f5",
-    "semantic_hash": "5dd0ab902dc76babbe9e91b6f7f5d0f5"
+    "mtime": 1782096181.3896265,
+    "ast_hash": "72ad092563ec6bb884a6c47f97ac7407",
+    "semantic_hash": ""
   },
   "src/games/monster-rpg/client/assets/monsterRpgAssets.ts": {
     "mtime": 1781983313.4473395,
@@ -135,8 +135,8 @@
     "semantic_hash": "a9123cc3f4821fe589f27d94dfc55e02"
   },
   "src/games/monster-rpg/client/scenes/VillageScene.ts": {
-    "mtime": 1782071400.7356837,
-    "ast_hash": "d0eb3a5ffab637fce200b06e204fa18c",
+    "mtime": 1782096019.7676883,
+    "ast_hash": "d9a97af7bf1afc24c13b25d7ee021be1",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/network/colyseusClient.ts": {
@@ -200,19 +200,19 @@
     "semantic_hash": "8e6a3166afa2164723f6efda1aebfbc1"
   },
   "src/games/monster-rpg/sim/farms.test.ts": {
-    "mtime": 1782018647.3791564,
-    "ast_hash": "29699c2fc4108b25bc22b9c3269e9351",
-    "semantic_hash": "29699c2fc4108b25bc22b9c3269e9351"
+    "mtime": 1782096212.4133413,
+    "ast_hash": "e16102a0469457bcdd0c87c360d76926",
+    "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/farms.ts": {
-    "mtime": 1782018647.380265,
-    "ast_hash": "263fd81b466478f624ad35cc4459cdf4",
-    "semantic_hash": "263fd81b466478f624ad35cc4459cdf4"
+    "mtime": 1782095950.9259305,
+    "ast_hash": "dff77d32689b677b6e650e17219fa633",
+    "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/index.ts": {
-    "mtime": 1782070117.2821054,
-    "ast_hash": "825daa7fdd3be3cb532eda6eb7f9b636",
-    "semantic_hash": "825daa7fdd3be3cb532eda6eb7f9b636"
+    "mtime": 1782095985.3070183,
+    "ast_hash": "f2074fbfcb9c6e049d858d38933f5376",
+    "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/maps.ts": {
     "mtime": 1781983313.4862156,
@@ -235,14 +235,14 @@
     "semantic_hash": "4d990a3e63bf96a354b29b1ab90c7108"
   },
   "src/games/monster-rpg/sim/pathfinding.test.ts": {
-    "mtime": 1781991637.1406956,
-    "ast_hash": "d806f98824e728b4b8a69554a7335344",
-    "semantic_hash": "d806f98824e728b4b8a69554a7335344"
+    "mtime": 1782096222.9838488,
+    "ast_hash": "b34961458a2b413fcab13fefe99f3099",
+    "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/pathfinding.ts": {
-    "mtime": 1781991637.1415899,
-    "ast_hash": "6614c02382f29438b5eb00d5bd089d87",
-    "semantic_hash": "6614c02382f29438b5eb00d5bd089d87"
+    "mtime": 1782096243.5156453,
+    "ast_hash": "e5ccd919f89396b9b84bb33ba9d0ebcb",
+    "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/playerProgression.test.ts": {
     "mtime": 1782070117.2832224,
@@ -295,9 +295,9 @@
     "semantic_hash": "ce0e7cb1948338887c608e37ffe2addf"
   },
   "src/games/monster-rpg/sim/types.ts": {
-    "mtime": 1782070117.2859495,
-    "ast_hash": "c5353979f60515af16d1eb6749fd9630",
-    "semantic_hash": "c5353979f60515af16d1eb6749fd9630"
+    "mtime": 1782096151.779922,
+    "ast_hash": "432716ad984158f86be4bcc77e34ef30",
+    "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/villageMap.ts": {
     "mtime": 1781983313.4965003,
@@ -315,13 +315,13 @@
     "semantic_hash": "32c5c66df19aa05fe7cec0afd817eb3a"
   },
   "src/games/monster-rpg/ui/CharacterCreator.tsx": {
-    "mtime": 1782071293.055708,
+    "mtime": 1782072095.350088,
     "ast_hash": "3abe4039f03da9d2183dd71fb6ce3f89",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/ui/GameHud.tsx": {
-    "mtime": 1782071360.3559399,
-    "ast_hash": "613a83f18e0facc46f8549eaa683a9e2",
+    "mtime": 1782096186.5143125,
+    "ast_hash": "422a3ce5d7b04f004f2c59a02b7394f7",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/ui/MobileDpad.tsx": {
@@ -505,8 +505,8 @@
     "semantic_hash": ""
   },
   "docs/monster-rpg/work-summary.md": {
-    "mtime": 1782071843.5025587,
-    "ast_hash": "a2bed6bff08679dadfe23f7ae615f50e",
+    "mtime": 1782096726.3760138,
+    "ast_hash": "41986168aca25458113815bc03469f61",
     "semantic_hash": ""
   },
   "index.html": {
