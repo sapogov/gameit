@@ -1,13 +1,13 @@
-import { lazy, Suspense, useMemo, useState } from 'react';
+import { lazy, Suspense, useMemo } from 'react';
 import { Link, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import { gameRegistry, getFeaturedGame } from '../config/games';
 import { getPortalImageAsset } from '../config/portalAssets';
-import { LeaderboardModal } from '../components/LeaderboardModal';
 import { useTheme } from '../hooks/useTheme';
 import { AdminPage } from '../admin/AdminPage';
 import { PortalLogo } from '../components/PortalLogo';
 import { IconCircleButton } from '../components/IconCircleButton';
 import { LibraryPage } from '../pages/LibraryPage';
+import { LeaderboardPage } from '../pages/LeaderboardPage';
 
 const SnakeGamePage = lazy(() => import('../games/snake/SnakeGamePage').then((m) => ({ default: m.SnakeGamePage })));
 const MonsterRpgGame = lazy(() =>
@@ -64,7 +64,6 @@ const ChevronIcon = () => (
 );
 
 const Home = () => {
-  const [showLeaderboard, setShowLeaderboard] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const logoIndex = useMemo(() => Math.floor(Math.random() * 4), []);
@@ -86,7 +85,7 @@ const Home = () => {
             onClick={toggleTheme}
             icon={<ThemeIcon mode={theme} />}
           />
-          <IconCircleButton label="Open leaderboard" onClick={() => setShowLeaderboard(true)} icon={<TrophyIcon />} />
+          <IconCircleButton label="Open leaderboard" onClick={() => navigate('/leaderboard')} icon={<TrophyIcon />} />
           <IconCircleButton label="Open library" onClick={() => navigate('/library')} icon={<LibraryIcon />} />
           <IconCircleButton label="Open admin settings" onClick={() => navigate('/admin')} icon={<CrownIcon />} />
         </div>
@@ -139,8 +138,6 @@ const Home = () => {
           </div>
         </aside>
       </section>
-
-      {showLeaderboard && <LeaderboardModal onClose={() => setShowLeaderboard(false)} />}
     </main>
   );
 };
@@ -150,6 +147,7 @@ export const App = () => (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/library" element={<LibraryPage />} />
+      <Route path="/leaderboard" element={<LeaderboardPage />} />
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/games/snake" element={<SnakeGamePage />} />
       <Route path="/games/gameit-monsters" element={<MonsterRpgGame />} />

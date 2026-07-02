@@ -1,5 +1,12 @@
 # Monster RPG Work Summary
 
+## 2026-07-02 - Issue #47: Full Leaderboard Route
+
+- Reworked `/leaderboard` into a full route in the app shell and changed Home’s trophy action to navigate there.
+- Rebuilt `LeaderboardPage` around `gameRegistry` + `LocalStorageLeaderboardProvider` with selectable games and daily/weekly/all-time ranges.
+- Added focused pure view-model coverage in `LeaderboardPage.test.ts` for provider query behavior and empty-state messaging.
+- Added responsive leaderboard-specific styling, focus-visible-aware controls, empty-state panel, and table presentation in `global.css`.
+
 ## 2026-07-02 - Issue #46: Library Catalog Route
 
 - Added `/library` as a registry-backed GameIt Portal catalog with search, genre/status filters, local cover assets, and non-launching coming-soon cards.
