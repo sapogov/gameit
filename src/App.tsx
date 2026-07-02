@@ -42,7 +42,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage games={games} />} />
         <Route path="/game/:gameId" element={<GamePage games={games} />} />
-        <Route path="/leaderboard" element={<LeaderboardPage games={games} />} />
+        <Route path="/leaderboard" element={<LeaderboardPage />} />
         <Route path="/admin" element={<AdminPage games={games} onAdd={handleAdd} />} />
         <Route path="/admin/game/:gameId" element={<AdminGameConfigPage games={games} onSave={handleSave} />} />
         <Route path="*" element={<Navigate to="/" replace />} />
