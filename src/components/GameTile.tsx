@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
 import type { CSSProperties } from 'react';
+import { Link } from 'react-router-dom';
 import { GameDefinition } from '../types/game';
 
 export const GameTile = ({ game, featured = false }: { game: GameDefinition; featured?: boolean }) => (
@@ -12,13 +12,15 @@ export const GameTile = ({ game, featured = false }: { game: GameDefinition; fea
     <div className="game-tile-art" aria-hidden>
       <span />
     </div>
-    <div className="game-tile-overlay" aria-hidden />
     <div className="game-tile-content">
-      <div className="badge">{game.status === 'playable' ? 'New Release' : 'Signal Locked'}</div>
+      <div className="badge">
+        <span aria-hidden />
+        {game.status === 'playable' ? 'Playable' : 'Soon'}
+      </div>
       <h3>{game.name}</h3>
       <p>{game.description}</p>
       <span className={`pixel-btn ${game.status === 'playable' ? '' : 'secondary'}`} aria-hidden="true">
-        {game.status === 'playable' ? 'Play Now' : 'Coming Soon'}
+        {game.status === 'playable' ? 'Play' : 'Preview'}
       </span>
     </div>
   </Link>

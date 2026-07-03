@@ -5,7 +5,7 @@ type Theme = 'light' | 'dark';
 const KEY = 'gameit.theme';
 
 export const useTheme = () => {
-  const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem(KEY) as Theme) || 'dark');
+  const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem(KEY) as Theme) || 'light');
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;

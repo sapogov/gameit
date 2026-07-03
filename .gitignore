@@ -4,8 +4,11 @@ dist
 .DS_Store
 *.tsbuildinfo
 .codex/
+.codex-worktrees/
 graphify-out/
+graphify-out/*
 graphify_out/
+docs/*
 AGENTS.md
 **/AGENTS.md
 CONTEXT.md
