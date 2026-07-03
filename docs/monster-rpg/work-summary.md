@@ -1,5 +1,21 @@
 # Monster RPG Work Summary
 
+## 2026-07-03 - Portal Stitch Alignment
+
+- Aligned the live GameIt portal with the local Stitch `design.html` Kinetic Portal reference: cinematic hero copy, fixed glass navigation, bento-style game tiles, mobile tab bar, and floating admin action.
+- Kept portal navigation mapped to real app destinations while preserving the Stitch visual structure and lightweight portal/game separation.
+- Re-aligned the portal to the public Stitch canvas prototype after browser access was restored: light-first shell, rounded hero banner, equal-card game grid, fuller placeholder library, footer links, and matching mobile navigation.
+
+## 2026-07-03 - PR Cleanup
+
+- Reviewed open PRs #41 and #55 against current `main`; both were conflicting and their useful changes were already represented by later HUD/farm movement, portal alignment, asset, and `.gitignore` work.
+- Closed both superseded PRs and deleted their remote branches instead of merging stale conflicting branches.
+
+## 2026-07-03 - Ignore Local Agent And Generated Artifacts
+
+- Added ignore rules for local Codex worktrees, generated graphify output, local docs artifacts, and agent planning files before merging the current branch into `main`.
+- Prepared uncommitted portal and Monster RPG changes for commit while keeping generated/local-only folders out of future staging.
+
 ## 2026-07-02 - Portal-Wide Kinetic Design Pass
 
 - Extended the kinetic GameIt portal design across Home, Library, Leaderboard, and Admin routes.

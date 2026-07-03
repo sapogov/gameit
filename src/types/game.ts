@@ -1,4 +1,12 @@
-export type GameId = 'snake' | 'gameit-monsters' | 'flappy-bird' | 'stickman-fight';
+export type GameId =
+  | 'snake'
+  | 'gameit-monsters'
+  | 'flappy-bird'
+  | 'stickman-fight'
+  | 'void-runner'
+  | 'mana-breach'
+  | 'circuit-breaker'
+  | 'frost-bite';
 export type GameStatus = 'playable' | 'coming-soon';
 export type GameGenre = 'arcade' | 'monster-rpg' | 'platformer' | 'fighting';
 export type PortalImageRole = 'cover' | 'hero';

@@ -57,6 +57,62 @@ export const gameRegistry: GameDefinition[] = [
     },
     route: '/games/stickman-fight',
   },
+  {
+    id: 'void-runner',
+    name: 'Void Runner',
+    description: 'Dash across neon lanes while the level folds around you.',
+    genre: 'platformer',
+    status: 'coming-soon',
+    featured: false,
+    accent: '#06b6d4',
+    assets: {
+      cover: 'portal-cover-coming-soon',
+      hero: 'portal-hero-coming-soon',
+    },
+    route: '/games/void-runner',
+  },
+  {
+    id: 'mana-breach',
+    name: 'Mana Breach',
+    description: 'Build a tiny deck and break spell shields in quick rounds.',
+    genre: 'arcade',
+    status: 'coming-soon',
+    featured: false,
+    accent: '#ec4899',
+    assets: {
+      cover: 'portal-cover-coming-soon',
+      hero: 'portal-hero-coming-soon',
+    },
+    route: '/games/mana-breach',
+  },
+  {
+    id: 'circuit-breaker',
+    name: 'Circuit Breaker',
+    description: 'Route power, dodge locks, and solve compact logic boards.',
+    genre: 'arcade',
+    status: 'coming-soon',
+    featured: false,
+    accent: '#6366f1',
+    assets: {
+      cover: 'portal-cover-coming-soon',
+      hero: 'portal-hero-coming-soon',
+    },
+    route: '/games/circuit-breaker',
+  },
+  {
+    id: 'frost-bite',
+    name: 'Frost Bite',
+    description: 'Survive a frozen route with supplies, timing, and nerve.',
+    genre: 'platformer',
+    status: 'coming-soon',
+    featured: false,
+    accent: '#38bdf8',
+    assets: {
+      cover: 'portal-cover-coming-soon',
+      hero: 'portal-hero-coming-soon',
+    },
+    route: '/games/frost-bite',
+  },
 ];
 
 export function getFeaturedGame(games: readonly GameDefinition[] = gameRegistry): GameDefinition {

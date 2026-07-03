@@ -9,8 +9,8 @@
       "source_file": "package.json",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "package",
-      "community": 6,
+      "id": "private_tmp_gameit_publish_main_package_json",
+      "community": 0,
       "norm_label": "package.json"
     },
     {
@@ -19,8 +19,8 @@
       "source_file": "package.json",
       "source_location": "L2",
       "_origin": "ast",
-      "id": "package_name",
-      "community": 6,
+      "id": "gameit_publish_main_package_name",
+      "community": 0,
       "norm_label": "name"
     },
     {
@@ -29,8 +29,8 @@
       "source_file": "package.json",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "package_version",
-      "community": 6,
+      "id": "gameit_publish_main_package_version",
+      "community": 0,
       "norm_label": "version"
     },
     {
@@ -39,8 +39,8 @@
       "source_file": "package.json",
       "source_location": "L4",
       "_origin": "ast",
-      "id": "package_private",
-      "community": 6,
+      "id": "gameit_publish_main_package_private",
+      "community": 0,
       "norm_label": "private"
     },
     {
@@ -49,8 +49,8 @@
       "source_file": "package.json",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "package_type",
-      "community": 6,
+      "id": "gameit_publish_main_package_type",
+      "community": 0,
       "norm_label": "type"
     },
     {
@@ -59,8 +59,8 @@
       "source_file": "package.json",
       "source_location": "L6",
       "_origin": "ast",
-      "id": "package_scripts",
-      "community": 6,
+      "id": "gameit_publish_main_package_scripts",
+      "community": 0,
       "norm_label": "scripts"
     },
     {
@@ -69,8 +69,8 @@
       "source_file": "package.json",
       "source_location": "L7",
       "_origin": "ast",
-      "id": "package_scripts_dev",
-      "community": 6,
+      "id": "gameit_publish_main_package_scripts_dev",
+      "community": 0,
       "norm_label": "dev"
     },
     {
@@ -79,8 +79,8 @@
       "source_file": "package.json",
       "source_location": "L8",
       "_origin": "ast",
-      "id": "package_scripts_dev_client",
-      "community": 6,
+      "id": "gameit_publish_main_package_scripts_dev_client",
+      "community": 0,
       "norm_label": "dev:client"
     },
     {
@@ -89,8 +89,8 @@
       "source_file": "package.json",
       "source_location": "L9",
       "_origin": "ast",
-      "id": "package_scripts_dev_server",
-      "community": 6,
+      "id": "gameit_publish_main_package_scripts_dev_server",
+      "community": 0,
       "norm_label": "dev:server"
     },
     {
@@ -99,8 +99,8 @@
       "source_file": "package.json",
       "source_location": "L10",
       "_origin": "ast",
-      "id": "package_scripts_dev_multiplayer",
-      "community": 6,
+      "id": "gameit_publish_main_package_scripts_dev_multiplayer",
+      "community": 0,
       "norm_label": "dev:multiplayer"
     },
     {
@@ -109,8 +109,8 @@
       "source_file": "package.json",
       "source_location": "L11",
       "_origin": "ast",
-      "id": "package_scripts_build",
-      "community": 6,
+      "id": "gameit_publish_main_package_scripts_build",
+      "community": 0,
       "norm_label": "build"
     },
     {
@@ -119,8 +119,8 @@
       "source_file": "package.json",
       "source_location": "L12",
       "_origin": "ast",
-      "id": "package_scripts_build_client",
-      "community": 6,
+      "id": "gameit_publish_main_package_scripts_build_client",
+      "community": 0,
       "norm_label": "build:client"
     },
     {
@@ -129,8 +129,8 @@
       "source_file": "package.json",
       "source_location": "L13",
       "_origin": "ast",
-      "id": "package_scripts_build_server",
-      "community": 6,
+      "id": "gameit_publish_main_package_scripts_build_server",
+      "community": 0,
       "norm_label": "build:server"
     },
     {
@@ -139,8 +139,8 @@
       "source_file": "package.json",
       "source_location": "L14",
       "_origin": "ast",
-      "id": "package_scripts_check_monster_rpg",
-      "community": 6,
+      "id": "gameit_publish_main_package_scripts_check_monster_rpg",
+      "community": 0,
       "norm_label": "check:monster-rpg"
     },
     {
@@ -149,8 +149,8 @@
       "source_file": "package.json",
       "source_location": "L15",
       "_origin": "ast",
-      "id": "package_scripts_preview",
-      "community": 6,
+      "id": "gameit_publish_main_package_scripts_preview",
+      "community": 0,
       "norm_label": "preview"
     },
     {
@@ -159,8 +159,8 @@
       "source_file": "package.json",
       "source_location": "L16",
       "_origin": "ast",
-      "id": "package_scripts_test",
-      "community": 6,
+      "id": "gameit_publish_main_package_scripts_test",
+      "community": 0,
       "norm_label": "test"
     },
     {
@@ -169,8 +169,8 @@
       "source_file": "package.json",
       "source_location": "L18",
       "_origin": "ast",
-      "id": "package_dependencies",
-      "community": 6,
+      "id": "gameit_publish_main_package_dependencies",
+      "community": 0,
       "norm_label": "dependencies"
     },
     {
@@ -179,8 +179,8 @@
       "source_file": "package.json",
       "source_location": "L19",
       "_origin": "ast",
-      "id": "package_dependencies_colyseus_schema",
-      "community": 6,
+      "id": "gameit_publish_main_package_dependencies_colyseus_schema",
+      "community": 0,
       "norm_label": "@colyseus/schema"
     },
     {
@@ -189,8 +189,8 @@
       "source_file": "package.json",
       "source_location": "L20",
       "_origin": "ast",
-      "id": "package_dependencies_colyseus_sdk",
-      "community": 6,
+      "id": "gameit_publish_main_package_dependencies_colyseus_sdk",
+      "community": 0,
       "norm_label": "@colyseus/sdk"
     },
     {
@@ -199,8 +199,8 @@
       "source_file": "package.json",
       "source_location": "L21",
       "_origin": "ast",
-      "id": "package_dependencies_colyseus",
-      "community": 6,
+      "id": "gameit_publish_main_package_dependencies_colyseus",
+      "community": 0,
       "norm_label": "colyseus"
     },
     {
@@ -209,8 +209,8 @@
       "source_file": "package.json",
       "source_location": "L22",
       "_origin": "ast",
-      "id": "package_dependencies_phaser",
-      "community": 6,
+      "id": "gameit_publish_main_package_dependencies_phaser",
+      "community": 0,
       "norm_label": "phaser"
     },
     {
@@ -219,8 +219,8 @@
       "source_file": "package.json",
       "source_location": "L23",
       "_origin": "ast",
-      "id": "package_dependencies_react",
-      "community": 6,
+      "id": "gameit_publish_main_package_dependencies_react",
+      "community": 0,
       "norm_label": "react"
     },
     {
@@ -229,8 +229,8 @@
       "source_file": "package.json",
       "source_location": "L24",
       "_origin": "ast",
-      "id": "package_dependencies_react_dom",
-      "community": 6,
+      "id": "gameit_publish_main_package_dependencies_react_dom",
+      "community": 0,
       "norm_label": "react-dom"
     },
     {
@@ -239,8 +239,8 @@
       "source_file": "package.json",
       "source_location": "L25",
       "_origin": "ast",
-      "id": "package_dependencies_react_router_dom",
-      "community": 6,
+      "id": "gameit_publish_main_package_dependencies_react_router_dom",
+      "community": 0,
       "norm_label": "react-router-dom"
     },
     {
@@ -249,8 +249,8 @@
       "source_file": "package.json",
       "source_location": "L26",
       "_origin": "ast",
-      "id": "package_dependencies_zod",
-      "community": 6,
+      "id": "gameit_publish_main_package_dependencies_zod",
+      "community": 0,
       "norm_label": "zod"
     },
     {
@@ -259,8 +259,8 @@
       "source_file": "package.json",
       "source_location": "L28",
       "_origin": "ast",
-      "id": "package_devdependencies",
-      "community": 6,
+      "id": "gameit_publish_main_package_devdependencies",
+      "community": 0,
       "norm_label": "devdependencies"
     },
     {
@@ -269,8 +269,8 @@
       "source_file": "package.json",
       "source_location": "L29",
       "_origin": "ast",
-      "id": "package_devdependencies_types_node",
-      "community": 6,
+      "id": "gameit_publish_main_package_devdependencies_types_node",
+      "community": 0,
       "norm_label": "@types/node"
     },
     {
@@ -279,8 +279,8 @@
       "source_file": "package.json",
       "source_location": "L30",
       "_origin": "ast",
-      "id": "package_devdependencies_types_react",
-      "community": 6,
+      "id": "gameit_publish_main_package_devdependencies_types_react",
+      "community": 0,
       "norm_label": "@types/react"
     },
     {
@@ -289,8 +289,8 @@
       "source_file": "package.json",
       "source_location": "L31",
       "_origin": "ast",
-      "id": "package_devdependencies_types_react_dom",
-      "community": 6,
+      "id": "gameit_publish_main_package_devdependencies_types_react_dom",
+      "community": 0,
       "norm_label": "@types/react-dom"
     },
     {
@@ -299,8 +299,8 @@
       "source_file": "package.json",
       "source_location": "L32",
       "_origin": "ast",
-      "id": "package_devdependencies_vitejs_plugin_react",
-      "community": 6,
+      "id": "gameit_publish_main_package_devdependencies_vitejs_plugin_react",
+      "community": 0,
       "norm_label": "@vitejs/plugin-react"
     },
     {
@@ -309,8 +309,8 @@
       "source_file": "package.json",
       "source_location": "L33",
       "_origin": "ast",
-      "id": "package_devdependencies_concurrently",
-      "community": 6,
+      "id": "gameit_publish_main_package_devdependencies_concurrently",
+      "community": 0,
       "norm_label": "concurrently"
     },
     {
@@ -319,8 +319,8 @@
       "source_file": "package.json",
       "source_location": "L34",
       "_origin": "ast",
-      "id": "package_devdependencies_tsx",
-      "community": 6,
+      "id": "gameit_publish_main_package_devdependencies_tsx",
+      "community": 0,
       "norm_label": "tsx"
     },
     {
@@ -329,8 +329,8 @@
       "source_file": "package.json",
       "source_location": "L35",
       "_origin": "ast",
-      "id": "package_devdependencies_typescript",
-      "community": 6,
+      "id": "gameit_publish_main_package_devdependencies_typescript",
+      "community": 0,
       "norm_label": "typescript"
     },
     {
@@ -339,8 +339,8 @@
       "source_file": "package.json",
       "source_location": "L36",
       "_origin": "ast",
-      "id": "package_devdependencies_vite",
-      "community": 6,
+      "id": "gameit_publish_main_package_devdependencies_vite",
+      "community": 0,
       "norm_label": "vite"
     },
     {
@@ -349,8 +349,8 @@
       "source_file": "package.json",
       "source_location": "L37",
       "_origin": "ast",
-      "id": "package_devdependencies_vitest",
-      "community": 6,
+      "id": "gameit_publish_main_package_devdependencies_vitest",
+      "community": 0,
       "norm_label": "vitest"
     },
     {
@@ -500,7 +500,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_checksavereset",
-      "community": 17,
+      "community": 16,
       "norm_label": "checksavereset()"
     },
     {
@@ -520,7 +520,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_checkoverworldvillageentry",
-      "community": 17,
+      "community": 15,
       "norm_label": "checkoverworldvillageentry()"
     },
     {
@@ -530,7 +530,7 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_checkhomevillageeastgateexit",
-      "community": 17,
+      "community": 15,
       "norm_label": "checkhomevillageeastgateexit()"
     },
     {
@@ -540,7 +540,7 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_checkbuildingentryandexit",
-      "community": 17,
+      "community": 15,
       "norm_label": "checkbuildingentryandexit()"
     },
     {
@@ -550,7 +550,7 @@
       "source_location": "L139",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_checkblockedmovement",
-      "community": 17,
+      "community": 15,
       "norm_label": "checkblockedmovement()"
     },
     {
@@ -560,7 +560,7 @@
       "source_location": "L151",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_checktaptowalkpathing",
-      "community": 17,
+      "community": 29,
       "norm_label": "checktaptowalkpathing()"
     },
     {
@@ -580,7 +580,7 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_checkcreaturejournalstates",
-      "community": 17,
+      "community": 30,
       "norm_label": "checkcreaturejournalstates()"
     },
     {
@@ -740,7 +740,7 @@
       "source_location": "L447",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_findpathtoadjacentfacing",
-      "community": 17,
+      "community": 29,
       "norm_label": "findpathtoadjacentfacing()"
     },
     {
@@ -750,7 +750,7 @@
       "source_location": "L482",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_findpath",
-      "community": 17,
+      "community": 29,
       "norm_label": "findpath()"
     },
     {
@@ -820,7 +820,7 @@
       "source_location": "L561",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_createstate",
-      "community": 17,
+      "community": 15,
       "norm_label": "createstate()"
     },
     {
@@ -844,13 +844,273 @@
       "norm_label": "creatememorystorage()"
     },
     {
+      "label": "slice-monster-rpg-ai-assets.mjs",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets",
+      "community": 9,
+      "norm_label": "slice-monster-rpg-ai-assets.mjs"
+    },
+    {
+      "label": "root",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_root",
+      "community": 9,
+      "norm_label": "root"
+    },
+    {
+      "label": "approvalDir",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_approvaldir",
+      "community": 9,
+      "norm_label": "approvaldir"
+    },
+    {
+      "label": "assetDir",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_assetdir",
+      "community": 9,
+      "norm_label": "assetdir"
+    },
+    {
+      "label": "crcTable",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_crctable",
+      "community": 9,
+      "norm_label": "crctable"
+    },
+    {
+      "label": "crc32()",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_crc32",
+      "community": 9,
+      "norm_label": "crc32()"
+    },
+    {
+      "label": "chunk()",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_chunk",
+      "community": 9,
+      "norm_label": "chunk()"
+    },
+    {
+      "label": "readPng()",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_readpng",
+      "community": 9,
+      "norm_label": "readpng()"
+    },
+    {
+      "label": "unfilterLine()",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L88",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_unfilterline",
+      "community": 9,
+      "norm_label": "unfilterline()"
+    },
+    {
+      "label": "paeth()",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L102",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_paeth",
+      "community": 9,
+      "norm_label": "paeth()"
+    },
+    {
+      "label": "writePng()",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L112",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_writepng",
+      "community": 9,
+      "norm_label": "writepng()"
+    },
+    {
+      "label": "crop()",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L136",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_crop",
+      "community": 9,
+      "norm_label": "crop()"
+    },
+    {
+      "label": "resizeNearest()",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L148",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_resizenearest",
+      "community": 9,
+      "norm_label": "resizenearest()"
+    },
+    {
+      "label": "removeLightBackground()",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L160",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_removelightbackground",
+      "community": 9,
+      "norm_label": "removelightbackground()"
+    },
+    {
+      "label": "trimToContent()",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L169",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_trimtocontent",
+      "community": 9,
+      "norm_label": "trimtocontent()"
+    },
+    {
+      "label": "placeBottomCenter()",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L196",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_placebottomcenter",
+      "community": 9,
+      "norm_label": "placebottomcenter()"
+    },
+    {
+      "label": "stitchFrames()",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L214",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_stitchframes",
+      "community": 9,
+      "norm_label": "stitchframes()"
+    },
+    {
+      "label": "blank()",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L230",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_blank",
+      "community": 9,
+      "norm_label": "blank()"
+    },
+    {
+      "label": "setPixel()",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L238",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_setpixel",
+      "community": 9,
+      "norm_label": "setpixel()"
+    },
+    {
+      "label": "fillRect()",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L247",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_fillrect",
+      "community": 9,
+      "norm_label": "fillrect()"
+    },
+    {
+      "label": "addNoise()",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L253",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_addnoise",
+      "community": 9,
+      "norm_label": "addnoise()"
+    },
+    {
+      "label": "drawTuft()",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L261",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_drawtuft",
+      "community": 9,
+      "norm_label": "drawtuft()"
+    },
+    {
+      "label": "drawStone()",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L269",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_drawstone",
+      "community": 9,
+      "norm_label": "drawstone()"
+    },
+    {
+      "label": "generateTerrainVariants()",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L275",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_generateterrainvariants",
+      "community": 9,
+      "norm_label": "generateterrainvariants()"
+    },
+    {
+      "label": "sliceCreatureSheet()",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L368",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_slicecreaturesheet",
+      "community": 9,
+      "norm_label": "slicecreaturesheet()"
+    },
+    {
+      "label": "sliceTerrainSheet()",
+      "file_type": "code",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L389",
+      "_origin": "ast",
+      "id": "scripts_slice_monster_rpg_ai_assets_sliceterrainsheet",
+      "community": 9,
+      "norm_label": "sliceterrainsheet()"
+    },
+    {
       "label": "battleRegistry.ts",
       "file_type": "code",
       "source_file": "server/battleRegistry.ts",
       "source_location": "L1",
       "_origin": "ast",
       "id": "server_battleregistry",
-      "community": 31,
+      "community": 13,
       "norm_label": "battleregistry.ts"
     },
     {
@@ -860,7 +1120,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "server_battleregistry_battleclaim",
-      "community": 10,
+      "community": 13,
       "norm_label": "battleclaim"
     },
     {
@@ -870,7 +1130,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "server_battleregistry_battleclaims",
-      "community": 31,
+      "community": 13,
       "norm_label": "battleclaims"
     },
     {
@@ -880,7 +1140,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "server_battleregistry_battleresultlisteners",
-      "community": 31,
+      "community": 13,
       "norm_label": "battleresultlisteners"
     },
     {
@@ -890,7 +1150,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "server_battleregistry_createbattleclaim",
-      "community": 31,
+      "community": 13,
       "norm_label": "createbattleclaim()"
     },
     {
@@ -900,7 +1160,7 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "server_battleregistry_createguardbattleclaim",
-      "community": 31,
+      "community": 13,
       "norm_label": "createguardbattleclaim()"
     },
     {
@@ -910,7 +1170,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "server_battleregistry_getbattleclaim",
-      "community": 31,
+      "community": 13,
       "norm_label": "getbattleclaim()"
     },
     {
@@ -930,7 +1190,7 @@
       "source_location": "L122",
       "_origin": "ast",
       "id": "server_battleregistry_getresolvedbattleoutcome",
-      "community": 31,
+      "community": 13,
       "norm_label": "getresolvedbattleoutcome()"
     },
     {
@@ -940,7 +1200,7 @@
       "source_location": "L135",
       "_origin": "ast",
       "id": "server_battleregistry_removebattleclaim",
-      "community": 31,
+      "community": 13,
       "norm_label": "removebattleclaim()"
     },
     {
@@ -950,7 +1210,7 @@
       "source_location": "L140",
       "_origin": "ast",
       "id": "server_battleregistry_onbattleclaimresolved",
-      "community": 44,
+      "community": 13,
       "norm_label": "onbattleclaimresolved()"
     },
     {
@@ -960,7 +1220,7 @@
       "source_location": "L151",
       "_origin": "ast",
       "id": "server_battleregistry_getbattlestateseed",
-      "community": 31,
+      "community": 13,
       "norm_label": "getbattlestateseed()"
     },
     {
@@ -970,7 +1230,7 @@
       "source_location": "L162",
       "_origin": "ast",
       "id": "server_battleregistry_cleanupexpiredbattleclaims",
-      "community": 31,
+      "community": 13,
       "norm_label": "cleanupexpiredbattleclaims()"
     },
     {
@@ -980,7 +1240,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "server_index",
-      "community": 10,
+      "community": 44,
       "norm_label": "index.ts"
     },
     {
@@ -990,7 +1250,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "server_index_port",
-      "community": 10,
+      "community": 44,
       "norm_label": "port"
     },
     {
@@ -1000,7 +1260,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "server_index_gameserver",
-      "community": 10,
+      "community": 44,
       "norm_label": "gameserver"
     },
     {
@@ -1150,7 +1410,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "rooms_homevillageroom",
-      "community": 44,
+      "community": 13,
       "norm_label": "homevillageroom.ts"
     },
     {
@@ -1230,7 +1490,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "rooms_locationroom_locationroom_oncreate",
-      "community": 13,
+      "community": 44,
       "norm_label": ".oncreate()"
     },
     {
@@ -1240,7 +1500,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "rooms_locationroom_locationroom_onjoin",
-      "community": 13,
+      "community": 44,
       "norm_label": ".onjoin()"
     },
     {
@@ -1260,7 +1520,7 @@
       "source_location": "L140",
       "_origin": "ast",
       "id": "rooms_locationroom_locationroom_handlemoveintent",
-      "community": 13,
+      "community": 15,
       "norm_label": ".handlemoveintent()"
     },
     {
@@ -1290,7 +1550,7 @@
       "source_location": "L301",
       "_origin": "ast",
       "id": "rooms_locationroom_locationroom_handleresolvewildencounter",
-      "community": 31,
+      "community": 13,
       "norm_label": ".handleresolvewildencounter()"
     },
     {
@@ -1300,7 +1560,7 @@
       "source_location": "L325",
       "_origin": "ast",
       "id": "rooms_locationroom_locationroom_spawninitialwildencounters",
-      "community": 13,
+      "community": 44,
       "norm_label": ".spawninitialwildencounters()"
     },
     {
@@ -1360,7 +1620,7 @@
       "source_location": "L431",
       "_origin": "ast",
       "id": "rooms_locationroom_sanitizeprofile",
-      "community": 13,
+      "community": 44,
       "norm_label": "sanitizeprofile()"
     },
     {
@@ -1370,7 +1630,7 @@
       "source_location": "L447",
       "_origin": "ast",
       "id": "rooms_locationroom_resolvejoinposition",
-      "community": 13,
+      "community": 15,
       "norm_label": "resolvejoinposition()"
     },
     {
@@ -1380,7 +1640,7 @@
       "source_location": "L465",
       "_origin": "ast",
       "id": "rooms_locationroom_schematoprofile",
-      "community": 13,
+      "community": 15,
       "norm_label": "schematoprofile()"
     },
     {
@@ -1390,7 +1650,7 @@
       "source_location": "L475",
       "_origin": "ast",
       "id": "rooms_locationroom_creatependingtransition",
-      "community": 13,
+      "community": 15,
       "norm_label": "creatependingtransition()"
     },
     {
@@ -1400,7 +1660,7 @@
       "source_location": "L492",
       "_origin": "ast",
       "id": "rooms_locationroom_consumependingtransition",
-      "community": 13,
+      "community": 15,
       "norm_label": "consumependingtransition()"
     },
     {
@@ -1410,7 +1670,7 @@
       "source_location": "L504",
       "_origin": "ast",
       "id": "rooms_locationroom_cleanupexpiredtransitions",
-      "community": 13,
+      "community": 15,
       "norm_label": "cleanupexpiredtransitions()"
     },
     {
@@ -1630,7 +1890,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "schema_locationstate_playerprofileschema",
-      "community": 33,
+      "community": 34,
       "norm_label": "playerprofileschema"
     },
     {
@@ -1640,7 +1900,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "schema_locationstate_playerprofileschema_constructor",
-      "community": 33,
+      "community": 34,
       "norm_label": ".constructor()"
     },
     {
@@ -1650,7 +1910,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "schema_locationstate_worldpositionschema",
-      "community": 1,
+      "community": 33,
       "norm_label": "worldpositionschema"
     },
     {
@@ -1660,7 +1920,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "schema_locationstate_worldpositionschema_constructor",
-      "community": 1,
+      "community": 33,
       "norm_label": ".constructor()"
     },
     {
@@ -1729,7 +1989,7 @@
       "source_file": "server/tsconfig.json",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "users_michael_documents_projects_gameit_server_tsconfig_json",
+      "id": "server_tsconfig",
       "community": 32,
       "norm_label": "tsconfig.json"
     },
@@ -1900,7 +2160,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "admin_adminpage_adminpage",
-      "community": 2,
+      "community": 24,
       "norm_label": "adminpage()"
     },
     {
@@ -2010,7 +2270,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "app_app_home",
-      "community": 19,
+      "community": 40,
       "norm_label": "home()"
     },
     {
@@ -2230,7 +2490,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "components_leaderboardmodal_leaderboardmodal",
-      "community": 18,
+      "community": 19,
       "norm_label": "leaderboardmodal()"
     },
     {
@@ -2240,7 +2500,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_portallogo",
-      "community": 0,
+      "community": 19,
       "norm_label": "portallogo.tsx"
     },
     {
@@ -2250,7 +2510,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "components_portallogo_props",
-      "community": 0,
+      "community": 19,
       "norm_label": "props"
     },
     {
@@ -2260,7 +2520,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "components_portallogo_portallogo",
-      "community": 0,
+      "community": 19,
       "norm_label": "portallogo()"
     },
     {
@@ -2297,7 +2557,7 @@
       "label": "getFeaturedGame()",
       "file_type": "code",
       "source_file": "src/config/games.ts",
-      "source_location": "L62",
+      "source_location": "L118",
       "_origin": "ast",
       "id": "config_games_getfeaturedgame",
       "community": 40,
@@ -2410,7 +2670,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "config_registryoverride_registryoverrideentry",
-      "community": 40,
+      "community": 24,
       "norm_label": "registryoverrideentry"
     },
     {
@@ -2420,7 +2680,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "config_registryoverride_registryoverride",
-      "community": 2,
+      "community": 24,
       "norm_label": "registryoverride"
     },
     {
@@ -2530,7 +2790,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "config_uiassets",
-      "community": 0,
+      "community": 19,
       "norm_label": "uiassets.ts"
     },
     {
@@ -2540,7 +2800,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "config_uiassets_spriteregion",
-      "community": 0,
+      "community": 19,
       "norm_label": "spriteregion"
     },
     {
@@ -2550,7 +2810,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "config_uiassets_logospritesheet",
-      "community": 0,
+      "community": 19,
       "norm_label": "logospritesheet"
     },
     {
@@ -2560,7 +2820,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "config_uiassets_uispritesheet",
-      "community": 0,
+      "community": 19,
       "norm_label": "uispritesheet"
     },
     {
@@ -2580,7 +2840,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "data_defaultgames_defaultgames",
-      "community": 4,
+      "community": 40,
       "norm_label": "defaultgames"
     },
     {
@@ -2600,7 +2860,7 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "monster_rpg_monsterrpggame_getinitialstate",
-      "community": 17,
+      "community": 16,
       "norm_label": "getinitialstate()"
     },
     {
@@ -2610,7 +2870,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "monster_rpg_monsterrpggame_monsterrpggame",
-      "community": 16,
+      "community": 6,
       "norm_label": "monsterrpggame()"
     },
     {
@@ -2790,7 +3050,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "assets_monsterrpgassets",
-      "community": 1,
+      "community": 28,
       "norm_label": "monsterrpgassets.ts"
     },
     {
@@ -2800,7 +3060,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "assets_monsterrpgassets_monsterrpgassetkeys",
-      "community": 1,
+      "community": 28,
       "norm_label": "monsterrpgassetkeys"
     },
     {
@@ -2820,7 +3080,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "assets_monsterrpgassets_monsterrpgassetmanifest",
-      "community": 1,
+      "community": 28,
       "norm_label": "monsterrpgassetmanifest"
     },
     {
@@ -2830,7 +3090,7 @@
       "source_location": "L120",
       "_origin": "ast",
       "id": "assets_monsterrpgassets_monsterrpgspritesheetmanifest",
-      "community": 1,
+      "community": 28,
       "norm_label": "monsterrpgspritesheetmanifest"
     },
     {
@@ -2890,7 +3150,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scenes_villagescene",
-      "community": 1,
+      "community": 28,
       "norm_label": "villagescene.ts"
     },
     {
@@ -2900,7 +3160,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "scenes_villagescene_villagesceneoptions",
-      "community": 1,
+      "community": 82,
       "norm_label": "villagesceneoptions"
     },
     {
@@ -2910,7 +3170,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "scenes_villagescene_movementkeymap",
-      "community": 1,
+      "community": 28,
       "norm_label": "movementkeymap"
     },
     {
@@ -2920,7 +3180,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "scenes_villagescene_tilecolors",
-      "community": 1,
+      "community": 28,
       "norm_label": "tilecolors"
     },
     {
@@ -2930,7 +3190,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "scenes_villagescene_avatarcolors",
-      "community": 1,
+      "community": 28,
       "norm_label": "avatarcolors"
     },
     {
@@ -2940,7 +3200,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "scenes_villagescene_directiondeltas",
-      "community": 1,
+      "community": 28,
       "norm_label": "directiondeltas"
     },
     {
@@ -2950,7 +3210,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "scenes_villagescene_maprendermetrics",
-      "community": 1,
+      "community": 28,
       "norm_label": "maprendermetrics"
     },
     {
@@ -2960,7 +3220,7 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "scenes_villagescene_playerview",
-      "community": 1,
+      "community": 28,
       "norm_label": "playerview"
     },
     {
@@ -2970,7 +3230,7 @@
       "source_location": "L136",
       "_origin": "ast",
       "id": "scenes_villagescene_encounterview",
-      "community": 1,
+      "community": 28,
       "norm_label": "encounterview"
     },
     {
@@ -2980,7 +3240,7 @@
       "source_location": "L143",
       "_origin": "ast",
       "id": "scenes_villagescene_farmview",
-      "community": 1,
+      "community": 28,
       "norm_label": "farmview"
     },
     {
@@ -3120,7 +3380,7 @@
       "source_location": "L307",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_handlepointerdown",
-      "community": 17,
+      "community": 29,
       "norm_label": ".handlepointerdown()"
     },
     {
@@ -3610,7 +3870,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "network_colyseusclient_multiplayerconnection",
-      "community": 26,
+      "community": 11,
       "norm_label": "multiplayerconnection"
     },
     {
@@ -3680,7 +3940,7 @@
       "source_location": "L174",
       "_origin": "ast",
       "id": "network_colyseusclient_tolocationroomstate",
-      "community": 45,
+      "community": 7,
       "norm_label": "tolocationroomstate()"
     },
     {
@@ -3690,7 +3950,7 @@
       "source_location": "L232",
       "_origin": "ast",
       "id": "network_colyseusclient_tobattleroomstate",
-      "community": 11,
+      "community": 35,
       "norm_label": "tobattleroomstate()"
     },
     {
@@ -3700,7 +3960,7 @@
       "source_location": "L255",
       "_origin": "ast",
       "id": "network_colyseusclient_tobattleparticipant",
-      "community": 11,
+      "community": 35,
       "norm_label": "tobattleparticipant()"
     },
     {
@@ -3710,7 +3970,7 @@
       "source_location": "L289",
       "_origin": "ast",
       "id": "network_colyseusclient_tobattlestatus",
-      "community": 11,
+      "community": 35,
       "norm_label": "tobattlestatus()"
     },
     {
@@ -3720,7 +3980,7 @@
       "source_location": "L303",
       "_origin": "ast",
       "id": "network_colyseusclient_toarray",
-      "community": 11,
+      "community": 35,
       "norm_label": "toarray()"
     },
     {
@@ -3730,7 +3990,7 @@
       "source_location": "L314",
       "_origin": "ast",
       "id": "network_colyseusclient_numberorzero",
-      "community": 11,
+      "community": 35,
       "norm_label": "numberorzero()"
     },
     {
@@ -3910,7 +4170,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "sim_battles_battleresolution",
-      "community": 10,
+      "community": 13,
       "norm_label": "battleresolution"
     },
     {
@@ -4200,7 +4460,7 @@
       "source_location": "L212",
       "_origin": "ast",
       "id": "sim_cards_test_createprofilestate",
-      "community": 17,
+      "community": 6,
       "norm_label": "createprofilestate()"
     },
     {
@@ -4250,7 +4510,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "sim_cards_cardrarities",
-      "community": 7,
+      "community": 3,
       "norm_label": "cardrarities"
     },
     {
@@ -4290,7 +4550,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "sim_cards_starter_creature_card_ids",
-      "community": 20,
+      "community": 3,
       "norm_label": "starter_creature_card_ids"
     },
     {
@@ -4370,7 +4630,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "sim_cards_cardactionresult",
-      "community": 22,
+      "community": 3,
       "norm_label": "cardactionresult"
     },
     {
@@ -4380,7 +4640,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "sim_cards_packopentracecard",
-      "community": 9,
+      "community": 22,
       "norm_label": "packopentracecard"
     },
     {
@@ -4400,7 +4660,7 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "sim_cards_openpackresult",
-      "community": 22,
+      "community": 3,
       "norm_label": "openpackresult"
     },
     {
@@ -4520,7 +4780,7 @@
       "source_location": "L263",
       "_origin": "ast",
       "id": "sim_cards_getcreaturecardbyid",
-      "community": 3,
+      "community": 6,
       "norm_label": "getcreaturecardbyid()"
     },
     {
@@ -4640,7 +4900,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_creaturejournal_test",
-      "community": 17,
+      "community": 30,
       "norm_label": "creaturejournal.test.ts"
     },
     {
@@ -4650,7 +4910,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_creaturejournal",
-      "community": 17,
+      "community": 30,
       "norm_label": "creaturejournal.ts"
     },
     {
@@ -4660,7 +4920,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "sim_creaturejournal_getjournalspeciesviewstate",
-      "community": 17,
+      "community": 30,
       "norm_label": "getjournalspeciesviewstate()"
     },
     {
@@ -4670,7 +4930,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "sim_creaturejournal_recordwildcreatureseen",
-      "community": 17,
+      "community": 30,
       "norm_label": "recordwildcreatureseen()"
     },
     {
@@ -4680,7 +4940,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "sim_creaturejournal_recordcreaturediscovered",
-      "community": 17,
+      "community": 30,
       "norm_label": "recordcreaturediscovered()"
     },
     {
@@ -4690,7 +4950,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "sim_creaturejournal_withjournalspeciesstate",
-      "community": 17,
+      "community": 30,
       "norm_label": "withjournalspeciesstate()"
     },
     {
@@ -4700,7 +4960,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "sim_creaturejournal_assertknownspecies",
-      "community": 17,
+      "community": 30,
       "norm_label": "assertknownspecies()"
     },
     {
@@ -4720,7 +4980,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_creaturecarddefinitionlike",
-      "community": 9,
+      "community": 22,
       "norm_label": "creaturecarddefinitionlike"
     },
     {
@@ -5010,7 +5270,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_creatureparty_test",
-      "community": 8,
+      "community": 6,
       "norm_label": "creatureparty.test.ts"
     },
     {
@@ -5020,7 +5280,7 @@
       "source_location": "L179",
       "_origin": "ast",
       "id": "sim_creatureparty_test_createstatewithmagicdust",
-      "community": 17,
+      "community": 6,
       "norm_label": "createstatewithmagicdust()"
     },
     {
@@ -5030,7 +5290,7 @@
       "source_location": "L193",
       "_origin": "ast",
       "id": "sim_creatureparty_test_createcommoncreatures",
-      "community": 8,
+      "community": 6,
       "norm_label": "createcommoncreatures()"
     },
     {
@@ -5040,7 +5300,7 @@
       "source_location": "L220",
       "_origin": "ast",
       "id": "sim_creatureparty_test_withreviveitems",
-      "community": 8,
+      "community": 6,
       "norm_label": "withreviveitems()"
     },
     {
@@ -5050,7 +5310,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_creatureparty",
-      "community": 22,
+      "community": 6,
       "norm_label": "creatureparty.ts"
     },
     {
@@ -5060,7 +5320,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "sim_creatureparty_creatureuserole",
-      "community": 22,
+      "community": 6,
       "norm_label": "creatureuserole"
     },
     {
@@ -5070,7 +5330,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "sim_creatureparty_creaturepartyfailurereason",
-      "community": 22,
+      "community": 6,
       "norm_label": "creaturepartyfailurereason"
     },
     {
@@ -5080,7 +5340,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "sim_creatureparty_creaturepartyresult",
-      "community": 22,
+      "community": 6,
       "norm_label": "creaturepartyresult"
     },
     {
@@ -5100,7 +5360,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "sim_creatureparty_movecreaturetoactiveparty",
-      "community": 22,
+      "community": 6,
       "norm_label": "movecreaturetoactiveparty()"
     },
     {
@@ -5110,7 +5370,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "sim_creatureparty_movecreaturetostorage",
-      "community": 22,
+      "community": 6,
       "norm_label": "movecreaturetostorage()"
     },
     {
@@ -5120,7 +5380,7 @@
       "source_location": "L91",
       "_origin": "ast",
       "id": "sim_creatureparty_setcreaturehp",
-      "community": 22,
+      "community": 14,
       "norm_label": "setcreaturehp()"
     },
     {
@@ -5130,7 +5390,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "sim_creatureparty_healallcreaturesathospital",
-      "community": 22,
+      "community": 6,
       "norm_label": "healallcreaturesathospital()"
     },
     {
@@ -5140,7 +5400,7 @@
       "source_location": "L140",
       "_origin": "ast",
       "id": "sim_creatureparty_isatvillagehospital",
-      "community": 16,
+      "community": 6,
       "norm_label": "isatvillagehospital()"
     },
     {
@@ -5150,7 +5410,7 @@
       "source_location": "L144",
       "_origin": "ast",
       "id": "sim_creatureparty_usereviveitem",
-      "community": 22,
+      "community": 6,
       "norm_label": "usereviveitem()"
     },
     {
@@ -5160,7 +5420,7 @@
       "source_location": "L187",
       "_origin": "ast",
       "id": "sim_creatureparty_cancreatureuserole",
-      "community": 22,
+      "community": 6,
       "norm_label": "cancreatureuserole()"
     },
     {
@@ -5170,7 +5430,7 @@
       "source_location": "L191",
       "_origin": "ast",
       "id": "sim_creatureparty_iscreaturefainted",
-      "community": 22,
+      "community": 6,
       "norm_label": "iscreaturefainted()"
     },
     {
@@ -5360,7 +5620,7 @@
       "source_location": "L92",
       "_origin": "ast",
       "id": "sim_farms_farmcardupgraderequirement",
-      "community": 9,
+      "community": 22,
       "norm_label": "farmcardupgraderequirement"
     },
     {
@@ -5370,7 +5630,7 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "sim_farms_farmupgraderequirements",
-      "community": 14,
+      "community": 22,
       "norm_label": "farmupgraderequirements"
     },
     {
@@ -5390,7 +5650,7 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "sim_farms_farmupgradepreview",
-      "community": 14,
+      "community": 22,
       "norm_label": "farmupgradepreview"
     },
     {
@@ -5400,7 +5660,7 @@
       "source_location": "L122",
       "_origin": "ast",
       "id": "sim_farms_farmdefinition",
-      "community": 14,
+      "community": 22,
       "norm_label": "farmdefinition"
     },
     {
@@ -5430,7 +5690,7 @@
       "source_location": "L164",
       "_origin": "ast",
       "id": "sim_farms_createfarmsaverecord",
-      "community": 14,
+      "community": 3,
       "norm_label": "createfarmsaverecord()"
     },
     {
@@ -5460,7 +5720,7 @@
       "source_location": "L282",
       "_origin": "ast",
       "id": "sim_farms_assignfarmguard",
-      "community": 22,
+      "community": 6,
       "norm_label": "assignfarmguard()"
     },
     {
@@ -5810,7 +6070,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "sim_maps_getgamemap",
-      "community": 13,
+      "community": 15,
       "norm_label": "getgamemap()"
     },
     {
@@ -5820,7 +6080,7 @@
       "source_location": "L99",
       "_origin": "ast",
       "id": "sim_maps_getmapbyid",
-      "community": 45,
+      "community": 7,
       "norm_label": "getmapbyid()"
     },
     {
@@ -5830,7 +6090,7 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "sim_maps_ismapid",
-      "community": 45,
+      "community": 7,
       "norm_label": "ismapid()"
     },
     {
@@ -5840,7 +6100,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "sim_maps_normalizemapid",
-      "community": 45,
+      "community": 44,
       "norm_label": "normalizemapid()"
     },
     {
@@ -5850,7 +6110,7 @@
       "source_location": "L111",
       "_origin": "ast",
       "id": "sim_maps_gettileat",
-      "community": 17,
+      "community": 45,
       "norm_label": "gettileat()"
     },
     {
@@ -5860,7 +6120,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "sim_maps_canentertile",
-      "community": 17,
+      "community": 29,
       "norm_label": "canentertile()"
     },
     {
@@ -5870,7 +6130,7 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "sim_maps_getallowedspawnsformap",
-      "community": 13,
+      "community": 15,
       "norm_label": "getallowedspawnsformap()"
     },
     {
@@ -5880,7 +6140,7 @@
       "source_location": "L136",
       "_origin": "ast",
       "id": "sim_maps_issameworldposition",
-      "community": 13,
+      "community": 15,
       "norm_label": "issameworldposition()"
     },
     {
@@ -5890,7 +6150,7 @@
       "source_location": "L145",
       "_origin": "ast",
       "id": "sim_maps_isvalidspawnposition",
-      "community": 13,
+      "community": 15,
       "norm_label": "isvalidspawnposition()"
     },
     {
@@ -5910,7 +6170,7 @@
       "source_location": "L228",
       "_origin": "ast",
       "id": "sim_maps_getexitat",
-      "community": 17,
+      "community": 45,
       "norm_label": "getexitat()"
     },
     {
@@ -5920,7 +6180,7 @@
       "source_location": "L236",
       "_origin": "ast",
       "id": "sim_maps_getvillagedefinition",
-      "community": 17,
+      "community": 5,
       "norm_label": "getvillagedefinition()"
     },
     {
@@ -6060,7 +6320,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_movement",
-      "community": 17,
+      "community": 26,
       "norm_label": "movement.ts"
     },
     {
@@ -6070,7 +6330,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "sim_movement_directiondelta",
-      "community": 17,
+      "community": 26,
       "norm_label": "directiondelta"
     },
     {
@@ -6080,7 +6340,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "sim_movement_moveplayer",
-      "community": 17,
+      "community": 15,
       "norm_label": "moveplayer()"
     },
     {
@@ -6320,7 +6580,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_pathfinding_test",
-      "community": 17,
+      "community": 29,
       "norm_label": "pathfinding.test.ts"
     },
     {
@@ -6330,7 +6590,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_pathfinding",
-      "community": 17,
+      "community": 29,
       "norm_label": "pathfinding.ts"
     },
     {
@@ -6340,7 +6600,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "sim_pathfinding_steps",
-      "community": 17,
+      "community": 29,
       "norm_label": "steps"
     },
     {
@@ -6350,7 +6610,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "sim_pathfinding_pathoptions",
-      "community": 17,
+      "community": 29,
       "norm_label": "pathoptions"
     },
     {
@@ -6360,7 +6620,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "sim_pathfinding_findwalkpath",
-      "community": 17,
+      "community": 29,
       "norm_label": "findwalkpath()"
     },
     {
@@ -6370,7 +6630,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "sim_pathfinding_findwalkpathtointeractiondistance",
-      "community": 17,
+      "community": 29,
       "norm_label": "findwalkpathtointeractiondistance()"
     },
     {
@@ -6380,7 +6640,7 @@
       "source_location": "L104",
       "_origin": "ast",
       "id": "sim_pathfinding_canstandontile",
-      "community": 17,
+      "community": 29,
       "norm_label": "canstandontile()"
     },
     {
@@ -6390,7 +6650,7 @@
       "source_location": "L108",
       "_origin": "ast",
       "id": "sim_pathfinding_positionkey",
-      "community": 17,
+      "community": 29,
       "norm_label": "positionkey()"
     },
     {
@@ -6550,7 +6810,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_savestate_test",
-      "community": 17,
+      "community": 6,
       "norm_label": "savestate.test.ts"
     },
     {
@@ -6560,7 +6820,7 @@
       "source_location": "L225",
       "_origin": "ast",
       "id": "sim_savestate_test_creatememorystorage",
-      "community": 17,
+      "community": 6,
       "norm_label": "creatememorystorage()"
     },
     {
@@ -6570,7 +6830,7 @@
       "source_location": "L250",
       "_origin": "ast",
       "id": "sim_savestate_test_createvalidcreature",
-      "community": 17,
+      "community": 6,
       "norm_label": "createvalidcreature()"
     },
     {
@@ -6600,7 +6860,7 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "sim_savestate_monsterrpgsaverepository",
-      "community": 22,
+      "community": 13,
       "norm_label": "monsterrpgsaverepository"
     },
     {
@@ -6670,7 +6930,7 @@
       "source_location": "L84",
       "_origin": "ast",
       "id": "sim_savestate_createplayerprofile",
-      "community": 17,
+      "community": 6,
       "norm_label": "createplayerprofile()"
     },
     {
@@ -6680,7 +6940,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "sim_savestate_createinitialsave",
-      "community": 17,
+      "community": 6,
       "norm_label": "createinitialsave()"
     },
     {
@@ -6690,7 +6950,7 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "sim_savestate_loadprofile",
-      "community": 17,
+      "community": 16,
       "norm_label": "loadprofile()"
     },
     {
@@ -6700,7 +6960,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "sim_savestate_loadsave",
-      "community": 17,
+      "community": 16,
       "norm_label": "loadsave()"
     },
     {
@@ -6710,7 +6970,7 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "sim_savestate_saveprogress",
-      "community": 17,
+      "community": 6,
       "norm_label": "saveprogress()"
     },
     {
@@ -6720,7 +6980,7 @@
       "source_location": "L117",
       "_origin": "ast",
       "id": "sim_savestate_exportsave",
-      "community": 20,
+      "community": 6,
       "norm_label": "exportsave()"
     },
     {
@@ -6730,7 +6990,7 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "sim_savestate_importsavepayload",
-      "community": 20,
+      "community": 6,
       "norm_label": "importsavepayload()"
     },
     {
@@ -6860,7 +7120,7 @@
       "source_location": "L359",
       "_origin": "ast",
       "id": "sim_savestate_isvalidstation",
-      "community": 5,
+      "community": 7,
       "norm_label": "isvalidstation()"
     },
     {
@@ -7500,7 +7760,7 @@
       "source_location": "L219",
       "_origin": "ast",
       "id": "sim_stations_isvalidstationdestination",
-      "community": 5,
+      "community": 7,
       "norm_label": "isvalidstationdestination()"
     },
     {
@@ -7540,7 +7800,7 @@
       "source_location": "L255",
       "_origin": "ast",
       "id": "sim_stations_isvalidfuturehooks",
-      "community": 5,
+      "community": 7,
       "norm_label": "isvalidfuturehooks()"
     },
     {
@@ -7550,7 +7810,7 @@
       "source_location": "L266",
       "_origin": "ast",
       "id": "sim_stations_isnonemptystring",
-      "community": 5,
+      "community": 7,
       "norm_label": "isnonemptystring()"
     },
     {
@@ -7570,7 +7830,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_types_direction",
-      "community": 1,
+      "community": 33,
       "norm_label": "direction"
     },
     {
@@ -7580,7 +7840,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "sim_types_avatarid",
-      "community": 16,
+      "community": 34,
       "norm_label": "avatarid"
     },
     {
@@ -7610,7 +7870,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "sim_types_creaturelabelmode",
-      "community": 82,
+      "community": 23,
       "norm_label": "creaturelabelmode"
     },
     {
@@ -7620,7 +7880,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "sim_types_villageid",
-      "community": 14,
+      "community": 22,
       "norm_label": "villageid"
     },
     {
@@ -7630,7 +7890,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "sim_types_buildingtype",
-      "community": 45,
+      "community": 26,
       "norm_label": "buildingtype"
     },
     {
@@ -7640,7 +7900,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "sim_types_interiormapid",
-      "community": 45,
+      "community": 26,
       "norm_label": "interiormapid"
     },
     {
@@ -7680,7 +7940,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "sim_types_playerprofile",
-      "community": 10,
+      "community": 13,
       "norm_label": "playerprofile"
     },
     {
@@ -7700,7 +7960,7 @@
       "source_location": "L64",
       "_origin": "ast",
       "id": "sim_types_cardrarity",
-      "community": 9,
+      "community": 22,
       "norm_label": "cardrarity"
     },
     {
@@ -7810,7 +8070,7 @@
       "source_location": "L134",
       "_origin": "ast",
       "id": "sim_types_savestack",
-      "community": 20,
+      "community": 3,
       "norm_label": "savestack"
     },
     {
@@ -7830,7 +8090,7 @@
       "source_location": "L146",
       "_origin": "ast",
       "id": "sim_types_creationrequirement",
-      "community": 14,
+      "community": 22,
       "norm_label": "creationrequirement"
     },
     {
@@ -7840,7 +8100,7 @@
       "source_location": "L152",
       "_origin": "ast",
       "id": "sim_types_creaturecardinstance",
-      "community": 7,
+      "community": 8,
       "norm_label": "creaturecardinstance"
     },
     {
@@ -7860,7 +8120,7 @@
       "source_location": "L164",
       "_origin": "ast",
       "id": "sim_types_eggsaverecord",
-      "community": 26,
+      "community": 8,
       "norm_label": "eggsaverecord"
     },
     {
@@ -7980,7 +8240,7 @@
       "source_location": "L265",
       "_origin": "ast",
       "id": "sim_types_creaturesavecontainer",
-      "community": 22,
+      "community": 6,
       "norm_label": "creaturesavecontainer"
     },
     {
@@ -8100,7 +8360,7 @@
       "source_location": "L351",
       "_origin": "ast",
       "id": "sim_types_journalspeciesviewstate",
-      "community": 17,
+      "community": 30,
       "norm_label": "journalspeciesviewstate"
     },
     {
@@ -8140,7 +8400,7 @@
       "source_location": "L376",
       "_origin": "ast",
       "id": "sim_types_mapexit",
-      "community": 45,
+      "community": 26,
       "norm_label": "mapexit"
     },
     {
@@ -8150,7 +8410,7 @@
       "source_location": "L387",
       "_origin": "ast",
       "id": "sim_types_villagedefinition",
-      "community": 45,
+      "community": 26,
       "norm_label": "villagedefinition"
     },
     {
@@ -8160,7 +8420,7 @@
       "source_location": "L400",
       "_origin": "ast",
       "id": "sim_types_buildingdefinition",
-      "community": 45,
+      "community": 26,
       "norm_label": "buildingdefinition"
     },
     {
@@ -8230,7 +8490,7 @@
       "source_location": "L455",
       "_origin": "ast",
       "id": "sim_types_wildencounteroutcome",
-      "community": 10,
+      "community": 13,
       "norm_label": "wildencounteroutcome"
     },
     {
@@ -8250,7 +8510,7 @@
       "source_location": "L469",
       "_origin": "ast",
       "id": "sim_types_claimwildencountermessage",
-      "community": 26,
+      "community": 11,
       "norm_label": "claimwildencountermessage"
     },
     {
@@ -8260,7 +8520,7 @@
       "source_location": "L474",
       "_origin": "ast",
       "id": "sim_types_claimguardedfarmtheftmessage",
-      "community": 26,
+      "community": 11,
       "norm_label": "claimguardedfarmtheftmessage"
     },
     {
@@ -8270,7 +8530,7 @@
       "source_location": "L480",
       "_origin": "ast",
       "id": "sim_types_resolvewildencountermessage",
-      "community": 26,
+      "community": 11,
       "norm_label": "resolvewildencountermessage"
     },
     {
@@ -8340,7 +8600,7 @@
       "source_location": "L532",
       "_origin": "ast",
       "id": "sim_types_monsterrpgsavestate",
-      "community": 22,
+      "community": 82,
       "norm_label": "monsterrpgsavestate"
     },
     {
@@ -8350,7 +8610,7 @@
       "source_location": "L547",
       "_origin": "ast",
       "id": "sim_types_movementresult",
-      "community": 5,
+      "community": 26,
       "norm_label": "movementresult"
     },
     {
@@ -8360,7 +8620,7 @@
       "source_location": "L558",
       "_origin": "ast",
       "id": "sim_types_moveintentmessage",
-      "community": 26,
+      "community": 11,
       "norm_label": "moveintentmessage"
     },
     {
@@ -8370,7 +8630,7 @@
       "source_location": "L563",
       "_origin": "ast",
       "id": "sim_types_joinlocationoptions",
-      "community": 13,
+      "community": 44,
       "norm_label": "joinlocationoptions"
     },
     {
@@ -8540,7 +8800,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "ui_charactercreator",
-      "community": 16,
+      "community": 34,
       "norm_label": "charactercreator.tsx"
     },
     {
@@ -8550,7 +8810,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "ui_charactercreator_charactercreatorprops",
-      "community": 16,
+      "community": 34,
       "norm_label": "charactercreatorprops"
     },
     {
@@ -8560,7 +8820,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "ui_charactercreator_avataroptions",
-      "community": 16,
+      "community": 34,
       "norm_label": "avataroptions"
     },
     {
@@ -8570,7 +8830,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "ui_charactercreator_charactercreator",
-      "community": 16,
+      "community": 34,
       "norm_label": "charactercreator()"
     },
     {
@@ -8590,7 +8850,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "ui_gamehud_gamehudprops",
-      "community": 5,
+      "community": 33,
       "norm_label": "gamehudprops"
     },
     {
@@ -8960,7 +9220,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "snake_snakecanvas",
-      "community": 2,
+      "community": 27,
       "norm_label": "snakecanvas.tsx"
     },
     {
@@ -8970,7 +9230,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "snake_snakecanvas_props",
-      "community": 2,
+      "community": 27,
       "norm_label": "props"
     },
     {
@@ -8980,7 +9240,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "snake_snakecanvas_colors",
-      "community": 2,
+      "community": 27,
       "norm_label": "colors"
     },
     {
@@ -8990,7 +9250,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "snake_snakecanvas_snakecanvas",
-      "community": 2,
+      "community": 27,
       "norm_label": "snakecanvas()"
     },
     {
@@ -9080,7 +9340,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "snake_engine",
-      "community": 2,
+      "community": 27,
       "norm_label": "engine.ts"
     },
     {
@@ -9090,7 +9350,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "snake_engine_point",
-      "community": 2,
+      "community": 27,
       "norm_label": "point"
     },
     {
@@ -9100,7 +9360,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "snake_engine_direction",
-      "community": 2,
+      "community": 27,
       "norm_label": "direction"
     },
     {
@@ -9110,7 +9370,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "snake_engine_itemkind",
-      "community": 2,
+      "community": 27,
       "norm_label": "itemkind"
     },
     {
@@ -9120,7 +9380,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "snake_engine_item",
-      "community": 2,
+      "community": 27,
       "norm_label": "item"
     },
     {
@@ -9130,7 +9390,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "snake_engine_effects",
-      "community": 2,
+      "community": 27,
       "norm_label": "effects"
     },
     {
@@ -9140,7 +9400,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "snake_engine_snakesnapshot",
-      "community": 2,
+      "community": 27,
       "norm_label": "snakesnapshot"
     },
     {
@@ -9150,7 +9410,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "snake_engine_dirvec",
-      "community": 2,
+      "community": 27,
       "norm_label": "dirvec"
     },
     {
@@ -9310,7 +9570,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "snake_storage_snakemode",
-      "community": 2,
+      "community": 27,
       "norm_label": "snakemode"
     },
     {
@@ -9580,7 +9840,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "pages_leaderboardpage",
-      "community": 4,
+      "community": 18,
       "norm_label": "leaderboardpage.tsx"
     },
     {
@@ -9590,7 +9850,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "pages_leaderboardpage_ranges",
-      "community": 4,
+      "community": 18,
       "norm_label": "ranges"
     },
     {
@@ -9600,7 +9860,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "pages_leaderboardpage_defaultprovider",
-      "community": 4,
+      "community": 18,
       "norm_label": "defaultprovider"
     },
     {
@@ -9610,7 +9870,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "pages_leaderboardpage_leaderboardrowvm",
-      "community": 4,
+      "community": 18,
       "norm_label": "leaderboardrowvm"
     },
     {
@@ -9620,7 +9880,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "pages_leaderboardpage_leaderboardpageviewmodel",
-      "community": 4,
+      "community": 18,
       "norm_label": "leaderboardpageviewmodel"
     },
     {
@@ -9630,7 +9890,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "pages_leaderboardpage_getrangelabel",
-      "community": 4,
+      "community": 18,
       "norm_label": "getrangelabel()"
     },
     {
@@ -9640,7 +9900,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "pages_leaderboardpage_datelabel",
-      "community": 4,
+      "community": 18,
       "norm_label": "datelabel()"
     },
     {
@@ -9650,7 +9910,7 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "pages_leaderboardpage_buildleaderboardviewmodel",
-      "community": 4,
+      "community": 18,
       "norm_label": "buildleaderboardviewmodel()"
     },
     {
@@ -9660,7 +9920,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "pages_leaderboardpage_trophyicon",
-      "community": 4,
+      "community": 18,
       "norm_label": "trophyicon()"
     },
     {
@@ -9670,7 +9930,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "pages_leaderboardpage_leaderboardpage",
-      "community": 4,
+      "community": 19,
       "norm_label": "leaderboardpage()"
     },
     {
@@ -10050,7 +10310,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "types_game",
-      "community": 40,
+      "community": 18,
       "norm_label": "game.ts"
     },
     {
@@ -10067,17 +10327,17 @@
       "label": "GameStatus",
       "file_type": "code",
       "source_file": "src/types/game.ts",
-      "source_location": "L2",
+      "source_location": "L10",
       "_origin": "ast",
       "id": "types_game_gamestatus",
-      "community": 40,
+      "community": 24,
       "norm_label": "gamestatus"
     },
     {
       "label": "GameGenre",
       "file_type": "code",
       "source_file": "src/types/game.ts",
-      "source_location": "L3",
+      "source_location": "L11",
       "_origin": "ast",
       "id": "types_game_gamegenre",
       "community": 40,
@@ -10087,7 +10347,7 @@
       "label": "PortalImageRole",
       "file_type": "code",
       "source_file": "src/types/game.ts",
-      "source_location": "L4",
+      "source_location": "L12",
       "_origin": "ast",
       "id": "types_game_portalimagerole",
       "community": 40,
@@ -10097,17 +10357,17 @@
       "label": "PortalImageAssetKey",
       "file_type": "code",
       "source_file": "src/types/game.ts",
-      "source_location": "L5",
+      "source_location": "L13",
       "_origin": "ast",
       "id": "types_game_portalimageassetkey",
-      "community": 40,
+      "community": 24,
       "norm_label": "portalimageassetkey"
     },
     {
       "label": "PortalImageAsset",
       "file_type": "code",
       "source_file": "src/types/game.ts",
-      "source_location": "L19",
+      "source_location": "L27",
       "_origin": "ast",
       "id": "types_game_portalimageasset",
       "community": 40,
@@ -10117,7 +10377,7 @@
       "label": "GameDefinition",
       "file_type": "code",
       "source_file": "src/types/game.ts",
-      "source_location": "L28",
+      "source_location": "L36",
       "_origin": "ast",
       "id": "types_game_gamedefinition",
       "community": 40,
@@ -10127,7 +10387,7 @@
       "label": "LeaderboardEntry",
       "file_type": "code",
       "source_file": "src/types/game.ts",
-      "source_location": "L43",
+      "source_location": "L51",
       "_origin": "ast",
       "id": "types_game_leaderboardentry",
       "community": 18,
@@ -10137,7 +10397,7 @@
       "label": "LeaderboardRange",
       "file_type": "code",
       "source_file": "src/types/game.ts",
-      "source_location": "L53",
+      "source_location": "L61",
       "_origin": "ast",
       "id": "types_game_leaderboardrange",
       "community": 18,
@@ -10159,8 +10419,8 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "users_michael_documents_projects_gameit_tsconfig_app_json",
-      "community": 25,
+      "id": "tsconfig_app",
+      "community": 12,
       "norm_label": "tsconfig.app.json"
     },
     {
@@ -10169,8 +10429,8 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L2",
       "_origin": "ast",
-      "id": "gameit_tsconfig_app_compileroptions",
-      "community": 25,
+      "id": "tsconfig_app_compileroptions",
+      "community": 12,
       "norm_label": "compileroptions"
     },
     {
@@ -10179,8 +10439,8 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "gameit_tsconfig_app_compileroptions_target",
-      "community": 25,
+      "id": "tsconfig_app_compileroptions_target",
+      "community": 12,
       "norm_label": "target"
     },
     {
@@ -10189,8 +10449,8 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L4",
       "_origin": "ast",
-      "id": "gameit_tsconfig_app_compileroptions_usedefineforclassfields",
-      "community": 25,
+      "id": "tsconfig_app_compileroptions_usedefineforclassfields",
+      "community": 12,
       "norm_label": "usedefineforclassfields"
     },
     {
@@ -10199,8 +10459,8 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "gameit_tsconfig_app_compileroptions_lib",
-      "community": 25,
+      "id": "tsconfig_app_compileroptions_lib",
+      "community": 12,
       "norm_label": "lib"
     },
     {
@@ -10209,8 +10469,8 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L6",
       "_origin": "ast",
-      "id": "gameit_tsconfig_app_compileroptions_module",
-      "community": 25,
+      "id": "tsconfig_app_compileroptions_module",
+      "community": 12,
       "norm_label": "module"
     },
     {
@@ -10219,8 +10479,8 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L7",
       "_origin": "ast",
-      "id": "gameit_tsconfig_app_compileroptions_skiplibcheck",
-      "community": 25,
+      "id": "tsconfig_app_compileroptions_skiplibcheck",
+      "community": 12,
       "norm_label": "skiplibcheck"
     },
     {
@@ -10229,8 +10489,8 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L8",
       "_origin": "ast",
-      "id": "gameit_tsconfig_app_compileroptions_moduleresolution",
-      "community": 25,
+      "id": "tsconfig_app_compileroptions_moduleresolution",
+      "community": 12,
       "norm_label": "moduleresolution"
     },
     {
@@ -10239,8 +10499,8 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L9",
       "_origin": "ast",
-      "id": "gameit_tsconfig_app_compileroptions_allowimportingtsextensions",
-      "community": 25,
+      "id": "tsconfig_app_compileroptions_allowimportingtsextensions",
+      "community": 12,
       "norm_label": "allowimportingtsextensions"
     },
     {
@@ -10249,8 +10509,8 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L10",
       "_origin": "ast",
-      "id": "gameit_tsconfig_app_compileroptions_resolvejsonmodule",
-      "community": 25,
+      "id": "tsconfig_app_compileroptions_resolvejsonmodule",
+      "community": 12,
       "norm_label": "resolvejsonmodule"
     },
     {
@@ -10259,8 +10519,8 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L11",
       "_origin": "ast",
-      "id": "gameit_tsconfig_app_compileroptions_isolatedmodules",
-      "community": 25,
+      "id": "tsconfig_app_compileroptions_isolatedmodules",
+      "community": 12,
       "norm_label": "isolatedmodules"
     },
     {
@@ -10269,8 +10529,8 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L12",
       "_origin": "ast",
-      "id": "gameit_tsconfig_app_compileroptions_noemit",
-      "community": 25,
+      "id": "tsconfig_app_compileroptions_noemit",
+      "community": 12,
       "norm_label": "noemit"
     },
     {
@@ -10279,8 +10539,8 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L13",
       "_origin": "ast",
-      "id": "gameit_tsconfig_app_compileroptions_jsx",
-      "community": 25,
+      "id": "tsconfig_app_compileroptions_jsx",
+      "community": 12,
       "norm_label": "jsx"
     },
     {
@@ -10289,8 +10549,8 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L14",
       "_origin": "ast",
-      "id": "gameit_tsconfig_app_compileroptions_strict",
-      "community": 25,
+      "id": "tsconfig_app_compileroptions_strict",
+      "community": 12,
       "norm_label": "strict"
     },
     {
@@ -10299,8 +10559,8 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L15",
       "_origin": "ast",
-      "id": "gameit_tsconfig_app_compileroptions_nounusedlocals",
-      "community": 25,
+      "id": "tsconfig_app_compileroptions_nounusedlocals",
+      "community": 12,
       "norm_label": "nounusedlocals"
     },
     {
@@ -10309,8 +10569,8 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L16",
       "_origin": "ast",
-      "id": "gameit_tsconfig_app_compileroptions_nounusedparameters",
-      "community": 25,
+      "id": "tsconfig_app_compileroptions_nounusedparameters",
+      "community": 12,
       "norm_label": "nounusedparameters"
     },
     {
@@ -10319,8 +10579,8 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L17",
       "_origin": "ast",
-      "id": "gameit_tsconfig_app_compileroptions_nofallthroughcasesinswitch",
-      "community": 25,
+      "id": "tsconfig_app_compileroptions_nofallthroughcasesinswitch",
+      "community": 12,
       "norm_label": "nofallthroughcasesinswitch"
     },
     {
@@ -10329,8 +10589,8 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L18",
       "_origin": "ast",
-      "id": "gameit_tsconfig_app_compileroptions_types",
-      "community": 25,
+      "id": "tsconfig_app_compileroptions_types",
+      "community": 12,
       "norm_label": "types"
     },
     {
@@ -10339,8 +10599,8 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L20",
       "_origin": "ast",
-      "id": "gameit_tsconfig_app_include",
-      "community": 25,
+      "id": "tsconfig_app_include",
+      "community": 12,
       "norm_label": "include"
     },
     {
@@ -10349,8 +10609,8 @@
       "source_file": "tsconfig.json",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "users_michael_documents_projects_gameit_tsconfig_json",
-      "community": 76,
+      "id": "tsconfig",
+      "community": 37,
       "norm_label": "tsconfig.json"
     },
     {
@@ -10359,8 +10619,8 @@
       "source_file": "tsconfig.json",
       "source_location": "L2",
       "_origin": "ast",
-      "id": "gameit_tsconfig_files",
-      "community": 76,
+      "id": "tsconfig_files",
+      "community": 37,
       "norm_label": "files"
     },
     {
@@ -10369,8 +10629,8 @@
       "source_file": "tsconfig.json",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "gameit_tsconfig_references",
-      "community": 76,
+      "id": "tsconfig_references",
+      "community": 37,
       "norm_label": "references"
     },
     {
@@ -10379,8 +10639,8 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "users_michael_documents_projects_gameit_tsconfig_node_json",
-      "community": 41,
+      "id": "tsconfig_node",
+      "community": 31,
       "norm_label": "tsconfig.node.json"
     },
     {
@@ -10389,8 +10649,8 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L2",
       "_origin": "ast",
-      "id": "gameit_tsconfig_node_compileroptions",
-      "community": 41,
+      "id": "tsconfig_node_compileroptions",
+      "community": 31,
       "norm_label": "compileroptions"
     },
     {
@@ -10399,8 +10659,8 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "gameit_tsconfig_node_compileroptions_composite",
-      "community": 41,
+      "id": "tsconfig_node_compileroptions_composite",
+      "community": 31,
       "norm_label": "composite"
     },
     {
@@ -10409,8 +10669,8 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L4",
       "_origin": "ast",
-      "id": "gameit_tsconfig_node_compileroptions_skiplibcheck",
-      "community": 41,
+      "id": "tsconfig_node_compileroptions_skiplibcheck",
+      "community": 31,
       "norm_label": "skiplibcheck"
     },
     {
@@ -10419,8 +10679,8 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "gameit_tsconfig_node_compileroptions_module",
-      "community": 41,
+      "id": "tsconfig_node_compileroptions_module",
+      "community": 31,
       "norm_label": "module"
     },
     {
@@ -10429,8 +10689,8 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L6",
       "_origin": "ast",
-      "id": "gameit_tsconfig_node_compileroptions_moduleresolution",
-      "community": 41,
+      "id": "tsconfig_node_compileroptions_moduleresolution",
+      "community": 31,
       "norm_label": "moduleresolution"
     },
     {
@@ -10439,8 +10699,8 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L7",
       "_origin": "ast",
-      "id": "gameit_tsconfig_node_compileroptions_noemit",
-      "community": 41,
+      "id": "tsconfig_node_compileroptions_noemit",
+      "community": 31,
       "norm_label": "noemit"
     },
     {
@@ -10449,8 +10709,8 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L8",
       "_origin": "ast",
-      "id": "gameit_tsconfig_node_compileroptions_allowsyntheticdefaultimports",
-      "community": 41,
+      "id": "tsconfig_node_compileroptions_allowsyntheticdefaultimports",
+      "community": 31,
       "norm_label": "allowsyntheticdefaultimports"
     },
     {
@@ -10459,8 +10719,8 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L10",
       "_origin": "ast",
-      "id": "gameit_tsconfig_node_include",
-      "community": 41,
+      "id": "tsconfig_node_include",
+      "community": 31,
       "norm_label": "include"
     },
     {
@@ -10479,8 +10739,8 @@
       "source_file": "README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "users_michael_documents_projects_gameit_readme_md",
-      "community": 38,
+      "id": "readme",
+      "community": 25,
       "norm_label": "readme.md"
     },
     {
@@ -10489,8 +10749,8 @@
       "source_file": "README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "gameit_readme_gameit_portal_mvp",
-      "community": 38,
+      "id": "readme_gameit_portal_mvp",
+      "community": 25,
       "norm_label": "gameit portal mvp"
     },
     {
@@ -10499,8 +10759,8 @@
       "source_file": "README.md",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "gameit_readme_features",
-      "community": 38,
+      "id": "readme_features",
+      "community": 25,
       "norm_label": "features"
     },
     {
@@ -10509,8 +10769,8 @@
       "source_file": "README.md",
       "source_location": "L16",
       "_origin": "ast",
-      "id": "gameit_readme_local_run",
-      "community": 38,
+      "id": "readme_local_run",
+      "community": 25,
       "norm_label": "local run"
     },
     {
@@ -10519,8 +10779,8 @@
       "source_file": "README.md",
       "source_location": "L23",
       "_origin": "ast",
-      "id": "gameit_readme_multiplayer_dev",
-      "community": 38,
+      "id": "readme_multiplayer_dev",
+      "community": 25,
       "norm_label": "multiplayer dev"
     },
     {
@@ -10529,8 +10789,8 @@
       "source_file": "README.md",
       "source_location": "L31",
       "_origin": "ast",
-      "id": "gameit_readme_build_preview",
-      "community": 38,
+      "id": "readme_build_preview",
+      "community": 25,
       "norm_label": "build / preview"
     },
     {
@@ -10539,8 +10799,8 @@
       "source_file": "README.md",
       "source_location": "L38",
       "_origin": "ast",
-      "id": "gameit_readme_deploy_to_github_pages",
-      "community": 38,
+      "id": "readme_deploy_to_github_pages",
+      "community": 25,
       "norm_label": "deploy to github pages"
     },
     {
@@ -10549,8 +10809,8 @@
       "source_file": "README.md",
       "source_location": "L46",
       "_origin": "ast",
-      "id": "gameit_readme_admin_access_mvp",
-      "community": 38,
+      "id": "readme_admin_access_mvp",
+      "community": 25,
       "norm_label": "admin access (mvp)"
     },
     {
@@ -10559,8 +10819,8 @@
       "source_file": "README.md",
       "source_location": "L52",
       "_origin": "ast",
-      "id": "gameit_readme_architecture_overview",
-      "community": 38,
+      "id": "readme_architecture_overview",
+      "community": 25,
       "norm_label": "architecture overview"
     },
     {
@@ -10569,8 +10829,8 @@
       "source_file": "README.md",
       "source_location": "L65",
       "_origin": "ast",
-      "id": "gameit_readme_monster_rpg_foundation",
-      "community": 38,
+      "id": "readme_monster_rpg_foundation",
+      "community": 25,
       "norm_label": "monster rpg foundation"
     },
     {
@@ -10579,8 +10839,8 @@
       "source_file": "README.md",
       "source_location": "L78",
       "_origin": "ast",
-      "id": "gameit_readme_adding_a_new_game",
-      "community": 38,
+      "id": "readme_adding_a_new_game",
+      "community": 25,
       "norm_label": "adding a new game"
     },
     {
@@ -10589,8 +10849,8 @@
       "source_file": "README.md",
       "source_location": "L85",
       "_origin": "ast",
-      "id": "gameit_readme_known_limitations",
-      "community": 38,
+      "id": "readme_known_limitations",
+      "community": 25,
       "norm_label": "known limitations"
     },
     {
@@ -10599,8 +10859,8 @@
       "source_file": "README.md",
       "source_location": "L93",
       "_origin": "ast",
-      "id": "gameit_readme_future_improvements",
-      "community": 38,
+      "id": "readme_future_improvements",
+      "community": 25,
       "norm_label": "future improvements"
     },
     {
@@ -10609,699 +10869,9 @@
       "source_file": "README.md",
       "source_location": "L102",
       "_origin": "ast",
-      "id": "gameit_readme_ui_asset_integration",
-      "community": 38,
+      "id": "readme_ui_asset_integration",
+      "community": 25,
       "norm_label": "ui asset integration"
-    },
-    {
-      "label": "0001-card-egg-acquisition-model.md",
-      "file_type": "document",
-      "source_file": "docs/adr/0001-card-egg-acquisition-model.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "users_michael_documents_projects_gameit_docs_adr_0001_card_egg_acquisition_model_md",
-      "community": 42,
-      "norm_label": "0001-card-egg-acquisition-model.md"
-    },
-    {
-      "label": "Card and Egg Acquisition Model",
-      "file_type": "document",
-      "source_file": "docs/adr/0001-card-egg-acquisition-model.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "adr_0001_card_egg_acquisition_model_card_and_egg_acquisition_model",
-      "community": 42,
-      "norm_label": "card and egg acquisition model"
-    },
-    {
-      "label": "0002-shared-server-wild-encounters.md",
-      "file_type": "document",
-      "source_file": "docs/adr/0002-shared-server-wild-encounters.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "users_michael_documents_projects_gameit_docs_adr_0002_shared_server_wild_encounters_md",
-      "community": 43,
-      "norm_label": "0002-shared-server-wild-encounters.md"
-    },
-    {
-      "label": "Shared Server Wild Encounters",
-      "file_type": "document",
-      "source_file": "docs/adr/0002-shared-server-wild-encounters.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "adr_0002_shared_server_wild_encounters_shared_server_wild_encounters",
-      "community": 43,
-      "norm_label": "shared server wild encounters"
-    },
-    {
-      "label": "0003-server-authoritative-economy-and-theft.md",
-      "file_type": "document",
-      "source_file": "docs/adr/0003-server-authoritative-economy-and-theft.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "users_michael_documents_projects_gameit_docs_adr_0003_server_authoritative_economy_and_theft_md",
-      "community": 70,
-      "norm_label": "0003-server-authoritative-economy-and-theft.md"
-    },
-    {
-      "label": "Server-Authoritative Economy and Theft",
-      "file_type": "document",
-      "source_file": "docs/adr/0003-server-authoritative-economy-and-theft.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "adr_0003_server_authoritative_economy_and_theft_server_authoritative_economy_and_theft",
-      "community": 70,
-      "norm_label": "server-authoritative economy and theft"
-    },
-    {
-      "label": "0004-local-first-persistence-until-gameplay-proof.md",
-      "file_type": "document",
-      "source_file": "docs/adr/0004-local-first-persistence-until-gameplay-proof.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "users_michael_documents_projects_gameit_docs_adr_0004_local_first_persistence_until_gameplay_proof_md",
-      "community": 71,
-      "norm_label": "0004-local-first-persistence-until-gameplay-proof.md"
-    },
-    {
-      "label": "Local-First Persistence Until Gameplay Proof",
-      "file_type": "document",
-      "source_file": "docs/adr/0004-local-first-persistence-until-gameplay-proof.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "adr_0004_local_first_persistence_until_gameplay_proof_local_first_persistence_until_gameplay_proof",
-      "community": 71,
-      "norm_label": "local-first persistence until gameplay proof"
-    },
-    {
-      "label": "0005-separate-location-and-battle-rooms.md",
-      "file_type": "document",
-      "source_file": "docs/adr/0005-separate-location-and-battle-rooms.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "users_michael_documents_projects_gameit_docs_adr_0005_separate_location_and_battle_rooms_md",
-      "community": 72,
-      "norm_label": "0005-separate-location-and-battle-rooms.md"
-    },
-    {
-      "label": "Separate Location and Battle Rooms",
-      "file_type": "document",
-      "source_file": "docs/adr/0005-separate-location-and-battle-rooms.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "adr_0005_separate_location_and_battle_rooms_separate_location_and_battle_rooms",
-      "community": 72,
-      "norm_label": "separate location and battle rooms"
-    },
-    {
-      "label": "phase-0-foundation.md",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/phase-0-foundation.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "users_michael_documents_projects_gameit_docs_monster_rpg_phase_0_foundation_md",
-      "community": 30,
-      "norm_label": "phase-0-foundation.md"
-    },
-    {
-      "label": "GameIt Monster RPG Phase 0 Foundation",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/phase-0-foundation.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "monster_rpg_phase_0_foundation_gameit_monster_rpg_phase_0_foundation",
-      "community": 30,
-      "norm_label": "gameit monster rpg phase 0 foundation"
-    },
-    {
-      "label": "Summary",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/phase-0-foundation.md",
-      "source_location": "L3",
-      "_origin": "ast",
-      "id": "monster_rpg_phase_0_foundation_summary",
-      "community": 30,
-      "norm_label": "summary"
-    },
-    {
-      "label": "Roadmap",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/phase-0-foundation.md",
-      "source_location": "L9",
-      "_origin": "ast",
-      "id": "monster_rpg_phase_0_foundation_roadmap",
-      "community": 30,
-      "norm_label": "roadmap"
-    },
-    {
-      "label": "Stack Decisions",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/phase-0-foundation.md",
-      "source_location": "L20",
-      "_origin": "ast",
-      "id": "monster_rpg_phase_0_foundation_stack_decisions",
-      "community": 30,
-      "norm_label": "stack decisions"
-    },
-    {
-      "label": "Architecture Boundaries",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/phase-0-foundation.md",
-      "source_location": "L30",
-      "_origin": "ast",
-      "id": "monster_rpg_phase_0_foundation_architecture_boundaries",
-      "community": 30,
-      "norm_label": "architecture boundaries"
-    },
-    {
-      "label": "Initial Contracts",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/phase-0-foundation.md",
-      "source_location": "L39",
-      "_origin": "ast",
-      "id": "monster_rpg_phase_0_foundation_initial_contracts",
-      "community": 30,
-      "norm_label": "initial contracts"
-    },
-    {
-      "label": "Test Strategy",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/phase-0-foundation.md",
-      "source_location": "L51",
-      "_origin": "ast",
-      "id": "monster_rpg_phase_0_foundation_test_strategy",
-      "community": 30,
-      "norm_label": "test strategy"
-    },
-    {
-      "label": "prd-gameit-monsters-mvp.md",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "users_michael_documents_projects_gameit_docs_monster_rpg_prd_gameit_monsters_mvp_md",
-      "community": 29,
-      "norm_label": "prd-gameit-monsters-mvp.md"
-    },
-    {
-      "label": "PRD: GameIt Monsters MVP",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "monster_rpg_prd_gameit_monsters_mvp_prd_gameit_monsters_mvp",
-      "community": 29,
-      "norm_label": "prd: gameit monsters mvp"
-    },
-    {
-      "label": "Problem Statement",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
-      "source_location": "L3",
-      "_origin": "ast",
-      "id": "monster_rpg_prd_gameit_monsters_mvp_problem_statement",
-      "community": 29,
-      "norm_label": "problem statement"
-    },
-    {
-      "label": "Solution",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
-      "source_location": "L9",
-      "_origin": "ast",
-      "id": "monster_rpg_prd_gameit_monsters_mvp_solution",
-      "community": 29,
-      "norm_label": "solution"
-    },
-    {
-      "label": "User Stories",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
-      "source_location": "L17",
-      "_origin": "ast",
-      "id": "monster_rpg_prd_gameit_monsters_mvp_user_stories",
-      "community": 29,
-      "norm_label": "user stories"
-    },
-    {
-      "label": "Implementation Decisions",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
-      "source_location": "L123",
-      "_origin": "ast",
-      "id": "monster_rpg_prd_gameit_monsters_mvp_implementation_decisions",
-      "community": 29,
-      "norm_label": "implementation decisions"
-    },
-    {
-      "label": "Testing Decisions",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
-      "source_location": "L153",
-      "_origin": "ast",
-      "id": "monster_rpg_prd_gameit_monsters_mvp_testing_decisions",
-      "community": 29,
-      "norm_label": "testing decisions"
-    },
-    {
-      "label": "Out of Scope",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
-      "source_location": "L163",
-      "_origin": "ast",
-      "id": "monster_rpg_prd_gameit_monsters_mvp_out_of_scope",
-      "community": 29,
-      "norm_label": "out of scope"
-    },
-    {
-      "label": "Further Notes",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
-      "source_location": "L180",
-      "_origin": "ast",
-      "id": "monster_rpg_prd_gameit_monsters_mvp_further_notes",
-      "community": 29,
-      "norm_label": "further notes"
-    },
-    {
-      "label": "work-summary.md",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary",
-      "community": 15,
-      "norm_label": "work-summary.md"
-    },
-    {
-      "label": "Monster RPG Work Summary",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "community": 15,
-      "norm_label": "monster rpg work summary"
-    },
-    {
-      "label": "2026-07-02 - Portal-Wide Kinetic Design Pass",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L3",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_07_02_portal_wide_kinetic_design_pass",
-      "community": 15,
-      "norm_label": "2026-07-02 - portal-wide kinetic design pass"
-    },
-    {
-      "label": "2026-07-02 - Issue #49: Portal Navigation And Final Responsive QA",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L13",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_07_02_issue_49_portal_navigation_and_final_responsive_qa",
-      "community": 15,
-      "norm_label": "2026-07-02 - issue #49: portal navigation and final responsive qa"
-    },
-    {
-      "label": "2026-07-02 - Issue #48: Admin Registry Override",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L19",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_07_02_issue_48_admin_registry_override",
-      "community": 15,
-      "norm_label": "2026-07-02 - issue #48: admin registry override"
-    },
-    {
-      "label": "2026-07-02 - Issue #47: Full Leaderboard Route",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L25",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_07_02_issue_47_full_leaderboard_route",
-      "community": 15,
-      "norm_label": "2026-07-02 - issue #47: full leaderboard route"
-    },
-    {
-      "label": "2026-07-02 - Issue #46: Library Catalog Route",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L32",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_07_02_issue_46_library_catalog_route",
-      "community": 15,
-      "norm_label": "2026-07-02 - issue #46: library catalog route"
-    },
-    {
-      "label": "2026-07-02 - Issue #45: Launch-First Home Dashboard",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L37",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_07_02_issue_45_launch_first_home_dashboard",
-      "community": 15,
-      "norm_label": "2026-07-02 - issue #45: launch-first home dashboard"
-    },
-    {
-      "label": "2026-07-01 - Portal Registry Metadata And Local Assets",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L43",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_07_01_portal_registry_metadata_and_local_assets",
-      "community": 15,
-      "norm_label": "2026-07-01 - portal registry metadata and local assets"
-    },
-    {
-      "label": "2026-06-13 - Phase 0 Foundation",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L49",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_13_phase_0_foundation",
-      "community": 15,
-      "norm_label": "2026-06-13 - phase 0 foundation"
-    },
-    {
-      "label": "2026-06-13 - Phase 1 Playable Client Slice",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L57",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_13_phase_1_playable_client_slice",
-      "community": 15,
-      "norm_label": "2026-06-13 - phase 1 playable client slice"
-    },
-    {
-      "label": "2026-06-13 - Phase 2 Multiplayer Presence",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L66",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_13_phase_2_multiplayer_presence",
-      "community": 15,
-      "norm_label": "2026-06-13 - phase 2 multiplayer presence"
-    },
-    {
-      "label": "2026-06-13 - Phase 2 Input Follow-Up",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L78",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_13_phase_2_input_follow_up",
-      "community": 15,
-      "norm_label": "2026-06-13 - phase 2 input follow-up"
-    },
-    {
-      "label": "2026-06-13 - Phase 3 World + Villages",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L83",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_13_phase_3_world_villages",
-      "community": 15,
-      "norm_label": "2026-06-13 - phase 3 world + villages"
-    },
-    {
-      "label": "2026-06-18 - Phase 4 Overworld Foundation",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L94",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_18_phase_4_overworld_foundation",
-      "community": 15,
-      "norm_label": "2026-06-18 - phase 4 overworld foundation"
-    },
-    {
-      "label": "2026-06-18 - Phase 4 Rendering Assets",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L104",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_18_phase_4_rendering_assets",
-      "community": 15,
-      "norm_label": "2026-06-18 - phase 4 rendering assets"
-    },
-    {
-      "label": "2026-06-18 - Phase 4 Multiplayer Transitions",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L113",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_18_phase_4_multiplayer_transitions",
-      "community": 15,
-      "norm_label": "2026-06-18 - phase 4 multiplayer transitions"
-    },
-    {
-      "label": "2026-06-18 - Phase 4 Final QA",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L122",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_18_phase_4_final_qa",
-      "community": 15,
-      "norm_label": "2026-06-18 - phase 4 final qa"
-    },
-    {
-      "label": "2026-06-18 - Full Vision Finish Plan",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L130",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_18_full_vision_finish_plan",
-      "community": 15,
-      "norm_label": "2026-06-18 - full vision finish plan"
-    },
-    {
-      "label": "2026-06-20 - Issue #8: Inventory Cards and Pack Opening Tracer",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L264",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_20_issue_8_inventory_cards_and_pack_opening_tracer",
-      "community": 15,
-      "norm_label": "2026-06-20 - issue #8: inventory cards and pack opening tracer"
-    },
-    {
-      "label": "2026-06-20 - Issue #9: Creature Card, Egg, and Creature Lifecycle",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L273",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_20_issue_9_creature_card_egg_and_creature_lifecycle",
-      "community": 15,
-      "norm_label": "2026-06-20 - issue #9: creature card, egg, and creature lifecycle"
-    },
-    {
-      "label": "2026-06-20 - Issue #10: Active Party, Storage, Fainted, Hospital, And Revive Item",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L284",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_20_issue_10_active_party_storage_fainted_hospital_and_revive_item",
-      "community": 15,
-      "norm_label": "2026-06-20 - issue #10: active party, storage, fainted, hospital, and revive item"
-    },
-    {
-      "label": "2026-06-20 - Issue #11: Visible Shared Wild Encounter Claim Flow",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L291",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_20_issue_11_visible_shared_wild_encounter_claim_flow",
-      "community": 15,
-      "norm_label": "2026-06-20 - issue #11: visible shared wild encounter claim flow"
-    },
-    {
-      "label": "2026-06-20 - Issue #12: Tap-to-Walk and Creature Label Setting",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L298",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_20_issue_12_tap_to_walk_and_creature_label_setting",
-      "community": 15,
-      "norm_label": "2026-06-20 - issue #12: tap-to-walk and creature label setting"
-    },
-    {
-      "label": "2026-06-20 - Issue #13: Battle Room Tracer With Manual Attacks And Enemy AI",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L306",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_20_issue_13_battle_room_tracer_with_manual_attacks_and_enemy_ai",
-      "community": 15,
-      "norm_label": "2026-06-20 - issue #13: battle room tracer with manual attacks and enemy ai"
-    },
-    {
-      "label": "2026-06-20 - Issue #14: Run Away And Wild Battle Exit Outcomes",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L314",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_20_issue_14_run_away_and_wild_battle_exit_outcomes",
-      "community": 15,
-      "norm_label": "2026-06-20 - issue #14: run away and wild battle exit outcomes"
-    },
-    {
-      "label": "2026-06-20 - Issue #15: Wild Battle Rewards, XP, And Direct-Drop Eggs",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L321",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_20_issue_15_wild_battle_rewards_xp_and_direct_drop_eggs",
-      "community": 15,
-      "norm_label": "2026-06-20 - issue #15: wild battle rewards, xp, and direct-drop eggs"
-    },
-    {
-      "label": "2026-06-20 - Issue #16: Magic Dust Farm Production And Owner Collection",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L328",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_20_issue_16_magic_dust_farm_production_and_owner_collection",
-      "community": 15,
-      "norm_label": "2026-06-20 - issue #16: magic dust farm production and owner collection"
-    },
-    {
-      "label": "2026-06-20 - Issue #17: Farm Upgrades And Guard Assignment",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L337",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_20_issue_17_farm_upgrades_and_guard_assignment",
-      "community": 15,
-      "norm_label": "2026-06-20 - issue #17: farm upgrades and guard assignment"
-    },
-    {
-      "label": "2026-06-20 - Issue #18: Visitor Permissions And Theft From Unguarded Farms",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L344",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_20_issue_18_visitor_permissions_and_theft_from_unguarded_farms",
-      "community": 15,
-      "norm_label": "2026-06-20 - issue #18: visitor permissions and theft from unguarded farms"
-    },
-    {
-      "label": "2026-06-21 - Issue #19: Guard Battle Theft Flow",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L352",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_21_issue_19_guard_battle_theft_flow",
-      "community": 15,
-      "norm_label": "2026-06-21 - issue #19: guard battle theft flow"
-    },
-    {
-      "label": "2026-06-21 - Issue #20: Station Discovery And Travel",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L359",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_21_issue_20_station_discovery_and_travel",
-      "community": 15,
-      "norm_label": "2026-06-21 - issue #20: station discovery and travel"
-    },
-    {
-      "label": "2026-06-21 - Issue #21: Player Level, Pack Milestones, And Reward Tables",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L368",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_21_issue_21_player_level_pack_milestones_and_reward_tables",
-      "community": 15,
-      "norm_label": "2026-06-21 - issue #21: player level, pack milestones, and reward tables"
-    },
-    {
-      "label": "2026-06-21 - Issue #22: MVP Art And HUD Polish Pass",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L377",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_21_issue_22_mvp_art_and_hud_polish_pass",
-      "community": 15,
-      "norm_label": "2026-06-21 - issue #22: mvp art and hud polish pass"
-    },
-    {
-      "label": "2026-06-21 - GitHub Pages CI Diagnosis",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L387",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_21_github_pages_ci_diagnosis",
-      "community": 15,
-      "norm_label": "2026-06-21 - github pages ci diagnosis"
-    },
-    {
-      "label": "2026-06-21 - HUD Cleanup, 2x2 Farms, And Click-Walk",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L392",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_21_hud_cleanup_2x2_farms_and_click_walk",
-      "community": 15,
-      "norm_label": "2026-06-21 - hud cleanup, 2x2 farms, and click-walk"
-    },
-    {
-      "label": "2026-06-22 - AI Art Approval Sheets",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L401",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_22_ai_art_approval_sheets",
-      "community": 15,
-      "norm_label": "2026-06-22 - ai art approval sheets"
-    },
-    {
-      "label": "2026-06-27 - Mobile HUD And Tap Movement Polish",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L412",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_06_27_mobile_hud_and_tap_movement_polish",
-      "community": 15,
-      "norm_label": "2026-06-27 - mobile hud and tap movement polish"
-    },
-    {
-      "label": "2026-07-02 - Portal Kinetic Design Pass",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L418",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_2026_07_02_portal_kinetic_design_pass",
-      "community": 15,
-      "norm_label": "2026-07-02 - portal kinetic design pass"
-    },
-    {
-      "label": "Next Work",
-      "file_type": "document",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L425",
-      "_origin": "ast",
-      "id": "monster_rpg_work_summary_next_work",
-      "community": 15,
-      "norm_label": "next work"
-    },
-    {
-      "label": "portal-glossary.md",
-      "file_type": "document",
-      "source_file": "docs/portal-glossary.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "private_tmp_gameit_issue_44_docs_portal_glossary_md",
-      "community": 78,
-      "norm_label": "portal-glossary.md"
-    },
-    {
-      "label": "Portal Glossary",
-      "file_type": "document",
-      "source_file": "docs/portal-glossary.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "docs_portal_glossary_portal_glossary",
-      "community": 78,
-      "norm_label": "portal glossary"
     },
     {
       "label": "README.md",
@@ -11309,7 +10879,7 @@
       "source_file": "src/games/monster-rpg/client/README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "users_michael_documents_projects_gameit_src_games_monster_rpg_client_readme_md",
+      "id": "client_readme",
       "community": 73,
       "norm_label": "readme.md"
     },
@@ -11329,7 +10899,7 @@
       "source_file": "src/games/monster-rpg/ui/README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "users_michael_documents_projects_gameit_src_games_monster_rpg_ui_readme_md",
+      "id": "ui_readme",
       "community": 74,
       "norm_label": "readme.md"
     },
@@ -11725,9 +11295,9 @@
       "source_file": "package.json",
       "source_location": "L18",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package",
-      "target": "package_dependencies"
+      "source": "private_tmp_gameit_publish_main_package_json",
+      "target": "gameit_publish_main_package_dependencies",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11735,9 +11305,9 @@
       "source_file": "package.json",
       "source_location": "L28",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package",
-      "target": "package_devdependencies"
+      "source": "private_tmp_gameit_publish_main_package_json",
+      "target": "gameit_publish_main_package_devdependencies",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11745,9 +11315,9 @@
       "source_file": "package.json",
       "source_location": "L2",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package",
-      "target": "package_name"
+      "source": "private_tmp_gameit_publish_main_package_json",
+      "target": "gameit_publish_main_package_name",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11755,9 +11325,9 @@
       "source_file": "package.json",
       "source_location": "L4",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package",
-      "target": "package_private"
+      "source": "private_tmp_gameit_publish_main_package_json",
+      "target": "gameit_publish_main_package_private",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11765,9 +11335,9 @@
       "source_file": "package.json",
       "source_location": "L6",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package",
-      "target": "package_scripts"
+      "source": "private_tmp_gameit_publish_main_package_json",
+      "target": "gameit_publish_main_package_scripts",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11775,9 +11345,9 @@
       "source_file": "package.json",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package",
-      "target": "package_type"
+      "source": "private_tmp_gameit_publish_main_package_json",
+      "target": "gameit_publish_main_package_type",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11785,9 +11355,9 @@
       "source_file": "package.json",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package",
-      "target": "package_version"
+      "source": "private_tmp_gameit_publish_main_package_json",
+      "target": "gameit_publish_main_package_version",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11795,9 +11365,9 @@
       "source_file": "package.json",
       "source_location": "L11",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_scripts",
-      "target": "package_scripts_build"
+      "source": "gameit_publish_main_package_scripts",
+      "target": "gameit_publish_main_package_scripts_build",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11805,9 +11375,9 @@
       "source_file": "package.json",
       "source_location": "L12",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_scripts",
-      "target": "package_scripts_build_client"
+      "source": "gameit_publish_main_package_scripts",
+      "target": "gameit_publish_main_package_scripts_build_client",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11815,9 +11385,9 @@
       "source_file": "package.json",
       "source_location": "L13",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_scripts",
-      "target": "package_scripts_build_server"
+      "source": "gameit_publish_main_package_scripts",
+      "target": "gameit_publish_main_package_scripts_build_server",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11825,9 +11395,9 @@
       "source_file": "package.json",
       "source_location": "L14",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_scripts",
-      "target": "package_scripts_check_monster_rpg"
+      "source": "gameit_publish_main_package_scripts",
+      "target": "gameit_publish_main_package_scripts_check_monster_rpg",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11835,9 +11405,9 @@
       "source_file": "package.json",
       "source_location": "L7",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_scripts",
-      "target": "package_scripts_dev"
+      "source": "gameit_publish_main_package_scripts",
+      "target": "gameit_publish_main_package_scripts_dev",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11845,9 +11415,9 @@
       "source_file": "package.json",
       "source_location": "L8",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_scripts",
-      "target": "package_scripts_dev_client"
+      "source": "gameit_publish_main_package_scripts",
+      "target": "gameit_publish_main_package_scripts_dev_client",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11855,9 +11425,9 @@
       "source_file": "package.json",
       "source_location": "L10",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_scripts",
-      "target": "package_scripts_dev_multiplayer"
+      "source": "gameit_publish_main_package_scripts",
+      "target": "gameit_publish_main_package_scripts_dev_multiplayer",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11865,9 +11435,9 @@
       "source_file": "package.json",
       "source_location": "L9",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_scripts",
-      "target": "package_scripts_dev_server"
+      "source": "gameit_publish_main_package_scripts",
+      "target": "gameit_publish_main_package_scripts_dev_server",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11875,9 +11445,9 @@
       "source_file": "package.json",
       "source_location": "L15",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_scripts",
-      "target": "package_scripts_preview"
+      "source": "gameit_publish_main_package_scripts",
+      "target": "gameit_publish_main_package_scripts_preview",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11885,9 +11455,9 @@
       "source_file": "package.json",
       "source_location": "L16",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_scripts",
-      "target": "package_scripts_test"
+      "source": "gameit_publish_main_package_scripts",
+      "target": "gameit_publish_main_package_scripts_test",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11895,9 +11465,9 @@
       "source_file": "package.json",
       "source_location": "L21",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_dependencies",
-      "target": "package_dependencies_colyseus"
+      "source": "gameit_publish_main_package_dependencies",
+      "target": "gameit_publish_main_package_dependencies_colyseus",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11905,9 +11475,9 @@
       "source_file": "package.json",
       "source_location": "L19",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_dependencies",
-      "target": "package_dependencies_colyseus_schema"
+      "source": "gameit_publish_main_package_dependencies",
+      "target": "gameit_publish_main_package_dependencies_colyseus_schema",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11915,9 +11485,9 @@
       "source_file": "package.json",
       "source_location": "L20",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_dependencies",
-      "target": "package_dependencies_colyseus_sdk"
+      "source": "gameit_publish_main_package_dependencies",
+      "target": "gameit_publish_main_package_dependencies_colyseus_sdk",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11925,9 +11495,9 @@
       "source_file": "package.json",
       "source_location": "L22",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_dependencies",
-      "target": "package_dependencies_phaser"
+      "source": "gameit_publish_main_package_dependencies",
+      "target": "gameit_publish_main_package_dependencies_phaser",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11935,9 +11505,9 @@
       "source_file": "package.json",
       "source_location": "L23",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_dependencies",
-      "target": "package_dependencies_react"
+      "source": "gameit_publish_main_package_dependencies",
+      "target": "gameit_publish_main_package_dependencies_react",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11945,9 +11515,9 @@
       "source_file": "package.json",
       "source_location": "L24",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_dependencies",
-      "target": "package_dependencies_react_dom"
+      "source": "gameit_publish_main_package_dependencies",
+      "target": "gameit_publish_main_package_dependencies_react_dom",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11955,9 +11525,9 @@
       "source_file": "package.json",
       "source_location": "L25",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_dependencies",
-      "target": "package_dependencies_react_router_dom"
+      "source": "gameit_publish_main_package_dependencies",
+      "target": "gameit_publish_main_package_dependencies_react_router_dom",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11965,9 +11535,9 @@
       "source_file": "package.json",
       "source_location": "L26",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_dependencies",
-      "target": "package_dependencies_zod"
+      "source": "gameit_publish_main_package_dependencies",
+      "target": "gameit_publish_main_package_dependencies_zod",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11975,9 +11545,9 @@
       "source_file": "package.json",
       "source_location": "L33",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_devdependencies",
-      "target": "package_devdependencies_concurrently"
+      "source": "gameit_publish_main_package_devdependencies",
+      "target": "gameit_publish_main_package_devdependencies_concurrently",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11985,9 +11555,9 @@
       "source_file": "package.json",
       "source_location": "L34",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_devdependencies",
-      "target": "package_devdependencies_tsx"
+      "source": "gameit_publish_main_package_devdependencies",
+      "target": "gameit_publish_main_package_devdependencies_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11995,9 +11565,9 @@
       "source_file": "package.json",
       "source_location": "L29",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_devdependencies",
-      "target": "package_devdependencies_types_node"
+      "source": "gameit_publish_main_package_devdependencies",
+      "target": "gameit_publish_main_package_devdependencies_types_node",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -12005,9 +11575,9 @@
       "source_file": "package.json",
       "source_location": "L30",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_devdependencies",
-      "target": "package_devdependencies_types_react"
+      "source": "gameit_publish_main_package_devdependencies",
+      "target": "gameit_publish_main_package_devdependencies_types_react",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -12015,9 +11585,9 @@
       "source_file": "package.json",
       "source_location": "L31",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_devdependencies",
-      "target": "package_devdependencies_types_react_dom"
+      "source": "gameit_publish_main_package_devdependencies",
+      "target": "gameit_publish_main_package_devdependencies_types_react_dom",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -12025,9 +11595,9 @@
       "source_file": "package.json",
       "source_location": "L35",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_devdependencies",
-      "target": "package_devdependencies_typescript"
+      "source": "gameit_publish_main_package_devdependencies",
+      "target": "gameit_publish_main_package_devdependencies_typescript",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -12035,9 +11605,9 @@
       "source_file": "package.json",
       "source_location": "L36",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_devdependencies",
-      "target": "package_devdependencies_vite"
+      "source": "gameit_publish_main_package_devdependencies",
+      "target": "gameit_publish_main_package_devdependencies_vite",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -12045,9 +11615,9 @@
       "source_file": "package.json",
       "source_location": "L32",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_devdependencies",
-      "target": "package_devdependencies_vitejs_plugin_react"
+      "source": "gameit_publish_main_package_devdependencies",
+      "target": "gameit_publish_main_package_devdependencies_vitejs_plugin_react",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -12055,9 +11625,9 @@
       "source_file": "package.json",
       "source_location": "L37",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "package_devdependencies",
-      "target": "package_devdependencies_vitest"
+      "source": "gameit_publish_main_package_devdependencies",
+      "target": "gameit_publish_main_package_devdependencies_vitest",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -13750,6 +13320,476 @@
       "confidence_score": 1.0,
       "source": "scripts_monster_rpg_phase4_checks_createstate",
       "target": "sim_savestate_createinitialsave"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L253",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_addnoise",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_approvaldir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_assetdir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L230",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_blank",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_chunk",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_crc32",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_crctable",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L136",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_crop",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L269",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_drawstone",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L261",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_drawtuft",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L247",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_fillrect",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L275",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_generateterrainvariants",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L102",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_paeth",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L196",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_placebottomcenter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_readpng",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L160",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_removelightbackground",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L148",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_resizenearest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_root",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L238",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_setpixel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L368",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_slicecreaturesheet",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L389",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_sliceterrainsheet",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L214",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_stitchframes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L169",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_trimtocontent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L88",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_unfilterline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L112",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets",
+      "target": "scripts_slice_monster_rpg_ai_assets_writepng",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets_chunk",
+      "target": "scripts_slice_monster_rpg_ai_assets_crc32",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L129",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets_writepng",
+      "target": "scripts_slice_monster_rpg_ai_assets_chunk",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets_readpng",
+      "target": "scripts_slice_monster_rpg_ai_assets_unfilterline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L369",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets_slicecreaturesheet",
+      "target": "scripts_slice_monster_rpg_ai_assets_readpng",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L390",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets_sliceterrainsheet",
+      "target": "scripts_slice_monster_rpg_ai_assets_readpng",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L97",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets_unfilterline",
+      "target": "scripts_slice_monster_rpg_ai_assets_paeth",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L386",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets_slicecreaturesheet",
+      "target": "scripts_slice_monster_rpg_ai_assets_writepng",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L380",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets_slicecreaturesheet",
+      "target": "scripts_slice_monster_rpg_ai_assets_crop",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L187",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets_trimtocontent",
+      "target": "scripts_slice_monster_rpg_ai_assets_crop",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L198",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets_placebottomcenter",
+      "target": "scripts_slice_monster_rpg_ai_assets_resizenearest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L381",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets_slicecreaturesheet",
+      "target": "scripts_slice_monster_rpg_ai_assets_removelightbackground",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L382",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets_slicecreaturesheet",
+      "target": "scripts_slice_monster_rpg_ai_assets_trimtocontent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L382",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets_slicecreaturesheet",
+      "target": "scripts_slice_monster_rpg_ai_assets_placebottomcenter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L386",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets_slicecreaturesheet",
+      "target": "scripts_slice_monster_rpg_ai_assets_stitchframes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L233",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets_blank",
+      "target": "scripts_slice_monster_rpg_ai_assets_setpixel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L256",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets_addnoise",
+      "target": "scripts_slice_monster_rpg_ai_assets_setpixel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L272",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets_drawstone",
+      "target": "scripts_slice_monster_rpg_ai_assets_setpixel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L262",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets_drawtuft",
+      "target": "scripts_slice_monster_rpg_ai_assets_setpixel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L249",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets_fillrect",
+      "target": "scripts_slice_monster_rpg_ai_assets_setpixel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
+      "source_location": "L270",
+      "weight": 1.0,
+      "source": "scripts_slice_monster_rpg_ai_assets_drawstone",
+      "target": "scripts_slice_monster_rpg_ai_assets_fillrect",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -16866,9 +16906,9 @@
       "source_file": "server/tsconfig.json",
       "source_location": "L2",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "users_michael_documents_projects_gameit_server_tsconfig_json",
-      "target": "server_tsconfig_compileroptions"
+      "source": "server_tsconfig",
+      "target": "server_tsconfig_compileroptions",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -16876,9 +16916,9 @@
       "source_file": "server/tsconfig.json",
       "source_location": "L13",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "users_michael_documents_projects_gameit_server_tsconfig_json",
-      "target": "server_tsconfig_include"
+      "source": "server_tsconfig",
+      "target": "server_tsconfig_include",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18701,9 +18741,9 @@
       "source_file": "src/config/portalAssets.ts",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "config_portalassets",
-      "target": "config_portalassets_portalassetsrc",
-      "confidence_score": 1.0
+      "target": "config_portalassets_portalassetsrc"
     },
     {
       "relation": "contains",
@@ -42213,9 +42253,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L2",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "users_michael_documents_projects_gameit_tsconfig_app_json",
-      "target": "gameit_tsconfig_app_compileroptions"
+      "source": "tsconfig_app",
+      "target": "tsconfig_app_compileroptions",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42223,9 +42263,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L20",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "users_michael_documents_projects_gameit_tsconfig_app_json",
-      "target": "gameit_tsconfig_app_include"
+      "source": "tsconfig_app",
+      "target": "tsconfig_app_include",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42233,9 +42273,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L9",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_app_compileroptions",
-      "target": "gameit_tsconfig_app_compileroptions_allowimportingtsextensions"
+      "source": "tsconfig_app_compileroptions",
+      "target": "tsconfig_app_compileroptions_allowimportingtsextensions",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42243,9 +42283,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L11",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_app_compileroptions",
-      "target": "gameit_tsconfig_app_compileroptions_isolatedmodules"
+      "source": "tsconfig_app_compileroptions",
+      "target": "tsconfig_app_compileroptions_isolatedmodules",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42253,9 +42293,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L13",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_app_compileroptions",
-      "target": "gameit_tsconfig_app_compileroptions_jsx"
+      "source": "tsconfig_app_compileroptions",
+      "target": "tsconfig_app_compileroptions_jsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42263,9 +42303,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_app_compileroptions",
-      "target": "gameit_tsconfig_app_compileroptions_lib"
+      "source": "tsconfig_app_compileroptions",
+      "target": "tsconfig_app_compileroptions_lib",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42273,9 +42313,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L6",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_app_compileroptions",
-      "target": "gameit_tsconfig_app_compileroptions_module"
+      "source": "tsconfig_app_compileroptions",
+      "target": "tsconfig_app_compileroptions_module",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42283,9 +42323,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L8",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_app_compileroptions",
-      "target": "gameit_tsconfig_app_compileroptions_moduleresolution"
+      "source": "tsconfig_app_compileroptions",
+      "target": "tsconfig_app_compileroptions_moduleresolution",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42293,9 +42333,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L12",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_app_compileroptions",
-      "target": "gameit_tsconfig_app_compileroptions_noemit"
+      "source": "tsconfig_app_compileroptions",
+      "target": "tsconfig_app_compileroptions_noemit",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42303,9 +42343,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L17",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_app_compileroptions",
-      "target": "gameit_tsconfig_app_compileroptions_nofallthroughcasesinswitch"
+      "source": "tsconfig_app_compileroptions",
+      "target": "tsconfig_app_compileroptions_nofallthroughcasesinswitch",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42313,9 +42353,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L15",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_app_compileroptions",
-      "target": "gameit_tsconfig_app_compileroptions_nounusedlocals"
+      "source": "tsconfig_app_compileroptions",
+      "target": "tsconfig_app_compileroptions_nounusedlocals",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42323,9 +42363,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L16",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_app_compileroptions",
-      "target": "gameit_tsconfig_app_compileroptions_nounusedparameters"
+      "source": "tsconfig_app_compileroptions",
+      "target": "tsconfig_app_compileroptions_nounusedparameters",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42333,9 +42373,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L10",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_app_compileroptions",
-      "target": "gameit_tsconfig_app_compileroptions_resolvejsonmodule"
+      "source": "tsconfig_app_compileroptions",
+      "target": "tsconfig_app_compileroptions_resolvejsonmodule",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42343,9 +42383,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L7",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_app_compileroptions",
-      "target": "gameit_tsconfig_app_compileroptions_skiplibcheck"
+      "source": "tsconfig_app_compileroptions",
+      "target": "tsconfig_app_compileroptions_skiplibcheck",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42353,9 +42393,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L14",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_app_compileroptions",
-      "target": "gameit_tsconfig_app_compileroptions_strict"
+      "source": "tsconfig_app_compileroptions",
+      "target": "tsconfig_app_compileroptions_strict",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42363,9 +42403,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_app_compileroptions",
-      "target": "gameit_tsconfig_app_compileroptions_target"
+      "source": "tsconfig_app_compileroptions",
+      "target": "tsconfig_app_compileroptions_target",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42373,9 +42413,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L18",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_app_compileroptions",
-      "target": "gameit_tsconfig_app_compileroptions_types"
+      "source": "tsconfig_app_compileroptions",
+      "target": "tsconfig_app_compileroptions_types",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42383,9 +42423,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L4",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_app_compileroptions",
-      "target": "gameit_tsconfig_app_compileroptions_usedefineforclassfields"
+      "source": "tsconfig_app_compileroptions",
+      "target": "tsconfig_app_compileroptions_usedefineforclassfields",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42393,9 +42433,9 @@
       "source_file": "tsconfig.json",
       "source_location": "L2",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "users_michael_documents_projects_gameit_tsconfig_json",
-      "target": "gameit_tsconfig_files"
+      "source": "tsconfig",
+      "target": "tsconfig_files",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42403,9 +42443,9 @@
       "source_file": "tsconfig.json",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "users_michael_documents_projects_gameit_tsconfig_json",
-      "target": "gameit_tsconfig_references"
+      "source": "tsconfig",
+      "target": "tsconfig_references",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42413,9 +42453,9 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L2",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "users_michael_documents_projects_gameit_tsconfig_node_json",
-      "target": "gameit_tsconfig_node_compileroptions"
+      "source": "tsconfig_node",
+      "target": "tsconfig_node_compileroptions",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42423,9 +42463,9 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L10",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "users_michael_documents_projects_gameit_tsconfig_node_json",
-      "target": "gameit_tsconfig_node_include"
+      "source": "tsconfig_node",
+      "target": "tsconfig_node_include",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42433,9 +42473,9 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L8",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_node_compileroptions",
-      "target": "gameit_tsconfig_node_compileroptions_allowsyntheticdefaultimports"
+      "source": "tsconfig_node_compileroptions",
+      "target": "tsconfig_node_compileroptions_allowsyntheticdefaultimports",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42443,9 +42483,9 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_node_compileroptions",
-      "target": "gameit_tsconfig_node_compileroptions_composite"
+      "source": "tsconfig_node_compileroptions",
+      "target": "tsconfig_node_compileroptions_composite",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42453,9 +42493,9 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_node_compileroptions",
-      "target": "gameit_tsconfig_node_compileroptions_module"
+      "source": "tsconfig_node_compileroptions",
+      "target": "tsconfig_node_compileroptions_module",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42463,9 +42503,9 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L6",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_node_compileroptions",
-      "target": "gameit_tsconfig_node_compileroptions_moduleresolution"
+      "source": "tsconfig_node_compileroptions",
+      "target": "tsconfig_node_compileroptions_moduleresolution",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42473,9 +42513,9 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L7",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_node_compileroptions",
-      "target": "gameit_tsconfig_node_compileroptions_noemit"
+      "source": "tsconfig_node_compileroptions",
+      "target": "tsconfig_node_compileroptions_noemit",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42483,9 +42523,9 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L4",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_tsconfig_node_compileroptions",
-      "target": "gameit_tsconfig_node_compileroptions_skiplibcheck"
+      "source": "tsconfig_node_compileroptions",
+      "target": "tsconfig_node_compileroptions_skiplibcheck",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42493,9 +42533,9 @@
       "source_file": "README.md",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "users_michael_documents_projects_gameit_readme_md",
-      "target": "gameit_readme_gameit_portal_mvp"
+      "source": "readme",
+      "target": "readme_gameit_portal_mvp",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42503,9 +42543,9 @@
       "source_file": "README.md",
       "source_location": "L78",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_readme_gameit_portal_mvp",
-      "target": "gameit_readme_adding_a_new_game"
+      "source": "readme_gameit_portal_mvp",
+      "target": "readme_adding_a_new_game",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42513,9 +42553,9 @@
       "source_file": "README.md",
       "source_location": "L46",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_readme_gameit_portal_mvp",
-      "target": "gameit_readme_admin_access_mvp"
+      "source": "readme_gameit_portal_mvp",
+      "target": "readme_admin_access_mvp",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42523,9 +42563,9 @@
       "source_file": "README.md",
       "source_location": "L52",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_readme_gameit_portal_mvp",
-      "target": "gameit_readme_architecture_overview"
+      "source": "readme_gameit_portal_mvp",
+      "target": "readme_architecture_overview",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42533,9 +42573,9 @@
       "source_file": "README.md",
       "source_location": "L31",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_readme_gameit_portal_mvp",
-      "target": "gameit_readme_build_preview"
+      "source": "readme_gameit_portal_mvp",
+      "target": "readme_build_preview",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42543,9 +42583,9 @@
       "source_file": "README.md",
       "source_location": "L38",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_readme_gameit_portal_mvp",
-      "target": "gameit_readme_deploy_to_github_pages"
+      "source": "readme_gameit_portal_mvp",
+      "target": "readme_deploy_to_github_pages",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42553,9 +42593,9 @@
       "source_file": "README.md",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_readme_gameit_portal_mvp",
-      "target": "gameit_readme_features"
+      "source": "readme_gameit_portal_mvp",
+      "target": "readme_features",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42563,9 +42603,9 @@
       "source_file": "README.md",
       "source_location": "L93",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_readme_gameit_portal_mvp",
-      "target": "gameit_readme_future_improvements"
+      "source": "readme_gameit_portal_mvp",
+      "target": "readme_future_improvements",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42573,9 +42613,9 @@
       "source_file": "README.md",
       "source_location": "L85",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_readme_gameit_portal_mvp",
-      "target": "gameit_readme_known_limitations"
+      "source": "readme_gameit_portal_mvp",
+      "target": "readme_known_limitations",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42583,9 +42623,9 @@
       "source_file": "README.md",
       "source_location": "L16",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_readme_gameit_portal_mvp",
-      "target": "gameit_readme_local_run"
+      "source": "readme_gameit_portal_mvp",
+      "target": "readme_local_run",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42593,9 +42633,9 @@
       "source_file": "README.md",
       "source_location": "L65",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_readme_gameit_portal_mvp",
-      "target": "gameit_readme_monster_rpg_foundation"
+      "source": "readme_gameit_portal_mvp",
+      "target": "readme_monster_rpg_foundation",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42603,9 +42643,9 @@
       "source_file": "README.md",
       "source_location": "L23",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_readme_gameit_portal_mvp",
-      "target": "gameit_readme_multiplayer_dev"
+      "source": "readme_gameit_portal_mvp",
+      "target": "readme_multiplayer_dev",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -42613,609 +42653,9 @@
       "source_file": "README.md",
       "source_location": "L102",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "gameit_readme_gameit_portal_mvp",
-      "target": "gameit_readme_ui_asset_integration"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/adr/0001-card-egg-acquisition-model.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "users_michael_documents_projects_gameit_docs_adr_0001_card_egg_acquisition_model_md",
-      "target": "adr_0001_card_egg_acquisition_model_card_and_egg_acquisition_model"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/adr/0002-shared-server-wild-encounters.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "users_michael_documents_projects_gameit_docs_adr_0002_shared_server_wild_encounters_md",
-      "target": "adr_0002_shared_server_wild_encounters_shared_server_wild_encounters"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/adr/0003-server-authoritative-economy-and-theft.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "users_michael_documents_projects_gameit_docs_adr_0003_server_authoritative_economy_and_theft_md",
-      "target": "adr_0003_server_authoritative_economy_and_theft_server_authoritative_economy_and_theft"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/adr/0004-local-first-persistence-until-gameplay-proof.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "users_michael_documents_projects_gameit_docs_adr_0004_local_first_persistence_until_gameplay_proof_md",
-      "target": "adr_0004_local_first_persistence_until_gameplay_proof_local_first_persistence_until_gameplay_proof"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/adr/0005-separate-location-and-battle-rooms.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "users_michael_documents_projects_gameit_docs_adr_0005_separate_location_and_battle_rooms_md",
-      "target": "adr_0005_separate_location_and_battle_rooms_separate_location_and_battle_rooms"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/phase-0-foundation.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "users_michael_documents_projects_gameit_docs_monster_rpg_phase_0_foundation_md",
-      "target": "monster_rpg_phase_0_foundation_gameit_monster_rpg_phase_0_foundation"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/phase-0-foundation.md",
-      "source_location": "L30",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_phase_0_foundation_gameit_monster_rpg_phase_0_foundation",
-      "target": "monster_rpg_phase_0_foundation_architecture_boundaries"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/phase-0-foundation.md",
-      "source_location": "L39",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_phase_0_foundation_gameit_monster_rpg_phase_0_foundation",
-      "target": "monster_rpg_phase_0_foundation_initial_contracts"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/phase-0-foundation.md",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_phase_0_foundation_gameit_monster_rpg_phase_0_foundation",
-      "target": "monster_rpg_phase_0_foundation_roadmap"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/phase-0-foundation.md",
-      "source_location": "L20",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_phase_0_foundation_gameit_monster_rpg_phase_0_foundation",
-      "target": "monster_rpg_phase_0_foundation_stack_decisions"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/phase-0-foundation.md",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_phase_0_foundation_gameit_monster_rpg_phase_0_foundation",
-      "target": "monster_rpg_phase_0_foundation_summary"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/phase-0-foundation.md",
-      "source_location": "L51",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_phase_0_foundation_gameit_monster_rpg_phase_0_foundation",
-      "target": "monster_rpg_phase_0_foundation_test_strategy"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "users_michael_documents_projects_gameit_docs_monster_rpg_prd_gameit_monsters_mvp_md",
-      "target": "monster_rpg_prd_gameit_monsters_mvp_prd_gameit_monsters_mvp"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
-      "source_location": "L180",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_prd_gameit_monsters_mvp_prd_gameit_monsters_mvp",
-      "target": "monster_rpg_prd_gameit_monsters_mvp_further_notes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
-      "source_location": "L123",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_prd_gameit_monsters_mvp_prd_gameit_monsters_mvp",
-      "target": "monster_rpg_prd_gameit_monsters_mvp_implementation_decisions"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
-      "source_location": "L163",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_prd_gameit_monsters_mvp_prd_gameit_monsters_mvp",
-      "target": "monster_rpg_prd_gameit_monsters_mvp_out_of_scope"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_prd_gameit_monsters_mvp_prd_gameit_monsters_mvp",
-      "target": "monster_rpg_prd_gameit_monsters_mvp_problem_statement"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_prd_gameit_monsters_mvp_prd_gameit_monsters_mvp",
-      "target": "monster_rpg_prd_gameit_monsters_mvp_solution"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
-      "source_location": "L153",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_prd_gameit_monsters_mvp_prd_gameit_monsters_mvp",
-      "target": "monster_rpg_prd_gameit_monsters_mvp_testing_decisions"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/prd-gameit-monsters-mvp.md",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_prd_gameit_monsters_mvp_prd_gameit_monsters_mvp",
-      "target": "monster_rpg_prd_gameit_monsters_mvp_user_stories"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_monster_rpg_work_summary"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_13_phase_0_foundation"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_13_phase_1_playable_client_slice"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L32",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_13_phase_2_input_follow_up"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L20",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_13_phase_2_multiplayer_presence"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L37",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_13_phase_3_world_villages"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L84",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_18_full_vision_finish_plan"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L76",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_18_phase_4_final_qa"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L67",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_18_phase_4_multiplayer_transitions"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L48",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_18_phase_4_overworld_foundation"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L58",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_18_phase_4_rendering_assets"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L238",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_10_active_party_storage_fainted_hospital_and_revive_item"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L245",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_11_visible_shared_wild_encounter_claim_flow"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L252",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_12_tap_to_walk_and_creature_label_setting"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L260",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_13_battle_room_tracer_with_manual_attacks_and_enemy_ai"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L268",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_14_run_away_and_wild_battle_exit_outcomes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L275",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_15_wild_battle_rewards_xp_and_direct_drop_eggs"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L282",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_16_magic_dust_farm_production_and_owner_collection"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L291",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_17_farm_upgrades_and_guard_assignment"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L298",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_18_visitor_permissions_and_theft_from_unguarded_farms"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L218",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_8_inventory_cards_and_pack_opening_tracer"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L227",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_20_issue_9_creature_card_egg_and_creature_lifecycle"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L341",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_21_github_pages_ci_diagnosis"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L346",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_21_hud_cleanup_2x2_farms_and_click_walk"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L306",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_21_issue_19_guard_battle_theft_flow"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L313",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_21_issue_20_station_discovery_and_travel"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L322",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_21_issue_21_player_level_pack_milestones_and_reward_tables"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L331",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_21_issue_22_mvp_art_and_hud_polish_pass"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L361",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_22_ai_art_approval_sheets"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L372",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_06_27_mobile_hud_and_tap_movement_polish"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_07_01_portal_registry_metadata_and_local_assets"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_07_02_issue_45_launch_first_home_dashboard"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_07_02_issue_46_library_catalog_route"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_07_02_issue_47_full_leaderboard_route"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_07_02_issue_48_admin_registry_override"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_07_02_issue_49_portal_navigation_and_final_responsive_qa"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L414",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_07_02_portal_kinetic_design_pass"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_2026_07_02_portal_wide_kinetic_design_pass"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/monster-rpg/work-summary.md",
-      "source_location": "L341",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "monster_rpg_work_summary_monster_rpg_work_summary",
-      "target": "monster_rpg_work_summary_next_work"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/portal-glossary.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "private_tmp_gameit_issue_44_docs_portal_glossary_md",
-      "target": "docs_portal_glossary_portal_glossary"
+      "source": "readme_gameit_portal_mvp",
+      "target": "readme_ui_asset_integration",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -43223,9 +42663,9 @@
       "source_file": "src/games/monster-rpg/client/README.md",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "users_michael_documents_projects_gameit_src_games_monster_rpg_client_readme_md",
-      "target": "client_readme_monster_rpg_client"
+      "source": "client_readme",
+      "target": "client_readme_monster_rpg_client",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -43233,11 +42673,11 @@
       "source_file": "src/games/monster-rpg/ui/README.md",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "users_michael_documents_projects_gameit_src_games_monster_rpg_ui_readme_md",
-      "target": "ui_readme_monster_rpg_ui"
+      "source": "ui_readme",
+      "target": "ui_readme_monster_rpg_ui",
+      "confidence_score": 1.0
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "b444f8de2b51c9413da07add4b19c69b4df63081"
+  "built_at_commit": "777b0c2e30902df76795e7c4b583a4e1e5181a46"
 }
