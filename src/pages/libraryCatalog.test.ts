@@ -27,7 +27,14 @@ describe('library catalog filtering', () => {
     const comingSoon = filterLibraryGames(gameRegistry, { genre: 'all', query: '', status: 'coming-soon' });
 
     expect(playable.map((game) => game.id)).toEqual(['snake', 'gameit-monsters']);
-    expect(comingSoon.map((game) => game.id)).toEqual(['flappy-bird', 'stickman-fight']);
+    expect(comingSoon.map((game) => game.id)).toEqual([
+      'flappy-bird',
+      'stickman-fight',
+      'void-runner',
+      'mana-breach',
+      'circuit-breaker',
+      'frost-bite',
+    ]);
   });
 
   it('uses local cover assets and fallbacks for catalog cards', () => {

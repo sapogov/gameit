@@ -43,6 +43,10 @@ const entriesByRange: Record<GameId, Partial<Record<LeaderboardRange, Leaderboar
   },
   'flappy-bird': {},
   'stickman-fight': {},
+  'void-runner': {},
+  'mana-breach': {},
+  'circuit-breaker': {},
+  'frost-bite': {},
 };
 
 const createProvider = () => {

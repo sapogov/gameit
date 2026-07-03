@@ -15,6 +15,7 @@
 
 - Added ignore rules for local Codex worktrees, generated graphify output, local docs artifacts, and agent planning files before merging the current branch into `main`.
 - Prepared uncommitted portal and Monster RPG changes for commit while keeping generated/local-only folders out of future staging.
+- Updated portal catalog and leaderboard tests for the expanded coming-soon registry carried through the merge.
 
 ## 2026-07-02 - Portal-Wide Kinetic Design Pass
 

@@ -2870,7 +2870,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "monster_rpg_monsterrpggame_monsterrpggame",
-      "community": 6,
+      "community": 20,
       "norm_label": "monsterrpggame()"
     },
     {
@@ -4020,7 +4020,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "sim_battlerewards_applybattlerewardsresult",
-      "community": 22,
+      "community": 6,
       "norm_label": "applybattlerewardsresult"
     },
     {
@@ -4650,7 +4650,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "sim_cards_packopentrace",
-      "community": 22,
+      "community": 6,
       "norm_label": "packopentrace"
     },
     {
@@ -4740,7 +4740,7 @@
       "source_location": "L245",
       "_origin": "ast",
       "id": "sim_cards_getcardrewardtable",
-      "community": 22,
+      "community": 6,
       "norm_label": "getcardrewardtable()"
     },
     {
@@ -4780,7 +4780,7 @@
       "source_location": "L263",
       "_origin": "ast",
       "id": "sim_cards_getcreaturecardbyid",
-      "community": 6,
+      "community": 3,
       "norm_label": "getcreaturecardbyid()"
     },
     {
@@ -5290,7 +5290,7 @@
       "source_location": "L193",
       "_origin": "ast",
       "id": "sim_creatureparty_test_createcommoncreatures",
-      "community": 6,
+      "community": 3,
       "norm_label": "createcommoncreatures()"
     },
     {
@@ -5380,7 +5380,7 @@
       "source_location": "L91",
       "_origin": "ast",
       "id": "sim_creatureparty_setcreaturehp",
-      "community": 14,
+      "community": 6,
       "norm_label": "setcreaturehp()"
     },
     {
@@ -5630,7 +5630,7 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "sim_farms_farmupgraderequirements",
-      "community": 22,
+      "community": 14,
       "norm_label": "farmupgraderequirements"
     },
     {
@@ -5650,7 +5650,7 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "sim_farms_farmupgradepreview",
-      "community": 22,
+      "community": 14,
       "norm_label": "farmupgradepreview"
     },
     {
@@ -5660,7 +5660,7 @@
       "source_location": "L122",
       "_origin": "ast",
       "id": "sim_farms_farmdefinition",
-      "community": 22,
+      "community": 14,
       "norm_label": "farmdefinition"
     },
     {
@@ -5950,7 +5950,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_index",
-      "community": 22,
+      "community": 6,
       "norm_label": "index.ts"
     },
     {
@@ -6660,7 +6660,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_playerprogression_test",
-      "community": 22,
+      "community": 6,
       "norm_label": "playerprogression.test.ts"
     },
     {
@@ -6670,7 +6670,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_playerprogression",
-      "community": 22,
+      "community": 6,
       "norm_label": "playerprogression.ts"
     },
     {
@@ -6680,7 +6680,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "sim_playerprogression_playerlevelthreshold",
-      "community": 22,
+      "community": 6,
       "norm_label": "playerlevelthreshold"
     },
     {
@@ -6690,7 +6690,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "sim_playerprogression_playerskillunlockdefinition",
-      "community": 22,
+      "community": 6,
       "norm_label": "playerskillunlockdefinition"
     },
     {
@@ -6700,7 +6700,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "sim_playerprogression_playerlevelpackrewarddefinition",
-      "community": 22,
+      "community": 6,
       "norm_label": "playerlevelpackrewarddefinition"
     },
     {
@@ -6710,7 +6710,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "sim_playerprogression_playerlevelrewarddefinition",
-      "community": 22,
+      "community": 6,
       "norm_label": "playerlevelrewarddefinition"
     },
     {
@@ -6720,7 +6720,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "sim_playerprogression_claimedplayerlevelreward",
-      "community": 22,
+      "community": 6,
       "norm_label": "claimedplayerlevelreward"
     },
     {
@@ -6730,7 +6730,7 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "sim_playerprogression_claimlevelrewardsresult",
-      "community": 22,
+      "community": 6,
       "norm_label": "claimlevelrewardsresult"
     },
     {
@@ -6740,7 +6740,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "sim_playerprogression_applyplayerexperienceresult",
-      "community": 22,
+      "community": 6,
       "norm_label": "applyplayerexperienceresult"
     },
     {
@@ -6750,7 +6750,7 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "sim_playerprogression_player_level_rewards",
-      "community": 22,
+      "community": 6,
       "norm_label": "player_level_rewards"
     },
     {
@@ -6760,7 +6760,7 @@
       "source_location": "L127",
       "_origin": "ast",
       "id": "sim_playerprogression_applyplayerexperience",
-      "community": 22,
+      "community": 6,
       "norm_label": "applyplayerexperience()"
     },
     {
@@ -6770,7 +6770,7 @@
       "source_location": "L153",
       "_origin": "ast",
       "id": "sim_playerprogression_claimavailablelevelrewards",
-      "community": 22,
+      "community": 6,
       "norm_label": "claimavailablelevelrewards()"
     },
     {
@@ -6780,7 +6780,7 @@
       "source_location": "L212",
       "_origin": "ast",
       "id": "sim_playerprogression_getplayerlevelforexperience",
-      "community": 22,
+      "community": 6,
       "norm_label": "getplayerlevelforexperience()"
     },
     {
@@ -6800,7 +6800,7 @@
       "source_location": "L223",
       "_origin": "ast",
       "id": "sim_playerprogression_hashstring",
-      "community": 22,
+      "community": 6,
       "norm_label": "hashstring()"
     },
     {
@@ -7880,7 +7880,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "sim_types_villageid",
-      "community": 22,
+      "community": 14,
       "norm_label": "villageid"
     },
     {
@@ -8000,7 +8000,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "sim_types_playerskillunlockkind",
-      "community": 22,
+      "community": 6,
       "norm_label": "playerskillunlockkind"
     },
     {
@@ -8090,7 +8090,7 @@
       "source_location": "L146",
       "_origin": "ast",
       "id": "sim_types_creationrequirement",
-      "community": 22,
+      "community": 14,
       "norm_label": "creationrequirement"
     },
     {
@@ -9827,7 +9827,7 @@
       "label": "createProvider()",
       "file_type": "code",
       "source_file": "src/pages/LeaderboardPage.test.ts",
-      "source_location": "L48",
+      "source_location": "L52",
       "_origin": "ast",
       "id": "pages_leaderboardpage_test_createprovider",
       "community": 18,
@@ -11295,9 +11295,9 @@
       "source_file": "package.json",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "private_tmp_gameit_publish_main_package_json",
-      "target": "gameit_publish_main_package_dependencies",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_dependencies"
     },
     {
       "relation": "contains",
@@ -11305,9 +11305,9 @@
       "source_file": "package.json",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "private_tmp_gameit_publish_main_package_json",
-      "target": "gameit_publish_main_package_devdependencies",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_devdependencies"
     },
     {
       "relation": "contains",
@@ -11315,9 +11315,9 @@
       "source_file": "package.json",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "private_tmp_gameit_publish_main_package_json",
-      "target": "gameit_publish_main_package_name",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_name"
     },
     {
       "relation": "contains",
@@ -11325,9 +11325,9 @@
       "source_file": "package.json",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "private_tmp_gameit_publish_main_package_json",
-      "target": "gameit_publish_main_package_private",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_private"
     },
     {
       "relation": "contains",
@@ -11335,9 +11335,9 @@
       "source_file": "package.json",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "private_tmp_gameit_publish_main_package_json",
-      "target": "gameit_publish_main_package_scripts",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_scripts"
     },
     {
       "relation": "contains",
@@ -11345,9 +11345,9 @@
       "source_file": "package.json",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "private_tmp_gameit_publish_main_package_json",
-      "target": "gameit_publish_main_package_type",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_type"
     },
     {
       "relation": "contains",
@@ -11355,9 +11355,9 @@
       "source_file": "package.json",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "private_tmp_gameit_publish_main_package_json",
-      "target": "gameit_publish_main_package_version",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_version"
     },
     {
       "relation": "contains",
@@ -11365,9 +11365,9 @@
       "source_file": "package.json",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_scripts",
-      "target": "gameit_publish_main_package_scripts_build",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_scripts_build"
     },
     {
       "relation": "contains",
@@ -11375,9 +11375,9 @@
       "source_file": "package.json",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_scripts",
-      "target": "gameit_publish_main_package_scripts_build_client",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_scripts_build_client"
     },
     {
       "relation": "contains",
@@ -11385,9 +11385,9 @@
       "source_file": "package.json",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_scripts",
-      "target": "gameit_publish_main_package_scripts_build_server",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_scripts_build_server"
     },
     {
       "relation": "contains",
@@ -11395,9 +11395,9 @@
       "source_file": "package.json",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_scripts",
-      "target": "gameit_publish_main_package_scripts_check_monster_rpg",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_scripts_check_monster_rpg"
     },
     {
       "relation": "contains",
@@ -11405,9 +11405,9 @@
       "source_file": "package.json",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_scripts",
-      "target": "gameit_publish_main_package_scripts_dev",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_scripts_dev"
     },
     {
       "relation": "contains",
@@ -11415,9 +11415,9 @@
       "source_file": "package.json",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_scripts",
-      "target": "gameit_publish_main_package_scripts_dev_client",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_scripts_dev_client"
     },
     {
       "relation": "contains",
@@ -11425,9 +11425,9 @@
       "source_file": "package.json",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_scripts",
-      "target": "gameit_publish_main_package_scripts_dev_multiplayer",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_scripts_dev_multiplayer"
     },
     {
       "relation": "contains",
@@ -11435,9 +11435,9 @@
       "source_file": "package.json",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_scripts",
-      "target": "gameit_publish_main_package_scripts_dev_server",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_scripts_dev_server"
     },
     {
       "relation": "contains",
@@ -11445,9 +11445,9 @@
       "source_file": "package.json",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_scripts",
-      "target": "gameit_publish_main_package_scripts_preview",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_scripts_preview"
     },
     {
       "relation": "contains",
@@ -11455,9 +11455,9 @@
       "source_file": "package.json",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_scripts",
-      "target": "gameit_publish_main_package_scripts_test",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_scripts_test"
     },
     {
       "relation": "contains",
@@ -11465,9 +11465,9 @@
       "source_file": "package.json",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_dependencies",
-      "target": "gameit_publish_main_package_dependencies_colyseus",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_dependencies_colyseus"
     },
     {
       "relation": "contains",
@@ -11475,9 +11475,9 @@
       "source_file": "package.json",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_dependencies",
-      "target": "gameit_publish_main_package_dependencies_colyseus_schema",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_dependencies_colyseus_schema"
     },
     {
       "relation": "contains",
@@ -11485,9 +11485,9 @@
       "source_file": "package.json",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_dependencies",
-      "target": "gameit_publish_main_package_dependencies_colyseus_sdk",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_dependencies_colyseus_sdk"
     },
     {
       "relation": "contains",
@@ -11495,9 +11495,9 @@
       "source_file": "package.json",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_dependencies",
-      "target": "gameit_publish_main_package_dependencies_phaser",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_dependencies_phaser"
     },
     {
       "relation": "contains",
@@ -11505,9 +11505,9 @@
       "source_file": "package.json",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_dependencies",
-      "target": "gameit_publish_main_package_dependencies_react",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_dependencies_react"
     },
     {
       "relation": "contains",
@@ -11515,9 +11515,9 @@
       "source_file": "package.json",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_dependencies",
-      "target": "gameit_publish_main_package_dependencies_react_dom",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_dependencies_react_dom"
     },
     {
       "relation": "contains",
@@ -11525,9 +11525,9 @@
       "source_file": "package.json",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_dependencies",
-      "target": "gameit_publish_main_package_dependencies_react_router_dom",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_dependencies_react_router_dom"
     },
     {
       "relation": "contains",
@@ -11535,9 +11535,9 @@
       "source_file": "package.json",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_dependencies",
-      "target": "gameit_publish_main_package_dependencies_zod",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_dependencies_zod"
     },
     {
       "relation": "contains",
@@ -11545,9 +11545,9 @@
       "source_file": "package.json",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_devdependencies",
-      "target": "gameit_publish_main_package_devdependencies_concurrently",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_devdependencies_concurrently"
     },
     {
       "relation": "contains",
@@ -11555,9 +11555,9 @@
       "source_file": "package.json",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_devdependencies",
-      "target": "gameit_publish_main_package_devdependencies_tsx",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_devdependencies_tsx"
     },
     {
       "relation": "contains",
@@ -11565,9 +11565,9 @@
       "source_file": "package.json",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_devdependencies",
-      "target": "gameit_publish_main_package_devdependencies_types_node",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_devdependencies_types_node"
     },
     {
       "relation": "contains",
@@ -11575,9 +11575,9 @@
       "source_file": "package.json",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_devdependencies",
-      "target": "gameit_publish_main_package_devdependencies_types_react",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_devdependencies_types_react"
     },
     {
       "relation": "contains",
@@ -11585,9 +11585,9 @@
       "source_file": "package.json",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_devdependencies",
-      "target": "gameit_publish_main_package_devdependencies_types_react_dom",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_devdependencies_types_react_dom"
     },
     {
       "relation": "contains",
@@ -11595,9 +11595,9 @@
       "source_file": "package.json",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_devdependencies",
-      "target": "gameit_publish_main_package_devdependencies_typescript",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_devdependencies_typescript"
     },
     {
       "relation": "contains",
@@ -11605,9 +11605,9 @@
       "source_file": "package.json",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_devdependencies",
-      "target": "gameit_publish_main_package_devdependencies_vite",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_devdependencies_vite"
     },
     {
       "relation": "contains",
@@ -11615,9 +11615,9 @@
       "source_file": "package.json",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_devdependencies",
-      "target": "gameit_publish_main_package_devdependencies_vitejs_plugin_react",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_devdependencies_vitejs_plugin_react"
     },
     {
       "relation": "contains",
@@ -11625,9 +11625,9 @@
       "source_file": "package.json",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "gameit_publish_main_package_devdependencies",
-      "target": "gameit_publish_main_package_devdependencies_vitest",
-      "confidence_score": 1.0
+      "target": "gameit_publish_main_package_devdependencies_vitest"
     },
     {
       "relation": "contains",
@@ -13327,9 +13327,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L253",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_addnoise",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_addnoise"
     },
     {
       "relation": "contains",
@@ -13337,9 +13337,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_approvaldir",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_approvaldir"
     },
     {
       "relation": "contains",
@@ -13347,9 +13347,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_assetdir",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_assetdir"
     },
     {
       "relation": "contains",
@@ -13357,9 +13357,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L230",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_blank",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_blank"
     },
     {
       "relation": "contains",
@@ -13367,9 +13367,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_chunk",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_chunk"
     },
     {
       "relation": "contains",
@@ -13377,9 +13377,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_crc32",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_crc32"
     },
     {
       "relation": "contains",
@@ -13387,9 +13387,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_crctable",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_crctable"
     },
     {
       "relation": "contains",
@@ -13397,9 +13397,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L136",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_crop",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_crop"
     },
     {
       "relation": "contains",
@@ -13407,9 +13407,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L269",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_drawstone",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_drawstone"
     },
     {
       "relation": "contains",
@@ -13417,9 +13417,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L261",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_drawtuft",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_drawtuft"
     },
     {
       "relation": "contains",
@@ -13427,9 +13427,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L247",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_fillrect",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_fillrect"
     },
     {
       "relation": "contains",
@@ -13437,9 +13437,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L275",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_generateterrainvariants",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_generateterrainvariants"
     },
     {
       "relation": "contains",
@@ -13447,9 +13447,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L102",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_paeth",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_paeth"
     },
     {
       "relation": "contains",
@@ -13457,9 +13457,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L196",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_placebottomcenter",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_placebottomcenter"
     },
     {
       "relation": "contains",
@@ -13467,9 +13467,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_readpng",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_readpng"
     },
     {
       "relation": "contains",
@@ -13477,9 +13477,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L160",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_removelightbackground",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_removelightbackground"
     },
     {
       "relation": "contains",
@@ -13487,9 +13487,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L148",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_resizenearest",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_resizenearest"
     },
     {
       "relation": "contains",
@@ -13497,9 +13497,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_root",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_root"
     },
     {
       "relation": "contains",
@@ -13507,9 +13507,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L238",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_setpixel",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_setpixel"
     },
     {
       "relation": "contains",
@@ -13517,9 +13517,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L368",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_slicecreaturesheet",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_slicecreaturesheet"
     },
     {
       "relation": "contains",
@@ -13527,9 +13527,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L389",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_sliceterrainsheet",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_sliceterrainsheet"
     },
     {
       "relation": "contains",
@@ -13537,9 +13537,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L214",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_stitchframes",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_stitchframes"
     },
     {
       "relation": "contains",
@@ -13547,9 +13547,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L169",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_trimtocontent",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_trimtocontent"
     },
     {
       "relation": "contains",
@@ -13557,9 +13557,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L88",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_unfilterline",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_unfilterline"
     },
     {
       "relation": "contains",
@@ -13567,9 +13567,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L112",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets",
-      "target": "scripts_slice_monster_rpg_ai_assets_writepng",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_writepng"
     },
     {
       "relation": "calls",
@@ -13578,9 +13578,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets_chunk",
-      "target": "scripts_slice_monster_rpg_ai_assets_crc32",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_crc32"
     },
     {
       "relation": "calls",
@@ -13589,9 +13589,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L129",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets_writepng",
-      "target": "scripts_slice_monster_rpg_ai_assets_chunk",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_chunk"
     },
     {
       "relation": "calls",
@@ -13600,9 +13600,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L71",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets_readpng",
-      "target": "scripts_slice_monster_rpg_ai_assets_unfilterline",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_unfilterline"
     },
     {
       "relation": "calls",
@@ -13611,9 +13611,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L369",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets_slicecreaturesheet",
-      "target": "scripts_slice_monster_rpg_ai_assets_readpng",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_readpng"
     },
     {
       "relation": "calls",
@@ -13622,9 +13622,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L390",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets_sliceterrainsheet",
-      "target": "scripts_slice_monster_rpg_ai_assets_readpng",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_readpng"
     },
     {
       "relation": "calls",
@@ -13633,9 +13633,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L97",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets_unfilterline",
-      "target": "scripts_slice_monster_rpg_ai_assets_paeth",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_paeth"
     },
     {
       "relation": "calls",
@@ -13644,9 +13644,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L386",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets_slicecreaturesheet",
-      "target": "scripts_slice_monster_rpg_ai_assets_writepng",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_writepng"
     },
     {
       "relation": "calls",
@@ -13655,9 +13655,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L380",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets_slicecreaturesheet",
-      "target": "scripts_slice_monster_rpg_ai_assets_crop",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_crop"
     },
     {
       "relation": "calls",
@@ -13666,9 +13666,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L187",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets_trimtocontent",
-      "target": "scripts_slice_monster_rpg_ai_assets_crop",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_crop"
     },
     {
       "relation": "calls",
@@ -13677,9 +13677,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L198",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets_placebottomcenter",
-      "target": "scripts_slice_monster_rpg_ai_assets_resizenearest",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_resizenearest"
     },
     {
       "relation": "calls",
@@ -13688,9 +13688,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L381",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets_slicecreaturesheet",
-      "target": "scripts_slice_monster_rpg_ai_assets_removelightbackground",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_removelightbackground"
     },
     {
       "relation": "calls",
@@ -13699,9 +13699,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L382",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets_slicecreaturesheet",
-      "target": "scripts_slice_monster_rpg_ai_assets_trimtocontent",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_trimtocontent"
     },
     {
       "relation": "calls",
@@ -13710,9 +13710,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L382",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets_slicecreaturesheet",
-      "target": "scripts_slice_monster_rpg_ai_assets_placebottomcenter",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_placebottomcenter"
     },
     {
       "relation": "calls",
@@ -13721,9 +13721,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L386",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets_slicecreaturesheet",
-      "target": "scripts_slice_monster_rpg_ai_assets_stitchframes",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_stitchframes"
     },
     {
       "relation": "calls",
@@ -13732,9 +13732,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L233",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets_blank",
-      "target": "scripts_slice_monster_rpg_ai_assets_setpixel",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_setpixel"
     },
     {
       "relation": "calls",
@@ -13743,9 +13743,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L256",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets_addnoise",
-      "target": "scripts_slice_monster_rpg_ai_assets_setpixel",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_setpixel"
     },
     {
       "relation": "calls",
@@ -13754,9 +13754,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L272",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets_drawstone",
-      "target": "scripts_slice_monster_rpg_ai_assets_setpixel",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_setpixel"
     },
     {
       "relation": "calls",
@@ -13765,9 +13765,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L262",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets_drawtuft",
-      "target": "scripts_slice_monster_rpg_ai_assets_setpixel",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_setpixel"
     },
     {
       "relation": "calls",
@@ -13776,9 +13776,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L249",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets_fillrect",
-      "target": "scripts_slice_monster_rpg_ai_assets_setpixel",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_setpixel"
     },
     {
       "relation": "calls",
@@ -13787,9 +13787,9 @@
       "source_file": "scripts/slice-monster-rpg-ai-assets.mjs",
       "source_location": "L270",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_slice_monster_rpg_ai_assets_drawstone",
-      "target": "scripts_slice_monster_rpg_ai_assets_fillrect",
-      "confidence_score": 1.0
+      "target": "scripts_slice_monster_rpg_ai_assets_fillrect"
     },
     {
       "relation": "imports_from",
@@ -16906,9 +16906,9 @@
       "source_file": "server/tsconfig.json",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "server_tsconfig",
-      "target": "server_tsconfig_compileroptions",
-      "confidence_score": 1.0
+      "target": "server_tsconfig_compileroptions"
     },
     {
       "relation": "contains",
@@ -16916,9 +16916,9 @@
       "source_file": "server/tsconfig.json",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "server_tsconfig",
-      "target": "server_tsconfig_include",
-      "confidence_score": 1.0
+      "target": "server_tsconfig_include"
     },
     {
       "relation": "contains",
@@ -42253,9 +42253,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_app",
-      "target": "tsconfig_app_compileroptions",
-      "confidence_score": 1.0
+      "target": "tsconfig_app_compileroptions"
     },
     {
       "relation": "contains",
@@ -42263,9 +42263,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_app",
-      "target": "tsconfig_app_include",
-      "confidence_score": 1.0
+      "target": "tsconfig_app_include"
     },
     {
       "relation": "contains",
@@ -42273,9 +42273,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_app_compileroptions",
-      "target": "tsconfig_app_compileroptions_allowimportingtsextensions",
-      "confidence_score": 1.0
+      "target": "tsconfig_app_compileroptions_allowimportingtsextensions"
     },
     {
       "relation": "contains",
@@ -42283,9 +42283,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_app_compileroptions",
-      "target": "tsconfig_app_compileroptions_isolatedmodules",
-      "confidence_score": 1.0
+      "target": "tsconfig_app_compileroptions_isolatedmodules"
     },
     {
       "relation": "contains",
@@ -42293,9 +42293,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_app_compileroptions",
-      "target": "tsconfig_app_compileroptions_jsx",
-      "confidence_score": 1.0
+      "target": "tsconfig_app_compileroptions_jsx"
     },
     {
       "relation": "contains",
@@ -42303,9 +42303,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_app_compileroptions",
-      "target": "tsconfig_app_compileroptions_lib",
-      "confidence_score": 1.0
+      "target": "tsconfig_app_compileroptions_lib"
     },
     {
       "relation": "contains",
@@ -42313,9 +42313,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_app_compileroptions",
-      "target": "tsconfig_app_compileroptions_module",
-      "confidence_score": 1.0
+      "target": "tsconfig_app_compileroptions_module"
     },
     {
       "relation": "contains",
@@ -42323,9 +42323,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_app_compileroptions",
-      "target": "tsconfig_app_compileroptions_moduleresolution",
-      "confidence_score": 1.0
+      "target": "tsconfig_app_compileroptions_moduleresolution"
     },
     {
       "relation": "contains",
@@ -42333,9 +42333,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_app_compileroptions",
-      "target": "tsconfig_app_compileroptions_noemit",
-      "confidence_score": 1.0
+      "target": "tsconfig_app_compileroptions_noemit"
     },
     {
       "relation": "contains",
@@ -42343,9 +42343,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_app_compileroptions",
-      "target": "tsconfig_app_compileroptions_nofallthroughcasesinswitch",
-      "confidence_score": 1.0
+      "target": "tsconfig_app_compileroptions_nofallthroughcasesinswitch"
     },
     {
       "relation": "contains",
@@ -42353,9 +42353,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_app_compileroptions",
-      "target": "tsconfig_app_compileroptions_nounusedlocals",
-      "confidence_score": 1.0
+      "target": "tsconfig_app_compileroptions_nounusedlocals"
     },
     {
       "relation": "contains",
@@ -42363,9 +42363,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_app_compileroptions",
-      "target": "tsconfig_app_compileroptions_nounusedparameters",
-      "confidence_score": 1.0
+      "target": "tsconfig_app_compileroptions_nounusedparameters"
     },
     {
       "relation": "contains",
@@ -42373,9 +42373,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_app_compileroptions",
-      "target": "tsconfig_app_compileroptions_resolvejsonmodule",
-      "confidence_score": 1.0
+      "target": "tsconfig_app_compileroptions_resolvejsonmodule"
     },
     {
       "relation": "contains",
@@ -42383,9 +42383,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_app_compileroptions",
-      "target": "tsconfig_app_compileroptions_skiplibcheck",
-      "confidence_score": 1.0
+      "target": "tsconfig_app_compileroptions_skiplibcheck"
     },
     {
       "relation": "contains",
@@ -42393,9 +42393,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_app_compileroptions",
-      "target": "tsconfig_app_compileroptions_strict",
-      "confidence_score": 1.0
+      "target": "tsconfig_app_compileroptions_strict"
     },
     {
       "relation": "contains",
@@ -42403,9 +42403,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_app_compileroptions",
-      "target": "tsconfig_app_compileroptions_target",
-      "confidence_score": 1.0
+      "target": "tsconfig_app_compileroptions_target"
     },
     {
       "relation": "contains",
@@ -42413,9 +42413,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_app_compileroptions",
-      "target": "tsconfig_app_compileroptions_types",
-      "confidence_score": 1.0
+      "target": "tsconfig_app_compileroptions_types"
     },
     {
       "relation": "contains",
@@ -42423,9 +42423,9 @@
       "source_file": "tsconfig.app.json",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_app_compileroptions",
-      "target": "tsconfig_app_compileroptions_usedefineforclassfields",
-      "confidence_score": 1.0
+      "target": "tsconfig_app_compileroptions_usedefineforclassfields"
     },
     {
       "relation": "contains",
@@ -42433,9 +42433,9 @@
       "source_file": "tsconfig.json",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig",
-      "target": "tsconfig_files",
-      "confidence_score": 1.0
+      "target": "tsconfig_files"
     },
     {
       "relation": "contains",
@@ -42443,9 +42443,9 @@
       "source_file": "tsconfig.json",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig",
-      "target": "tsconfig_references",
-      "confidence_score": 1.0
+      "target": "tsconfig_references"
     },
     {
       "relation": "contains",
@@ -42453,9 +42453,9 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_node",
-      "target": "tsconfig_node_compileroptions",
-      "confidence_score": 1.0
+      "target": "tsconfig_node_compileroptions"
     },
     {
       "relation": "contains",
@@ -42463,9 +42463,9 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_node",
-      "target": "tsconfig_node_include",
-      "confidence_score": 1.0
+      "target": "tsconfig_node_include"
     },
     {
       "relation": "contains",
@@ -42473,9 +42473,9 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_node_compileroptions",
-      "target": "tsconfig_node_compileroptions_allowsyntheticdefaultimports",
-      "confidence_score": 1.0
+      "target": "tsconfig_node_compileroptions_allowsyntheticdefaultimports"
     },
     {
       "relation": "contains",
@@ -42483,9 +42483,9 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_node_compileroptions",
-      "target": "tsconfig_node_compileroptions_composite",
-      "confidence_score": 1.0
+      "target": "tsconfig_node_compileroptions_composite"
     },
     {
       "relation": "contains",
@@ -42493,9 +42493,9 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_node_compileroptions",
-      "target": "tsconfig_node_compileroptions_module",
-      "confidence_score": 1.0
+      "target": "tsconfig_node_compileroptions_module"
     },
     {
       "relation": "contains",
@@ -42503,9 +42503,9 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_node_compileroptions",
-      "target": "tsconfig_node_compileroptions_moduleresolution",
-      "confidence_score": 1.0
+      "target": "tsconfig_node_compileroptions_moduleresolution"
     },
     {
       "relation": "contains",
@@ -42513,9 +42513,9 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_node_compileroptions",
-      "target": "tsconfig_node_compileroptions_noemit",
-      "confidence_score": 1.0
+      "target": "tsconfig_node_compileroptions_noemit"
     },
     {
       "relation": "contains",
@@ -42523,9 +42523,9 @@
       "source_file": "tsconfig.node.json",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tsconfig_node_compileroptions",
-      "target": "tsconfig_node_compileroptions_skiplibcheck",
-      "confidence_score": 1.0
+      "target": "tsconfig_node_compileroptions_skiplibcheck"
     },
     {
       "relation": "contains",
@@ -42533,9 +42533,9 @@
       "source_file": "README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme",
-      "target": "readme_gameit_portal_mvp",
-      "confidence_score": 1.0
+      "target": "readme_gameit_portal_mvp"
     },
     {
       "relation": "contains",
@@ -42543,9 +42543,9 @@
       "source_file": "README.md",
       "source_location": "L78",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_adding_a_new_game",
-      "confidence_score": 1.0
+      "target": "readme_adding_a_new_game"
     },
     {
       "relation": "contains",
@@ -42553,9 +42553,9 @@
       "source_file": "README.md",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_admin_access_mvp",
-      "confidence_score": 1.0
+      "target": "readme_admin_access_mvp"
     },
     {
       "relation": "contains",
@@ -42563,9 +42563,9 @@
       "source_file": "README.md",
       "source_location": "L52",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_architecture_overview",
-      "confidence_score": 1.0
+      "target": "readme_architecture_overview"
     },
     {
       "relation": "contains",
@@ -42573,9 +42573,9 @@
       "source_file": "README.md",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_build_preview",
-      "confidence_score": 1.0
+      "target": "readme_build_preview"
     },
     {
       "relation": "contains",
@@ -42583,9 +42583,9 @@
       "source_file": "README.md",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_deploy_to_github_pages",
-      "confidence_score": 1.0
+      "target": "readme_deploy_to_github_pages"
     },
     {
       "relation": "contains",
@@ -42593,9 +42593,9 @@
       "source_file": "README.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_features",
-      "confidence_score": 1.0
+      "target": "readme_features"
     },
     {
       "relation": "contains",
@@ -42603,9 +42603,9 @@
       "source_file": "README.md",
       "source_location": "L93",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_future_improvements",
-      "confidence_score": 1.0
+      "target": "readme_future_improvements"
     },
     {
       "relation": "contains",
@@ -42613,9 +42613,9 @@
       "source_file": "README.md",
       "source_location": "L85",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_known_limitations",
-      "confidence_score": 1.0
+      "target": "readme_known_limitations"
     },
     {
       "relation": "contains",
@@ -42623,9 +42623,9 @@
       "source_file": "README.md",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_local_run",
-      "confidence_score": 1.0
+      "target": "readme_local_run"
     },
     {
       "relation": "contains",
@@ -42633,9 +42633,9 @@
       "source_file": "README.md",
       "source_location": "L65",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_monster_rpg_foundation",
-      "confidence_score": 1.0
+      "target": "readme_monster_rpg_foundation"
     },
     {
       "relation": "contains",
@@ -42643,9 +42643,9 @@
       "source_file": "README.md",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_multiplayer_dev",
-      "confidence_score": 1.0
+      "target": "readme_multiplayer_dev"
     },
     {
       "relation": "contains",
@@ -42653,9 +42653,9 @@
       "source_file": "README.md",
       "source_location": "L102",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_gameit_portal_mvp",
-      "target": "readme_ui_asset_integration",
-      "confidence_score": 1.0
+      "target": "readme_ui_asset_integration"
     },
     {
       "relation": "contains",
@@ -42663,9 +42663,9 @@
       "source_file": "src/games/monster-rpg/client/README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "client_readme",
-      "target": "client_readme_monster_rpg_client",
-      "confidence_score": 1.0
+      "target": "client_readme_monster_rpg_client"
     },
     {
       "relation": "contains",
@@ -42673,11 +42673,11 @@
       "source_file": "src/games/monster-rpg/ui/README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_readme",
-      "target": "ui_readme_monster_rpg_ui",
-      "confidence_score": 1.0
+      "target": "ui_readme_monster_rpg_ui"
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "777b0c2e30902df76795e7c4b583a4e1e5181a46"
+  "built_at_commit": "65ae8d9b12f3f3a27691ca75b5af7de7d34f217d"
 }
