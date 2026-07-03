@@ -7,6 +7,7 @@
 - Added a GitHub Pages SPA fallback so direct portal routes such as `/library`, `/leaderboard`, and `/admin` load the React app.
 - Added original Flappy Bird and Stickman Fight cover/hero portal assets, wired them into the registry, and upgraded preview cards/pages so coming-soon entries read as intentional queue items.
 - Bumped the local registry override storage key so stale browser overrides cannot mask newly generated portal assets.
+- Fixed portal image URLs to respect Vite's `BASE_URL`, so GitHub Pages loads covers/heroes from `/gameit/assets/portal/...` instead of the domain root.
 - Kept the portal pass scoped to React/DOM pages so game runtime routes remain lightweight.
 
 ## 2026-07-02 - Issue #49: Portal Navigation And Final Responsive QA
