@@ -1,5 +1,7 @@
-import { lazy, Suspense, useState, type ReactNode } from 'react';
+import { lazy, Suspense, useMemo, useState, type CSSProperties, type ReactNode } from 'react';
 import { Link, NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { getFeaturedGame } from '../config/games';
+import { getPortalImageAsset } from '../config/portalAssets';
 import { loadGameRegistry } from '../config/registryOverride';
 import { useTheme } from '../hooks/useTheme';
 import { AdminPage } from '../admin/AdminPage';
@@ -67,39 +69,102 @@ const navIcons = {
   '/admin': <CrownIcon />,
 } as const;
 
+const popularOrder = ['gameit-monsters', 'snake', 'flappy-bird', 'stickman-fight'] as const;
+
 const Home = ({ games }: { games: GameDefinition[] }) => {
+  const featuredGame = getFeaturedGame(games);
+  const hero = getPortalImageAsset(featuredGame.assets.hero, 'hero');
+  const popularGames = useMemo(
+    () =>
+      popularOrder
+        .map((id) => games.find((game) => game.id === id))
+        .filter((game): game is GameDefinition => Boolean(game)),
+    [games],
+  );
+  const playableCount = games.filter((game) => game.status === 'playable').length;
+  const queuedCount = games.length - playableCount;
+  const heroStyle = {
+    '--hero-image': `url(${hero.src})`,
+    '--hero-accent': featuredGame.accent,
+  } as CSSProperties;
+
   return (
-    <>
+    <main className="portal-main">
       <a className="skip-link" href="#collection">Skip to games</a>
-      <section
-        className="kinetic-hero"
-        aria-labelledby="portal-title"
-      >
+      <section className="portal-hero" aria-labelledby="portal-title" style={heroStyle}>
         <div className="kinetic-hero-copy">
+          <p className="section-kicker">Browser game arcade</p>
           <h1 id="portal-title">GameIt</h1>
-          <p>Step into the Kinetic Portal. A curated universe of fast browser games built for instant play.</p>
-          <a className="portal-primary-action" href="#collection">Explore Vault</a>
+          <p>Fast games, sharp scores, and a whole arcade waiting in the browser.</p>
+          <div className="hero-actions">
+            <Link className="portal-primary-action" to={featuredGame.route}>Play featured</Link>
+            <Link className="portal-secondary-action" to="/library">Open library</Link>
+          </div>
         </div>
-      </section>
 
-      <section className="portal-collection" id="collection" aria-labelledby="collection-title">
-        <div className="collection-heading">
+        <div className="hero-feature-card" aria-label={`Featured game: ${featuredGame.name}`}>
+          <span>Featured now</span>
+          <strong>{featuredGame.name}</strong>
+          <p>{featuredGame.description}</p>
+        </div>
+
+        <dl className="portal-stat-strip" aria-label="Portal stats">
           <div>
-            <span className="section-kicker">Featured Titles</span>
-            <h2 id="collection-title">The Kinetic Collection</h2>
+            <dt>{games.length}</dt>
+            <dd>Total games</dd>
           </div>
-          <div className="collection-tags" aria-label="Game categories">
-            <span>Arcade</span>
-            <span>RPG</span>
-            <span>Indie</span>
+          <div>
+            <dt>{playableCount}</dt>
+            <dd>Playable</dd>
           </div>
+          <div>
+            <dt>{queuedCount}</dt>
+            <dd>In queue</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section className="portal-section portal-popular" id="collection" aria-labelledby="collection-title">
+        <div className="section-heading">
+          <div>
+            <span className="section-kicker">Most popular</span>
+            <h2 id="collection-title">Hot right now</h2>
+          </div>
+          <Link className="section-link" to="/library">View all games</Link>
         </div>
 
-        <div className="kinetic-grid">
-          {games.map((game, index) => <GameTile key={game.id} game={game} featured={index === 0} />)}
+        <div className="popular-grid">
+          {popularGames.map((game, index) => <GameTile key={game.id} game={game} featured={index === 0} />)}
         </div>
       </section>
-    </>
+
+      <section className="portal-section portal-leaderboard-preview" aria-labelledby="score-preview-title">
+        <div className="leaderboard-preview-copy">
+          <span className="section-kicker">Daily, weekly, all-time</span>
+          <h2 id="score-preview-title">Every game has its own race.</h2>
+          <p>Jump from one title to another and check score ranges without leaving the portal.</p>
+        </div>
+        <Link className="portal-primary-action" to="/leaderboard">Open leaderboard</Link>
+      </section>
+
+      <section className="portal-section portal-library-preview" aria-labelledby="library-preview-title">
+        <div className="section-heading">
+          <div>
+            <span className="section-kicker">Full library</span>
+            <h2 id="library-preview-title">Everything in the portal</h2>
+          </div>
+        </div>
+        <div className="mini-library-grid">
+          {games.slice(0, 6).map((game) => (
+            <Link key={game.id} to={game.route} className="mini-library-tile">
+              <span style={{ background: game.accent }} />
+              <strong>{game.name}</strong>
+              <small>{game.status === 'playable' ? 'Playable' : 'Coming soon'}</small>
+            </Link>
+          ))}
+        </div>
+      </section>
+    </main>
   );
 };
 

@@ -1,7 +1,5 @@
 import { useMemo, useState } from 'react';
-import type { CSSProperties } from 'react';
-import { Link } from 'react-router-dom';
-import { getPortalImageAsset } from '../config/portalAssets';
+import { GameTile } from '../components/GameTile';
 import type { GameDefinition } from '../types/game';
 import {
   defaultLibraryFilters,
@@ -18,39 +16,6 @@ interface LibraryPageProps {
   games: GameDefinition[];
 }
 
-function LibraryGameCard({ game }: { game: GameDefinition }) {
-  const cover = getPortalImageAsset(game.assets.cover, 'cover');
-  const isPlayable = game.status === 'playable';
-
-  return (
-    <article
-      className={`library-card ${isPlayable ? 'library-card-playable' : 'library-card-coming-soon'}`}
-      style={{ borderColor: game.accent, '--game-accent': game.accent } as CSSProperties}
-    >
-      <img className="library-card-cover" src={cover.src} alt={cover.alt} width={cover.width} height={cover.height} />
-      <div className="library-card-body">
-        <div className="badge-row">
-          <span className="badge">{formatLibraryLabel(game.genre)}</span>
-          <span className={`badge status-badge ${isPlayable ? 'status-badge-live' : 'status-badge-soon'}`}>
-            {isPlayable ? 'Playable' : 'Coming soon'}
-          </span>
-        </div>
-        <h2>{game.name}</h2>
-        <p>{game.description}</p>
-        {isPlayable ? (
-          <Link to={game.route} className="pixel-btn library-launch">
-            Launch
-          </Link>
-        ) : (
-          <span className="pixel-btn secondary library-launch disabled" aria-disabled="true" title="This game is in the portal queue.">
-            Coming soon
-          </span>
-        )}
-      </div>
-    </article>
-  );
-}
-
 export function LibraryPage({ games }: LibraryPageProps) {
   const [query, setQuery] = useState(defaultLibraryFilters.query);
   const [genre, setGenre] = useState<LibraryGenreFilter>(defaultLibraryFilters.genre);
@@ -61,19 +26,30 @@ export function LibraryPage({ games }: LibraryPageProps) {
     () => filterLibraryGames(games, { genre, query, status }),
     [games, genre, query, status],
   );
+  const playableCount = filteredGames.filter((game) => game.status === 'playable').length;
 
   return (
-    <main className="page library-page">
-      <section className="arcade-panel library-header">
+    <main className="portal-main library-page">
+      <section className="portal-page-hero library-header">
         <div>
           <p className="section-kicker">Library</p>
-          <h1>Game catalog</h1>
-          <p>Browse every registered GameIt title.</p>
+          <h1>All games</h1>
+          <p>Every registered GameIt title, from live releases to the next arcade arrivals.</p>
         </div>
+        <dl className="library-counts" aria-label="Library result counts">
+          <div>
+            <dt>{filteredGames.length}</dt>
+            <dd>Shown</dd>
+          </div>
+          <div>
+            <dt>{playableCount}</dt>
+            <dd>Playable</dd>
+          </div>
+        </dl>
       </section>
 
-      <section className="arcade-panel library-filters" aria-label="Library filters">
-        <label htmlFor="library-search">
+      <section className="portal-filter-panel library-filters" aria-label="Library filters">
+        <label htmlFor="library-search" className="library-search-field">
           <span>Search</span>
           <input
             id="library-search"
@@ -108,10 +84,10 @@ export function LibraryPage({ games }: LibraryPageProps) {
 
       <section className="library-results" aria-label="Library games">
         {filteredGames.map((game) => (
-          <LibraryGameCard key={game.id} game={game} />
+          <GameTile key={game.id} game={game} />
         ))}
         {filteredGames.length === 0 && (
-          <div className="arcade-panel library-empty">
+          <div className="portal-empty-state library-empty">
             <h2>No games found</h2>
             <p>Adjust search or filters.</p>
           </div>

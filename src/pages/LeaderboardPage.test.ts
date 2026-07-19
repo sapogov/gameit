@@ -93,7 +93,7 @@ describe('leaderboard view model', () => {
     });
 
     expect(emptyWeekly.isEmpty).toBe(true);
-    expect(emptyWeekly.rangeLabel).toBe('Weekly');
-    expect(emptyWeekly.emptyStateMessage).toBe('No Weekly scores for Snake yet.');
+    expect(emptyWeekly.rangeLabel).toBe('Week');
+    expect(emptyWeekly.emptyStateMessage).toBe('No Week scores for Snake yet.');
   });
 });

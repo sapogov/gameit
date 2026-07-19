@@ -1,5 +1,138 @@
 # Monster RPG Work Summary
 
+## 2026-07-08 - Python-Monsters Port Planning Docs
+
+- Synthesized the full grilled design into `docs/monster-rpg/prd-python-monsters-port.md`, including 189 user stories, implementation decisions, confirmed test seams, and explicit out-of-scope boundaries; published it as GitHub issue #57 with `ready-for-agent`.
+- Published the approved maximum-parallel tracer-bullet breakdown as GitHub issues #58-#78, all linked to parent PRD #57, labeled `ready-for-agent`, and ordered so real blocker issue numbers appear in each dependency section.
+- Created the `feature/python-monsters-faithful-port` branch from the current `new-version` working tree before port work.
+- Locked planning decisions for canonical licensed Python-Monsters/Scarloxy art, TMX map conversion replacing the current map set, hybrid visible Monster Patches, canonical Creature Evolution with player confirmation, five-level equivalent Evolution Stat Bonus, deterministic-default Stat Growth Model with rarity-weighted random Stat Growth Events, explicit Stat Rebalance rules, Trainer terminology, one-time Trainer clears, and server-owned Trainer Battles.
+- Added future map-generation language: Generated Map Sets default to template-driven generation from Hand-Authored Map Sets, with a strategy boundary so the approach can change later.
+- Decided the world replacement performs a full Monster RPG save reset so all players restart from the beginning.
+- Kept First-Run Onboarding, Village Elder, Starter Pack, and starter Magic Dust Farm as GameIt domain flow while moving presentation into the new hand-authored TMX town.
+- Kept private home towns per Player ID, while reserving shared public maps and Big Cities for non-owned multiplayer gathering and services.
+- Decided private home towns use a shared template with deterministic player-seeded Town Variation and location-derived Town Biomes so players can notice differences without breaking services, exits, farms, or collisions.
+- Added Home Town Anchors as stable big-map locations that determine public entrance placement, Town Biome, and town discovery/visiting.
+- Chose first-release Town Clusters so multiple player towns can share one big-map anchor marker and open a town selection/discovery list.
+- Locked first-release Big Cities as fixed hand-authored public hubs, including City-Owned Farms where stealing affects City Reputation and guards instead of player ownership rules.
+- Refined City Reputation: low standing restricts services and escalates guard encounters first, with City Ban reserved for the lowest reputation state.
+- Added Reputation Recovery Tasks so banned players have multiple outside-city paths to repair City Reputation.
+- Scoped first-release Trainers to routes, public maps, and Big Cities, leaving default player towns focused on ownership, farms, visitors, and services.
+- Locked first-release Trainer Rewards as one-time player XP, Creature XP, Magic Dust, and optional Card rewards.
+- Decided Battles support forced player switching after a Fainted active Creature when another ready Active Party Creature exists; defeat occurs only when no ready Creature remains.
+- Decided Trainer Battles resolve active Creature versus active Creature, allow Trainer and player switching, charge player switching as a turn or recovery action, and allow limited proactive Trainer AI switching.
+- Updated Creature XP rules so non-Fainted Active Party Creatures receive full XP, Fainted Active Party Creatures receive a balance-configured reduced share defaulting to 20%, and stored Creatures receive none.
+- Clarified level-up and evolution HP behavior: Fainted Creatures stay at 0 HP, non-Fainted Creatures gain current HP equal to max HP increases, and only non-Fainted Creatures can evolve.
+- Locked evolution access: common level-based evolution starts from Creature UI, special evolutions may route to services, online evolution blocks movement and hostile interactions, and completion can show nearby players a short effect.
+- Added configured Protected Interaction States as the shared multiplayer boundary for evolution and future blocking UI flows.
+- Decided imported Python-Monsters assets keep their vendor source folder structure while game code uses normalized manifest keys.
+- Included reference graphics/fonts in asset scope, excluded reference audio pending separate audit, and allowed original generated audio if useful.
+- Kept battle controls in the DOM HUD while adding a dedicated Phaser Battle Presentation Scene for battle backgrounds, sprites, transitions, and effects.
+- Kept square-tile movement for first release, but added a Movement Model boundary so free movement or hex-tile movement can be introduced later.
+- Decided TMX conversion preserves movement-agnostic map data and object/polygon collision metadata while v1 enforces tile collision through a square-grid adapter.
+- Added Map Trigger Areas and Map Interactions so exits, doors, NPCs, signs, farms, chests, and similar objects are not hardcoded to single-tile assumptions.
+- Chose a Typed Map Object Registry as the runtime contract, with TMX object layers used only as authoring input.
+- Chose one Generated Map Schema for converted, generated, remote, and future user-created maps; first-release shipped maps will be packaged as typed modules.
+- Added tiered timed-reset Chests, per-player and shared/global Chest reset scopes, Locked Chests with item or skill requirements, Chest Loot Tables, and basic Items as first-release Map Interaction systems.
+- Decided city-owned Locked Chest theft affects City Reputation only through nearby NPC witnesses, with maximum theft or lock-picking skill able to avoid reputation consequences.
+- Added a player-facing Guidebook concept for explaining Chests and broader game systems, with manual prose plus static build-generated config tables, per-player discovery state, locked undiscovered rows, exact discovered Chest Loot Table chances, and access outside Battles/NPC dialogs.
+- Decided opening any Chest discovers that Chest Tier's Guidebook details, independent of the specific rewards rolled.
+- Decided Chest rewards go straight into inventory and are surfaced through the game log, with optional summary UI.
+- Defined the Game Log as a session-only, player-local HUD panel that replaces transient one-line status messages with an expandable recent event history.
+- Typed Game Log entries as `reward`, `battle`, `interaction`, `travel`, or `system`; first release uses those categories for presentation without exposing filters.
+- Kept detailed combat actions in the Battle UI; only major Battle milestones, XP, rewards, evolution availability, and outcomes flow into the general Game Log.
+- Chose compact non-blocking Chest reward summaries alongside Game Log entries, with stronger presentation for rare or first-discovered rewards and no movement-blocking modal.
+- Kept Chest reward contents private; nearby players can see an opening effect and shared empty state, but not the awarded Items.
+- Made shared/global Chest opening an atomic server-authoritative claim: first valid request wins, and rejected competing requests consume no keys or resources.
+- Split Items into Consumable, Key, and Task Items; Task Items are protected from selling or accidental consumption.
+- Added Battle Items as an explicit Consumable Item category for healing, revival, Fatigue recovery, and temporary buffs usable during Battles.
+- Changed Buff Cards into acquisition objects that grant buff Battle Items; only Battle Items are consumed during combat, avoiding overlapping buff-use systems.
+- Made Battle Item use follow the real-time Attack pipeline: apply the Item effect, then start normal player action cooldown while the opponent continues acting.
+- Clarified that Fainted Creatures cannot be selected or switched into Battle but can be targeted by Revive Items; standard Revive restores a balance-configured 5-10 HP, while Full Revive restores full HP.
+- Kept revival and switching as separate Battle actions: a revived Creature can enter only after the Revive Item cooldown and a later switch action.
+- Made Battle defeat immediate when no ready Creature remains; there is no emergency Revive Item window after the final Faint.
+- Set no per-Battle Battle Item cap; players may use all eligible Items in inventory, with action cooldown and enemy pressure providing the combat cost.
+- Kept ordinary Trainers Item-free by default; only explicitly configured Boss Trainers can use Battle Items and buffs.
+- Gave each Boss Trainer a finite predefined Item loadout per Battle attempt; consumed Items stay spent during the attempt and reset only for a new attempt.
+- Defined Healing Item scaling: common tiers restore fixed HP, rarer tiers restore a percentage of max HP, and the strongest fully heals; values remain centralized balance parameters.
+- Allowed Healing Items to target the active or any non-Fainted reserve Creature; reserve healing still consumes an action while the active Creature remains exposed.
+- Split buff targeting into Creature Buffs for one chosen non-Fainted Creature and Party Buffs for all non-Fainted Active Party Creatures, excluding Fainted and stored Creatures.
+- Made buffs Creature-attached snapshots that persist through switching; Party Buffs do not retroactively affect Creatures revived after use.
+- Allowed each buff to configure duration by real-time seconds, affected actions, or Battle end; duration remains server-authoritative and pauses during Battle Disconnect Grace.
+- Allowed healing, Revive, and Fatigue recovery Battle Items outside combat without cooldown; Battle-context buffs remain unavailable outside Battle.
+- Chose data-driven Item Definitions with generic effect execution and recorded the architectural boundary in ADR 0020.
+- Scoped the first-release Item Catalog to three healing tiers, two revival tiers, two Fatigue recovery tiers, three Creature Buffs, one Party Buff, and three key tiers; tasks define their own Task Items.
+- Set first-release buff effects to Creature offense, defense, and action-recovery boosts plus a weaker Party Rally that grants all three; strengths and durations remain centralized balance values.
+- Resolved same-type buff stacking by applying only the highest value; weaker uses still consume the Item and action cooldown without changing the stronger active effect.
+- Made equal-value same-type buff uses consume the Item and refresh the existing effect to its full configured duration without increasing strength.
+- Set centralized inventory defaults to 150 Item slots and 99 units per stack; overflow starts another stack, reusable keys remain unique, and Item Definitions may override stack size.
+- Added a persistent Reward Inbox for Items awarded while inventory is full, so Chests and Battles complete without discarding rewards and players can claim them after freeing space.
+- Capped the Reward Inbox at a centralized default of 50 source bundles and required capacity reservation before reward-producing actions, blocking optional starts only when no bundle capacity remains.
+- Made Reward Inbox claims atomic: a bundle transfers fully or remains unchanged, with no partial claims.
+- Required Inbox bundles to preview full contents and exact additional slots when Claim is disabled, with the server rechecking capacity atomically at claim time.
+- Kept Magic Dust and raw materials outside Inventory Slots and granted them immediately; only overflow Item stacks enter Reward Inbox bundles.
+- Allowed quantity-based confirmed discard for ordinary Consumables and consumable keys, while reusable Key Items and Task Items remain protected; selling stays a shop interaction.
+- Made shop sellability data-driven per Item Definition: ordinary Consumables are sellable by default, while Key and Task Items require an explicit sell-price override.
+- Named the ordinary gold-coin shop currency `Clinks`; Item buying and selling use Clinks, while Magic Dust remains reserved for progression, crafting, evolution, and special systems.
+- Added Clinks to possible Wild Battle Rewards alongside Magic Dust, XP, Packs, materials, and rare direct-drop Eggs.
+- Reused the Chest Reward Chance Matrix model for Wild Battle Reward Tables, including independent entries, quantity ranges, constraints, and explicit 100% guarantees.
+- Selected Wild Battle Reward Tables from Encounter Zone plus enemy Rarity defaults, with per-Species entry overrides taking precedence.
+- Added an explicit `boostable` flag to Reward Chance Matrix entries; drop-chance buffs affect only opted-in entries and cap at 100%.
+- Made drop-chance buffs multiplicative rather than additive, preserving relative rarity between Reward Chance Matrix entries.
+- Added two Drop-Chance Buff duration models: configured real-time duration and configured Battle count.
+- Made battle-count Drop-Chance Buffs decrement after every completed reward-eligible Wild Battle, including losses and escapes, while excluding Trainer, Guard, and PvP Battles.
+- Made timed Drop-Chance Buffs use visible wall-clock expiration timestamps that continue while the player is offline or disconnected.
+- Made equal-strength Drop-Chance Buff activation replace the existing buff and duration model completely, without combining remaining time or Battles.
+- Allowed per-entry Clinks boost behavior: guaranteed baseline Clinks stay non-boostable, while separate bonus Clinks entries may opt into Drop-Chance Buffs.
+- Reused the existing `common` through `mythical` Rarity taxonomy for Item availability, pricing, Chest tables, and Guidebook display without coupling Rarity to Item behavior.
+- Added ordered Key Strength independent from Rarity; stronger consumable keys open weaker locks only after the UI identifies the key and confirms its consumption.
+- Made Locked Chests default to an exact-strength consumable key or otherwise the weakest valid one, while allowing manual selection of another valid key before confirmation.
+- Preferred reusable keys over consumable keys automatically, while allowing a lock definition to explicitly require a consumable unlock method.
+- Modeled Locked Chest access as alternative `anyOf` Unlock Methods, with each method able to require multiple conditions together and one complete method sufficient to open.
+- Required player choice among valid Unlock Methods after showing costs and risks, with safe reusable/non-consuming methods focused by default but no deliberate option blocked.
+- Made first acquisition unlock full Item Guidebook discovery; prior shop or lock exposure reveals only the Item name and silhouette.
+- Kept undiscovered Item sources hidden in the Guidebook; Item pages reveal only separately discovered shops, Chest Tiers, zones, and tasks.
+- Centralized adjustable values under one typed, validated, versioned Game Balance Config shared by client, server, tests, and Guidebook generation; recorded the boundary in ADR 0021.
+- Chose build-time Game Balance Config deployment for first release, requiring rebuild/redeploy and server rejection of clients with incompatible config versions; live tuning is deferred.
+- Required every save to persist the Game Balance Config version that last wrote it, enabling explicit migrations, deterministic recalculation, and reliable debugging.
+- Required explicit ordered migrations for older Save Balance Versions and clear rejection when no path exists, forbidding silent reset or reinterpretation.
+- Placed Basic Merchants in every home town for common recovery Items and expanded City Merchants in Big Cities for rarer Items, keys, buffs, selling, and City Reputation restrictions.
+- Made every merchant Item finite through configured stock quantities and timed restocks, including common recovery essentials.
+- Scoped home-village Merchant Stock per shopper Player ID and all other public-map Merchant Stock globally across players.
+- Set Merchant Stock to wall-clock schedules with a centralized daily default and per-entry overrides; shared stock resets simultaneously for everyone.
+- Made shared Merchant Stock purchases atomic and server-authoritative: first valid request wins remaining stock, rejected competitors spend no Clinks and receive refreshed stock.
+- Limited shop quantity selection to visible stock and made stale shared-stock purchase requests fail all-or-nothing, returning current availability without charging the player.
+- Required full inventory capacity before shop purchase; insufficient-space requests spend no Clinks, reduce no stock, and never enter Reward Inbox.
+- Kept player sales separate from Merchant Stock: sold Items leave the economy and stock changes only through purchases and scheduled restocks.
+- Chose lightly humorous Item display names paired with explicit mechanical subtitles so flavor never hides function.
+- Named the 14 first-release core Items: three healing, two revival, two Fatigue recovery, three Creature Buffs, one Party Buff, and three Key Items.
+- Set initial configurable Healing Item defaults: Mending Sprig restores 15 HP, Hearty Draught restores 50% max HP, and Fullbloom Elixir fully heals.
+- Set initial configurable Fatigue recovery defaults: Second-Wind Tea removes 30 Fatigue and Clearhead Tonic removes all Fatigue.
+- Made Fangbrew, Ironbark Tonic, Quickstep Fizz, and Rallybrew last until the current Battle ends by default, retaining other duration models for future Items.
+- Set initial configurable buff strengths: 20% offense, defense, or cooldown improvement for single-Creature Items and 10% to all three for Rallybrew party effects.
+- Assigned initial Item Rarities from common through ultra-rare and consolidated all 14 names, IDs, categories, Rarities, and default effects in `docs/monster-rpg/item-catalog.md`.
+- Set the centralized default Item sell ratio to 40% of configured buy price, rounded down to whole Clinks, while retaining per-Item sell overrides.
+- Put default buy price on Item Definitions with optional Merchant Stock overrides; first-release City Reputation restricts service access but does not alter prices.
+- Added a configurable Economy Pacing Target of approximately three common Wild Battle wins per Mending Sprig so Clinks rewards and Item prices can be tuned together.
+- Set initial common Wild Battle Clinks entries to guaranteed 6-8 plus a boostable 40% chance for 5-10, and priced Mending Sprig at 30 Clinks for roughly three expected wins.
+- Assigned initial configurable buy prices from 30 Clinks for Mending Sprig through 1,200 Clinks for Crown Key and recorded them in the Item Catalog.
+- Added configurable per-player Merchant Stock purchase caps, with first-release values intentionally high enough to feel effectively unrestricted while retaining future balance control.
+- Set the centralized default per-player Merchant Stock purchase cap to 99 units per Item per restock period, matching the default Item stack size.
+- Added a Game Balance Config stock-quantity matrix by Item Rarity, with merchant and Item stock entries able to override defaults.
+- Split Merchant Stock defaults into separate personal home-village and shared public Rarity matrices so multiplayer demand does not distort personal availability.
+- Set initial configurable daily Merchant Stock matrices from 20/500 personal/shared common Items down to 1/1 legendary and mythical Items, documented in the Item Catalog.
+- Limited Basic Merchants to Mending Sprig, Wakeleaf, and Second-Wind Tea; expanded recovery, buffs, and keys remain City Merchant offerings.
+- Differentiated City Merchants through fixed recovery stock, biome/city-specific Items, and daily rotating Merchant Offer Matrices with explicit guaranteed entries and constraints.
+- Synchronized City Merchant offer rotation and stock replenishment on one default daily wall-clock reset, with optional per-merchant schedule overrides.
+- Made City Merchant rotations global and server-authoritative: one offer result per merchant/reset period is shared by every player, with no client rerolls.
+- Updated `CONTEXT.md` and added ADRs for canonical licensed art, TMX maps as authoritative source, Creature Evolution identity, original GameIt Evolution Chains, and server-owned Trainer Battles.
+
+## 2026-07-03 - Browser Game Portal Rebuild
+
+- Rebuilt the GameIt portal home from scratch around a full-bleed featured game hero, most-popular game tiles, portal stats, leaderboard entry point, and a compact library preview.
+- Reworked the Library page to show every registry-backed game through the shared tile treatment while preserving search, genre, and status filters.
+- Reworked the Leaderboard page so each registered game has selectable Day, Week, and All-time score views with a focused game selector and selected-game artwork.
+- Added a final scoped portal visual system with neon arcade contrast, responsive desktop/mobile navigation, stable cards, accessible focus states, and local portal assets.
+
 ## 2026-07-03 - Portal Stitch Alignment
 
 - Aligned the live GameIt portal with the local Stitch `design.html` Kinetic Portal reference: cinematic hero copy, fixed glass navigation, bento-style game tiles, mobile tab bar, and floating admin action.

@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
+import type { CSSProperties } from 'react';
 import { gameRegistry } from '../config/games';
+import { getPortalImageAsset } from '../config/portalAssets';
 import { LocalStorageLeaderboardProvider, type LeaderboardProvider } from '../providers/leaderboardProvider';
 import { type GameDefinition, type GameId, type LeaderboardRange } from '../types/game';
 
 const ranges: readonly { value: LeaderboardRange; label: string }[] = [
-  { value: 'daily', label: 'Daily' },
-  { value: 'weekly', label: 'Weekly' },
+  { value: 'daily', label: 'Day' },
+  { value: 'weekly', label: 'Week' },
   { value: 'all-time', label: 'All time' },
 ];
 
@@ -108,44 +110,58 @@ export const LeaderboardPage = ({
       }),
     [provider, registryGames, selectedGameId, selectedRange],
   );
+  const selectedGame = registryGames.find((game) => game.id === selectedGameId) ?? registryGames[0];
+  const selectedCover = selectedGame ? getPortalImageAsset(selectedGame.assets.cover, 'cover') : undefined;
 
   return (
-    <main className="page leaderboard-page">
-      <header className="leaderboard-header">
+    <main className="portal-main leaderboard-page">
+      <header className="portal-page-hero leaderboard-header">
         <div>
+          <p className="section-kicker">Leaderboard</p>
           <h1>
-            <TrophyIcon /> Leaderboard
+            <TrophyIcon /> Score chase
           </h1>
-          <p className="leaderboard-subtitle">Select a game and time range to view top runs.</p>
+          <p className="leaderboard-subtitle">Each game has separate rankings for day, week, and all time.</p>
         </div>
+        {selectedGame && selectedCover && (
+          <div className="leaderboard-feature">
+            <img src={selectedCover.src} alt={selectedCover.alt} width={selectedCover.width} height={selectedCover.height} />
+            <div>
+              <span>Viewing</span>
+              <strong>{selectedGame.name}</strong>
+            </div>
+          </div>
+        )}
       </header>
 
-      <section className="leaderboard-controls panel" aria-label="Leaderboard filters">
+      <section className="leaderboard-controls portal-filter-panel" aria-label="Leaderboard filters">
         <div className="leaderboard-control-group">
-          <h2>Game</h2>
-          <div className="leaderboard-segment" role="group" aria-label="Game filter">
+          <h2>Choose game</h2>
+          <div className="leaderboard-game-grid" role="group" aria-label="Game filter">
             {registryGames.map((game) => (
               <button
                 key={game.id}
                 type="button"
-                className={`pixel-btn secondary ${selectedGameId === game.id ? 'active' : ''}`}
+                className={`leaderboard-game-button ${selectedGameId === game.id ? 'active' : ''}`}
+                style={{ '--game-accent': game.accent } as CSSProperties}
                 aria-pressed={selectedGameId === game.id}
                 onClick={() => setSelectedGameId(game.id)}
               >
-                {game.name}
+                <span>{game.name}</span>
+                <small>{game.status === 'playable' ? 'Live' : 'Queued'}</small>
               </button>
             ))}
           </div>
         </div>
 
         <div className="leaderboard-control-group">
-          <h2>Range</h2>
+          <h2>Score range</h2>
           <div className="leaderboard-segment" role="group" aria-label="Score range">
             {ranges.map((option) => (
               <button
                 key={option.value}
                 type="button"
-                className={`pixel-btn secondary ${selectedRange === option.value ? 'active' : ''}`}
+                className={`range-button ${selectedRange === option.value ? 'active' : ''}`}
                 aria-pressed={selectedRange === option.value}
                 onClick={() => setSelectedRange(option.value)}
               >
@@ -156,7 +172,7 @@ export const LeaderboardPage = ({
         </div>
       </section>
 
-      <section className="panel leaderboard-summary">
+      <section className="portal-panel leaderboard-summary">
         <p className="leaderboard-summary-label">
           Showing <strong>{viewModel.rangeLabel}</strong> scores for <strong>{viewModel.gameName}</strong>
         </p>

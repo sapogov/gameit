@@ -1,7 +1,7 @@
 # Graph Report - gameit  (2026-07-03)
 
 ## Corpus Check
-- 106 files · ~286,102 words
+- 106 files · ~286,116 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `777b0c2e`
+- Built from commit: `65ae8d9b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -130,7 +130,7 @@ Nodes (14): AdminPageProps, readLocal(), writeLocal(), defaultSnakeConfig, Snake
 
 ### Community 3 - "Card Activation and Types"
 Cohesion: 0.08
-Nodes (39): activateBuffCard(), activateCreatureCardViaElder(), activateMaterialCard(), BuffCardDefinition, buildFarmCardViaElder(), CARD_PACK_RARITY_TIERS, CardActionResult, CardActionResultReason (+31 more)
+Nodes (41): activateBuffCard(), activateCreatureCardViaElder(), activateMaterialCard(), BuffCardDefinition, buildFarmCardViaElder(), CARD_PACK_RARITY_TIERS, CardActionResult, CardActionResultReason (+33 more)
 
 ### Community 4 - "Game and Admin Pages"
 Cohesion: 0.13
@@ -141,8 +141,8 @@ Cohesion: 0.07
 Nodes (41): CardDefinition, getVillageDefinition(), getNextPlayerLevelThreshold(), createEmptySaveContainers(), confirmStationTravel(), createInitialStationContainer(), createPlayerVillageStationDestination(), discoverCurrentStationDestination() (+33 more)
 
 ### Community 6 - "Project Dependencies"
-Cohesion: 0.11
-Nodes (22): MonsterRpgGame(), getCreatureCardById(), createProfileState(), canCreatureUseRole(), CreaturePartyFailureReason, CreaturePartyResult, CreatureUseRole, healAllCreaturesAtHospital() (+14 more)
+Cohesion: 0.10
+Nodes (35): ApplyBattleRewardsResult, getCardRewardTable(), PackOpenTrace, createProfileState(), canCreatureUseRole(), CreaturePartyFailureReason, CreaturePartyResult, CreatureUseRole (+27 more)
 
 ### Community 7 - "State Validation and Schema"
 Cohesion: 0.07
@@ -174,7 +174,7 @@ Nodes (23): avatarIds, directions, hashString(), isFacingFarmPosition(), pending
 
 ### Community 14 - "Farm Management and Theft"
 Cohesion: 0.08
-Nodes (39): setCreatureHp(), attemptFacingFarmTheft(), clearFarmGuard(), collectFacingFarm(), consumeFarmCardRequirements(), consumeMaterialRequirements(), createFarmTheftLogEntry(), FarmCollectionFailureReason (+31 more)
+Nodes (43): attemptFacingFarmTheft(), clearFarmGuard(), collectFacingFarm(), consumeFarmCardRequirements(), consumeMaterialRequirements(), createFarmTheftLogEntry(), FarmCollectionFailureReason, FarmCollectionResult (+35 more)
 
 ### Community 15 - "Species Catalog and Stats"
 Cohesion: 0.21
@@ -197,16 +197,16 @@ Cohesion: 0.07
 Nodes (21): App(), ComingSoonPage, MonsterRpgGame, navIcons, PortalShell(), SnakeGamePage, portalNavigationItems, PortalNavigationRoute (+13 more)
 
 ### Community 20 - "Community 20"
-Cohesion: 0.17
-Nodes (23): MAGIC_DUST_CURRENCY_ID, buildStarterMagicDustFarm(), completeVillageElderDialog(), completeVillageElderOnboarding(), convertStarterCreatureCards(), decrementStack(), getStarterCreatureConversionCost(), getVillageElderOnboardingStep() (+15 more)
+Cohesion: 0.16
+Nodes (24): MonsterRpgGame(), MAGIC_DUST_CURRENCY_ID, buildStarterMagicDustFarm(), completeVillageElderDialog(), completeVillageElderOnboarding(), convertStarterCreatureCards(), decrementStack(), getStarterCreatureConversionCost() (+16 more)
 
 ### Community 21 - "Wild Encounter Spawning"
 Cohesion: 0.18
 Nodes (17): PendingTransition, LocationTransition, MapId, WorldPosition, canTargetEncounter(), clamp01(), createWildEncounterSpawn(), EncounterRng (+9 more)
 
 ### Community 22 - "Battle Rewards and Updates"
-Cohesion: 0.15
-Nodes (24): ApplyBattleRewardsResult, getCardRewardTable(), PackOpenTrace, PackOpenTraceCard, CreatureCardDefinitionLike, FarmCardUpgradeRequirement, FarmDefinition, FarmUpgradePreview (+16 more)
+Cohesion: 0.50
+Nodes (4): PackOpenTraceCard, CreatureCardDefinitionLike, FarmCardUpgradeRequirement, CardRarity
 
 ### Community 23 - "Community 23"
 Cohesion: 0.36
@@ -290,9 +290,9 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `VillageScene` connect `Village Scene and Assets` to `Battle State and Schema`, `Community 82`, `Community 23`, `Community 28`, `Location and Player Schema`?**
   _High betweenness centrality (0.049) - this node is a cross-community bridge._
-- **Why does `MonsterRpgSaveState` connect `Community 82` to `Village Scene and Assets`, `Battle State and Schema`, `Card Activation and Types`, `Creature Journal and Profile`, `Project Dependencies`, `State Validation and Schema`, `Save State and Rewards`, `Creature Lifecycle and Attacks`, `Multiplayer Connection Handling`, `Farm Management and Theft`, `Colyseus Client Connections`, `Type Definitions and States`, `Community 20`, `Battle Rewards and Updates`, `Community 26`, `Community 28`, `Farm and Creature Actions`?**
+- **Why does `MonsterRpgSaveState` connect `Community 82` to `Village Scene and Assets`, `Battle State and Schema`, `Card Activation and Types`, `Creature Journal and Profile`, `Project Dependencies`, `State Validation and Schema`, `Save State and Rewards`, `Creature Lifecycle and Attacks`, `Multiplayer Connection Handling`, `Farm Management and Theft`, `Colyseus Client Connections`, `Type Definitions and States`, `Community 20`, `Community 26`, `Community 28`, `Farm and Creature Actions`?**
   _High betweenness centrality (0.030) - this node is a cross-community bridge._
-- **Why does `getGameMap()` connect `Species Catalog and Stats` to `Village Scene and Assets`, `Creature Journal and Profile`, `Project Dependencies`, `State Validation and Schema`, `UI Components and Formatting`, `Community 44`, `Multiplayer Connection Handling`, `Coming Soon Page`, `Colyseus Client Connections`, `Type Definitions and States`, `Community 82`, `Wild Encounter Spawning`, `Battle Rewards and Updates`, `Community 28`, `Location and Player Schema`?**
+- **Why does `getGameMap()` connect `Species Catalog and Stats` to `Village Scene and Assets`, `Creature Journal and Profile`, `Project Dependencies`, `State Validation and Schema`, `UI Components and Formatting`, `Community 44`, `Multiplayer Connection Handling`, `Coming Soon Page`, `Colyseus Client Connections`, `Type Definitions and States`, `Community 82`, `Community 20`, `Wild Encounter Spawning`, `Community 28`, `Location and Player Schema`?**
   _High betweenness centrality (0.016) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `private` to the rest of the system?**
   _204 weakly-connected nodes found - possible documentation gaps or missing edges._
@@ -301,4 +301,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `Village Scene and Assets` be split into smaller, more focused modules?**
   _Cohesion score 0.06634615384615385 - nodes in this community are weakly interconnected._
 - **Should `Card Activation and Types` be split into smaller, more focused modules?**
-  _Cohesion score 0.07822410147991543 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07536231884057971 - nodes in this community are weakly interconnected._
