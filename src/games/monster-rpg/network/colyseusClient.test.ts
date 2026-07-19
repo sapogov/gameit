@@ -107,6 +107,31 @@ describe.each([
   ['location', locationHarness],
   ['battle', battleHarness]
 ] as const)('%s adapter lifecycle', (_name, createHarness) => {
+  test('waits for the first SDK state packet instead of validating the unhydrated state placeholder', async () => {
+    const room = new FakeRoom();
+    room.state = { balanceVersion: 0 };
+    const harness = createHarness();
+    joinOrCreate.mockResolvedValue(room);
+
+    let settled = false;
+    const connectionPromise = harness.connect().then((connection) => {
+      settled = true;
+      return connection;
+    });
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(settled).toBe(false);
+    expect(harness.onState).not.toHaveBeenCalled();
+    expect(harness.onStatus).not.toHaveBeenCalled();
+    expect(room.leave).not.toHaveBeenCalled();
+
+    room.publishDecodedState(harness.decodedState);
+    await expect(connectionPromise).resolves.toBeDefined();
+    expect(harness.onState).toHaveBeenCalledTimes(1);
+    expect(room.leave).not.toHaveBeenCalled();
+  });
+
   test('stays pending without callbacks or message listeners until decoded v1 is published', async () => {
     const room = new FakeRoom();
     const harness = createHarness();

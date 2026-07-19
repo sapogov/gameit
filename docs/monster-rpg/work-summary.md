@@ -4,6 +4,19 @@
 
 - Made the real SDK wild-encounter check accept either authoritative terminal escape outcome (`ran` or `lost`), wait for observed attempt progress or terminal state, and resolve the encounter with that exact outcome.
 - Added deterministic battle simulation coverage for a failed escape that loses at 1 HP and the config/formula-derived four-intent escape bound; production RNG and gameplay remain unchanged.
+- Updated Colyseus room setup to wait for the first SDK state packet instead of validating its unhydrated `room.state` placeholder.
+
+## 2026-07-19 - Issue #59 Validator Symlink Hardening
+
+- Hardened licensed asset inventory validation so every listed graphics asset must be a non-symlink regular file whose canonical path remains under the Python-Monsters vendor root.
+- Added regression coverage rejecting matching-byte inventory symlinks pointing both outside and inside the vendor tree.
+
+## 2026-07-19 - Typed Session Game Log
+
+- Replaced transient HUD activity with a bounded, player-local session Game Log for reward, battle, interaction, travel, and system events.
+- Kept detailed attack-by-attack messages in the Battle panel; only battle milestones and outcomes enter the Game Log.
+- Added explicit typed event adapters, player/session boundaries, accessible native history disclosure, mobile-visible newest status, and focused model/markup tests.
+- Routed profile creation, save import, and profile reset through tested production session transitions that clear prior-player history and restart deterministic entry IDs.
 
 ## 2026-07-19 - Portal Review Fixes
 
@@ -600,3 +613,9 @@
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.
 - Keep production persistence behind repository interfaces until core gameplay loops are proven.
+
+## 2026-07-19 - Issue #59: Licensed Art Vendor And Manifest
+
+- Vendored the complete 140-file `graphics/**` tree from pinned Python-Monsters commit `1b15724635ef11e84dd719c6c30240c053348d82`, with per-file SHA-256 inventory, source/tree pins, Scarloxy CC BY 4.0 attribution, and full Pixeloid/Dogica OFL notices; upstream audio remains excluded.
+- Added typed stable manifest entries for a licensed environment tree, four-direction player spritesheet, and Pixeloid Sans v0.4 font, then rendered those assets through Phaser without exposing vendor paths to gameplay code.
+- Added focused asset checks for manifest uniqueness, source containment/existence, exact frame/font metadata, complete inventory hashes, audio exclusion, provenance notices, and raw vendor-path leakage.

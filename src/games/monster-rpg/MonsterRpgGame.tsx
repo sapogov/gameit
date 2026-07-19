@@ -59,6 +59,14 @@ import {
 } from './sim';
 import { CharacterCreator } from './ui/CharacterCreator';
 import { GameHud } from './ui/GameHud';
+import {
+  appendGameLogEntry,
+  beginImportedSaveGameLogSession,
+  beginProfileGameLogSession,
+  createGameLogState,
+  resetProfileGameLogSession,
+  type GameLogKind
+} from './ui/gameLog';
 import { MobileDpad } from './ui/MobileDpad';
 import { VillageElderOnboarding } from './ui/VillageElderOnboarding';
 
@@ -95,11 +103,16 @@ export function MonsterRpgGame() {
   const [roomState, setRoomState] = useState<LocationRoomState | null>(null);
   const [battleState, setBattleState] = useState<BattleRoomState | null>(null);
   const [importStatus, setImportStatus] = useState<string | null>(initialState.current.error);
+  const [gameLog, setGameLog] = useState(() => createGameLogState(saveState?.profile.playerId ?? null));
   const [packTrace, setPackTrace] = useState<PackOpenTrace | null>(null);
   const [multiplayerStatus, setMultiplayerStatus] = useState<MultiplayerStatus>('offline');
   const [settings, setSettings] = useState(loadMonsterRpgSettings);
   const [farmStatusNow, setFarmStatusNow] = useState(Date.now());
   const [pendingStationDestinationId, setPendingStationDestinationId] = useState<string | null>(null);
+
+  const recordGameLog = useCallback((kind: GameLogKind, message: string) => {
+    setGameLog((current) => appendGameLogEntry(current, kind, message));
+  }, []);
 
   const updateMultiplayerStatus = useCallback((status: MultiplayerStatus) => {
     multiplayerStatusRef.current = status;
@@ -119,7 +132,7 @@ export function MonsterRpgGame() {
     }
 
     if (action.type === 'move' && battleState?.status === 'active') {
-      setImportStatus('Battle in progress');
+      recordGameLog('battle', 'Battle in progress');
       return;
     }
 
@@ -152,7 +165,7 @@ export function MonsterRpgGame() {
         setSaveState(collection.state);
         setLastMove(null);
         setPackTrace(null);
-        setImportStatus(`Collected ${collection.collectedQuantity} Magic Dust`);
+        recordGameLog('reward', `Collected ${collection.collectedQuantity} Magic Dust`);
         return;
       }
 
@@ -165,7 +178,7 @@ export function MonsterRpgGame() {
             setSaveState(theft.state);
             setLastMove(null);
             setPackTrace(null);
-            setImportStatus(formatFarmTheftAttempt(theft));
+            recordGameLog('interaction', formatFarmTheftAttempt(theft));
             return;
           }
           if (theft.reason === 'guarded' && multiplayerStatusRef.current === 'online' && connectionRef.current) {
@@ -173,17 +186,17 @@ export function MonsterRpgGame() {
             const activeCreature = getFirstBattleReadyCreature(currentState);
             const guardCreature = farm?.guardCreatureId ? currentState.creatures.creatures[farm.guardCreatureId] : undefined;
             if (!farm || !activeCreature || !guardCreature) {
-              setImportStatus(!activeCreature ? 'No ready Creature for guard battle' : 'Farm guard data unavailable');
+              recordGameLog('battle', !activeCreature ? 'No ready Creature for guard battle' : 'Farm guard data unavailable');
               return;
             }
             connectionRef.current.sendClaimGuardedFarmTheft({ farm, activeCreature, guardCreature });
-            setImportStatus('Challenging farm guard');
+            recordGameLog('battle', 'Challenging farm guard');
             return;
           }
-          setImportStatus(formatFarmTheftFailure(theft.reason, theft));
+          recordGameLog('interaction', formatFarmTheftFailure(theft.reason, theft));
           return;
         }
-        setImportStatus(formatFarmCollectionFailure(collection.reason));
+        recordGameLog('interaction', formatFarmCollectionFailure(collection.reason));
         return;
       }
     }
@@ -193,13 +206,13 @@ export function MonsterRpgGame() {
       if (encounter) {
         const activeCreature = currentState ? getFirstBattleReadyCreature(currentState) : null;
         if (!activeCreature) {
-          setImportStatus('No ready Creature for battle');
+          recordGameLog('battle', 'No ready Creature for battle');
           return;
         }
         connectionRef.current.sendClaimWildEncounter({ encounterId: encounter.id, activeCreature });
-        setImportStatus(`Claiming wild Creature #${encounter.speciesId}`);
+        recordGameLog('battle', `Claiming wild Creature #${encounter.speciesId}`);
       } else {
-        setImportStatus('No wild Creature ahead');
+        recordGameLog('battle', 'No wild Creature ahead');
       }
       return;
     }
@@ -222,7 +235,7 @@ export function MonsterRpgGame() {
     const profile = createPlayerProfile(name, avatar);
     const initialSave = createInitialSave(profile);
     saveProgress(initialSave);
-    setImportStatus(null);
+    setGameLog((current) => beginProfileGameLogSession(current, profile.playerId));
     setLastMove(null);
     setSaveState(initialSave);
   };
@@ -241,7 +254,7 @@ export function MonsterRpgGame() {
   };
 
   const handleCompleteVillageElderDialog = () => {
-    setImportStatus('Starter Pack received');
+    recordGameLog('reward', 'Starter Pack received');
     persistOnboardingUpdate(completeVillageElderDialog);
   };
 
@@ -251,14 +264,14 @@ export function MonsterRpgGame() {
 
       const result = convertStarterCreatureCards(current);
       if (!result.ok) {
-        setImportStatus(formatStarterConversionFailure(result.reason));
+        recordGameLog('reward', formatStarterConversionFailure(result.reason));
         return current;
       }
 
       saveProgress(result.state);
       saveStateRef.current = result.state;
       freeMovementUnlockedRef.current = isVillageElderDialogComplete(result.state);
-      setImportStatus('Starter Creatures joined');
+      recordGameLog('reward', 'Starter Creatures joined');
       setLastMove(null);
       return result.state;
     });
@@ -270,21 +283,21 @@ export function MonsterRpgGame() {
 
       const result = buildStarterMagicDustFarm(current);
       if (!result.ok) {
-        setImportStatus(formatStarterFarmFailure(result.reason));
+        recordGameLog('interaction', formatStarterFarmFailure(result.reason));
         return current;
       }
 
       saveProgress(result.state);
       saveStateRef.current = result.state;
       freeMovementUnlockedRef.current = isVillageElderDialogComplete(result.state);
-      setImportStatus('Magic Dust Farm built');
+      recordGameLog('interaction', 'Magic Dust Farm built');
       setLastMove(null);
       return result.state;
     });
   };
 
   const handleFinishVillageElderOnboarding = () => {
-    setImportStatus('Onboarding complete');
+    recordGameLog('interaction', 'Onboarding complete');
     persistOnboardingUpdate(completeVillageElderOnboarding);
   };
 
@@ -295,7 +308,7 @@ export function MonsterRpgGame() {
     saveProgress(result.state);
     saveStateRef.current = result.state;
     setLastMove(null);
-    setImportStatus(`Pack opened (${result.trace.cards.length})`);
+    recordGameLog('reward', `Pack opened (${result.trace.cards.length})`);
     setSaveState(result.state);
   };
 
@@ -307,32 +320,32 @@ export function MonsterRpgGame() {
       if (definition?.type === 'material') {
         const result = activateMaterialCard(current, cardId);
         if (!result.ok) {
-          setImportStatus(formatCardFailure(result.reason));
+          recordGameLog('interaction', formatCardFailure(result.reason));
           return current;
         }
         saveProgress(result.state);
         saveStateRef.current = result.state;
         setLastMove(null);
         setPackTrace(null);
-        setImportStatus('Material card activated');
+        recordGameLog('interaction', 'Material card activated');
         return result.state;
       }
 
       if (definition?.type === 'buff') {
         const result = activateBuffCard(current, cardId);
         if (!result.ok) {
-          setImportStatus(formatCardFailure(result.reason));
+          recordGameLog('interaction', formatCardFailure(result.reason));
           return current;
         }
         saveProgress(result.state);
         saveStateRef.current = result.state;
         setLastMove(null);
         setPackTrace(null);
-        setImportStatus('Buff card activated');
+        recordGameLog('interaction', 'Buff card activated');
         return result.state;
       }
 
-      setImportStatus('Unknown card action');
+      recordGameLog('interaction', 'Unknown card action');
       return current;
     });
   };
@@ -345,32 +358,32 @@ export function MonsterRpgGame() {
       if (current.inventory.creatureCards[cardId] || definition?.type === 'creature') {
         const result = activateCreatureCardViaElder(current, cardId);
         if (!result.ok) {
-          setImportStatus(formatCardFailure(result.reason));
+          recordGameLog('interaction', formatCardFailure(result.reason));
           return current;
         }
         saveProgress(result.state);
         saveStateRef.current = result.state;
         setLastMove(null);
         setPackTrace(null);
-        setImportStatus('Creature card routed to Elder');
+        recordGameLog('interaction', 'Creature card routed to Elder');
         return result.state;
       }
 
       if (definition?.type === 'farm') {
         const result = buildFarmCardViaElder(current, cardId);
         if (!result.ok) {
-          setImportStatus(formatCardFailure(result.reason));
+          recordGameLog('interaction', formatCardFailure(result.reason));
           return current;
         }
         saveProgress(result.state);
         saveStateRef.current = result.state;
         setLastMove(null);
         setPackTrace(null);
-        setImportStatus('Farm card routed to Elder');
+        recordGameLog('interaction', 'Farm card routed to Elder');
         return result.state;
       }
 
-      setImportStatus('Card cannot use Village Elder action');
+      recordGameLog('interaction', 'Card cannot use Village Elder action');
       return current;
     });
   };
@@ -381,7 +394,7 @@ export function MonsterRpgGame() {
 
       const result = hatchEgg(current, eggId);
       if (!result.ok) {
-        setImportStatus(formatCardFailure(result.reason));
+        recordGameLog('reward', formatCardFailure(result.reason));
         return current;
       }
 
@@ -389,7 +402,7 @@ export function MonsterRpgGame() {
       saveStateRef.current = result.state;
       setLastMove(null);
       setPackTrace(null);
-      setImportStatus('Egg hatched');
+      recordGameLog('reward', 'Egg hatched');
       return result.state;
     });
   };
@@ -398,7 +411,7 @@ export function MonsterRpgGame() {
     setSaveState((current) => {
       if (!current) return current;
       if (!isAtVillageHospital(current)) {
-        setImportStatus(formatCreaturePartyFailure('not-at-hospital'));
+        recordGameLog('interaction', formatCreaturePartyFailure('not-at-hospital'));
         return current;
       }
 
@@ -407,7 +420,7 @@ export function MonsterRpgGame() {
       saveStateRef.current = result;
       setLastMove(null);
       setPackTrace(null);
-      setImportStatus('Hospital full heal complete');
+      recordGameLog('interaction', 'Hospital full heal complete');
       return result;
     });
   };
@@ -418,7 +431,7 @@ export function MonsterRpgGame() {
 
       const result = useReviveItem(current, creatureId);
       if (!result.ok) {
-        setImportStatus(formatCreaturePartyFailure(result.reason));
+        recordGameLog('interaction', formatCreaturePartyFailure(result.reason));
         return current;
       }
 
@@ -426,7 +439,7 @@ export function MonsterRpgGame() {
       saveStateRef.current = result.state;
       setLastMove(null);
       setPackTrace(null);
-      setImportStatus('Revive item used');
+      recordGameLog('interaction', 'Revive item used');
       return result.state;
     });
   };
@@ -437,7 +450,7 @@ export function MonsterRpgGame() {
 
       const result = moveCreatureToActiveParty(current, creatureId);
       if (!result.ok) {
-        setImportStatus(formatCreaturePartyFailure(result.reason));
+        recordGameLog('interaction', formatCreaturePartyFailure(result.reason));
         return current;
       }
 
@@ -445,7 +458,7 @@ export function MonsterRpgGame() {
       saveStateRef.current = result.state;
       setLastMove(null);
       setPackTrace(null);
-      setImportStatus('Creature moved to active party');
+      recordGameLog('interaction', 'Creature moved to active party');
       return result.state;
     });
   };
@@ -456,7 +469,7 @@ export function MonsterRpgGame() {
 
       const result = moveCreatureToStorage(current, creatureId);
       if (!result.ok) {
-        setImportStatus(formatCreaturePartyFailure(result.reason));
+        recordGameLog('interaction', formatCreaturePartyFailure(result.reason));
         return current;
       }
 
@@ -464,7 +477,7 @@ export function MonsterRpgGame() {
       saveStateRef.current = result.state;
       setLastMove(null);
       setPackTrace(null);
-      setImportStatus('Creature moved to storage');
+      recordGameLog('interaction', 'Creature moved to storage');
       return result.state;
     });
   };
@@ -475,7 +488,7 @@ export function MonsterRpgGame() {
 
       const result = upgradeFarm(current, farmId);
       if (!result.ok) {
-        setImportStatus(formatFarmUpgradeFailure(result.reason));
+        recordGameLog('interaction', formatFarmUpgradeFailure(result.reason));
         return current;
       }
 
@@ -483,7 +496,7 @@ export function MonsterRpgGame() {
       saveStateRef.current = result.state;
       setLastMove(null);
       setPackTrace(null);
-      setImportStatus(`Farm upgraded to level ${result.farm.level}`);
+      recordGameLog('interaction', `Farm upgraded to level ${result.farm.level}`);
       return result.state;
     });
   };
@@ -494,7 +507,7 @@ export function MonsterRpgGame() {
 
       const result = creatureId ? assignFarmGuard(current, farmId, creatureId) : clearFarmGuard(current, farmId);
       if (!result.ok) {
-        setImportStatus(formatFarmGuardFailure(result.reason));
+        recordGameLog('interaction', formatFarmGuardFailure(result.reason));
         return current;
       }
 
@@ -502,19 +515,19 @@ export function MonsterRpgGame() {
       saveStateRef.current = result.state;
       setLastMove(null);
       setPackTrace(null);
-      setImportStatus(creatureId ? 'Farm guard assigned' : 'Farm guard cleared');
+      recordGameLog('interaction', creatureId ? 'Farm guard assigned' : 'Farm guard cleared');
       return result.state;
     });
   };
 
   const handlePrepareStationTravel = (destinationId: string) => {
     setPendingStationDestinationId(destinationId);
-    setImportStatus('Confirm station travel');
+    recordGameLog('travel', 'Confirm station travel');
   };
 
   const handleCancelStationTravel = () => {
     setPendingStationDestinationId(null);
-    setImportStatus('Station travel canceled');
+    recordGameLog('travel', 'Station travel canceled');
   };
 
   const handleConfirmStationTravel = (destinationId: string) => {
@@ -523,7 +536,7 @@ export function MonsterRpgGame() {
 
       const result = confirmStationTravel(current, destinationId);
       if (!result.ok) {
-        setImportStatus(formatStationTravelFailure(result.reason, result));
+        recordGameLog('travel', formatStationTravelFailure(result.reason, result));
         return current;
       }
 
@@ -549,7 +562,7 @@ export function MonsterRpgGame() {
       });
       setPackTrace(null);
       setPendingStationDestinationId(null);
-      setImportStatus(`Station travel to ${result.destination.displayName}: paid ${result.costPaid} Magic Dust`);
+      recordGameLog('travel', `Station travel to ${result.destination.displayName}: paid ${result.costPaid} Magic Dust`);
       return result.state;
     });
   };
@@ -564,7 +577,7 @@ export function MonsterRpgGame() {
     link.download = `gameit-monsters-${saveState.profile.playerId}.json`;
     link.click();
     URL.revokeObjectURL(url);
-    setImportStatus('Save exported');
+    recordGameLog('system', 'Save exported');
   };
 
   const handleImportSave = async (file: File) => {
@@ -572,7 +585,7 @@ export function MonsterRpgGame() {
     const result = importSavePayload(payload);
 
     if (!result.ok) {
-      setImportStatus(`Import failed: ${formatImportFailure(result.reason)}`);
+      recordGameLog('system', `Import failed: ${formatImportFailure(result.reason)}`);
       return;
     }
 
@@ -587,7 +600,7 @@ export function MonsterRpgGame() {
     setRoomState(null);
     updateMultiplayerStatus('offline');
     setSaveState(result.state);
-    setImportStatus('Save imported');
+    setGameLog((current) => beginImportedSaveGameLogSession(current, result.state.profile.playerId));
   };
 
   const handleReset = () => {
@@ -600,7 +613,7 @@ export function MonsterRpgGame() {
     runtimeRef.current?.destroy();
     runtimeRef.current = null;
     clearProgress();
-    setImportStatus(null);
+    setGameLog(resetProfileGameLogSession);
     setLastMove(null);
     setRoomState(null);
     setBattleState(null);
@@ -751,12 +764,12 @@ export function MonsterRpgGame() {
                 encounterId: claim.encounterId,
                 speciesId: claim.speciesId
               };
-              setImportStatus('Battle started');
+              recordGameLog('battle', 'Battle started');
               void connectBattleRoom(claim.battleId, claim.battleToken);
             },
             onWildEncounterClaimRejected: (message) => {
               if (!cancelled) {
-                setImportStatus(formatWildEncounterClaimFailure(message.reason));
+                recordGameLog('battle', formatWildEncounterClaimFailure(message.reason));
               }
             },
             onGuardedFarmTheftClaimed: (claim) => {
@@ -768,12 +781,12 @@ export function MonsterRpgGame() {
                 battleToken: claim.battleToken,
                 farmId: claim.farmId
               };
-              setImportStatus('Guard battle started');
+              recordGameLog('battle', 'Guard battle started');
               void connectBattleRoom(claim.battleId, claim.battleToken);
             },
             onGuardedFarmTheftClaimRejected: (message) => {
               if (!cancelled) {
-                setImportStatus(formatGuardedFarmTheftClaimFailure(message.reason));
+                recordGameLog('battle', formatGuardedFarmTheftClaimFailure(message.reason));
               }
             },
             onStatus: (status) => {
@@ -864,7 +877,7 @@ export function MonsterRpgGame() {
         console.warn('[monster-rpg] battle room unavailable', error);
         activeBattleClaimRef.current = null;
         setBattleState(null);
-        setImportStatus('Battle unavailable');
+        recordGameLog('battle', 'Battle unavailable');
       }
     },
     []
@@ -873,6 +886,7 @@ export function MonsterRpgGame() {
   const applyBattleResult = useCallback((result: BattleResultMessage, battleToken: string) => {
     const claim = activeBattleClaimRef.current;
     if (!claim || claim.battleId !== result.battleId) return;
+    recordGameLog('battle', formatBattleOutcome(result));
 
     if (claim.kind === 'wild' && claim.encounterId && claim.speciesId !== undefined) {
       connectionRef.current?.sendResolveWildEncounter({
@@ -892,8 +906,6 @@ export function MonsterRpgGame() {
         saveStateRef.current = nextState;
         return nextState;
       });
-
-      setImportStatus(formatBattleOutcome(result));
     } else if (claim.kind === 'guard-theft' && claim.farmId) {
       setSaveState((current) => {
         if (!current) return current;
@@ -906,21 +918,21 @@ export function MonsterRpgGame() {
           visitorWon: result.outcome === 'defeated'
         });
         if (!guardBattle.ok) {
-          setImportStatus(formatFarmTheftFailure(guardBattle.reason, guardBattle));
+          recordGameLog('interaction', formatFarmTheftFailure(guardBattle.reason, guardBattle));
           return current;
         }
 
         saveProgress(guardBattle.state);
         saveStateRef.current = guardBattle.state;
         setPackTrace(null);
-        setImportStatus(formatFarmTheftAttempt(guardBattle));
+        recordGameLog('interaction', formatFarmTheftAttempt(guardBattle));
         return guardBattle.state;
       });
     }
     activeBattleClaimRef.current = null;
     battleConnectionRef.current?.leave({ silent: true });
     battleConnectionRef.current = null;
-  }, []);
+  }, [recordGameLog]);
 
   if (!saveState) {
     if (importStatus) return <main className="monster-game-shell"><p role="alert">{importStatus}</p></main>;
@@ -935,6 +947,7 @@ export function MonsterRpgGame() {
         <div className="monster-canvas-host" ref={canvasHostRef} />
         <GameHud
           canUseHospital={isAtVillageHospital(saveState)}
+          gameLog={gameLog}
           importStatus={importStatus}
           lastMove={lastMove}
           mapKind={activeMap.kind}

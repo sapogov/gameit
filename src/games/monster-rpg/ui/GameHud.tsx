@@ -34,9 +34,12 @@ import {
   type MultiplayerStatus,
   type StationDestination
 } from '../sim';
+import type { GameLogState } from './gameLog';
+import { GameLogHistory, GameLogStatus } from './GameLogView';
 
 interface GameHudProps {
   canUseHospital: boolean;
+  gameLog: GameLogState;
   importStatus: string | null;
   lastMove: MovementResult | null;
   mapKind: MapKind;
@@ -72,6 +75,7 @@ interface GameHudProps {
 
 export function GameHud({
   canUseHospital,
+  gameLog,
   importStatus,
   lastMove,
   mapKind,
@@ -113,7 +117,6 @@ export function GameHud({
   const farmRows = getFarmRows(saveState, new Date(farmStatusNow));
   const stationRows = getStationRows(saveState);
   const inventoryRows = getInventoryRows(saveState);
-  const activityRows = getActivityRows(saveState, importStatus, lastMove, battleState);
   const guardOptions = creatureRows.map((row) => ({
     id: row.id,
     label: `${row.species?.displayName ?? `Species #${row.creature.speciesId}`} (${row.container})`,
@@ -140,6 +143,7 @@ export function GameHud({
           <small className="monster-status-location">{locationHint}</small>
           <small className="monster-status-balance">Balance v{CURRENT_BALANCE_VERSION}</small>
           {importStatus ? <small className="monster-status-message">{importStatus}</small> : null}
+          <GameLogStatus gameLog={gameLog} />
         </section>
         <div className="monster-menu-dock" aria-label="Game menus">
         {battleState ? (
@@ -464,14 +468,9 @@ export function GameHud({
             </button>
           </div>
         </details>
+        <GameLogHistory gameLog={gameLog} />
         </div>
       </div>
-      <section className="monster-action-log" aria-label="Action log">
-        <strong>Action Log</strong>
-        {activityRows.map((row) => (
-          <small key={row}>{row}</small>
-        ))}
-      </section>
     </div>
   );
 }
@@ -568,32 +567,6 @@ function getInventoryRows(saveState: MonsterRpgSaveState): string[] {
     `Creature cards: ${creatureCardCount}`,
     `Eggs: ${eggCount}`
   ];
-}
-
-function getActivityRows(
-  saveState: MonsterRpgSaveState,
-  importStatus: string | null,
-  lastMove: MovementResult | null,
-  battleState: BattleRoomState | null
-): string[] {
-  const rows: string[] = [];
-
-  if (importStatus) rows.push(importStatus);
-  if (lastMove) {
-    rows.push(
-      lastMove.blocked
-        ? `Blocked by ${formatBlockedBy(lastMove.blockedBy)}`
-        : `Moved to ${lastMove.state.position.x}, ${lastMove.state.position.y}`
-    );
-  }
-  battleState?.lastLog.slice(-2).forEach((entry) => rows.push(entry.message));
-  saveState.farms.theftLog?.slice(-2).forEach((entry) => {
-    rows.push(
-      `Farm theft ${entry.outcome}: ${entry.stolenQuantity} ${formatMaterialId(entry.resourceId)}`
-    );
-  });
-
-  return rows.slice(-4).reverse().length > 0 ? rows.slice(-4).reverse() : ['Ready'];
 }
 
 function formatMaterialId(id: string): string {

@@ -232,8 +232,6 @@ async function connectRoomLifecycle<TState, TConnection>(
     room.onStateChange(onStateChange);
     room.onError(onError);
     room.onLeave(onLeave);
-
-    if (room.state !== undefined) onStateChange(room.state);
   });
 }
 

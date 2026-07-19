@@ -1642,40 +1642,33 @@ textarea { min-height: 88px; resize: vertical; }
   gap: 0.55rem;
 }
 
-.monster-action-log {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  display: grid;
-  width: min(320px, calc(100vw - 8rem));
-  max-height: 140px;
-  gap: 0.12rem;
-  overflow: hidden;
-  padding: 0.5rem 0.6rem;
-  background: rgba(24, 35, 27, 0.82);
-  border: 3px solid rgba(255, 248, 214, 0.72);
-  color: #fff8d6;
-  pointer-events: none;
-}
-
-.monster-action-log strong,
-.monster-action-log small {
+.monster-status-message {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.monster-action-log strong {
-  font-size: 0.7rem;
-  font-weight: 900;
-  text-transform: uppercase;
+.monster-game-log {
+  pointer-events: auto;
 }
 
-.monster-action-log small {
-  color: #e9dda1;
-  font-size: 0.68rem;
-  font-weight: 800;
+.monster-game-log ol {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 0.72rem;
 }
+
+.monster-game-log li {
+  padding: 0.25rem;
+  border-left: 4px solid #6f6a4a;
+}
+.monster-game-log-reward { border-color: #b28018 !important; }
+.monster-game-log-battle { border-color: #b13d35 !important; }
+.monster-game-log-interaction { border-color: #3a746c !important; }
+.monster-game-log-travel { border-color: #3d6899 !important; }
+.monster-game-log-system { border-color: #6f6a4a !important; }
 
 .monster-battle-heading,
 .monster-battle-health,
@@ -2248,10 +2241,14 @@ textarea { min-height: 88px; resize: vertical; }
     line-height: 1.16;
   }
 
-  .monster-status-panel span,
-  .monster-status-currency,
-  .monster-status-message {
+  .monster-status-panel > span,
+  .monster-status-currency {
     display: none;
+  }
+
+  .monster-status-message {
+    display: block;
+    color: #26351f;
   }
 
   .monster-status-level,
@@ -2262,24 +2259,6 @@ textarea { min-height: 88px; resize: vertical; }
   .monster-save-actions {
     flex-direction: column;
     gap: 0.3rem;
-  }
-
-  .monster-action-log {
-    left: 0;
-    bottom: 0;
-    width: min(12rem, calc(100vw - 10.5rem));
-    min-height: 2rem;
-    max-height: 2rem;
-    padding: 0.25rem 0.35rem;
-  }
-
-  .monster-action-log strong,
-  .monster-action-log small:not(:first-of-type) {
-    display: none;
-  }
-
-  .monster-action-log small {
-    font-size: 0.58rem;
   }
 
   .monster-save-actions button,
