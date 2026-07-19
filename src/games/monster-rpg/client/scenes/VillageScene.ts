@@ -23,6 +23,7 @@ import {
   isFarmTile
 } from '../../sim';
 import {
+  loadMonsterRpgFonts,
   monsterRpgAssetKeys,
   monsterRpgAssetManifest,
   monsterRpgSpriteSheetManifest,
@@ -98,7 +99,7 @@ const terrainAssetKeys = {
   field: monsterRpgAssetKeys.terrainField,
   forest: monsterRpgAssetKeys.terrainForest,
   mountain: monsterRpgAssetKeys.terrainMountain,
-  tree: monsterRpgAssetKeys.terrainTree,
+  tree: monsterRpgAssetKeys.licensedEnvironmentGreenTree,
   water: monsterRpgAssetKeys.terrainWater
 } as const satisfies Partial<Record<TileType, MonsterRpgAssetKey>>;
 
@@ -107,7 +108,7 @@ const terrainVariantKeys = {
   forest: [monsterRpgAssetKeys.terrainForestAi1, monsterRpgAssetKeys.terrainForestAi2, monsterRpgAssetKeys.terrainForestAi3],
   grass: [monsterRpgAssetKeys.terrainGrass1, monsterRpgAssetKeys.terrainGrass2, monsterRpgAssetKeys.terrainGrass3],
   mountain: [monsterRpgAssetKeys.terrainMountainAi1, monsterRpgAssetKeys.terrainMountainAi2],
-  tree: [monsterRpgAssetKeys.terrainTreeAi1, monsterRpgAssetKeys.terrainTreeAi2]
+  tree: [monsterRpgAssetKeys.licensedEnvironmentGreenTree]
 } as const satisfies Partial<Record<TileType, readonly MonsterRpgAssetKey[]>>;
 
 const CREATURE_ENCOUNTER_ROWS = 6;
@@ -117,17 +118,12 @@ interface MapRenderMetrics {
   cameraZoom: number;
   labelOffsetY: number;
   labelFontSize: string;
-  playerBodyHeight: number;
-  playerBodyWidth: number;
-  playerFacingOffsetY: number;
-  playerFacingScale: number;
 }
 
 interface PlayerView {
   container: Phaser.GameObjects.Container;
-  body: Phaser.GameObjects.Rectangle;
-  facing: Phaser.GameObjects.Triangle;
   label: Phaser.GameObjects.Text;
+  sprite: Phaser.GameObjects.Sprite;
   lastTileX?: number;
   lastTileY?: number;
   moveTween?: Phaser.Tweens.Tween;
@@ -192,7 +188,12 @@ export class VillageScene extends Phaser.Scene {
     });
   }
 
-  create() {
+  async create() {
+    try {
+      await loadMonsterRpgFonts();
+    } catch (error) {
+      console.warn('Monster RPG licensed font failed to load; using the fallback font.', error);
+    }
     this.configureEncounterAnimations();
     this.drawMap();
     this.configureInput();
@@ -580,7 +581,7 @@ export class VillageScene extends Phaser.Scene {
       .text(x, y, text, {
         align: 'center',
         color: '#fff8d6',
-        fontFamily: 'monospace',
+        fontFamily: 'Pixeloid Sans, monospace',
         fontSize: this.map.kind === 'world-map' ? '6px' : '7px',
         stroke: '#1b1c24',
         strokeThickness: 3
@@ -658,7 +659,7 @@ export class VillageScene extends Phaser.Scene {
     });
 
     Object.entries(players).forEach(([id, player]) => {
-      const view = this.players.get(id) ?? this.createPlayerView(id, player);
+      const view = this.players.get(id) ?? this.createPlayerView(id);
       this.syncPlayerView(view, player, id === this.getLocalPlayerId());
     });
 
@@ -705,7 +706,7 @@ export class VillageScene extends Phaser.Scene {
     const label = this.add
       .text(0, 10, '', {
         color: '#fff8d6',
-        fontFamily: 'monospace',
+        fontFamily: 'Pixeloid Sans, monospace',
         fontSize: '7px',
         stroke: '#17351f',
         strokeThickness: 3
@@ -740,7 +741,7 @@ export class VillageScene extends Phaser.Scene {
       .text(0, 12, 'Magic Dust Farm', {
         align: 'center',
         color: '#fff8d6',
-        fontFamily: 'monospace',
+        fontFamily: 'Pixeloid Sans, monospace',
         fontSize: '7px',
         stroke: '#1b1c24',
         strokeThickness: 3
@@ -773,25 +774,23 @@ export class VillageScene extends Phaser.Scene {
     view.label.setFontSize(this.map.kind === 'world-map' ? '6px' : '7px');
   }
 
-  private createPlayerView(id: RoomPlayerId, player: LocationPlayerState): PlayerView {
-    const color = avatarColors[player.profile.avatar];
+  private createPlayerView(id: RoomPlayerId): PlayerView {
     const container = this.add.container(0, 0);
-    const body = this.add.rectangle(0, 0, 12, 14, color).setStrokeStyle(2, 0x1b1c24);
-    const facing = this.add.triangle(0, -17, 0, 0, 8, 8, -8, 8, 0x1b1c24);
+    const sprite = this.add.sprite(0, 0, monsterRpgAssetKeys.licensedCharacterPlayer, 0);
     const label = this.add
       .text(0, 12, '', {
         color: '#fff8d6',
-        fontFamily: 'monospace',
+        fontFamily: 'Pixeloid Sans, monospace',
         fontSize: '8px',
         stroke: '#1b1c24',
         strokeThickness: 3
       })
       .setOrigin(0.5, 0);
 
-    container.add([body, facing, label]);
+    container.add([sprite, label]);
     container.setDepth(5);
-    this.players.set(id, { container, body, facing, label });
-    return { container, body, facing, label };
+    this.players.set(id, { container, label, sprite });
+    return { container, label, sprite };
   }
 
   private syncPlayerView(view: PlayerView, player: LocationPlayerState, isLocal: boolean) {
@@ -832,11 +831,9 @@ export class VillageScene extends Phaser.Scene {
       view.lastTileY = player.position.y;
     }
     view.container.setAlpha(player.inBattle ? 0.52 : 1);
-    view.body.setSize(metrics.playerBodyWidth, metrics.playerBodyHeight);
-    view.body.setFillStyle(avatarColors[player.profile.avatar], 1);
-    view.body.setStrokeStyle(isLocal ? 3 : 2, isLocal ? 0xffffff : 0x1b1c24);
-    view.facing.setY(metrics.playerFacingOffsetY);
-    view.facing.setScale(metrics.playerFacingScale);
+    view.sprite.setDisplaySize(tileSize * 1.12, tileSize * 1.12);
+    view.sprite.setFrame({ south: 0, west: 4, east: 8, north: 12 }[player.position.facing]);
+    view.sprite.setTint(avatarColors[player.profile.avatar]);
     view.label.setY(metrics.labelOffsetY);
     view.label.setFontSize(metrics.labelFontSize);
     const battleMarker = player.inBattle ? ' *' : '';
@@ -844,13 +841,6 @@ export class VillageScene extends Phaser.Scene {
       isLocal ? `${player.profile.name}${battleMarker}` : `${player.profile.name} ${player.position.facing.slice(0, 1)}${battleMarker}`
     );
 
-    const angleByDirection = {
-      north: 0,
-      east: 90,
-      south: 180,
-      west: 270
-    };
-    view.facing.setAngle(angleByDirection[player.position.facing]);
   }
 
   private getRenderMetrics(): MapRenderMetrics {
@@ -861,22 +851,14 @@ export class VillageScene extends Phaser.Scene {
       return {
         cameraZoom,
         labelOffsetY: tileSize * 0.48,
-        labelFontSize: '7px',
-        playerBodyHeight: tileSize * 0.8,
-        playerBodyWidth: tileSize * 0.62,
-        playerFacingOffsetY: -tileSize * 0.68,
-        playerFacingScale: 0.72
+        labelFontSize: '7px'
       };
     }
 
     return {
       cameraZoom,
       labelOffsetY: tileSize * 0.54,
-      labelFontSize: this.map.kind === 'interior' ? '7px' : '8px',
-      playerBodyHeight: tileSize * 0.76,
-      playerBodyWidth: tileSize * 0.56,
-      playerFacingOffsetY: -tileSize * 0.64,
-      playerFacingScale: 0.86
+      labelFontSize: this.map.kind === 'interior' ? '7px' : '8px'
     };
   }
 

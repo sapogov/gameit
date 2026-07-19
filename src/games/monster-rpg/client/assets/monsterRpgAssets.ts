@@ -35,6 +35,26 @@ import terrainWaterAi1 from './pixel/terrain-water-ai-1.png?url';
 import terrainWaterAi2 from './pixel/terrain-water-ai-2.png?url';
 import villageLarge from './pixel/village-large.png?url';
 import villageSmall from './pixel/village-small.png?url';
+import licensedAssetManifestData from './licensedAssetManifest.json';
+import licensedPlayer from './vendor/python-monsters/graphics/characters/player.png?url';
+import licensedPixeloidSans from './vendor/python-monsters/graphics/fonts/PixeloidSans.ttf?url';
+import licensedGreenTree from './vendor/python-monsters/graphics/objects/green_tree.png?url';
+
+export type LicensedAssetMetadata =
+  | { key: string; source: string; type: 'image' }
+  | { key: string; source: string; type: 'spritesheet'; frameHeight: number; frameWidth: number }
+  | {
+      key: string;
+      source: string;
+      type: 'font';
+      family: string;
+      format: 'truetype' | 'opentype';
+      style: string;
+      version: string;
+      weight: string;
+    };
+
+export const monsterRpgLicensedAssetMetadata = licensedAssetManifestData as readonly LicensedAssetMetadata[];
 
 export const monsterRpgAssetKeys = {
   villageSmall: 'monster-rpg.village.small',
@@ -46,6 +66,9 @@ export const monsterRpgAssetKeys = {
   buildingTavern: 'monster-rpg.building.tavern',
   buildingTownHall: 'monster-rpg.building.town-hall',
   creatureEncounters: 'monster-rpg.creature.encounters',
+  licensedCharacterPlayer: 'monster-rpg.licensed.character.player',
+  licensedEnvironmentGreenTree: 'monster-rpg.licensed.environment.green-tree',
+  licensedFontPixeloidSans: 'monster-rpg.licensed.font.pixeloid-sans',
   markerDoor: 'monster-rpg.marker.door',
   markerSign: 'monster-rpg.marker.sign',
   terrainBridgeWater: 'monster-rpg.terrain.bridge-water',
@@ -78,7 +101,20 @@ export const monsterRpgAssetKeys = {
 
 export type MonsterRpgAssetKey = (typeof monsterRpgAssetKeys)[keyof typeof monsterRpgAssetKeys];
 
+function getLicensedAssetMetadata<T extends LicensedAssetMetadata['type']>(
+  key: MonsterRpgAssetKey,
+  type: T
+): Extract<LicensedAssetMetadata, { type: T }> {
+  const asset = monsterRpgLicensedAssetMetadata.find((entry) => entry.key === key);
+  if (!asset || asset.type !== type) throw new Error(`Missing ${type} metadata for ${key}`);
+  return asset as Extract<LicensedAssetMetadata, { type: T }>;
+}
+
+const licensedPlayerMetadata = getLicensedAssetMetadata(monsterRpgAssetKeys.licensedCharacterPlayer, 'spritesheet');
+const licensedFontMetadata = getLicensedAssetMetadata(monsterRpgAssetKeys.licensedFontPixeloidSans, 'font');
+
 export const monsterRpgAssetManifest: ReadonlyArray<{ key: MonsterRpgAssetKey; src: string }> = [
+  { key: monsterRpgAssetKeys.licensedEnvironmentGreenTree, src: licensedGreenTree },
   { key: monsterRpgAssetKeys.villageSmall, src: villageSmall },
   { key: monsterRpgAssetKeys.villageLarge, src: villageLarge },
   { key: monsterRpgAssetKeys.buildingClinic, src: buildingClinic },
@@ -128,5 +164,49 @@ export const monsterRpgSpriteSheetManifest: ReadonlyArray<{
     src: creatureEncounters,
     frameHeight: 64,
     frameWidth: 64
+  },
+  {
+    key: monsterRpgAssetKeys.licensedCharacterPlayer,
+    src: licensedPlayer,
+    frameHeight: licensedPlayerMetadata.frameHeight,
+    frameWidth: licensedPlayerMetadata.frameWidth
   }
 ];
+
+export const monsterRpgFontManifest: ReadonlyArray<{
+  family: string;
+  format: 'truetype' | 'opentype';
+  key: MonsterRpgAssetKey;
+  src: string;
+  style: string;
+  version: string;
+  weight: string;
+}> = [
+  {
+    family: licensedFontMetadata.family,
+    format: licensedFontMetadata.format,
+    key: monsterRpgAssetKeys.licensedFontPixeloidSans,
+    src: licensedPixeloidSans,
+    style: licensedFontMetadata.style,
+    version: licensedFontMetadata.version,
+    weight: licensedFontMetadata.weight
+  }
+];
+
+let fontLoadPromise: Promise<void> | undefined;
+
+export function loadMonsterRpgFonts(): Promise<void> {
+  if (fontLoadPromise) return fontLoadPromise;
+
+  fontLoadPromise = Promise.all(
+    monsterRpgFontManifest.map(async (asset) => {
+      const face = new FontFace(asset.family, `url("${asset.src}") format("${asset.format}")`, {
+        style: asset.style,
+        weight: asset.weight
+      });
+      document.fonts.add(await face.load());
+    })
+  ).then(() => undefined);
+
+  return fontLoadPromise;
+}

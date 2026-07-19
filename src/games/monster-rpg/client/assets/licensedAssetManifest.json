@@ -1,0 +1,24 @@
+[
+  {
+    "key": "monster-rpg.licensed.environment.green-tree",
+    "source": "vendor/python-monsters/graphics/objects/green_tree.png",
+    "type": "image"
+  },
+  {
+    "key": "monster-rpg.licensed.character.player",
+    "source": "vendor/python-monsters/graphics/characters/player.png",
+    "type": "spritesheet",
+    "frameWidth": 128,
+    "frameHeight": 128
+  },
+  {
+    "key": "monster-rpg.licensed.font.pixeloid-sans",
+    "source": "vendor/python-monsters/graphics/fonts/PixeloidSans.ttf",
+    "type": "font",
+    "family": "Pixeloid Sans",
+    "format": "truetype",
+    "style": "normal",
+    "weight": "400",
+    "version": "0.4"
+  }
+]
