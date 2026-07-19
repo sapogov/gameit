@@ -1,5 +1,12 @@
 # Monster RPG Work Summary
 
+## 2026-07-19 - Typed Session Game Log
+
+- Replaced transient HUD activity with a bounded, player-local session Game Log for reward, battle, interaction, travel, and system events.
+- Kept detailed attack-by-attack messages in the Battle panel; only battle milestones and outcomes enter the Game Log.
+- Added explicit typed event adapters, player/session boundaries, accessible native history disclosure, mobile-visible newest status, and focused model/markup tests.
+- Routed profile creation, save import, and profile reset through tested production session transitions that clear prior-player history and restart deterministic entry IDs.
+
 ## 2026-07-19 - Portal Review Fixes
 
 - Kept coming-soon catalog cards non-launching while playable cards retain their game-route links.
