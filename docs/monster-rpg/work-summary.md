@@ -1,5 +1,11 @@
 # Monster RPG Work Summary
 
+## 2026-07-19 - Portal Review Fixes
+
+- Kept coming-soon catalog cards non-launching while playable cards retain their game-route links.
+- Added dedicated light-theme action fills with WCAG AA dark-text contrast, preserving darker portal accents for light-surface text.
+- Added focused GameTile markup coverage for playable links and coming-soon non-navigation cards.
+
 ## 2026-07-08 - Python-Monsters Port Planning Docs
 
 - Synthesized the full grilled design into `docs/monster-rpg/prd-python-monsters-port.md`, including 189 user stories, implementation decisions, confirmed test seams, and explicit out-of-scope boundaries; published it as GitHub issue #57 with `ready-for-agent`.
