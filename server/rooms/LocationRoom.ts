@@ -15,6 +15,8 @@ import {
   isSameWorldPosition,
   isValidSpawnPosition,
   MONSTER_RPG_SCHEMA_VERSION,
+  CURRENT_BALANCE_VERSION,
+  GAME_BALANCE_CONFIG,
   movePlayer,
   normalizeMapId,
   rollStats,
@@ -49,7 +51,7 @@ import { LocationPlayerSchema, LocationStateSchema, WildEncounterSchema } from '
 
 const avatarIds = new Set<AvatarId>(['scout', 'ranger', 'keeper']);
 const directions = new Set<Direction>(['north', 'east', 'south', 'west']);
-const transitionTokenTtlMs = 15_000;
+export const TRANSITION_TOKEN_TTL_MS = GAME_BALANCE_CONFIG.maps.transitionTokenTtlMs;
 const pendingTransitions = new Map<string, PendingTransition>();
 const registryErrors = validateGameMapRegistry();
 
@@ -73,6 +75,7 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
   private finalizedBattleIds = new Set<string>();
 
   async onCreate(options?: Partial<JoinLocationOptions>) {
+    assertBalanceVersion(options?.balanceVersion);
     const mapId = normalizeMapId(options?.mapId);
     if (!mapId) {
       throw new ServerError(400, 'Invalid map id');
@@ -83,6 +86,7 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
     this.mapId = map.id;
     await this.setMetadata({ mapId: map.id });
     this.setState(new LocationStateSchema());
+    this.state.balanceVersion = CURRENT_BALANCE_VERSION;
     this.state.mapId = map.id;
     this.state.mapName = map.name;
     this.state.mapKind = map.kind;
@@ -105,6 +109,7 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
   }
 
   onJoin(client: Client, options: JoinLocationOptions) {
+    assertBalanceVersion(options?.balanceVersion);
     const requestedMapId = normalizeMapId(options?.mapId);
     if (!requestedMapId || requestedMapId !== this.mapId) {
       throw new ServerError(400, 'Invalid map id');
@@ -428,6 +433,12 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
   }
 }
 
+export function assertBalanceVersion(clientBalanceVersion: unknown): asserts clientBalanceVersion is number {
+  if (clientBalanceVersion !== CURRENT_BALANCE_VERSION) {
+    throw new ServerError(409, JSON.stringify({ code: 'BALANCE_VERSION_MISMATCH', serverBalanceVersion: CURRENT_BALANCE_VERSION, clientBalanceVersion: typeof clientBalanceVersion === 'number' ? clientBalanceVersion : null }));
+  }
+}
+
 function sanitizeProfile(profile?: PlayerProfile): PlayerProfile {
   const fallbackName = 'Player';
   const rawName = typeof profile?.name === 'string' ? profile.name.trim() : fallbackName;
@@ -484,7 +495,7 @@ function createPendingTransition(profileId: string, toMapId: MapId, spawn: World
     profileId,
     toMapId,
     spawn: { ...spawn },
-    expiresAt: Date.now() + transitionTokenTtlMs
+    expiresAt: Date.now() + TRANSITION_TOKEN_TTL_MS
   });
   return transitionId;
 }

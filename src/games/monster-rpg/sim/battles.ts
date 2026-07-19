@@ -13,12 +13,13 @@ import { generateWildBattleRewards } from './battleRewards';
 import { createRng, rollStats, selectCreatureAttacks } from './creatureLifecycle';
 import { canCreatureUseRole } from './creatureParty';
 import { getSpeciesById } from './speciesCatalog';
+import { GAME_BALANCE_CONFIG } from './gameBalance';
 
 export const BATTLE_TICK_RATE = 10;
-export const BATTLE_DISCONNECT_GRACE_MS = 15_000;
-export const BATTLE_FATIGUE_RECOVERY_FLOOR = 4;
-export const BATTLE_BASE_RUN_CHANCE = 0.5;
-export const BATTLE_RUN_ATTEMPT_BONUS = 0.25;
+export const BATTLE_DISCONNECT_GRACE_MS = GAME_BALANCE_CONFIG.battles.disconnectGraceMs;
+export const BATTLE_FATIGUE_RECOVERY_FLOOR = GAME_BALANCE_CONFIG.battles.fatigueRecoveryFloor;
+export const BATTLE_BASE_RUN_CHANCE = GAME_BALANCE_CONFIG.battles.baseRunChance;
+export const BATTLE_RUN_ATTEMPT_BONUS = GAME_BALANCE_CONFIG.battles.runAttemptBonus;
 
 export type BattleActionResult =
   | { ok: true; state: BattleRoomState; result?: BattleResolution }

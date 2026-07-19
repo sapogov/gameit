@@ -1,2 +1,2 @@
 export type { BattleConnection, LocationTransitionMessage, MultiplayerConnection } from './colyseusClient';
-export { connectToBattle, connectToLocation } from './colyseusClient';
+export { BalanceVersionMismatchError, connectToBattle, connectToLocation } from './colyseusClient';

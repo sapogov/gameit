@@ -5,6 +5,8 @@ import {
   exportSave,
   importSavePayload,
   loadSave,
+  localMonsterRpgSaveRepository,
+  migrateSaveBalance,
   saveProgress
 } from './saveState';
 import { REVIVE_ITEM_ID, STARTING_REVIVE_ITEM_QUANTITY } from './creatureParty';
@@ -17,6 +19,30 @@ beforeEach(() => {
 });
 
 describe('Monster RPG save import and export', () => {
+  test('new saves persist the current balance version and migrate legacy balance v0', () => {
+    const save = createInitialSave(createPlayerProfile('Mira', 'scout'));
+    expect(save.balanceVersion).toBe(1);
+    const legacy = { ...save } as Record<string, unknown>;
+    delete legacy.balanceVersion;
+    const migrated = migrateSaveBalance(legacy);
+    expect(migrated).toMatchObject({ ok: true, state: { balanceVersion: 1 } });
+  });
+
+  test('missing balance migration rejects atomically without mutating input', () => {
+    const save = createInitialSave(createPlayerProfile('Mira', 'scout'));
+    const unsupported = { ...save, balanceVersion: 99 };
+    const original = JSON.stringify(unsupported);
+    expect(migrateSaveBalance(unsupported)).toEqual({ ok: false, reason: 'unsupported-balance-version' });
+    expect(JSON.stringify(unsupported)).toBe(original);
+  });
+
+  test('stored unsupported balance save preserves its bytes and reports a typed failure', () => {
+    const save = createInitialSave(createPlayerProfile('Mira', 'scout'));
+    const raw = JSON.stringify({ ...save, balanceVersion: 99 });
+    localStorage.setItem('gameit.monsterRpg.save', raw);
+    expect(localMonsterRpgSaveRepository.loadSave()).toEqual({ ok: false, reason: 'unsupported-balance-version' });
+    expect(localStorage.getItem('gameit.monsterRpg.save')).toBe(raw);
+  });
   test('valid export and import keep the same stable Player ID', () => {
     const profile = createPlayerProfile('Mira', 'scout');
     const save = createInitialSave(profile);
@@ -59,8 +85,8 @@ describe('Monster RPG save import and export', () => {
     const imported = importSavePayload('{not-json');
 
     expect(imported).toEqual({ ok: false, reason: 'invalid-json' });
-    expect(loadSave()?.profile.playerId).toBe(currentSave.profile.playerId);
-    expect(loadSave()?.profile.name).toBe('Sol');
+    const loaded = loadSave();
+    expect(loaded).toMatchObject({ ok: true, state: { profile: { playerId: currentSave.profile.playerId, name: 'Sol' } } });
   });
 
   test('unsupported schema version import fails clearly', () => {

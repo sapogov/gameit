@@ -36,7 +36,7 @@ import {
   isVillageElderDialogComplete,
   loadMonsterRpgSettings,
   loadProfile,
-  loadSave,
+  loadSaveResult,
   movePlayer,
   moveCreatureToActiveParty,
   moveCreatureToStorage,
@@ -70,12 +70,13 @@ import {
 import { MobileDpad } from './ui/MobileDpad';
 import { VillageElderOnboarding } from './ui/VillageElderOnboarding';
 
-function getInitialState(): MonsterRpgSaveState | null {
-  const saved = loadSave();
-  if (saved) return saved;
+function getInitialState(): { state: MonsterRpgSaveState | null; error: string | null } {
+  const saved = loadSaveResult();
+  if (!saved.ok) return { state: null, error: `Save unavailable: ${saved.reason}` };
+  if (saved.state) return { state: saved.state, error: null };
 
   const profile = loadProfile();
-  return profile ? createInitialSave(profile) : null;
+  return { state: profile ? createInitialSave(profile) : null, error: null };
 }
 
 export function MonsterRpgGame() {
@@ -94,12 +95,14 @@ export function MonsterRpgGame() {
   const moveSequenceRef = useRef(0);
   const multiplayerStatusRef = useRef<MultiplayerStatus>('offline');
   const pendingTransitionRef = useRef<LocationTransitionMessage | null>(null);
-  const [saveState, setSaveState] = useState<MonsterRpgSaveState | null>(getInitialState);
+  const initialState = useRef(getInitialState());
+  const [saveState, setSaveState] = useState<MonsterRpgSaveState | null>(initialState.current.state);
   const saveStateRef = useRef<MonsterRpgSaveState | null>(saveState);
   const freeMovementUnlockedRef = useRef(saveState ? isVillageElderDialogComplete(saveState) : false);
   const [lastMove, setLastMove] = useState<MovementResult | null>(null);
   const [roomState, setRoomState] = useState<LocationRoomState | null>(null);
   const [battleState, setBattleState] = useState<BattleRoomState | null>(null);
+  const [importStatus, setImportStatus] = useState<string | null>(initialState.current.error);
   const [gameLog, setGameLog] = useState(() => createGameLogState(saveState?.profile.playerId ?? null));
   const [packTrace, setPackTrace] = useState<PackOpenTrace | null>(null);
   const [multiplayerStatus, setMultiplayerStatus] = useState<MultiplayerStatus>('offline');
@@ -807,6 +810,13 @@ export function MonsterRpgGame() {
         updateMultiplayerStatus('online');
       } catch (error) {
         if (cancelled) return;
+        if (isBalanceVersionMismatch(error)) {
+          connectionRef.current = null;
+          setRoomState(null);
+          setImportStatus('Multiplayer unavailable: game balance version mismatch');
+          updateMultiplayerStatus('offline');
+          return;
+        }
         console.warn('[monster-rpg] multiplayer unavailable, using offline local mode', error);
         connectionRef.current = null;
         setRoomState(null);
@@ -858,6 +868,12 @@ export function MonsterRpgGame() {
         );
         battleConnectionRef.current = connection;
       } catch (error) {
+        if (isBalanceVersionMismatch(error)) {
+          activeBattleClaimRef.current = null;
+          setBattleState(null);
+          setImportStatus('Battle unavailable: game balance version mismatch');
+          return;
+        }
         console.warn('[monster-rpg] battle room unavailable', error);
         activeBattleClaimRef.current = null;
         setBattleState(null);
@@ -919,6 +935,7 @@ export function MonsterRpgGame() {
   }, [recordGameLog]);
 
   if (!saveState) {
+    if (importStatus) return <main className="monster-game-shell"><p role="alert">{importStatus}</p></main>;
     return <CharacterCreator onCreate={handleCreateProfile} />;
   }
 
@@ -931,6 +948,7 @@ export function MonsterRpgGame() {
         <GameHud
           canUseHospital={isAtVillageHospital(saveState)}
           gameLog={gameLog}
+          importStatus={importStatus}
           lastMove={lastMove}
           mapKind={activeMap.kind}
           mapName={roomState?.mapName ?? activeMap.name}
@@ -978,7 +996,13 @@ export function MonsterRpgGame() {
   );
 }
 
-function formatImportFailure(reason: 'invalid-json' | 'unsupported-schema' | 'invalid-save'): string {
+function isBalanceVersionMismatch(error: unknown): error is { code: 'BALANCE_VERSION_MISMATCH' } {
+  return Boolean(error && typeof error === 'object' && (error as { code?: unknown }).code === 'BALANCE_VERSION_MISMATCH');
+}
+
+function formatImportFailure(reason: 'invalid-json' | 'unsupported-schema' | 'invalid-save' | 'unsupported-balance-version' | 'missing-balance-migration'): string {
+  if (reason === 'missing-balance-migration') return 'No migration path for this game balance version';
+  if (reason === 'unsupported-balance-version') return 'Unsupported game balance version';
   if (reason === 'invalid-json') return 'bad JSON';
   if (reason === 'unsupported-schema') return 'unsupported version';
   return 'invalid save';

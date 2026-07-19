@@ -26,6 +26,7 @@ import { creatureTypes, isKnownSpeciesId } from './speciesCatalog';
 import { cardRarities } from './cards';
 import { isValidCreatureContainerLayout, REVIVE_ITEM_ID, STARTING_REVIVE_ITEM_QUANTITY } from './creatureParty';
 import { createInitialStationContainer, isValidStationDestination } from './stations';
+import { CURRENT_BALANCE_VERSION, GAME_BALANCE_CONFIG } from './gameBalance';
 
 export const MONSTER_RPG_PROFILE_KEY = 'gameit.monsterRpg.profile';
 export const MONSTER_RPG_SAVE_KEY = 'gameit.monsterRpg.save';
@@ -33,11 +34,18 @@ export const MONSTER_RPG_SCHEMA_VERSION = 9;
 
 export type SaveImportResult =
   | { ok: true; state: MonsterRpgSaveState }
-  | { ok: false; reason: 'invalid-json' | 'unsupported-schema' | 'invalid-save' };
+  | { ok: false; reason: 'invalid-json' | 'unsupported-schema' | 'invalid-save' | 'unsupported-balance-version' | 'missing-balance-migration' };
+
+export type SaveBalanceMigrationResult =
+  | { ok: true; state: MonsterRpgSaveState }
+  | { ok: false; reason: 'unsupported-balance-version' | 'missing-balance-migration' | 'invalid-save' };
+
+export type SaveBalanceMigrationFailure = Extract<SaveBalanceMigrationResult, { ok: false }>;
+export type SaveLoadResult = { ok: true; state: MonsterRpgSaveState | null } | SaveBalanceMigrationFailure;
 
 export interface MonsterRpgSaveRepository {
   loadProfile: () => PlayerProfile | null;
-  loadSave: () => MonsterRpgSaveState | null;
+  loadSave: () => SaveLoadResult;
   save: (state: MonsterRpgSaveState) => void;
   clear: () => void;
   exportSave: (state: MonsterRpgSaveState) => string;
@@ -59,11 +67,10 @@ export const localMonsterRpgSaveRepository: MonsterRpgSaveRepository = {
     return null;
   },
   loadSave() {
-    const state = readJson<MonsterRpgSaveState>(MONSTER_RPG_SAVE_KEY);
-    if (state && isValidSaveState(state)) return state;
-
-    localStorage.removeItem(MONSTER_RPG_SAVE_KEY);
-    return null;
+    const state = readJson<unknown>(MONSTER_RPG_SAVE_KEY);
+    const migrated = migrateSaveBalance(state);
+    if (state === null) return { ok: true, state: null };
+    return migrated.ok ? { ok: true, state: migrated.state } : migrated;
   },
   save(state) {
     localStorage.setItem(MONSTER_RPG_PROFILE_KEY, JSON.stringify(state.profile));
@@ -94,6 +101,7 @@ export function createPlayerProfile(name: string, avatar: AvatarId): PlayerProfi
 export function createInitialSave(profile: PlayerProfile): MonsterRpgSaveState {
   return {
     schemaVersion: MONSTER_RPG_SCHEMA_VERSION,
+    balanceVersion: CURRENT_BALANCE_VERSION,
     profile,
     position: { ...homeVillageMap.spawn },
     mapId: homeVillageMap.id,
@@ -106,9 +114,9 @@ export function loadProfile(): PlayerProfile | null {
   return localMonsterRpgSaveRepository.loadProfile();
 }
 
-export function loadSave(): MonsterRpgSaveState | null {
-  return localMonsterRpgSaveRepository.loadSave();
-}
+export function loadSave(): SaveLoadResult { return localMonsterRpgSaveRepository.loadSave(); }
+
+export const loadSaveResult = loadSave;
 
 export function saveProgress(state: MonsterRpgSaveState): void {
   localMonsterRpgSaveRepository.save(state);
@@ -130,7 +138,7 @@ function createEmptySaveContainers(playerId: string, homeVillageId: PlayerProfil
   return {
     inventory: {
       ownerPlayerId: playerId,
-      currencies: { magicDust: 0 },
+      currencies: { magicDust: GAME_BALANCE_CONFIG.inventory.startingMagicDust },
       items: {
         [REVIVE_ITEM_ID]: {
           id: REVIVE_ITEM_ID,
@@ -187,9 +195,28 @@ function parseSavePayload(payload: string): SaveImportResult {
   }
 
   if (hasUnsupportedSchemaVersion(parsed)) return { ok: false, reason: 'unsupported-schema' };
-  if (!isValidSaveState(parsed)) return { ok: false, reason: 'invalid-save' };
+  const migrated = migrateSaveBalance(parsed);
+  if (!migrated.ok) return migrated;
 
-  return { ok: true, state: parsed };
+  return migrated;
+}
+
+export function migrateSaveBalance(input: unknown): SaveBalanceMigrationResult {
+  if (!input || typeof input !== 'object' || Array.isArray(input)) return { ok: false, reason: 'invalid-save' };
+  const candidate = JSON.parse(JSON.stringify(input)) as Record<string, unknown>;
+  const version = candidate.balanceVersion === undefined ? 0 : candidate.balanceVersion;
+  if (typeof version !== 'number' || !Number.isInteger(version) || version < 0 || version > CURRENT_BALANCE_VERSION) {
+    return { ok: false, reason: 'unsupported-balance-version' };
+  }
+  const migrations: Record<number, (save: Record<string, unknown>) => Record<string, unknown>> = { 0: (save) => ({ ...save, balanceVersion: 1 }) };
+  let working = candidate;
+  for (let current = version; current < CURRENT_BALANCE_VERSION; current += 1) {
+    const migrate = migrations[current];
+    if (!migrate) return { ok: false, reason: 'missing-balance-migration' };
+    working = migrate(working);
+  }
+  if (!isValidSaveState(working)) return { ok: false, reason: 'invalid-save' };
+  return { ok: true, state: working };
 }
 
 function readJson<T>(key: string): T | null {
@@ -228,6 +255,7 @@ function isValidSaveState(state: unknown): state is MonsterRpgSaveState {
 
   return (
     candidate.schemaVersion === MONSTER_RPG_SCHEMA_VERSION &&
+    candidate.balanceVersion === CURRENT_BALANCE_VERSION &&
     isValidProfile(candidate.profile) &&
     isMapId(candidate.mapId) &&
     candidate.mapId === candidate.position.mapId &&

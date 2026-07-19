@@ -1,9 +1,10 @@
 import type { CreatureSaveRecord, CreatureSaveContainer, MonsterRpgSaveState } from './types';
+import { GAME_BALANCE_CONFIG } from './gameBalance';
 
-export const ACTIVE_PARTY_LIMIT = 5;
+export const ACTIVE_PARTY_LIMIT = GAME_BALANCE_CONFIG.creatures.activePartyLimit;
 export const REVIVE_ITEM_ID = 'item:revive';
-export const REVIVE_ITEM_RESTORE_RATIO = 0.25;
-export const STARTING_REVIVE_ITEM_QUANTITY = 1;
+export const REVIVE_ITEM_RESTORE_RATIO = GAME_BALANCE_CONFIG.creatures.reviveRestoreRatio;
+export const STARTING_REVIVE_ITEM_QUANTITY = GAME_BALANCE_CONFIG.items.startingReviveQuantity;
 
 export type CreatureUseRole = 'battle' | 'guard' | 'mount';
 

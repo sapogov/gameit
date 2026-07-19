@@ -2,6 +2,7 @@ import { Client, Room, ServerError } from 'colyseus';
 import {
   abandonDisconnectedBattle,
   BATTLE_DISCONNECT_GRACE_MS,
+  CURRENT_BALANCE_VERSION,
   choosePlayerBattleAttack,
   createBattleRoomState,
   createGuardBattleRoomState,
@@ -32,6 +33,7 @@ export class BattleRoom extends Room {
   private playerId = '';
 
   onCreate(options?: Partial<JoinBattleOptions>) {
+    assertBalanceVersion(options?.balanceVersion);
     const battleId = typeof options?.battleId === 'string' ? options.battleId : '';
     const battleToken = typeof options?.battleToken === 'string' ? options.battleToken : '';
     const claim = getBattleClaim(battleId, battleToken);
@@ -58,7 +60,9 @@ export class BattleRoom extends Room {
             playerCreature: claim.playerCreature,
             wildSpeciesId: claim.wildSpeciesId
           });
-    this.setState(toBattleStateSchema(this.battleState));
+    const stateSchema = toBattleStateSchema(this.battleState);
+    stateSchema.balanceVersion = CURRENT_BALANCE_VERSION;
+    this.setState(stateSchema);
 
     this.onMessage('chooseAttack', (client, payload: BattleAttackIntentMessage) => {
       this.handleChooseAttack(client, payload);
@@ -69,6 +73,7 @@ export class BattleRoom extends Room {
   }
 
   onJoin(client: Client, options?: JoinBattleOptions) {
+    assertBalanceVersion(options?.balanceVersion);
     if (
       options?.battleToken !== this.battleToken ||
       options?.profile?.playerId !== this.playerId ||
@@ -142,6 +147,12 @@ export class BattleRoom extends Room {
   private syncBattleState(state: BattleRoomState) {
     this.battleState = state;
     copyBattleStateToSchema(state, this.state as BattleStateSchema);
+  }
+}
+
+export function assertBalanceVersion(clientBalanceVersion: unknown): asserts clientBalanceVersion is number {
+  if (clientBalanceVersion !== CURRENT_BALANCE_VERSION) {
+    throw new ServerError(409, JSON.stringify({ code: 'BALANCE_VERSION_MISMATCH', serverBalanceVersion: CURRENT_BALANCE_VERSION, clientBalanceVersion: typeof clientBalanceVersion === 'number' ? clientBalanceVersion : null }));
   }
 }
 

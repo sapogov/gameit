@@ -8,7 +8,8 @@ import {
   getBattleAttackFatigueCost,
   getFirstBattleReadyCreature,
   getBattleRunChance,
-  runFromBattle
+  runFromBattle,
+  GAME_BALANCE_CONFIG
 } from '.';
 import type { BattleRewardBundle, CreatureSaveRecord, MonsterRpgSaveState } from './types';
 import { createInitialSave, createPlayerProfile } from './saveState';
@@ -160,6 +161,66 @@ describe('battle simulation', () => {
     expect(retried.ok).toBe(true);
     if (!retried.ok) throw new Error(retried.reason);
     expect(retried.result?.outcome).toBe('ran');
+  });
+
+  it('resolves a failed escape as a loss when the enemy defeats the 1HP player', () => {
+    const profile = createPlayerProfile('Battle Tester', 'scout');
+    const state = createBattleRoomState({
+      battleId: 'battle-run-loss',
+      encounterId: 'encounter-run-loss',
+      playerProfile: profile,
+      playerCreature: createCreature(profile.playerId, 'runner', 1, 60, false),
+      wildSpeciesId: 3
+    });
+    const oneHp = {
+      ...state,
+      player: { ...state.player, activeCreature: { ...state.player.activeCreature, hp: 1 } }
+    };
+
+    const result = runFromBattle(oneHp, new Date('2026-06-20T12:00:01.000Z'), () => 0.99);
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error(result.reason);
+    expect(result.result?.outcome).toBe('lost');
+    expect(result.state.status).toBe('player-lost');
+    expect(result.state.runAttempts).toBe(1);
+  });
+
+  it('guarantees escape within the config-derived attempt bound when the player survives retries', () => {
+    const profile = createPlayerProfile('Battle Tester', 'scout');
+    const state = createBattleRoomState({
+      battleId: 'battle-run-bound',
+      encounterId: 'encounter-run-bound',
+      playerProfile: profile,
+      playerCreature: createCreature(profile.playerId, 'runner', 1, 60, false),
+      wildSpeciesId: 3
+    });
+    const minimumSpeedAdjustmentFromRunFormula = -0.2;
+    const minimumRunChance = Math.max(0.15, GAME_BALANCE_CONFIG.battles.baseRunChance + minimumSpeedAdjustmentFromRunFormula);
+    const maximumRunIntents = Math.ceil((1 - minimumRunChance) / GAME_BALANCE_CONFIG.battles.runAttemptBonus) + 1;
+    let current = {
+      ...state,
+      player: {
+        ...state.player,
+        activeCreature: { ...state.player.activeCreature, hp: 999, maxHp: 999, stats: { ...state.player.activeCreature.stats, speed: 1 } }
+      },
+      enemy: { ...state.enemy, activeCreature: { ...state.enemy.activeCreature, stats: { ...state.enemy.activeCreature.stats, speed: 100 } } }
+    };
+
+    for (let attempt = 1; attempt < maximumRunIntents; attempt += 1) {
+      const result = runFromBattle(current, new Date(`2026-06-20T12:00:0${attempt}.000Z`), () => 0.99);
+      expect(result.ok).toBe(true);
+      if (!result.ok) throw new Error(result.reason);
+      expect(result.result).toBeUndefined();
+      current = result.state;
+    }
+
+    const result = runFromBattle(current, new Date('2026-06-20T12:00:09.000Z'), () => 0.99);
+    expect(maximumRunIntents).toBe(4);
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error(result.reason);
+    expect(result.result?.outcome).toBe('ran');
+    expect(result.state.runAttempts).toBe(maximumRunIntents - 1);
   });
 
   it('marks successful run away as resolved without granting rewards', () => {
