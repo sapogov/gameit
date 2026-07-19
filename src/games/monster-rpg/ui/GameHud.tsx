@@ -1,5 +1,6 @@
 import {
   ACTIVE_PARTY_LIMIT,
+  CURRENT_BALANCE_VERSION,
   REVIVE_ITEM_ID,
   canCreatureUseRole,
   getBattleAttackFatigueCost,
@@ -137,6 +138,7 @@ export function GameHud({
           </small>
           <small className="monster-status-currency">{currencySummary}</small>
           <small className="monster-status-location">{locationHint}</small>
+          <small className="monster-status-balance">Balance v{CURRENT_BALANCE_VERSION}</small>
           {importStatus ? <small className="monster-status-message">{importStatus}</small> : null}
         </section>
         <div className="monster-menu-dock" aria-label="Game menus">

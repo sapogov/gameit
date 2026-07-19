@@ -10,11 +10,12 @@ import { openPack, type PackOpenTrace } from './cards';
 import { createDirectDropEgg, createRng } from './creatureLifecycle';
 import { applyPlayerExperience, type ApplyPlayerExperienceResult } from './playerProgression';
 import { getSpeciesById } from './speciesCatalog';
+import { GAME_BALANCE_CONFIG } from './gameBalance';
 
-export const BATTLE_REWARD_MAGIC_DUST_BASE = 2;
-export const BATTLE_REWARD_PACK_CHANCE = 0.18;
-export const BATTLE_REWARD_DIRECT_EGG_CHANCE = 0.03;
-export const BATTLE_REWARD_MATERIAL_CHANCE = 0.4;
+export const BATTLE_REWARD_MAGIC_DUST_BASE = GAME_BALANCE_CONFIG.rewards.battleMagicDustBase;
+export const BATTLE_REWARD_PACK_CHANCE = GAME_BALANCE_CONFIG.rewards.battlePackChance;
+export const BATTLE_REWARD_DIRECT_EGG_CHANCE = GAME_BALANCE_CONFIG.rewards.battleDirectEggChance;
+export const BATTLE_REWARD_MATERIAL_CHANCE = GAME_BALANCE_CONFIG.rewards.battleMaterialChance;
 
 export interface ApplyBattleRewardsResult {
   state: MonsterRpgSaveState;

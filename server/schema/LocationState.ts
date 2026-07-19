@@ -107,6 +107,7 @@ defineTypes(WildEncounterSchema, {
 });
 
 export class LocationStateSchema extends Schema {
+  declare balanceVersion: number;
   declare mapId: MapId;
   declare mapName: string;
   declare mapKind: MapKind;
@@ -117,6 +118,7 @@ export class LocationStateSchema extends Schema {
 
   constructor() {
     super();
+    this.balanceVersion = 0;
     this.mapId = 'world-map';
     this.mapName = 'Overworld';
     this.mapKind = 'world-map';
@@ -127,6 +129,7 @@ export class LocationStateSchema extends Schema {
   }
 }
 defineTypes(LocationStateSchema, {
+  balanceVersion: 'number',
   mapId: 'string',
   mapName: 'string',
   mapKind: 'string',

@@ -78,6 +78,12 @@ export type {
   WorldPosition
 } from './types';
 export {
+  CURRENT_BALANCE_VERSION,
+  GAME_BALANCE_CONFIG,
+  validateGameBalanceConfig,
+  type GameBalanceConfig
+} from './gameBalance';
+export {
   buildingDefinitions,
   brookhavenVillageMap,
   canEnterTile,
@@ -124,12 +130,16 @@ export {
   localMonsterRpgSaveRepository,
   loadProfile,
   loadSave,
+  loadSaveResult,
   MONSTER_RPG_SCHEMA_VERSION,
   MONSTER_RPG_PROFILE_KEY,
   MONSTER_RPG_SAVE_KEY,
   saveProgress,
+  migrateSaveBalance,
   type MonsterRpgSaveRepository,
-  type SaveImportResult
+  type SaveImportResult,
+  type SaveBalanceMigrationResult,
+  type SaveLoadResult
 } from './saveState';
 export {
   STATION_TRAVEL_BASE_COST,

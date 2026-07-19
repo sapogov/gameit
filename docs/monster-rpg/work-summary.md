@@ -1,5 +1,10 @@
 # Monster RPG Work Summary
 
+## 2026-07-19 - Issue #58 Validation Repair
+
+- Made the real SDK wild-encounter check accept either authoritative terminal escape outcome (`ran` or `lost`), wait for observed attempt progress or terminal state, and resolve the encounter with that exact outcome.
+- Added deterministic battle simulation coverage for a failed escape that loses at 1 HP and the config/formula-derived four-intent escape bound; production RNG and gameplay remain unchanged.
+
 ## 2026-07-19 - Portal Review Fixes
 
 - Kept coming-soon catalog cards non-launching while playable cards retain their game-route links.
@@ -577,6 +582,19 @@
 - Replaced emoji toolbar actions with inline SVG icons and preserved existing game routes, leaderboard modal, admin route, and local sprite-sheet logo usage.
 - Kept shared game-screen styling compatible by retaining legacy UI variables used by Snake and Monster RPG surfaces.
 - Validated portal usability against UI/UX guidance and added a skip link, real navigation targets, clearer card labels, keyboard focus treatment, and reduced-motion safeguards.
+
+## 2026-07-19 - Game Balance Config
+
+- Added the validated immutable balance v1 contract, save balance migration, server compatibility rejection, and HUD version readout.
+- Advertised and verified balance versions in both Colyseus state schemas; incompatible stored saves now preserve their bytes and show a typed migration failure.
+- Strengthened config validation, removed remaining duplicated configured values, and extended the real SDK check across correct, wrong, absent, and future location/battle versions.
+
+## 2026-07-19 - Colyseus Adapter Decode Timing
+
+- Added a shared location/battle connection lifecycle that resolves only after the first decoded compatible state is translated and published, so temporary undefined state cannot create an online/offline flicker.
+- Pre-ready failures now reject and tear down once without status callbacks; post-ready incompatible state reports offline once, removes only adapter-owned listeners, and never throws from the SDK signal.
+- Exported state/status callback exceptions are contained: first-state publication rejects with the original error, while ready-state publication/status failures still complete one terminal teardown without escaping SDK callbacks.
+- Added adapter timing coverage for pending joins, decoded v1 acceptance, decoded v0/absent/v2 rejection, pre-ready errors/leaves, listener cleanup, and idempotent post-ready teardown.
 
 ## Next Work
 

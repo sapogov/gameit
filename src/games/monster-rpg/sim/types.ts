@@ -505,6 +505,7 @@ export interface JoinBattleOptions {
   battleId: string;
   battleToken: string;
   profile: PlayerProfile;
+  balanceVersion: number;
 }
 
 export interface BattleResultMessage {
@@ -531,6 +532,7 @@ export interface LocationRoomState {
 
 export interface MonsterRpgSaveState {
   schemaVersion: number;
+  balanceVersion: number;
   profile: PlayerProfile;
   position: WorldPosition;
   mapId: MapId;
@@ -563,6 +565,7 @@ export interface MoveIntentMessage {
 export interface JoinLocationOptions {
   mapId: MapId;
   profile: PlayerProfile;
+  balanceVersion: number;
   position?: WorldPosition;
   transitionId?: string;
 }

@@ -1,12 +1,13 @@
 import { strict as assert } from 'node:assert';
 import { Client, Room } from '@colyseus/sdk';
-import { Server } from 'colyseus';
+import { matchMaker, Server } from 'colyseus';
 import { BattleRoom } from '../server/rooms/BattleRoom';
 import { LocationRoom } from '../server/rooms/LocationRoom';
 import {
   buildingDefinitions,
   canEnterTile,
   createInitialSave,
+  CURRENT_BALANCE_VERSION,
   getGameMap,
   getVillageDefinition,
   loadProfile,
@@ -22,6 +23,7 @@ import {
   recordWildCreatureSeen,
   findWalkPath,
   findWalkPathToInteractionDistance,
+  GAME_BALANCE_CONFIG,
   validateSpeciesCatalog,
   type MonsterRpgSaveState,
   type PlayerProfile
@@ -69,9 +71,9 @@ function checkSaveReset(): void {
     })
   );
 
-  assert.equal(loadSave(), null);
+  assert.deepEqual(loadSave(), { ok: false, reason: 'invalid-save' });
   assert.equal(loadProfile(), null);
-  assert.equal(storage.getItem(MONSTER_RPG_SAVE_KEY), null);
+  assert.notEqual(storage.getItem(MONSTER_RPG_SAVE_KEY), null);
   assert.equal(storage.getItem(MONSTER_RPG_PROFILE_KEY), null);
 }
 
@@ -187,6 +189,7 @@ async function checkSdkMultiplayerFlow(): Promise<void> {
 
   try {
     const endpoint = `ws://127.0.0.1:${port}`;
+    await checkBalanceCompatibility(endpoint);
     await checkTwoClientsShareWorldMap(endpoint);
     await checkWorldToVillageRoomHandoff(endpoint);
     await checkTwoClientsShareBuildingInterior(endpoint);
@@ -196,6 +199,30 @@ async function checkSdkMultiplayerFlow(): Promise<void> {
   } finally {
     await server.gracefullyShutdown(false);
   }
+}
+
+async function checkBalanceCompatibility(endpoint: string): Promise<void> {
+  const client = new Client(endpoint);
+  const room = await joinLocation(client, 'world-map', createProfile('balance-control'));
+  assert.equal(room.state.balanceVersion, CURRENT_BALANCE_VERSION);
+  const playerCount = getPlayerCount(room);
+  for (const version of [0, undefined, 2]) {
+    await assertBalanceReject(() => client.joinOrCreate('location', { mapId: 'world-map', profile: createProfile(`location-${String(version)}`), ...(version === undefined ? {} : { balanceVersion: version }) }), version);
+    assert.equal(getPlayerCount(room), playerCount);
+    await assertBalanceReject(() => client.joinOrCreate('battle', { battleId: 'missing', battleToken: 'missing', profile: createProfile(`battle-${String(version)}`), ...(version === undefined ? {} : { balanceVersion: version }) }), version);
+    assert.equal((await matchMaker.query({ name: 'battle' })).length, 0, 'rejected battle version must not create a room');
+  }
+  await leaveRoom(room);
+}
+
+async function assertBalanceReject(join: () => Promise<unknown>, clientBalanceVersion: number | undefined): Promise<void> {
+  try { await join(); } catch (error) {
+    const candidate = error as { code?: unknown; message?: unknown };
+    assert.equal(candidate.code, 409);
+    assert.equal(candidate.message, JSON.stringify({ code: 'BALANCE_VERSION_MISMATCH', serverBalanceVersion: CURRENT_BALANCE_VERSION, clientBalanceVersion: clientBalanceVersion ?? null }));
+    return;
+  }
+  assert.fail('expected balance version rejection');
 }
 
 async function checkTwoClientsShareWorldMap(endpoint: string): Promise<void> {
@@ -291,7 +318,8 @@ async function checkSharedWildEncounterClaimFlow(endpoint: string): Promise<void
       clientB.joinOrCreate('battle', {
         battleId: claimedMessage.battleId,
         battleToken: claimedMessage.battleToken,
-        profile: profileB
+        profile: profileB,
+        balanceVersion: CURRENT_BALANCE_VERSION
       }),
     /Spectating disabled|Failed to|forbidden/i
   );
@@ -300,34 +328,41 @@ async function checkSharedWildEncounterClaimFlow(endpoint: string): Promise<void
     battleId: claimedMessage.battleId,
     battleToken: claimedMessage.battleToken,
     profile: profileA
+    , balanceVersion: CURRENT_BALANCE_VERSION
   })) as SdkRoom;
   await waitFor(() => battleRoom.state.status === 'active', 'battle room active');
+  assert.equal(battleRoom.state.balanceVersion, CURRENT_BALANCE_VERSION);
 
   const battleResult = new Promise<{ battleId: string; encounterId: string; outcome: string }>((resolve) => {
     battleRoom.onMessage('battleResult', resolve);
   });
   assert.equal(battleRoom.state.canRun, true);
-  for (let attempt = 0; attempt < 4; attempt += 1) {
+  const maximumRunIntents = getMaximumRunIntents();
+  for (let attempt = 0; attempt < maximumRunIntents && battleRoom.state.status === 'active'; attempt += 1) {
+    const previousRunAttempts = battleRoom.state.runAttempts;
     battleRoom.send('run');
-    await new Promise((resolve) => setTimeout(resolve, 75));
-    if (battleRoom.state.status === 'ran') break;
+    await waitFor(
+      () => battleRoom.state.status !== 'active' || battleRoom.state.runAttempts > previousRunAttempts,
+      'run attempt progress or terminal battle state'
+    );
   }
   const battleResultMessage = await withTimeout(battleResult, 'battle run result');
-  assert.equal(battleResultMessage.outcome, 'ran');
+  assert.ok(['ran', 'lost'].includes(battleResultMessage.outcome));
+  assert.equal(battleRoom.state.status, battleResultMessage.outcome === 'ran' ? 'ran' : 'player-lost');
 
   const released = new Promise<{ encounterId: string; outcome: string }>((resolve) => {
     roomA.onMessage('wildEncounterReleased', resolve);
   });
   roomA.send('resolveWildEncounter', {
     encounterId: encounter.id,
-    outcome: 'ran',
+    outcome: battleResultMessage.outcome,
     battleId: claimedMessage.battleId,
     battleToken: claimedMessage.battleToken
   });
   const releasedMessage = await withTimeout(released, 'wild encounter released');
 
-  assert.equal(releasedMessage.outcome, 'ran');
-  await waitFor(() => roomA.state.encounters.get(encounter.id)?.status === 'available', 'encounter released after loss');
+  assert.equal(releasedMessage.outcome, battleResultMessage.outcome);
+  await waitFor(() => roomA.state.encounters.get(encounter.id)?.status === 'available', 'encounter released after terminal battle');
   assert.equal(roomA.state.players.get(roomA.sessionId)?.inBattle, false);
 
   const rejected = new Promise<{ encounterId: string; reason: string }>((resolve) => {
@@ -346,7 +381,7 @@ async function checkSharedWildEncounterClaimFlow(endpoint: string): Promise<void
 async function checkInvalidMapIdRejected(endpoint: string): Promise<void> {
   const client = new Client(endpoint);
   await assert.rejects(
-    () => client.joinOrCreate('location', { mapId: 'greenway-route', profile: createProfile('invalid-map') }),
+    () => client.joinOrCreate('location', { mapId: 'greenway-route', profile: createProfile('invalid-map'), balanceVersion: CURRENT_BALANCE_VERSION }),
     /Invalid map id|no available handler|Failed to/
   );
 }
@@ -399,6 +434,7 @@ async function joinLocation(
   const room = (await client.joinOrCreate('location', {
     mapId,
     profile,
+    balanceVersion: CURRENT_BALANCE_VERSION,
     ...(transitionId ? { transitionId } : {})
   })) as SdkRoom;
   await waitFor(() => room.state.mapId === mapId, `join ${mapId}`);
@@ -529,6 +565,12 @@ async function waitFor(assertion: () => boolean, label: string, timeoutMs = 2_00
   }
 
   assert.fail(`Timed out waiting for ${label}`);
+}
+
+function getMaximumRunIntents(): number {
+  // Matches getBattleRunChance: speed adjustment is clamped to -0.2 and chance floors at 0.15.
+  const minimumRunChance = Math.max(0.15, GAME_BALANCE_CONFIG.battles.baseRunChance - 0.2);
+  return Math.ceil((1 - minimumRunChance) / GAME_BALANCE_CONFIG.battles.runAttemptBonus) + 1;
 }
 
 async function withTimeout<T>(promise: Promise<T>, label: string, timeoutMs = 2_000): Promise<T> {

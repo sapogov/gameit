@@ -137,6 +137,7 @@ defineTypes(BattleLogEntrySchema, {
 });
 
 export class BattleStateSchema extends Schema {
+  declare balanceVersion: number;
   declare battleId: string;
   declare encounterId: string;
   declare battleKind: BattleKind;
@@ -154,6 +155,7 @@ export class BattleStateSchema extends Schema {
 
   constructor() {
     super();
+    this.balanceVersion = 0;
     this.battleId = '';
     this.encounterId = '';
     this.battleKind = 'wild';
@@ -171,6 +173,7 @@ export class BattleStateSchema extends Schema {
   }
 }
 defineTypes(BattleStateSchema, {
+  balanceVersion: 'number',
   battleId: 'string',
   encounterId: 'string',
   battleKind: 'string',

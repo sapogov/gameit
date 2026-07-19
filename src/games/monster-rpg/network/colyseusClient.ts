@@ -17,10 +17,18 @@ import type {
   WildEncounterClaimedMessage,
   WorldPosition
 } from '../sim';
-import { getGameMap, isMapId, MONSTER_RPG_SCHEMA_VERSION } from '../sim';
+import { CURRENT_BALANCE_VERSION, getGameMap, isMapId, MONSTER_RPG_SCHEMA_VERSION } from '../sim';
 
 const DEFAULT_SERVER_URL = 'http://127.0.0.1:2567';
 const ROOM_NAME = 'location';
+
+export class BalanceVersionMismatchError extends Error {
+  readonly code = 'BALANCE_VERSION_MISMATCH';
+
+  constructor(readonly serverBalanceVersion: number, readonly clientBalanceVersion: unknown) {
+    super(`BALANCE_VERSION_MISMATCH: server ${serverBalanceVersion}, client ${String(clientBalanceVersion)}`);
+  }
+}
 
 type ColyseusRoom = Room<unknown, any>;
 
@@ -63,112 +71,209 @@ export interface LocationTransitionMessage {
 
 export async function connectToLocation(
   mapId: MapId,
-  options: JoinLocationOptions,
+  options: Omit<JoinLocationOptions, 'balanceVersion'>,
   handlers: ConnectionHandlers
 ): Promise<MultiplayerConnection> {
   const client = new Client(getServerUrl());
-  const room = (await client.joinOrCreate(ROOM_NAME, { ...options, mapId })) as ColyseusRoom;
-
-  const publishState = () => {
-    handlers.onRoomState(toLocationRoomState(room.state, room.sessionId));
-  };
-
-  room.onStateChange(() => {
-    publishState();
-  });
-  room.onMessage('locationTransition', (transition: LocationTransitionMessage) => {
-    handlers.onTransition(transition);
-  });
-  room.onMessage('wildEncounterClaimed', (message: WildEncounterClaimedMessage) => {
-    handlers.onWildEncounterClaimed(message);
-  });
-  room.onMessage('wildEncounterClaimRejected', (message: { encounterId: string; reason: string }) => {
-    handlers.onWildEncounterClaimRejected(message);
-  });
-  room.onMessage('guardedFarmTheftClaimed', (message: GuardedFarmTheftClaimedMessage) => {
-    handlers.onGuardedFarmTheftClaimed(message);
-  });
-  room.onMessage('guardedFarmTheftClaimRejected', (message: { farmId: string; reason: string }) => {
-    handlers.onGuardedFarmTheftClaimRejected(message);
-  });
-  room.onError((code, message) => {
-    console.warn(`[monster-rpg] multiplayer room error ${code}: ${message ?? 'unknown error'}`);
-    handlers.onStatus('offline');
-  });
-  room.onLeave(() => {
-    handlers.onStatus('offline');
-  });
-
-  publishState();
-
-  return {
-    sessionId: room.sessionId,
-    sendMoveIntent: (message) => {
-      room.send('moveIntent', message);
+  return connectRoomLifecycle({
+    join: () => joinWithBalanceError(client, ROOM_NAME, { ...options, mapId, balanceVersion: CURRENT_BALANCE_VERSION }),
+    decodeState: (room, state) => {
+      assertAdvertisedBalanceVersion(state);
+      return toLocationRoomState(state, room.sessionId);
     },
-    sendClaimWildEncounter: (message) => {
-      room.send('claimWildEncounter', message);
-    },
-    sendClaimGuardedFarmTheft: (message) => {
-      room.send('claimGuardedFarmTheft', message);
-    },
-    sendResolveWildEncounter: (message) => {
-      room.send('resolveWildEncounter', message);
-    },
-    leave: (options) => {
-      if (options?.silent) {
-        room.onLeave.clear();
-      }
-      room.leave();
-    }
-  };
+    publishState: handlers.onRoomState,
+    attachReadyHandlers: (room) => [
+      room.onMessage('locationTransition', (transition: LocationTransitionMessage) => handlers.onTransition(transition)),
+      room.onMessage('wildEncounterClaimed', (message: WildEncounterClaimedMessage) => handlers.onWildEncounterClaimed(message)),
+      room.onMessage('wildEncounterClaimRejected', (message: { encounterId: string; reason: string }) => handlers.onWildEncounterClaimRejected(message)),
+      room.onMessage('guardedFarmTheftClaimed', (message: GuardedFarmTheftClaimedMessage) => handlers.onGuardedFarmTheftClaimed(message)),
+      room.onMessage('guardedFarmTheftClaimRejected', (message: { farmId: string; reason: string }) => handlers.onGuardedFarmTheftClaimRejected(message))
+    ],
+    createConnection: (room, leave): MultiplayerConnection => ({
+      sessionId: room.sessionId,
+      sendMoveIntent: (message) => { room.send('moveIntent', message); },
+      sendClaimWildEncounter: (message) => { room.send('claimWildEncounter', message); },
+      sendClaimGuardedFarmTheft: (message) => { room.send('claimGuardedFarmTheft', message); },
+      sendResolveWildEncounter: (message) => { room.send('resolveWildEncounter', message); },
+      leave
+    }),
+    onStatus: handlers.onStatus,
+    roomErrorLabel: 'multiplayer room'
+  });
 }
 
 export async function connectToBattle(
-  options: JoinBattleOptions,
+  options: Omit<JoinBattleOptions, 'balanceVersion'>,
   handlers: BattleConnectionHandlers
 ): Promise<BattleConnection> {
   const client = new Client(getServerUrl());
-  const room = (await client.joinOrCreate('battle', options)) as ColyseusRoom;
-
-  const publishState = () => {
-    handlers.onBattleState(toBattleRoomState(room.state));
-  };
-
-  room.onStateChange(() => {
-    publishState();
-  });
-  room.onMessage('battleResult', (result: BattleResultMessage) => {
-    handlers.onBattleResult(result);
-  });
-  room.onError((code, message) => {
-    console.warn(`[monster-rpg] battle room error ${code}: ${message ?? 'unknown error'}`);
-    handlers.onStatus('offline');
-  });
-  room.onLeave(() => {
-    handlers.onStatus('offline');
-  });
-
-  publishState();
-
-  return {
-    sendAttack: (message) => {
-      room.send('chooseAttack', message);
+  return connectRoomLifecycle({
+    join: () => joinWithBalanceError(client, 'battle', { ...options, balanceVersion: CURRENT_BALANCE_VERSION }),
+    decodeState: (_room, state) => {
+      assertAdvertisedBalanceVersion(state);
+      return toBattleRoomState(state);
     },
-    sendRun: () => {
-      room.send('run');
-    },
-    leave: (options) => {
-      if (options?.silent) {
-        room.onLeave.clear();
+    publishState: handlers.onBattleState,
+    attachReadyHandlers: (room) => [
+      room.onMessage('battleResult', (result: BattleResultMessage) => handlers.onBattleResult(result))
+    ],
+    createConnection: (room, leave): BattleConnection => ({
+      sendAttack: (message) => { room.send('chooseAttack', message); },
+      sendRun: () => { room.send('run'); },
+      leave
+    }),
+    onStatus: handlers.onStatus,
+    roomErrorLabel: 'battle room'
+  });
+}
+
+type LifecyclePhase = 'joining' | 'awaiting-first-state' | 'ready' | 'terminal';
+type LeaveConnection = (options?: { silent?: boolean }) => void;
+
+interface RoomLifecycleOptions<TState, TConnection> {
+  join: () => Promise<ColyseusRoom>;
+  decodeState: (room: ColyseusRoom, state: unknown) => TState;
+  publishState: (state: TState) => void;
+  attachReadyHandlers: (room: ColyseusRoom) => Array<() => void>;
+  createConnection: (room: ColyseusRoom, leave: LeaveConnection) => TConnection;
+  onStatus: (status: MultiplayerStatus) => void;
+  roomErrorLabel: string;
+}
+
+async function connectRoomLifecycle<TState, TConnection>(
+  options: RoomLifecycleOptions<TState, TConnection>
+): Promise<TConnection> {
+  let phase: LifecyclePhase = 'joining';
+  const room = await options.join();
+  phase = 'awaiting-first-state';
+
+  return new Promise<TConnection>((resolve, reject) => {
+    const messageCleanups: Array<() => void> = [];
+    let leaveStarted = false;
+
+    const cleanupListeners = () => {
+      room.onStateChange.remove(onStateChange);
+      room.onError.remove(onError);
+      room.onLeave.remove(onLeave);
+      messageCleanups.splice(0).forEach((cleanup) => cleanup());
+    };
+
+    const leaveRoomOnce = () => {
+      if (leaveStarted) return;
+      leaveStarted = true;
+      try {
+        void room.leave().catch(() => undefined);
+      } catch {
+        // The transport may already be closed when its leave signal reaches us.
       }
-      room.leave();
+    };
+
+    const terminate = (error: Error, notifyOffline: boolean) => {
+      if (phase === 'terminal') return;
+      const wasReady = phase === 'ready';
+      phase = 'terminal';
+      cleanupListeners();
+      leaveRoomOnce();
+      if (wasReady) {
+        if (notifyOffline) {
+          try {
+            options.onStatus('offline');
+          } catch {
+            // Lifecycle teardown must not escape through an SDK signal callback.
+          }
+        }
+      } else {
+        reject(error);
+      }
+    };
+
+    const leave: LeaveConnection = (leaveOptions) => {
+      terminate(new Error(`${options.roomErrorLabel} left`), !leaveOptions?.silent);
+    };
+
+    function onStateChange(state: unknown) {
+      if (phase === 'terminal' || state === undefined) return;
+
+      let decodedState: TState;
+      try {
+        decodedState = options.decodeState(room, state);
+      } catch (error) {
+        terminate(toError(error), phase === 'ready');
+        return;
+      }
+
+      try {
+        options.publishState(decodedState);
+      } catch (error) {
+        terminate(toError(error), phase === 'ready');
+        return;
+      }
+      if (phase !== 'awaiting-first-state') return;
+
+      try {
+        messageCleanups.push(...options.attachReadyHandlers(room));
+      } catch (error) {
+        terminate(toError(error), false);
+        return;
+      }
+      phase = 'ready';
+      resolve(options.createConnection(room, leave));
     }
-  };
+
+    function onError(code: number, message?: string) {
+      console.warn(`[monster-rpg] ${options.roomErrorLabel} error ${code}: ${message ?? 'unknown error'}`);
+      terminate(new Error(`${options.roomErrorLabel} error ${code}: ${message ?? 'unknown error'}`), phase === 'ready');
+    }
+
+    function onLeave(code: number, reason?: string) {
+      terminate(new Error(`${options.roomErrorLabel} left ${code}: ${reason ?? 'unknown reason'}`), phase === 'ready');
+    }
+
+    room.onStateChange(onStateChange);
+    room.onError(onError);
+    room.onLeave(onLeave);
+
+    if (room.state !== undefined) onStateChange(room.state);
+  });
 }
 
 function getServerUrl(): string {
   return import.meta.env.VITE_MONSTER_RPG_SERVER_URL || DEFAULT_SERVER_URL;
+}
+
+async function joinWithBalanceError(client: Client, roomName: string, options: object): Promise<Room<unknown, any>> {
+  try {
+    return await client.joinOrCreate(roomName, options);
+  } catch (error) {
+    const structured = error as { code?: unknown; message?: unknown; serverBalanceVersion?: unknown; clientBalanceVersion?: unknown };
+    const message = typeof structured?.message === 'string' ? structured.message : String(error);
+    const payload = structured.code === 'BALANCE_VERSION_MISMATCH' ? structured : parseMismatchPayload(message);
+    if (payload) {
+      if (typeof payload.serverBalanceVersion === 'number') {
+        throw new BalanceVersionMismatchError(payload.serverBalanceVersion, payload.clientBalanceVersion);
+      }
+    }
+    throw error;
+  }
+}
+
+function parseMismatchPayload(message: string): { serverBalanceVersion?: unknown; clientBalanceVersion?: unknown } | null {
+  const start = message.indexOf('{');
+  const end = message.lastIndexOf('}');
+  if (start < 0 || end < start) return null;
+  try {
+    const payload = JSON.parse(message.slice(start, end + 1)) as { code?: unknown; serverBalanceVersion?: unknown; clientBalanceVersion?: unknown };
+    return payload.code === 'BALANCE_VERSION_MISMATCH' ? payload : null;
+  } catch { return null; }
+}
+
+function toError(error: unknown): Error {
+  return error instanceof Error ? error : new Error(String(error));
+}
+
+function assertAdvertisedBalanceVersion(state: unknown): void {
+  const version = (state as { balanceVersion?: unknown } | null)?.balanceVersion;
+  if (version !== CURRENT_BALANCE_VERSION) throw new BalanceVersionMismatchError(typeof version === 'number' ? version : -1, CURRENT_BALANCE_VERSION);
 }
 
 function toLocationRoomState(state: any, localPlayerId: string): LocationRoomState {

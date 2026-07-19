@@ -1,8 +1,9 @@
 import type { CardBuffType, CardRarity, CardRewardSource, MonsterRpgSaveState, SaveStack } from './types';
 import { createCreatureCardInstance, convertCreatureCardViaElder, MAGIC_DUST_MATERIAL_ID } from './creatureLifecycle';
 import { createFarmSaveRecord } from './farms';
+import { GAME_BALANCE_CONFIG } from './gameBalance';
 
-export const CARD_PACK_SIZE = 5;
+export const CARD_PACK_SIZE = GAME_BALANCE_CONFIG.chests.cardPackSize;
 export const cardRarities = ['common', 'uncommon', 'rare', 'legendary', 'mythical'] as const;
 export const cardTypes = ['creature', 'farm', 'material', 'buff'] as const;
 export const cardBuffTypes = ['battle', 'drop-chance'] as const;

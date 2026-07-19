@@ -6,10 +6,11 @@ import type {
   StationSaveContainer,
   VillageId
 } from './types';
+import { GAME_BALANCE_CONFIG } from './gameBalance';
 
 export const STATION_TRAVEL_RESOURCE_ID = 'magicDust';
-export const STATION_TRAVEL_BASE_COST = 2;
-export const STATION_TRAVEL_LEVEL_DIFF_COST = 3;
+export const STATION_TRAVEL_BASE_COST = GAME_BALANCE_CONFIG.economy.stationTravelBaseCost;
+export const STATION_TRAVEL_LEVEL_DIFF_COST = GAME_BALANCE_CONFIG.economy.stationTravelLevelDiffCost;
 
 export type StationTravelFailureReason =
   | 'missing-destination'

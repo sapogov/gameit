@@ -1,10 +1,11 @@
 import type { Direction, GameMap, MapId, WorldPosition } from './types';
 import { canEnterTile, getGameMap } from './maps';
 import { gen1SpeciesCatalog } from './speciesCatalog';
+import { GAME_BALANCE_CONFIG } from './gameBalance';
 
 export const WILD_ENCOUNTER_MIN_SPAWN_INTERVAL_MS = 90_000;
 export const WILD_ENCOUNTER_MAX_SPAWN_INTERVAL_MS = 120_000;
-export const WILD_ENCOUNTER_RESPAWN_MS = 30_000;
+export const WILD_ENCOUNTER_RESPAWN_MS = GAME_BALANCE_CONFIG.maps.wildEncounterRespawnMs;
 export const WILD_ENCOUNTER_LOSS_COOLDOWN_MS = 30_000;
 
 export interface WildEncounterZone {
