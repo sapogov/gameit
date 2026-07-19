@@ -1,5 +1,10 @@
 # Monster RPG Work Summary
 
+## 2026-07-19 - Issue #59 Validator Symlink Hardening
+
+- Hardened licensed asset inventory validation so every listed graphics asset must be a non-symlink regular file whose canonical path remains under the Python-Monsters vendor root.
+- Added regression coverage rejecting matching-byte inventory symlinks pointing both outside and inside the vendor tree.
+
 ## 2026-07-19 - Portal Review Fixes
 
 - Kept coming-soon catalog cards non-launching while playable cards retain their game-route links.
@@ -582,3 +587,9 @@
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.
 - Keep production persistence behind repository interfaces until core gameplay loops are proven.
+
+## 2026-07-19 - Issue #59: Licensed Art Vendor And Manifest
+
+- Vendored the complete 140-file `graphics/**` tree from pinned Python-Monsters commit `1b15724635ef11e84dd719c6c30240c053348d82`, with per-file SHA-256 inventory, source/tree pins, Scarloxy CC BY 4.0 attribution, and full Pixeloid/Dogica OFL notices; upstream audio remains excluded.
+- Added typed stable manifest entries for a licensed environment tree, four-direction player spritesheet, and Pixeloid Sans v0.4 font, then rendered those assets through Phaser without exposing vendor paths to gameplay code.
+- Added focused asset checks for manifest uniqueness, source containment/existence, exact frame/font metadata, complete inventory hashes, audio exclusion, provenance notices, and raw vendor-path leakage.
