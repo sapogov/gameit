@@ -10,6 +10,7 @@ vi.mock('@colyseus/sdk', () => ({
 }));
 
 import { BalanceVersionMismatchError, connectToBattle, connectToLocation } from './colyseusClient';
+import { CURRENT_BALANCE_VERSION } from '../sim/gameBalance';
 
 type StateHandler = (state: unknown) => void;
 type ErrorHandler = (code: number, message?: string) => void;
@@ -79,7 +80,7 @@ function locationHarness() {
       onGuardedFarmTheftClaimRejected: vi.fn()
     }),
     decodedState: {
-      balanceVersion: 1,
+      balanceVersion: CURRENT_BALANCE_VERSION,
       mapSetId: 'python-monsters-tracer',
       mapSetVersion: '1.0.0',
       mapId: 'world-map',
@@ -101,7 +102,7 @@ function battleHarness() {
       onBattleResult: vi.fn(),
       onStatus
     }),
-    decodedState: { balanceVersion: 1 },
+    decodedState: { balanceVersion: CURRENT_BALANCE_VERSION },
     readyMessageCount: 1
   };
 }
@@ -122,7 +123,7 @@ describe('location map-set handshake', () => {
     expect(joinOrCreate).toHaveBeenCalledWith('location', {
       mapId: 'world-map',
       profile,
-      balanceVersion: 1,
+      balanceVersion: CURRENT_BALANCE_VERSION,
       mapSetId: 'python-monsters-tracer',
       mapSetVersion: '1.0.0'
     });
@@ -133,7 +134,7 @@ describe('location map-set handshake', () => {
 
   test('ignores the unhydrated state placeholder until the first SDK state callback', async () => {
     const room = new FakeRoom();
-    room.state = { balanceVersion: 1, mapSetId: 'wrong-map-set', mapSetVersion: '0.0.0' };
+    room.state = { balanceVersion: CURRENT_BALANCE_VERSION, mapSetId: 'wrong-map-set', mapSetVersion: '0.0.0' };
     const harness = locationHarness();
     joinOrCreate.mockResolvedValue(room);
     const connectionPromise = harness.connect();
@@ -230,7 +231,7 @@ describe.each([
     expect(room.messageListenerCount()).toBe(harness.readyMessageCount);
   });
 
-  test.each([0, undefined, 2])('rejects decoded balance version %s without throwing from the signal', async (balanceVersion) => {
+  test.each([0, undefined, CURRENT_BALANCE_VERSION + 1])('rejects decoded balance version %s without throwing from the signal', async (balanceVersion) => {
     const room = new FakeRoom();
     const harness = createHarness();
     joinOrCreate.mockResolvedValue(room);

@@ -27,6 +27,9 @@ import { cardRarities } from './cards';
 import { isValidCreatureContainerLayout, REVIVE_ITEM_ID, STARTING_REVIVE_ITEM_QUANTITY } from './creatureParty';
 import { createInitialStationContainer, isValidStationDestination } from './stations';
 import { CURRENT_BALANCE_VERSION, GAME_BALANCE_CONFIG } from './gameBalance';
+import { createItemInventory } from './inventory';
+import { createRewardInbox, isValidRewardBundle, isValidRewardSourceId } from './rewardInbox';
+import { getItemDefinition, isItemId } from './items';
 
 export const MONSTER_RPG_PROFILE_KEY = 'gameit.monsterRpg.profile';
 export const MONSTER_RPG_SAVE_KEY = 'gameit.monsterRpg.save';
@@ -149,6 +152,8 @@ function createEmptySaveContainers(playerId: string, homeVillageId: PlayerProfil
       cards: {},
       creatureCards: {},
       eggs: {}
+      ,itemInventory: createItemInventory(),
+      rewardInbox: createRewardInbox(playerId)
     },
     creatures: {
       ownerPlayerId: playerId,
@@ -203,12 +208,20 @@ function parseSavePayload(payload: string): SaveImportResult {
 
 export function migrateSaveBalance(input: unknown): SaveBalanceMigrationResult {
   if (!input || typeof input !== 'object' || Array.isArray(input)) return { ok: false, reason: 'invalid-save' };
-  const candidate = JSON.parse(JSON.stringify(input)) as Record<string, unknown>;
+  let candidate: Record<string, unknown>;
+  try {
+    candidate = JSON.parse(JSON.stringify(input)) as Record<string, unknown>;
+  } catch {
+    return { ok: false, reason: 'invalid-save' };
+  }
   const version = candidate.balanceVersion === undefined ? 0 : candidate.balanceVersion;
   if (typeof version !== 'number' || !Number.isInteger(version) || version < 0 || version > CURRENT_BALANCE_VERSION) {
     return { ok: false, reason: 'unsupported-balance-version' };
   }
-  const migrations: Record<number, (save: Record<string, unknown>) => Record<string, unknown>> = { 0: (save) => ({ ...save, balanceVersion: 1 }) };
+  const migrations: Record<number, (save: Record<string, unknown>) => Record<string, unknown>> = {
+    0: (save) => ({ ...save, balanceVersion: 1 }),
+    1: migrateBalanceV1ToV2
+  };
   let working = candidate;
   for (let current = version; current < CURRENT_BALANCE_VERSION; current += 1) {
     const migrate = migrations[current];
@@ -217,6 +230,23 @@ export function migrateSaveBalance(input: unknown): SaveBalanceMigrationResult {
   }
   if (!isValidSaveState(working)) return { ok: false, reason: 'invalid-save' };
   return { ok: true, state: working };
+}
+
+function migrateBalanceV1ToV2(save: Record<string, unknown>): Record<string, unknown> {
+  const profile = save.profile;
+  if (!profile || typeof profile !== 'object' || Array.isArray(profile)) return { ...save, balanceVersion: 2 };
+  const playerId = (profile as { playerId?: unknown }).playerId;
+  if (typeof playerId !== 'string') return { ...save, balanceVersion: 2 };
+  const inventory = save.inventory;
+  return {
+    ...save,
+    balanceVersion: 2,
+    inventory: {
+      ...(inventory && typeof inventory === 'object' && !Array.isArray(inventory) ? inventory : {}),
+      itemInventory: { stacks: {} },
+      rewardInbox: createRewardInbox(playerId)
+    }
+  };
 }
 
 function readJson<T>(key: string): T | null {
@@ -282,10 +312,37 @@ function isValidInventory(inventory: unknown, playerId: string): inventory is In
     candidate.ownerPlayerId === playerId &&
     isQuantityRecord(candidate.currencies) &&
     isStackRecord(candidate.items, playerId) &&
+    isValidItemInventory(candidate.itemInventory) &&
+    isValidRewardInbox(candidate.rewardInbox, playerId) &&
     isStackRecord(candidate.cards, playerId) &&
     isCreatureCardRecord(candidate.creatureCards, playerId) &&
     isEggRecord(candidate.eggs, playerId)
   );
+}
+
+function isValidItemInventory(value: unknown): boolean {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const stacks = (value as { stacks?: unknown }).stacks;
+  if (!stacks || typeof stacks !== 'object' || Array.isArray(stacks) || Object.keys(stacks).length > 150) return false;
+  return Object.entries(stacks).every(([id, stack]) => {
+    if (!stack || typeof stack !== 'object') return false;
+    const candidate = stack as { id?: unknown; itemId?: unknown; quantity?: unknown };
+    const definition = isItemId(candidate.itemId) ? getItemDefinition(candidate.itemId) : undefined;
+    return candidate.id === id && definition !== undefined && isNonNegativeInteger(candidate.quantity) && candidate.quantity > 0 && candidate.quantity <= definition.maxStack;
+  });
+}
+
+function isValidRewardInbox(value: unknown, playerId: string): boolean {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const candidate = value as { ownerPlayerId?: unknown; bundles?: unknown; claimedSourceIds?: unknown };
+  if (candidate.ownerPlayerId !== playerId || !isRecord(candidate.bundles) || Object.keys(candidate.bundles).length > 50 || !isRecord(candidate.claimedSourceIds)) return false;
+  const claimedSourcesAreValid = Object.entries(candidate.claimedSourceIds).every(([sourceId, claimed]) => isValidRewardSourceId(sourceId) && claimed === true);
+  if (!claimedSourcesAreValid) return false;
+  return Object.entries(candidate.bundles).every(([sourceId, bundle]) => isValidRewardBundle(bundle, sourceId, playerId) && !Object.prototype.hasOwnProperty.call(candidate.claimedSourceIds, sourceId));
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value && typeof value === 'object' && !Array.isArray(value));
 }
 
 function isCreatureCardRecord(value: unknown, playerId: string): value is Record<string, CreatureCardInstance> {

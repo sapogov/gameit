@@ -7,6 +7,7 @@ import {
   gen1SpeciesCatalog,
   getAccruedFarmRecord,
   getCardDefinition,
+  getItemDefinition,
   getEggDescription,
   getFarmDefinition,
   getFarmTheftAttemptCost,
@@ -34,6 +35,7 @@ import {
   type MultiplayerStatus,
   type StationDestination
 } from '../sim';
+import { useState } from 'react';
 import type { GameLogState } from './gameLog';
 import { GameLogHistory, GameLogStatus } from './GameLogView';
 
@@ -55,6 +57,8 @@ interface GameHudProps {
   onImport: (file: File) => void;
   onReset: () => void;
   onOpenPack: () => void;
+  onDiscardItem: (stackId: string, quantity: number) => void;
+  onClaimReward: (sourceId: string) => void;
   onActivateCard: (cardId: string) => void;
   onRouteCardToElder: (cardId: string) => void;
   onHatchEgg: (eggId: string) => void;
@@ -91,6 +95,8 @@ export function GameHud({
   onImport,
   onReset,
   onOpenPack,
+  onDiscardItem,
+  onClaimReward,
   onActivateCard,
   onRouteCardToElder,
   onHatchEgg,
@@ -108,6 +114,7 @@ export function GameHud({
   onCancelStationTravel,
   onConfirmStationTravel
 }: GameHudProps) {
+  const [discardQuantities, setDiscardQuantities] = useState<Record<string, number>>({});
   const status = getStatusText(multiplayerStatus, playerCount, lastMove);
   const locationHint = `${formatMapKind(mapKind)} - ${saveState.position.x}, ${saveState.position.y}`;
   const discoveredCount = Object.values(saveState.journal.species).filter((state) => state === 'discovered').length;
@@ -127,6 +134,8 @@ export function GameHud({
   const currencySummary = formatCurrencySummary(saveState.inventory.currencies);
   const canRunFromBattle = battleState?.status === 'active' && battleState.canRun;
   const nextLevelThreshold = getNextPlayerLevelThreshold(saveState.progression.playerLevel);
+  const itemStacks = Object.values(saveState.inventory.itemInventory.stacks).sort((a, b) => a.id.localeCompare(b.id));
+  const inboxBundles = Object.values(saveState.inventory.rewardInbox.bundles).sort((a, b) => a.sourceId.localeCompare(b.sourceId));
 
   return (
     <div className="monster-hud">
@@ -358,6 +367,38 @@ export function GameHud({
               <small key={row}>{row}</small>
             ))}
           </div>
+          <section className="monster-item-inventory" aria-label="Item inventory">
+            <small>Item slots {itemStacks.length}/150</small>
+            {itemStacks.map((stack) => {
+              const definition = getItemDefinition(stack.itemId);
+              const quantity = discardQuantities[stack.id] ?? stack.quantity;
+              return (
+                <div className="monster-item-row" key={stack.id}>
+                  <span><strong>{definition?.name ?? stack.itemId}</strong> · {definition?.effect}</span>
+                  <small>{stack.quantity}/{definition?.maxStack ?? 99}</small>
+                  <label>
+                    Discard quantity
+                    <input
+                      aria-label={`Discard quantity for ${definition?.name ?? stack.itemId}`}
+                      max={stack.quantity}
+                      min="1"
+                      onChange={(event) => setDiscardQuantities((current) => ({ ...current, [stack.id]: Number(event.currentTarget.value) }))}
+                      type="number"
+                      value={quantity}
+                    />
+                  </label>
+                  <button
+                    disabled={!Number.isSafeInteger(quantity) || quantity < 1 || quantity > stack.quantity}
+                    onClick={() => onDiscardItem(stack.id, quantity)}
+                    type="button"
+                  >
+                    Discard
+                  </button>
+                </div>
+              );
+            })}
+            {inboxBundles.length > 0 ? <div className="monster-reward-inbox"><strong>Reward Inbox ({inboxBundles.length}/50)</strong>{inboxBundles.map((bundle) => <div key={bundle.sourceId}><small>{bundle.items.map((item) => `${getItemDefinition(item.itemId)?.name ?? item.itemId} ×${item.quantity}`).join(', ')}</small><button onClick={() => onClaimReward(bundle.sourceId)} type="button">Claim</button></div>)}</div> : null}
+          </section>
           <div className="monster-card-actions">
             <button onClick={onOpenPack} type="button">
               Open Pack

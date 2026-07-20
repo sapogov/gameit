@@ -1503,6 +1503,9 @@ textarea { min-height: 88px; resize: vertical; }
   text-transform: uppercase;
 }
 
+.monster-item-inventory, .monster-reward-inbox { display: grid; gap: 0.28rem; margin-top: 0.45rem; }
+.monster-item-row, .monster-reward-inbox > div { display: flex; gap: 0.35rem; align-items: center; justify-content: space-between; font-size: 0.72rem; }
+
 .monster-farm-grid {
   display: grid;
   gap: 0.3rem;
