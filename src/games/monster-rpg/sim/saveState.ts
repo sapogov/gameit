@@ -208,15 +208,17 @@ function parseSavePayload(payload: string): SaveImportResult {
 
 export function migrateSaveBalance(input: unknown): SaveBalanceMigrationResult {
   if (!input || typeof input !== 'object' || Array.isArray(input)) return { ok: false, reason: 'invalid-save' };
+  const source = input as Record<string, unknown>;
+  const version = source.balanceVersion === undefined ? 0 : source.balanceVersion;
+  if (typeof version !== 'number' || !Number.isInteger(version) || version < 0 || version > CURRENT_BALANCE_VERSION) {
+    return { ok: false, reason: 'unsupported-balance-version' };
+  }
+  if (version < 2 && !hasValidLegacyCurrencies(source)) return { ok: false, reason: 'invalid-save' };
   let candidate: Record<string, unknown>;
   try {
     candidate = JSON.parse(JSON.stringify(input)) as Record<string, unknown>;
   } catch {
     return { ok: false, reason: 'invalid-save' };
-  }
-  const version = candidate.balanceVersion === undefined ? 0 : candidate.balanceVersion;
-  if (typeof version !== 'number' || !Number.isInteger(version) || version < 0 || version > CURRENT_BALANCE_VERSION) {
-    return { ok: false, reason: 'unsupported-balance-version' };
   }
   const migrations: Record<number, (save: Record<string, unknown>) => Record<string, unknown>> = {
     0: (save) => ({ ...save, balanceVersion: 1 }),
@@ -253,6 +255,21 @@ function migrateBalanceV1ToV2(save: Record<string, unknown>): Record<string, unk
       rewardInbox: createRewardInbox(playerId)
     }
   };
+}
+
+function hasValidLegacyCurrencies(save: Record<string, unknown>): boolean {
+  if (!isPlainObject(save.inventory)) return false;
+  const inventory = save.inventory;
+  if (!isPlainObject(inventory.currencies)) return false;
+  const currencies = inventory.currencies;
+  if (!Object.prototype.hasOwnProperty.call(currencies, 'clinks')) return true;
+  return typeof currencies.clinks === 'number' && Number.isSafeInteger(currencies.clinks) && currencies.clinks >= 0;
+}
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
 }
 
 function readJson<T>(key: string): T | null {

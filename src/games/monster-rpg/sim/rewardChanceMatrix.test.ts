@@ -14,11 +14,35 @@ describe('reward chance matrix', () => {
   });
 
   test('does not consume a chance roll for literal certainty', () => {
-    const rng = sequence([0.999]);
+    const rng = vi.fn(() => 0.999);
     expect(rollRewardChanceMatrix([entries[0]], context, { rng })).toEqual([
       { entryId: 'guaranteed', reward: 'clinks', quantity: 8 }
     ]);
-    expect(rng()).toBe(0);
+    expect(rng).toHaveBeenCalledTimes(1);
+  });
+
+  test('matches scalar and array constraints against authoritative context', () => {
+    const constrained = {
+      ...entries[0],
+      constraints: {
+        zoneId: ['south', 'north'],
+        enemyRarity: ['rare', 'common'] as const,
+        speciesId: [2, 3],
+        outcome: ['ran', 'defeated'] as const
+      }
+    };
+    expect(rollRewardChanceMatrix([constrained], context, { rng: () => 0 })).toHaveLength(1);
+    expect(rollRewardChanceMatrix([{ ...constrained, constraints: { zoneId: ['south'] } }], context, { rng: () => 0 })).toEqual([]);
+  });
+
+  test('uses an exact exclusive 40 percent chance boundary without extra RNG calls', () => {
+    const below = vi.fn(sequence([0.399_999, 0]));
+    const boundary = vi.fn(() => 0.4);
+
+    expect(rollRewardChanceMatrix([entries[1]], context, { rng: below })).toHaveLength(1);
+    expect(below).toHaveBeenCalledTimes(2);
+    expect(rollRewardChanceMatrix([entries[1]], context, { rng: boundary })).toEqual([]);
+    expect(boundary).toHaveBeenCalledTimes(1);
   });
 
   test('does not boost entries without explicit opt-in and fails closed on missing authority context', () => {

@@ -1,5 +1,13 @@
 export const CURRENT_BALANCE_VERSION = 2 as const;
 
+export interface RewardChanceBalanceEntry {
+  readonly id: string;
+  readonly chance: number;
+  readonly minimum: number;
+  readonly maximum: number;
+  readonly boostable: boolean;
+}
+
 export interface GameBalanceConfig {
   readonly version: typeof CURRENT_BALANCE_VERSION;
   readonly creatures: { readonly activePartyLimit: number; readonly reviveRestoreRatio: number };
@@ -7,7 +15,13 @@ export interface GameBalanceConfig {
   readonly items: { readonly startingReviveQuantity: number };
   readonly inventory: { readonly startingMagicDust: number; readonly startingClinks: number };
   readonly chests: { readonly cardPackSize: number };
-  readonly rewards: { readonly battleMagicDustBase: number; readonly battlePackChance: number; readonly battleDirectEggChance: number; readonly battleMaterialChance: number };
+  readonly rewards: {
+    readonly battleMagicDustBase: number;
+    readonly battlePackChance: number;
+    readonly battleDirectEggChance: number;
+    readonly battleMaterialChance: number;
+    readonly wildBattleCommonClinks: readonly RewardChanceBalanceEntry[];
+  };
   readonly economy: { readonly stationTravelBaseCost: number; readonly stationTravelLevelDiffCost: number };
   readonly maps: { readonly transitionTokenTtlMs: number; readonly wildEncounterRespawnMs: number };
 }
@@ -19,7 +33,16 @@ export const GAME_BALANCE_CONFIG: Readonly<GameBalanceConfig> = Object.freeze({
   items: Object.freeze({ startingReviveQuantity: 1 }),
   inventory: Object.freeze({ startingMagicDust: 0, startingClinks: 0 }),
   chests: Object.freeze({ cardPackSize: 5 }),
-  rewards: Object.freeze({ battleMagicDustBase: 2, battlePackChance: 0.18, battleDirectEggChance: 0.03, battleMaterialChance: 0.4 }),
+  rewards: Object.freeze({
+    battleMagicDustBase: 2,
+    battlePackChance: 0.18,
+    battleDirectEggChance: 0.03,
+    battleMaterialChance: 0.4,
+    wildBattleCommonClinks: Object.freeze([
+      Object.freeze({ id: 'clinks-common-guaranteed', chance: 1, minimum: 6, maximum: 8, boostable: false }),
+      Object.freeze({ id: 'clinks-common-bonus', chance: 0.4, minimum: 5, maximum: 10, boostable: true })
+    ])
+  }),
   economy: Object.freeze({ stationTravelBaseCost: 2, stationTravelLevelDiffCost: 3 }),
   maps: Object.freeze({ transitionTokenTtlMs: 15_000, wildEncounterRespawnMs: 30_000 })
 });
@@ -47,6 +70,7 @@ export function validateGameBalanceConfig(config: unknown = GAME_BALANCE_CONFIG)
   probability('rewards.battlePackChance');
   probability('rewards.battleDirectEggChance');
   probability('rewards.battleMaterialChance');
+  validateRewardChanceEntries(candidate, 'rewards.wildBattleCommonClinks', issues);
   integer('economy.stationTravelBaseCost');
   integer('economy.stationTravelLevelDiffCost');
   integer('maps.transitionTokenTtlMs', 1);
@@ -57,6 +81,76 @@ export function validateGameBalanceConfig(config: unknown = GAME_BALANCE_CONFIG)
     issues.push({ path: 'maps.transitionTokenTtlMs', message: 'must not exceed maps.wildEncounterRespawnMs' });
   }
   return issues;
+}
+
+function validateRewardChanceEntries(
+  root: Record<string, unknown>,
+  path: string,
+  issues: BalanceValidationIssue[]
+): void {
+  const value = getPath(root, path);
+  if (!Array.isArray(value)) {
+    issues.push({ path, message: 'must be an array' });
+    return;
+  }
+  if (value.length === 0) issues.push({ path, message: 'must not be empty' });
+
+  const ids = new Set<string>();
+  const entryKeys = new Set(['id', 'chance', 'minimum', 'maximum', 'boostable']);
+  value.forEach((entry, index) => {
+    const entryPath = `${path}.${index}`;
+    if (!isPlainObject(entry)) {
+      issues.push({ path: entryPath, message: 'must be an object' });
+      return;
+    }
+    const candidate = entry as Record<string, unknown>;
+    if (Object.keys(candidate).some((key) => !entryKeys.has(key))) {
+      issues.push({ path: entryPath, message: 'contains unknown properties' });
+    }
+    if (typeof candidate.id !== 'string' || candidate.id.length === 0) {
+      issues.push({ path: `${entryPath}.id`, message: 'must be a non-empty string' });
+    } else if (ids.has(candidate.id)) {
+      issues.push({ path: `${entryPath}.id`, message: 'must be unique' });
+    } else {
+      ids.add(candidate.id);
+    }
+    validateRewardEntryNumber(candidate.chance, `${entryPath}.chance`, issues, false, 0, 1);
+    validateRewardEntryNumber(candidate.minimum, `${entryPath}.minimum`, issues, true, 0);
+    validateRewardEntryNumber(candidate.maximum, `${entryPath}.maximum`, issues, true, 0);
+    if (
+      typeof candidate.minimum === 'number' &&
+      typeof candidate.maximum === 'number' &&
+      candidate.maximum < candidate.minimum
+    ) {
+      issues.push({ path: `${entryPath}.maximum`, message: 'must be at least minimum' });
+    }
+    if (typeof candidate.boostable !== 'boolean') {
+      issues.push({ path: `${entryPath}.boostable`, message: 'must be a boolean' });
+    }
+  });
+}
+
+function validateRewardEntryNumber(
+  value: unknown,
+  path: string,
+  issues: BalanceValidationIssue[],
+  integer: boolean,
+  minimum: number,
+  maximum?: number
+): void {
+  if (typeof value !== 'number' || !Number.isFinite(value)) {
+    issues.push({ path, message: 'must be a finite number' });
+    return;
+  }
+  if (integer && !Number.isSafeInteger(value)) issues.push({ path, message: 'must be a safe integer' });
+  if (value < minimum) issues.push({ path, message: `must be at least ${minimum}` });
+  if (maximum !== undefined && value > maximum) issues.push({ path, message: `must be at most ${maximum}` });
+}
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
 }
 
 function validateNumber(root: Record<string, unknown>, path: string, issues: BalanceValidationIssue[], rules: { integer?: boolean; minimum: number; maximum?: number }): void {

@@ -14,10 +14,15 @@ import { GAME_BALANCE_CONFIG } from './gameBalance';
 import { applyRewardChanceEntryOverrides, assertValidMatrix, rollRewardChanceMatrix, type RewardChanceEntry } from './rewardChanceMatrix';
 
 export const CLINKS_CURRENCY_ID = 'clinks' as const;
-const COMMON_CLINKS_ENTRIES = [
-  { id: 'clinks-common-guaranteed', chance: 1, quantity: [6, 8], reward: CLINKS_CURRENCY_ID, constraints: { outcome: 'defeated' }, boostable: false },
-  { id: 'clinks-common-bonus', chance: 0.4, quantity: [5, 10], reward: CLINKS_CURRENCY_ID, constraints: { outcome: 'defeated' }, boostable: true }
-] as const satisfies readonly RewardChanceEntry<typeof CLINKS_CURRENCY_ID>[];
+const COMMON_CLINKS_ENTRIES: readonly RewardChanceEntry<typeof CLINKS_CURRENCY_ID>[] =
+  GAME_BALANCE_CONFIG.rewards.wildBattleCommonClinks.map((entry) => ({
+    id: entry.id,
+    chance: entry.chance,
+    quantity: [entry.minimum, entry.maximum],
+    reward: CLINKS_CURRENCY_ID,
+    constraints: { outcome: 'defeated' },
+    boostable: entry.boostable
+  }));
 
 export interface WildBattleRewardTable { zoneId: string; enemyRarity: CreatureRarity; entries: readonly RewardChanceEntry<typeof CLINKS_CURRENCY_ID>[] }
 

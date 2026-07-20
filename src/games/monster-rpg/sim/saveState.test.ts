@@ -52,6 +52,52 @@ describe('Monster RPG save import and export', () => {
     expect(JSON.stringify(malformedInventory)).toBe(inventoryBefore);
   });
 
+  test('v1 to v2 migration adds missing Clinks and preserves valid existing Clinks exactly', () => {
+    for (const clinks of [undefined, 0, 17, Number.MAX_SAFE_INTEGER]) {
+      const save = createInitialSave(createPlayerProfile('Mira', 'scout')) as any;
+      save.balanceVersion = 1;
+      if (clinks === undefined) delete save.inventory.currencies.clinks;
+      else save.inventory.currencies.clinks = clinks;
+
+      const migrated = migrateSaveBalance(save);
+
+      expect(migrated).toMatchObject({ ok: true, state: { inventory: { currencies: { clinks: clinks ?? 0 } } } });
+    }
+  });
+
+  test('v1 to v2 migration rejects malformed currency containers and Clinks without mutation', () => {
+    const malformed = [
+      { inventory: null },
+      { inventory: [] },
+      { inventory: 'inventory' },
+      { inventory: false },
+      { inventory: {} },
+      { currencies: null },
+      { currencies: [] },
+      { currencies: 'currencies' },
+      { currencies: false },
+      { clinks: Number.NaN },
+      { clinks: -1 },
+      { clinks: 1.5 },
+      { clinks: Number.MAX_SAFE_INTEGER + 1 },
+      { clinks: '4' },
+      { clinks: null },
+      { clinks: false }
+    ];
+
+    malformed.forEach((failure) => {
+      const save = createInitialSave(createPlayerProfile('Mira', 'scout')) as any;
+      save.balanceVersion = 1;
+      if ('inventory' in failure) save.inventory = failure.inventory;
+      if ('currencies' in failure) save.inventory.currencies = failure.currencies;
+      if ('clinks' in failure) save.inventory.currencies.clinks = failure.clinks;
+      const original = structuredClone(save);
+
+      expect(migrateSaveBalance(save)).toEqual({ ok: false, reason: 'invalid-save' });
+      expect(save).toEqual(original);
+    });
+  });
+
   test('stored unsupported balance save preserves its bytes and reports a typed failure', () => {
     const save = createInitialSave(createPlayerProfile('Mira', 'scout'));
     const raw = JSON.stringify({ ...save, balanceVersion: 99 });
