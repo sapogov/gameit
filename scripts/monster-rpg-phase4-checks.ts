@@ -208,7 +208,7 @@ async function checkBalanceCompatibility(endpoint: string): Promise<void> {
   const room = await joinLocation(client, 'world-map', createProfile('balance-control'));
   assert.equal(room.state.balanceVersion, CURRENT_BALANCE_VERSION);
   const playerCount = getPlayerCount(room);
-  for (const version of [0, undefined, 2]) {
+  for (const version of [0, undefined, CURRENT_BALANCE_VERSION + 1]) {
     await assertBalanceReject(() => client.joinOrCreate('location', { mapId: 'world-map', profile: createProfile(`location-${String(version)}`), ...(version === undefined ? {} : { balanceVersion: version }) }), version);
     assert.equal(getPlayerCount(room), playerCount);
     await assertBalanceReject(() => client.joinOrCreate('battle', { battleId: 'missing', battleToken: 'missing', profile: createProfile(`battle-${String(version)}`), ...(version === undefined ? {} : { balanceVersion: version }) }), version);

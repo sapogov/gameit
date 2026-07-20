@@ -1,5 +1,10 @@
 # Monster RPG Work Summary
 
+## 2026-07-20 - Issue #62: Item inventory and Reward Inbox
+
+- Added the validated 14-item catalog, deterministic 150-slot multi-stack inventory, confirmed discard path, and a persistent atomic 50-bundle Reward Inbox.
+- Added balance-version migration, save/import ownership and quantity validation, and HUD item stack, capacity, discard, and inbox claim surfaces.
+
 ## 2026-07-19 - Issue #58 Validation Repair
 
 - Made the real SDK wild-encounter check accept either authoritative terminal escape outcome (`ran` or `lost`), wait for observed attempt progress or terminal state, and resolve the encounter with that exact outcome.

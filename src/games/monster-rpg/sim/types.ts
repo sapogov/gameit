@@ -181,6 +181,8 @@ export interface InventorySaveContainer {
   cards: Record<string, SaveStack>;
   creatureCards: Record<string, CreatureCardInstance>;
   eggs: Record<string, EggSaveRecord>;
+  itemInventory: import('./inventory').ItemInventory;
+  rewardInbox: import('./rewardInbox').RewardInbox;
 }
 
 export interface CreatureSaveRecord {

@@ -27,6 +27,9 @@ import { cardRarities } from './cards';
 import { isValidCreatureContainerLayout, REVIVE_ITEM_ID, STARTING_REVIVE_ITEM_QUANTITY } from './creatureParty';
 import { createInitialStationContainer, isValidStationDestination } from './stations';
 import { CURRENT_BALANCE_VERSION, GAME_BALANCE_CONFIG } from './gameBalance';
+import { createItemInventory } from './inventory';
+import { createRewardInbox } from './rewardInbox';
+import { getItemDefinition, isItemId } from './items';
 
 export const MONSTER_RPG_PROFILE_KEY = 'gameit.monsterRpg.profile';
 export const MONSTER_RPG_SAVE_KEY = 'gameit.monsterRpg.save';
@@ -149,6 +152,8 @@ function createEmptySaveContainers(playerId: string, homeVillageId: PlayerProfil
       cards: {},
       creatureCards: {},
       eggs: {}
+      ,itemInventory: createItemInventory(),
+      rewardInbox: createRewardInbox(playerId)
     },
     creatures: {
       ownerPlayerId: playerId,
@@ -208,7 +213,10 @@ export function migrateSaveBalance(input: unknown): SaveBalanceMigrationResult {
   if (typeof version !== 'number' || !Number.isInteger(version) || version < 0 || version > CURRENT_BALANCE_VERSION) {
     return { ok: false, reason: 'unsupported-balance-version' };
   }
-  const migrations: Record<number, (save: Record<string, unknown>) => Record<string, unknown>> = { 0: (save) => ({ ...save, balanceVersion: 1 }) };
+  const migrations: Record<number, (save: Record<string, unknown>) => Record<string, unknown>> = {
+    0: (save) => ({ ...save, balanceVersion: 1 }),
+    1: (save) => ({ ...save, balanceVersion: 2, inventory: { ...(save.inventory as object), itemInventory: { stacks: {} }, rewardInbox: createRewardInbox((save.profile as PlayerProfile).playerId) } })
+  };
   let working = candidate;
   for (let current = version; current < CURRENT_BALANCE_VERSION; current += 1) {
     const migrate = migrations[current];
@@ -282,10 +290,35 @@ function isValidInventory(inventory: unknown, playerId: string): inventory is In
     candidate.ownerPlayerId === playerId &&
     isQuantityRecord(candidate.currencies) &&
     isStackRecord(candidate.items, playerId) &&
+    isValidItemInventory(candidate.itemInventory) &&
+    isValidRewardInbox(candidate.rewardInbox, playerId) &&
     isStackRecord(candidate.cards, playerId) &&
     isCreatureCardRecord(candidate.creatureCards, playerId) &&
     isEggRecord(candidate.eggs, playerId)
   );
+}
+
+function isValidItemInventory(value: unknown): boolean {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const stacks = (value as { stacks?: unknown }).stacks;
+  if (!stacks || typeof stacks !== 'object' || Array.isArray(stacks) || Object.keys(stacks).length > 150) return false;
+  return Object.entries(stacks).every(([id, stack]) => {
+    if (!stack || typeof stack !== 'object') return false;
+    const candidate = stack as { id?: unknown; itemId?: unknown; quantity?: unknown };
+    const definition = isItemId(candidate.itemId) ? getItemDefinition(candidate.itemId) : undefined;
+    return candidate.id === id && definition !== undefined && isNonNegativeInteger(candidate.quantity) && candidate.quantity > 0 && candidate.quantity <= definition.maxStack;
+  });
+}
+
+function isValidRewardInbox(value: unknown, playerId: string): boolean {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const candidate = value as { ownerPlayerId?: unknown; bundles?: unknown };
+  if (candidate.ownerPlayerId !== playerId || !candidate.bundles || typeof candidate.bundles !== 'object' || Array.isArray(candidate.bundles) || Object.keys(candidate.bundles).length > 50) return false;
+  return Object.entries(candidate.bundles).every(([sourceId, bundle]) => {
+    if (!bundle || typeof bundle !== 'object') return false;
+    const record = bundle as { sourceId?: unknown; ownerPlayerId?: unknown; items?: unknown; createdAt?: unknown };
+    return record.sourceId === sourceId && record.ownerPlayerId === playerId && isIsoDate(record.createdAt) && Array.isArray(record.items) && record.items.length > 0 && record.items.every((item) => Boolean(item && typeof item === 'object' && isItemId((item as { itemId?: unknown }).itemId) && isNonNegativeInteger((item as { quantity?: unknown }).quantity) && (item as { quantity: number }).quantity > 0));
+  });
 }
 
 function isCreatureCardRecord(value: unknown, playerId: string): value is Record<string, CreatureCardInstance> {

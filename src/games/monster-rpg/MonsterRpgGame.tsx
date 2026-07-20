@@ -46,6 +46,8 @@ import {
   saveProgress,
   upgradeFarm,
   useReviveItem,
+  claimReward,
+  discardItem,
   type AvatarId,
   type BattleResultMessage,
   type BattleRoomState,
@@ -310,6 +312,26 @@ export function MonsterRpgGame() {
     setLastMove(null);
     recordGameLog('reward', `Pack opened (${result.trace.cards.length})`);
     setSaveState(result.state);
+  };
+
+  const handleDiscardItem = (stackId: string, quantity: number) => {
+    setSaveState((current) => {
+      if (!current || !window.confirm(`Discard ${quantity} item${quantity === 1 ? '' : 's'}?`)) return current;
+      const result = discardItem(current.inventory.itemInventory, stackId, quantity, true);
+      if (!result.ok) { recordGameLog('interaction', 'Item discard failed'); return current; }
+      const state = { ...current, inventory: { ...current.inventory, itemInventory: result.inventory }, updatedAt: new Date().toISOString() };
+      saveProgress(state); saveStateRef.current = state; return state;
+    });
+  };
+
+  const handleClaimReward = (sourceId: string) => {
+    setSaveState((current) => {
+      if (!current) return current;
+      const result = claimReward(current.inventory.rewardInbox, current.inventory.itemInventory, current.profile.playerId, sourceId);
+      if (!result.ok) { recordGameLog('reward', result.reason === 'capacity' ? `Need ${result.requiredSlots ?? 0} more slots` : 'Reward claim failed'); return current; }
+      const state = { ...current, inventory: { ...current.inventory, itemInventory: result.inventory, rewardInbox: result.inbox }, updatedAt: new Date().toISOString() };
+      saveProgress(state); saveStateRef.current = state; recordGameLog('reward', 'Reward claimed'); return state;
+    });
   };
 
   const handleActivateCard = (cardId: string) => {
@@ -962,6 +984,8 @@ export function MonsterRpgGame() {
           onExport={handleExportSave}
           onImport={handleImportSave}
           onOpenPack={handleOpenPack}
+          onDiscardItem={handleDiscardItem}
+          onClaimReward={handleClaimReward}
           onActivateCard={handleActivateCard}
           onRouteCardToElder={handleRouteCardToElder}
           onHatchEgg={handleHatchEgg}

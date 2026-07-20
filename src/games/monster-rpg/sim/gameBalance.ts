@@ -1,4 +1,4 @@
-export const CURRENT_BALANCE_VERSION = 1 as const;
+export const CURRENT_BALANCE_VERSION = 2 as const;
 
 export interface GameBalanceConfig {
   readonly version: typeof CURRENT_BALANCE_VERSION;

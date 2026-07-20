@@ -21,11 +21,11 @@ beforeEach(() => {
 describe('Monster RPG save import and export', () => {
   test('new saves persist the current balance version and migrate legacy balance v0', () => {
     const save = createInitialSave(createPlayerProfile('Mira', 'scout'));
-    expect(save.balanceVersion).toBe(1);
+    expect(save.balanceVersion).toBe(2);
     const legacy = { ...save } as Record<string, unknown>;
     delete legacy.balanceVersion;
     const migrated = migrateSaveBalance(legacy);
-    expect(migrated).toMatchObject({ ok: true, state: { balanceVersion: 1 } });
+    expect(migrated).toMatchObject({ ok: true, state: { balanceVersion: 2 } });
   });
 
   test('missing balance migration rejects atomically without mutating input', () => {
