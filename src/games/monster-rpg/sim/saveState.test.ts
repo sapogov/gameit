@@ -65,6 +65,60 @@ describe('Monster RPG save import and export', () => {
     }
   });
 
+  test('v1 to v2 migration preserves #62 item inventory, queued rewards, and claimed replay ledger', () => {
+    const save = createInitialSave(createPlayerProfile('Mira', 'scout')) as any;
+    save.balanceVersion = 1;
+    save.inventory.itemInventory = {
+      stacks: {
+        'worn-key:001': { id: 'worn-key:001', itemId: 'worn-key', quantity: 2 }
+      }
+    };
+    save.inventory.rewardInbox = {
+      ownerPlayerId: save.profile.playerId,
+      bundles: {
+        'battle:queued': {
+          sourceId: 'battle:queued',
+          ownerPlayerId: save.profile.playerId,
+          items: [{ itemId: 'worn-key', quantity: 1 }],
+          createdAt: '2026-07-20T00:00:00.000Z'
+        }
+      },
+      claimedSourceIds: { 'battle:claimed': true }
+    };
+
+    const migrated = migrateSaveBalance(save);
+
+    expect(migrated).toMatchObject({
+      ok: true,
+      state: {
+        balanceVersion: CURRENT_BALANCE_VERSION,
+        inventory: {
+          itemInventory: save.inventory.itemInventory,
+          rewardInbox: save.inventory.rewardInbox
+        }
+      }
+    });
+  });
+
+  test('v1 to v2 migration initializes #62 inventory fields only when absent', () => {
+    const save = createInitialSave(createPlayerProfile('Mira', 'scout')) as any;
+    save.balanceVersion = 1;
+    delete save.inventory.itemInventory;
+    delete save.inventory.rewardInbox;
+
+    const migrated = migrateSaveBalance(save);
+
+    expect(migrated).toMatchObject({
+      ok: true,
+      state: {
+        inventory: {
+          itemInventory: { stacks: {} },
+          rewardInbox: { ownerPlayerId: save.profile.playerId, bundles: {}, claimedSourceIds: {} }
+        }
+      }
+    });
+  });
+
   test('v1 to v2 migration rejects malformed currency containers and Clinks without mutation', () => {
     const malformed = [
       { inventory: null },

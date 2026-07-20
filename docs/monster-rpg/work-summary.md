@@ -636,6 +636,7 @@
 - Added a validated, stable-order Reward Chance Matrix for authoritative wild Battle Clinks, including zone/rarity defaults and species entry-ID overrides.
 - Guaranteed common rewards are immutable balance-config entries granting 6-8 Clinks plus an independent 40% 5-10 bonus; invalid or missing authoritative context fails closed.
 - Stored Clinks as a non-slot currency with strict, non-coercing save migration, win-only/idempotent receipt application, HUD display, and server-propagated encounter zones.
+- Repaired the post-rebase v1-to-v2 migration so existing item stacks, queued reward bundles, and claimed reward source IDs survive while only absent #62 fields are initialized.
 
 ## Next Work
 

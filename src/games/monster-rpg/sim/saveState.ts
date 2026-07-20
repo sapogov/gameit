@@ -151,8 +151,8 @@ function createEmptySaveContainers(playerId: string, homeVillageId: PlayerProfil
       },
       cards: {},
       creatureCards: {},
-      eggs: {}
-      ,itemInventory: createItemInventory(),
+      eggs: {},
+      itemInventory: createItemInventory(),
       rewardInbox: createRewardInbox(playerId)
     },
     creatures: {
@@ -245,14 +245,20 @@ function migrateBalanceV1ToV2(save: Record<string, unknown>): Record<string, unk
   const currencies = inventory.currencies && typeof inventory.currencies === 'object' && !Array.isArray(inventory.currencies)
     ? inventory.currencies as Record<string, unknown>
     : {};
+  const itemInventory = Object.prototype.hasOwnProperty.call(inventory, 'itemInventory')
+    ? inventory.itemInventory
+    : createItemInventory();
+  const rewardInbox = Object.prototype.hasOwnProperty.call(inventory, 'rewardInbox')
+    ? inventory.rewardInbox
+    : createRewardInbox(playerId);
   return {
     ...save,
     balanceVersion: 2,
     inventory: {
       ...inventory,
       currencies: { ...currencies, clinks: Number(currencies.clinks ?? 0) },
-      itemInventory: { stacks: {} },
-      rewardInbox: createRewardInbox(playerId)
+      itemInventory,
+      rewardInbox
     }
   };
 }
