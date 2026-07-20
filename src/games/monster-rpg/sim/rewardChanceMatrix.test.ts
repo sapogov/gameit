@@ -1,0 +1,52 @@
+import { describe, expect, test, vi } from 'vitest';
+import { applyRewardChanceEntryOverrides, rollRewardChanceMatrix, type RewardChanceEntry } from './rewardChanceMatrix';
+
+const context = { zoneId: 'north', enemyRarity: 'common' as const, speciesId: 3, outcome: 'defeated' as const };
+const entries: readonly RewardChanceEntry[] = [
+  { id: 'guaranteed', chance: 1, quantity: [6, 8], reward: 'clinks', boostable: false },
+  { id: 'bonus', chance: 0.4, quantity: [5, 10], reward: 'clinks', constraints: { outcome: 'defeated' }, boostable: true }
+];
+
+describe('reward chance matrix', () => {
+  test('rolls independent inclusive entries in stable order and caps boosts at certainty', () => {
+    const rolls = rollRewardChanceMatrix(entries, context, { rng: sequence([0.999, 0]), boostMultiplier: 10 });
+    expect(rolls).toEqual([{ entryId: 'guaranteed', reward: 'clinks', quantity: 8 }, { entryId: 'bonus', reward: 'clinks', quantity: 5 }]);
+  });
+
+  test('does not consume a chance roll for literal certainty', () => {
+    const rng = sequence([0.999]);
+    expect(rollRewardChanceMatrix([entries[0]], context, { rng })).toEqual([
+      { entryId: 'guaranteed', reward: 'clinks', quantity: 8 }
+    ]);
+    expect(rng()).toBe(0);
+  });
+
+  test('does not boost entries without explicit opt-in and fails closed on missing authority context', () => {
+    expect(rollRewardChanceMatrix([{ ...entries[0], chance: 0.4 }], context, { rng: () => 0.5, boostMultiplier: 10 })).toEqual([]);
+    expect(rollRewardChanceMatrix(entries, undefined, { rng: () => 0 })).toEqual([]);
+    expect(rollRewardChanceMatrix(entries, { ...context, zoneId: '' }, { rng: () => 0 })).toEqual([]);
+    expect(() => rollRewardChanceMatrix([{ ...entries[0], constraints: { unknown: undefined } as any }], context, { rng: () => 0 })).toThrow('Invalid reward chance constraints');
+  });
+
+  test('normalizes invalid and out-of-range RNG values deterministically', () => {
+    expect(rollRewardChanceMatrix([{ ...entries[0], quantity: [0, 1] }], context, { rng: () => Number.NaN })).toEqual([
+      { entryId: 'guaranteed', reward: 'clinks', quantity: 0 }
+    ]);
+    expect(rollRewardChanceMatrix([{ ...entries[0], quantity: [0, 1] }], context, { rng: () => 2 })).toEqual([
+      { entryId: 'guaranteed', reward: 'clinks', quantity: 1 }
+    ]);
+  });
+
+  test('rejects duplicate or invalid matrices before making any RNG calls', () => {
+    const rng = vi.fn(() => 0);
+    expect(() => rollRewardChanceMatrix([entries[0], entries[0]], context, { rng })).toThrow('Duplicate reward chance entry');
+    expect(() => rollRewardChanceMatrix([{ ...entries[0], quantity: [2, 1] }], context, { rng })).toThrow('Invalid reward chance entry');
+    expect(rng).not.toHaveBeenCalled();
+  });
+
+  test('replaces matching IDs in place and appends new overrides', () => {
+    expect(applyRewardChanceEntryOverrides(entries, [{ ...entries[0], chance: 0.5 }, { id: 'extra', chance: 1, quantity: [1, 1], reward: 'dust' }]).map((entry) => entry.id)).toEqual(['guaranteed', 'bonus', 'extra']);
+  });
+});
+
+function sequence(values: number[]): () => number { let index = 0; return () => values[index++] ?? 0; }

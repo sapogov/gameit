@@ -58,7 +58,8 @@ export class BattleRoom extends Room {
             encounterId: claim.encounterId,
             playerProfile: claim.playerProfile,
             playerCreature: claim.playerCreature,
-            wildSpeciesId: claim.wildSpeciesId
+            wildSpeciesId: claim.wildSpeciesId,
+            zoneId: claim.zoneId
           });
     const stateSchema = toBattleStateSchema(this.battleState);
     stateSchema.balanceVersion = CURRENT_BALANCE_VERSION;

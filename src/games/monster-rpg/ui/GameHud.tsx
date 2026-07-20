@@ -586,10 +586,11 @@ function formatMapKind(kind: MapKind): string {
 }
 
 function formatCurrencySummary(currencies: Record<string, number>): string {
-  const entries = Object.entries(currencies).filter(([, quantity]) => quantity > 0);
-  if (entries.length === 0) return 'No materials';
+  const clinks = currencies.clinks ?? 0;
+  const entries = Object.entries(currencies).filter(([id, quantity]) => id !== 'clinks' && quantity > 0);
+  if (entries.length === 0) return `Clinks ${clinks}`;
 
-  return entries.map(([id, quantity]) => `${formatMaterialId(id)} ${quantity}`).join(' / ');
+  return `Clinks ${clinks} / ${entries.map(([id, quantity]) => `${formatMaterialId(id)} ${quantity}`).join(' / ')}`;
 }
 
 function getInventoryRows(saveState: MonsterRpgSaveState): string[] {

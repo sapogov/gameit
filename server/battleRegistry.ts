@@ -24,6 +24,7 @@ export interface BattleClaim {
   playerCreature: CreatureSaveRecord;
   guardCreature?: CreatureSaveRecord;
   wildSpeciesId: number;
+  zoneId?: string;
   createdAt: number;
   expiresAt: number;
   result?: BattleResolution;
@@ -38,7 +39,8 @@ export function createBattleClaim({
   mapId,
   playerProfile,
   playerCreature,
-  wildSpeciesId
+  wildSpeciesId,
+  zoneId
 }: {
   encounterId: string;
   locationRoomId: string;
@@ -46,6 +48,7 @@ export function createBattleClaim({
   playerProfile: PlayerProfile;
   playerCreature: CreatureSaveRecord;
   wildSpeciesId: number;
+  zoneId: string;
 }): BattleClaim {
   cleanupExpiredBattleClaims();
   const battleId = `battle:${encounterId}:${playerProfile.playerId}:${Date.now()}`;
@@ -59,6 +62,7 @@ export function createBattleClaim({
     playerProfile,
     playerCreature,
     wildSpeciesId,
+    zoneId,
     createdAt: Date.now(),
     expiresAt: Date.now() + BATTLE_CLAIM_TTL_MS
   };
@@ -150,12 +154,13 @@ export function onBattleClaimResolved(battleId: string, listener: (result: Battl
 
 export function getBattleStateSeed(claim: BattleClaim): Pick<
   BattleRoomState,
-  'battleId' | 'encounterId' | 'wildSpeciesId'
+  'battleId' | 'encounterId' | 'wildSpeciesId' | 'zoneId'
 > {
   return {
     battleId: claim.battleId,
     encounterId: claim.encounterId,
-    wildSpeciesId: claim.wildSpeciesId
+    wildSpeciesId: claim.wildSpeciesId,
+    zoneId: claim.zoneId
   };
 }
 

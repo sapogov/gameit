@@ -141,7 +141,7 @@ function createEmptySaveContainers(playerId: string, homeVillageId: PlayerProfil
   return {
     inventory: {
       ownerPlayerId: playerId,
-      currencies: { magicDust: GAME_BALANCE_CONFIG.inventory.startingMagicDust },
+      currencies: { magicDust: GAME_BALANCE_CONFIG.inventory.startingMagicDust, clinks: GAME_BALANCE_CONFIG.inventory.startingClinks },
       items: {
         [REVIVE_ITEM_ID]: {
           id: REVIVE_ITEM_ID,
@@ -237,12 +237,18 @@ function migrateBalanceV1ToV2(save: Record<string, unknown>): Record<string, unk
   if (!profile || typeof profile !== 'object' || Array.isArray(profile)) return { ...save, balanceVersion: 2 };
   const playerId = (profile as { playerId?: unknown }).playerId;
   if (typeof playerId !== 'string') return { ...save, balanceVersion: 2 };
-  const inventory = save.inventory;
+  const inventory = save.inventory && typeof save.inventory === 'object' && !Array.isArray(save.inventory)
+    ? save.inventory as Record<string, unknown>
+    : {};
+  const currencies = inventory.currencies && typeof inventory.currencies === 'object' && !Array.isArray(inventory.currencies)
+    ? inventory.currencies as Record<string, unknown>
+    : {};
   return {
     ...save,
     balanceVersion: 2,
     inventory: {
-      ...(inventory && typeof inventory === 'object' && !Array.isArray(inventory) ? inventory : {}),
+      ...inventory,
+      currencies: { ...currencies, clinks: Number(currencies.clinks ?? 0) },
       itemInventory: { stacks: {} },
       rewardInbox: createRewardInbox(playerId)
     }

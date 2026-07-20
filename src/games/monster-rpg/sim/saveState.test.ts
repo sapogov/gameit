@@ -11,6 +11,7 @@ import {
 } from './saveState';
 import { REVIVE_ITEM_ID, STARTING_REVIVE_ITEM_QUANTITY } from './creatureParty';
 import { claimReward, enqueueReward } from './rewardInbox';
+import { CURRENT_BALANCE_VERSION } from './gameBalance';
 
 beforeEach(() => {
   Object.defineProperty(globalThis, 'localStorage', {
@@ -22,11 +23,12 @@ beforeEach(() => {
 describe('Monster RPG save import and export', () => {
   test('new saves persist the current balance version and migrate legacy balance v0', () => {
     const save = createInitialSave(createPlayerProfile('Mira', 'scout'));
-    expect(save.balanceVersion).toBe(2);
+    expect(save.balanceVersion).toBe(CURRENT_BALANCE_VERSION);
     const legacy = { ...save } as Record<string, unknown>;
     delete legacy.balanceVersion;
     const migrated = migrateSaveBalance(legacy);
-    expect(migrated).toMatchObject({ ok: true, state: { balanceVersion: 2, inventory: { rewardInbox: { claimedSourceIds: {} } } } });
+    expect(migrated).toMatchObject({ ok: true, state: { balanceVersion: CURRENT_BALANCE_VERSION, inventory: { rewardInbox: { claimedSourceIds: {} } } } });
+    if (migrated.ok) expect(migrated.state.inventory.currencies.clinks).toBe(0);
   });
 
   test('missing balance migration rejects atomically without mutating input', () => {

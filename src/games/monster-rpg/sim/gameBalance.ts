@@ -5,7 +5,7 @@ export interface GameBalanceConfig {
   readonly creatures: { readonly activePartyLimit: number; readonly reviveRestoreRatio: number };
   readonly battles: { readonly disconnectGraceMs: number; readonly fatigueRecoveryFloor: number; readonly baseRunChance: number; readonly runAttemptBonus: number };
   readonly items: { readonly startingReviveQuantity: number };
-  readonly inventory: { readonly startingMagicDust: number };
+  readonly inventory: { readonly startingMagicDust: number; readonly startingClinks: number };
   readonly chests: { readonly cardPackSize: number };
   readonly rewards: { readonly battleMagicDustBase: number; readonly battlePackChance: number; readonly battleDirectEggChance: number; readonly battleMaterialChance: number };
   readonly economy: { readonly stationTravelBaseCost: number; readonly stationTravelLevelDiffCost: number };
@@ -17,7 +17,7 @@ export const GAME_BALANCE_CONFIG: Readonly<GameBalanceConfig> = Object.freeze({
   creatures: Object.freeze({ activePartyLimit: 5, reviveRestoreRatio: 0.25 }),
   battles: Object.freeze({ disconnectGraceMs: 15_000, fatigueRecoveryFloor: 4, baseRunChance: 0.5, runAttemptBonus: 0.25 }),
   items: Object.freeze({ startingReviveQuantity: 1 }),
-  inventory: Object.freeze({ startingMagicDust: 0 }),
+  inventory: Object.freeze({ startingMagicDust: 0, startingClinks: 0 }),
   chests: Object.freeze({ cardPackSize: 5 }),
   rewards: Object.freeze({ battleMagicDustBase: 2, battlePackChance: 0.18, battleDirectEggChance: 0.03, battleMaterialChance: 0.4 }),
   economy: Object.freeze({ stationTravelBaseCost: 2, stationTravelLevelDiffCost: 3 }),
@@ -41,6 +41,7 @@ export function validateGameBalanceConfig(config: unknown = GAME_BALANCE_CONFIG)
   probability('battles.runAttemptBonus');
   integer('items.startingReviveQuantity');
   integer('inventory.startingMagicDust');
+  integer('inventory.startingClinks');
   integer('chests.cardPackSize', 1);
   integer('rewards.battleMagicDustBase');
   probability('rewards.battlePackChance');
