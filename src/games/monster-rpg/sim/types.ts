@@ -22,7 +22,8 @@ export type BuildingType = 'shop' | 'house' | 'clinic' | 'post-office' | 'town-h
 
 export type InteriorMapId = `${VillageId}-${BuildingType}-interior`;
 
-export type MapId = 'world-map' | VillageId | InteriorMapId;
+export type GeneratedMapId = 'tracer-water-town' | 'tracer-world-route';
+export type MapId = 'world-map' | VillageId | InteriorMapId | GeneratedMapId;
 
 export type MapKind = 'world-map' | 'village' | 'interior';
 
@@ -527,6 +528,8 @@ export interface LocationRoomState {
   encounters: Record<string, WildEncounterState>;
   tileWidth: number;
   tileHeight: number;
+  mapSetId: string;
+  mapSetVersion: string;
   localPlayerId?: RoomPlayerId;
 }
 
@@ -568,4 +571,7 @@ export interface JoinLocationOptions {
   balanceVersion: number;
   position?: WorldPosition;
   transitionId?: string;
+  /** Required when joining a generated-map room; legacy rooms remain save-compatible. */
+  mapSetId: string;
+  mapSetVersion: string;
 }

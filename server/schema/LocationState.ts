@@ -113,6 +113,8 @@ export class LocationStateSchema extends Schema {
   declare mapKind: MapKind;
   declare tileWidth: number;
   declare tileHeight: number;
+  declare mapSetId: string;
+  declare mapSetVersion: string;
   declare players: MapSchema<LocationPlayerSchema>;
   declare encounters: MapSchema<WildEncounterSchema>;
 
@@ -124,6 +126,8 @@ export class LocationStateSchema extends Schema {
     this.mapKind = 'world-map';
     this.tileWidth = 16;
     this.tileHeight = 16;
+    this.mapSetId = '';
+    this.mapSetVersion = '';
     this.players = new MapSchema<LocationPlayerSchema>();
     this.encounters = new MapSchema<WildEncounterSchema>();
   }
@@ -135,6 +139,8 @@ defineTypes(LocationStateSchema, {
   mapKind: 'string',
   tileWidth: 'number',
   tileHeight: 'number',
+  mapSetId: 'string',
+  mapSetVersion: 'string',
   players: { map: LocationPlayerSchema },
   encounters: { map: WildEncounterSchema }
 });

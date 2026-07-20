@@ -9,6 +9,7 @@ import {
   createInitialSave,
   CURRENT_BALANCE_VERSION,
   getGameMap,
+  generatedMapRegistry,
   getVillageDefinition,
   loadProfile,
   loadSave,
@@ -196,6 +197,7 @@ async function checkSdkMultiplayerFlow(): Promise<void> {
     await checkSharedWildEncounterClaimFlow(endpoint);
     await checkInvalidMapIdRejected(endpoint);
     await checkBlockedTerrainRejectedOnline(endpoint);
+    await checkGeneratedMapSdkFlow(endpoint);
   } finally {
     await server.gracefullyShutdown(false);
   }
@@ -381,9 +383,26 @@ async function checkSharedWildEncounterClaimFlow(endpoint: string): Promise<void
 async function checkInvalidMapIdRejected(endpoint: string): Promise<void> {
   const client = new Client(endpoint);
   await assert.rejects(
-    () => client.joinOrCreate('location', { mapId: 'greenway-route', profile: createProfile('invalid-map'), balanceVersion: CURRENT_BALANCE_VERSION }),
+    () => client.joinOrCreate('location', {
+      mapId: 'greenway-route',
+      profile: createProfile('invalid-map'),
+      balanceVersion: CURRENT_BALANCE_VERSION,
+      ...generatedMapIdentity()
+    }),
     /Invalid map id|no available handler|Failed to/
   );
+}
+
+async function checkGeneratedMapSdkFlow(endpoint: string): Promise<void> {
+  const client = new Client(endpoint); const town = await joinLocation(client, 'tracer-water-town', createProfile('generated-town'));
+  assert.equal(town.state.mapSetId, generatedMapRegistry.handshake().id);
+  await sendMoves(town, ['west']); const transition = await sendMoveForTransition(town, 'south'); assert.equal(transition.toMapId, 'tracer-world-route'); await leaveRoom(town);
+  const route = await joinLocation(client, 'tracer-world-route', createProfile('generated-town'), transition.transitionId); assert.equal(route.state.mapId, 'tracer-world-route');
+  const generatedRoute = generatedMapRegistry.require('tracer-world-route'); const routeMap = getGameMap('tracer-world-route');
+  assert.ok(generatedRoute.collisions.length > 0, 'generated collision metadata is preserved'); assert.equal(generatedRoute.blocked.flat().some(Boolean), false, 'geometry collision is not enforced by v1 square movement');
+  const start = getLocalPosition(route); const movementProbe = ([{ direction: 'north' as const, x: start.x, y: start.y - 1 }, { direction: 'east' as const, x: start.x + 1, y: start.y }, { direction: 'south' as const, x: start.x, y: start.y + 1 }, { direction: 'west' as const, x: start.x - 1, y: start.y }]).find((candidate) => canEnterTile(routeMap, candidate.x, candidate.y) && !routeMap.exits.some((exit) => exit.x === candidate.x && exit.y === candidate.y));
+  assert.ok(movementProbe, 'reachable generated square-grid movement'); await sendMoves(route, [movementProbe.direction]); assert.deepEqual(getLocalPosition(route), { ...start, x: movementProbe.x, y: movementProbe.y, facing: movementProbe.direction }); await leaveRoom(route);
+  await assert.rejects(() => client.joinOrCreate('location', { mapId: 'tracer-water-town', profile: createProfile('bad-handshake'), balanceVersion: CURRENT_BALANCE_VERSION, mapSetId: 'wrong', mapSetVersion: '0' }), /map-set version mismatch|409|Failed to/);
 }
 
 async function waitForEncounter(room: SdkRoom): Promise<EncounterTarget> {
@@ -435,11 +454,14 @@ async function joinLocation(
     mapId,
     profile,
     balanceVersion: CURRENT_BALANCE_VERSION,
+    ...generatedMapIdentity(),
     ...(transitionId ? { transitionId } : {})
   })) as SdkRoom;
   await waitFor(() => room.state.mapId === mapId, `join ${mapId}`);
   return room;
 }
+
+function generatedMapIdentity() { const mapSet = generatedMapRegistry.handshake(); return { mapSetId: mapSet.id, mapSetVersion: mapSet.version }; }
 
 async function sendMoves(room: SdkRoom, directions: Direction[]): Promise<void> {
   for (const direction of directions) {

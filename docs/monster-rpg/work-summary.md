@@ -18,6 +18,22 @@
 - Added explicit typed event adapters, player/session boundaries, accessible native history disclosure, mobile-visible newest status, and focused model/markup tests.
 - Routed profile creation, save import, and profile reset through tested production session transitions that clear prior-player history and restart deterministic entry IDs.
 
+## 2026-07-19 - Issue #60 Generated Map Schema Tracer
+
+- Added a versioned, serializable generated map-set registry with typed objects, geometry, triggers, Monster Patches, services, exits, terrain, square-grid movement adapters, and validation diagnostics.
+- Added a build-time-only hardened TMX inspector and a deterministic additive Water Town/World Route tracer artifact sourced from the pinned Python-Monsters inputs; legacy maps and saves remain unchanged.
+- Added shared client/server map-set identity handshake fields and focused schema/converter coverage.
+- Replaced the initial handcrafted tracer with deterministic generated data from the pinned 24×34 Water Town and 86×86 World Route TMX CSV layers, source objects, collision geometry, transitions, and TSX references.
+- Added atomic unknown-input loading, reciprocal reference checks, checked-in upstream fixtures, byte-identical golden regeneration coverage, and movement/pathfinding consumers on both client and server.
+- Routed both generated IDs through the production client/server map registry, required the shared map-set handshake, and added real SDK coverage for generated joins, authoritative movement, a reciprocal exit, collision metadata preservation, and mismatch rejection.
+- Hardened aggregate layer limits and rooted TSX loading, replaced arbitrary object bags with closed GameIt unions, preserved identified collision records without converting geometry to blocked tiles, rejected unresolved exit endpoints, and omitted upstream monster gameplay metadata.
+- Hardened generated collision loading: collision property bags are required primitive records, every geometry coordinate is finite, and collision areas require positive rectangle/ellipse dimensions or minimum polygon/polyline point counts while preserving zero-sized point geometry for NPCs and spawns; typed geometry guards retain compiler narrowing.
+- Integrated the map-set handshake with the balance-version lifecycle so the client injects both identities centrally, waits for the first real SDK state packet, and rejects missing or mismatched map-set advertisements before publishing room state.
+- Made the build-time converter fail closed on URI-valued XML content, non-finite geometry, non-positive collision areas, and underspecified collision paths while retaining valid zero-size spawn/NPC points and linear scanning for large CSV layers.
+- Normalized the pinned XML fixtures to repository-safe LF endings and made the two-map converter CLI preserve canonical `data/maps/*` upstream provenance, keeping command-line regeneration byte-identical to the checked-in artifact.
+- Preserved authored collision geometry without rasterizing it into v1 blocked tiles; generated square movement now relies only on explicit blocked-tile input, while SDK checks prove metadata preservation, movement, and reciprocal transition behavior.
+- Sanitized converter filesystem and CLI diagnostics so missing or unreadable TMX/TSX/root/output failures never expose host paths; added focused top-level TMX diagnostic probes.
+
 ## 2026-07-19 - Portal Review Fixes
 
 - Kept coming-soon catalog cards non-launching while playable cards retain their game-route links.

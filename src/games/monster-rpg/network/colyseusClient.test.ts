@@ -78,7 +78,14 @@ function locationHarness() {
       onGuardedFarmTheftClaimed: vi.fn(),
       onGuardedFarmTheftClaimRejected: vi.fn()
     }),
-    decodedState: { balanceVersion: 1, mapId: 'world-map', players: new Map(), encounters: new Map() },
+    decodedState: {
+      balanceVersion: 1,
+      mapSetId: 'python-monsters-tracer',
+      mapSetVersion: '1.0.0',
+      mapId: 'world-map',
+      players: new Map(),
+      encounters: new Map()
+    },
     readyMessageCount: 5
   };
 }
@@ -101,6 +108,70 @@ function battleHarness() {
 
 beforeEach(() => {
   joinOrCreate.mockReset();
+});
+
+describe('location map-set handshake', () => {
+  test('injects the balance and generated map-set identities into the join request', async () => {
+    const room = new FakeRoom();
+    const harness = locationHarness();
+    joinOrCreate.mockResolvedValue(room);
+    const connectionPromise = harness.connect();
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(joinOrCreate).toHaveBeenCalledWith('location', {
+      mapId: 'world-map',
+      profile,
+      balanceVersion: 1,
+      mapSetId: 'python-monsters-tracer',
+      mapSetVersion: '1.0.0'
+    });
+
+    room.publishDecodedState(harness.decodedState);
+    await expect(connectionPromise).resolves.toBeDefined();
+  });
+
+  test('ignores the unhydrated state placeholder until the first SDK state callback', async () => {
+    const room = new FakeRoom();
+    room.state = { balanceVersion: 1, mapSetId: 'wrong-map-set', mapSetVersion: '0.0.0' };
+    const harness = locationHarness();
+    joinOrCreate.mockResolvedValue(room);
+    const connectionPromise = harness.connect();
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(harness.onState).not.toHaveBeenCalled();
+    expect(harness.onStatus).not.toHaveBeenCalled();
+    expect(room.leave).not.toHaveBeenCalled();
+
+    room.publishDecodedState(harness.decodedState);
+    await expect(connectionPromise).resolves.toBeDefined();
+  });
+
+  test.each([
+    ['wrong map-set ID', { mapSetId: 'other-map-set' }],
+    ['missing map-set ID', { mapSetId: undefined }],
+    ['wrong map-set version', { mapSetVersion: '2.0.0' }],
+    ['missing map-set version', { mapSetVersion: undefined }]
+  ])('rejects a first state with %s before publication', async (_caseName, advertisedState) => {
+    const room = new FakeRoom();
+    const harness = locationHarness();
+    joinOrCreate.mockResolvedValue(room);
+    const connectionPromise = harness.connect();
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(() => room.publishDecodedState({ ...harness.decodedState, ...advertisedState })).not.toThrow();
+    room.emitError();
+    room.emitLeave();
+
+    await expect(connectionPromise).rejects.toThrow('Generated map-set version mismatch');
+    expect(harness.onState).not.toHaveBeenCalled();
+    expect(harness.onStatus).not.toHaveBeenCalled();
+    expect(room.leave).toHaveBeenCalledTimes(1);
+    expect(room.lifecycleListenerCount()).toBe(0);
+    expect(room.messageListenerCount()).toBe(0);
+  });
 });
 
 describe.each([

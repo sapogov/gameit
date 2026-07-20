@@ -23,6 +23,7 @@ import {
   rollSpawnDelayMs,
   selectCreatureAttacks,
   validateGameMapRegistry,
+  generatedMapRegistry,
   type BattleResolution
 } from '../../src/games/monster-rpg/sim';
 import type {
@@ -48,12 +49,15 @@ import {
   removeBattleClaim
 } from '../battleRegistry';
 import { LocationPlayerSchema, LocationStateSchema, WildEncounterSchema } from '../schema/LocationState';
+import { getGeneratedMapForServer } from '../generatedMapAdapter';
 
 const avatarIds = new Set<AvatarId>(['scout', 'ranger', 'keeper']);
 const directions = new Set<Direction>(['north', 'east', 'south', 'west']);
 export const TRANSITION_TOKEN_TTL_MS = GAME_BALANCE_CONFIG.maps.transitionTokenTtlMs;
 const pendingTransitions = new Map<string, PendingTransition>();
 const registryErrors = validateGameMapRegistry();
+const generatedTown = getGeneratedMapForServer('tracer-water-town');
+const generatedRoute = getGeneratedMapForServer('tracer-world-route');
 
 interface PendingTransition {
   profileId: string;
@@ -76,6 +80,8 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
 
   async onCreate(options?: Partial<JoinLocationOptions>) {
     assertBalanceVersion(options?.balanceVersion);
+    const advertisedMapSet = generatedMapRegistry.handshake();
+    if (options?.mapSetId !== advertisedMapSet.id || options?.mapSetVersion !== advertisedMapSet.version) throw new ServerError(409, 'Generated map-set version mismatch');
     const mapId = normalizeMapId(options?.mapId);
     if (!mapId) {
       throw new ServerError(400, 'Invalid map id');
@@ -92,6 +98,10 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
     this.state.mapKind = map.kind;
     this.state.tileWidth = map.tileSize;
     this.state.tileHeight = map.tileSize;
+    const mapSet = generatedMapRegistry.handshake();
+    if (!generatedTown.findPath({ x: 11, y: 29 }, { x: 11, y: 29 }) || !generatedRoute.map.exits.some((exit) => exit.toMapId === generatedTown.map.id)) throw new ServerError(500, 'Generated map registry is unavailable');
+    this.state.mapSetId = mapSet.id;
+    this.state.mapSetVersion = mapSet.version;
     this.spawnInitialWildEncounters();
 
     this.onMessage('moveIntent', (client, payload: MoveIntentMessage) => {
@@ -110,6 +120,10 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
 
   onJoin(client: Client, options: JoinLocationOptions) {
     assertBalanceVersion(options?.balanceVersion);
+    const advertisedMapSet = generatedMapRegistry.handshake();
+    if (options.mapSetId !== advertisedMapSet.id || options.mapSetVersion !== advertisedMapSet.version) {
+      throw new ServerError(409, 'Generated map-set version mismatch');
+    }
     const requestedMapId = normalizeMapId(options?.mapId);
     if (!requestedMapId || requestedMapId !== this.mapId) {
       throw new ServerError(400, 'Invalid map id');

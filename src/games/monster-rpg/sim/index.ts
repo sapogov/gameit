@@ -27,6 +27,7 @@ export type {
   FarmSaveContainer,
   FarmSaveRecord,
   GameMap,
+  GeneratedMapId,
   GuardedFarmTheftClaimedMessage,
   ClaimWildEncounterMessage,
   ClaimGuardedFarmTheftMessage,
@@ -104,8 +105,29 @@ export {
   villageDefinitions,
   walkableTiles
 } from './maps';
-export { movePlayer } from './movement';
-export { findWalkPath, findWalkPathToInteractionDistance } from './pathfinding';
+export { moveOnSquareGrid, movePlayer } from './movement';
+export { findSquareGridPath, findWalkPath, findWalkPathToInteractionDistance } from './pathfinding';
+export {
+  GENERATED_MAP_SCHEMA_VERSION,
+  GeneratedMapRegistry,
+  loadMapSet,
+  toSquareGridMap,
+  validateGeneratedMapSet,
+  type GeneratedExitV1,
+  type GeneratedCollisionV1,
+  type GeneratedEncounterV1,
+  type GeneratedGeometry,
+  type GeneratedMapObjectKind,
+  type GeneratedMapObjectV1,
+  type GeneratedMapSetV1,
+  type GeneratedMapV1,
+  type GeneratedNpcV1,
+  type GeneratedServiceV1,
+  type GeneratedSpawnV1,
+  type LoadMapSetResult,
+  type SquareGridMapAdapter
+} from './generatedMapSchema';
+export { generatedMapRegistry, generatedTracerMapSet } from './generatedMapSet';
 export {
   WILD_ENCOUNTER_LOSS_COOLDOWN_MS,
   WILD_ENCOUNTER_MAX_SPAWN_INTERVAL_MS,
