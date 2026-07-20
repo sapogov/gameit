@@ -19,6 +19,25 @@ test('rejects duplicate sources and a full inbox without mutation', () => {
   expect(enqueueReward(full, { ...bundle, sourceId: 'next' })).toMatchObject({ ok: false, reason: 'inbox-full' });
 });
 
+test('rejects prototype source IDs and ignores inherited bundle aliases without mutation', () => {
+  const initial = createRewardInbox('player');
+  const bundle = { sourceId: 'toString', ownerPlayerId: 'player', items: [{ itemId: 'worn-key' as const, quantity: 1 }], createdAt: '2026-07-20T00:00:00.000Z' };
+  const inventory = createItemInventory();
+  const inboxBefore = JSON.stringify(initial);
+  const inventoryBefore = JSON.stringify(inventory);
+
+  expect(() => enqueueReward(initial, bundle)).not.toThrow();
+  expect(enqueueReward(initial, bundle)).toEqual({ ok: false, reason: 'invalid-bundle' });
+  expect(enqueueReward(initial, { ...bundle, sourceId: '__proto__' })).toEqual({ ok: false, reason: 'invalid-bundle' });
+  expect(() => claimReward(initial, inventory, 'player', 'toString')).not.toThrow();
+  expect(claimReward(initial, inventory, 'player', 'toString')).toEqual({ ok: false, reason: 'missing-bundle' });
+
+  const inheritedInbox = { ...initial, bundles: Object.create({ inherited: { ...bundle, sourceId: 'inherited' } }) };
+  expect(claimReward(inheritedInbox, inventory, 'player', 'inherited')).toEqual({ ok: false, reason: 'missing-bundle' });
+  expect(JSON.stringify(initial)).toBe(inboxBefore);
+  expect(JSON.stringify(inventory)).toBe(inventoryBefore);
+});
+
 test('rejects owner mismatch and preserves every input when capacity prevents a claim', () => {
   const queued = enqueueReward(createRewardInbox('player'), { sourceId: 'overflow', ownerPlayerId: 'player', items: [{ itemId: 'worn-key', quantity: 1 }], createdAt: '2026-07-20T00:00:00.000Z' });
   expect(queued.ok).toBe(true); if (!queued.ok) return;
@@ -27,4 +46,27 @@ test('rejects owner mismatch and preserves every input when capacity prevents a 
   const inboxBefore = JSON.stringify(queued.inbox); const inventoryBefore = JSON.stringify(fullInventory);
   expect(claimReward(queued.inbox, fullInventory, 'player', 'overflow')).toMatchObject({ ok: false, reason: 'capacity', requiredSlots: 1 });
   expect(JSON.stringify(queued.inbox)).toBe(inboxBefore); expect(JSON.stringify(fullInventory)).toBe(inventoryBefore);
+});
+
+test('reports bundle-wide additional slots across items and partial stacks', () => {
+  const queued = enqueueReward(createRewardInbox('player'), {
+    sourceId: 'multi-item-overflow',
+    ownerPlayerId: 'player',
+    items: [
+      { itemId: 'mending-sprig', quantity: 101 },
+      { itemId: 'worn-key', quantity: 100 },
+      { itemId: 'mending-sprig', quantity: 97 }
+    ],
+    createdAt: '2026-07-20T00:00:00.000Z'
+  });
+  expect(queued.ok).toBe(true); if (!queued.ok) return;
+  const inventory = {
+    stacks: {
+      partial: { id: 'partial', itemId: 'mending-sprig' as const, quantity: 98 },
+      ...Object.fromEntries(Array.from({ length: 149 }, (_, index) => [`full:${index}`, { id: `full:${index}`, itemId: 'clearhead-tonic' as const, quantity: 99 }]))
+    }
+  };
+  const before = JSON.stringify(inventory);
+  expect(claimReward(queued.inbox, inventory, 'player', 'multi-item-overflow')).toMatchObject({ ok: false, reason: 'capacity', requiredSlots: 4 });
+  expect(JSON.stringify(inventory)).toBe(before);
 });

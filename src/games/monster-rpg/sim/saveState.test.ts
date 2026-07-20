@@ -36,6 +36,19 @@ describe('Monster RPG save import and export', () => {
     expect(JSON.stringify(unsupported)).toBe(original);
   });
 
+  test('v1 migration rejects malformed profile or inventory without throwing or mutating input', () => {
+    const malformedProfile = { balanceVersion: 1, profile: null, inventory: null };
+    const malformedInventory = { balanceVersion: 1, profile: { playerId: 'player' }, inventory: null };
+    const profileBefore = JSON.stringify(malformedProfile);
+    const inventoryBefore = JSON.stringify(malformedInventory);
+
+    expect(() => migrateSaveBalance(malformedProfile)).not.toThrow();
+    expect(migrateSaveBalance(malformedProfile)).toEqual({ ok: false, reason: 'invalid-save' });
+    expect(migrateSaveBalance(malformedInventory)).toEqual({ ok: false, reason: 'invalid-save' });
+    expect(JSON.stringify(malformedProfile)).toBe(profileBefore);
+    expect(JSON.stringify(malformedInventory)).toBe(inventoryBefore);
+  });
+
   test('stored unsupported balance save preserves its bytes and reports a typed failure', () => {
     const save = createInitialSave(createPlayerProfile('Mira', 'scout'));
     const raw = JSON.stringify({ ...save, balanceVersion: 99 });

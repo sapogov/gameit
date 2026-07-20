@@ -16,13 +16,53 @@ export const ITEM_CATALOG = [
 ] as const;
 
 export type ItemId = (typeof ITEM_CATALOG)[number][0];
-export type ItemDefinition = { id: ItemId; name: string; category: string; rarity: string; buyPrice: number; sellPrice: number; effect: string; maxStack: number; discardable: boolean };
-export const ITEM_DEFINITIONS: readonly ItemDefinition[] = Object.freeze(ITEM_CATALOG.map(([id, name, category, rarity, buyPrice, effect]) => Object.freeze({ id, name, category, rarity, buyPrice, sellPrice: Math.floor(buyPrice * 0.4), effect, maxStack: 99, discardable: true })));
+
+export type ItemDefinition = {
+  id: ItemId;
+  name: string;
+  category: string;
+  rarity: string;
+  buyPrice: number;
+  sellPrice: number;
+  effect: string;
+  maxStack: number;
+  discardable: boolean;
+};
+
+export const ITEM_DEFINITIONS: readonly ItemDefinition[] = Object.freeze(
+  ITEM_CATALOG.map(([id, name, category, rarity, buyPrice, effect]) =>
+    Object.freeze({
+      id,
+      name,
+      category,
+      rarity,
+      buyPrice,
+      sellPrice: Math.floor(buyPrice * 0.4),
+      effect,
+      maxStack: 99,
+      discardable: true
+    })
+  )
+);
+
+const canonicalDefinitions = ITEM_DEFINITIONS.map((item) => ({ ...item }));
 export const itemById = new Map<ItemId, ItemDefinition>(ITEM_DEFINITIONS.map((item) => [item.id, item]));
-export function getItemDefinition(id: string): ItemDefinition | undefined { return itemById.get(id as ItemId); }
-export function isItemId(id: unknown): id is ItemId { return typeof id === 'string' && itemById.has(id as ItemId); }
+
+export function getItemDefinition(id: string): ItemDefinition | undefined {
+  return itemById.get(id as ItemId);
+}
+
+export function isItemId(id: unknown): id is ItemId {
+  return typeof id === 'string' && itemById.has(id as ItemId);
+}
+
 export function validateItemCatalog(items: readonly ItemDefinition[] = ITEM_DEFINITIONS): string[] {
-  if (items.length !== 14) return ['catalog must contain exactly 14 items'];
-  const ids = new Set(items.map((item) => item.id));
-  return ids.size === items.length && items.every((item) => Number.isSafeInteger(item.buyPrice) && item.buyPrice > 0 && Number.isSafeInteger(item.maxStack) && item.maxStack > 0) ? [] : ['catalog ids and numeric values must be valid'];
+  if (items.length !== canonicalDefinitions.length) return ['catalog must contain exactly 14 items'];
+
+  const invalidIndex = items.findIndex((item, index) => {
+    const canonical = canonicalDefinitions[index];
+    return !canonical || Object.keys(canonical).some((key) => item[key as keyof ItemDefinition] !== canonical[key as keyof ItemDefinition]);
+  });
+
+  return invalidIndex === -1 ? [] : [`catalog definition ${invalidIndex + 1} must match the canonical catalog`];
 }

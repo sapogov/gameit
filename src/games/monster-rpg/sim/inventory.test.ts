@@ -7,6 +7,10 @@ test('fills deterministic overflow stacks and requires confirmation to discard',
   if (!added.ok) return;
   expect(Object.values(added.inventory.stacks).map((stack) => stack.quantity)).toEqual([99, 1]);
   expect(discardItem(added.inventory, 'mending-sprig:001', 1, false)).toMatchObject({ ok: false });
+  expect(discardItem(added.inventory, 'mending-sprig:001', 1, true)).toMatchObject({
+    ok: true,
+    inventory: { stacks: { 'mending-sprig:001': { quantity: 98 }, 'mending-sprig:002': { quantity: 1 } } }
+  });
 });
 
 test('rejects additions beyond the 150 occupied stack limit', () => {

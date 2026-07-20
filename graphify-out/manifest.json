@@ -335,13 +335,13 @@
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/saveState.test.ts": {
-    "mtime": 1784573610.0999074,
-    "ast_hash": "4427a27d6548165dd54d78677efeec69",
+    "mtime": 1784580901.5089967,
+    "ast_hash": "fadc8652ff9265766a92ac30bf3498e4",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/saveState.ts": {
-    "mtime": 1784573511.405082,
-    "ast_hash": "6a8ba4f1273f0d7b4283f17e244ff4d3",
+    "mtime": 1784580876.150041,
+    "ast_hash": "bedda9a2c46c32c252ac567e548e0b40",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/settings.test.ts": {
@@ -400,8 +400,8 @@
     "semantic_hash": ""
   },
   "src/games/monster-rpg/ui/GameHud.tsx": {
-    "mtime": 1784573609.5703864,
-    "ast_hash": "1bcc04c9d3d40379697c1d8ec03a58c9",
+    "mtime": 1784580876.7240474,
+    "ast_hash": "71b804ff60386b5ae3642d7d771a9fca",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/ui/GameLogView.test.tsx": {
@@ -1615,8 +1615,8 @@
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/inventory.test.ts": {
-    "mtime": 1784573817.8545182,
-    "ast_hash": "47a0c13dacbfde1a5179d33054e3bf29",
+    "mtime": 1784580924.7393088,
+    "ast_hash": "be44b7f1d019e0215eb59f5dab46c0cc",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/inventory.ts": {
@@ -1625,23 +1625,23 @@
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/items.test.ts": {
-    "mtime": 1784573588.6657746,
-    "ast_hash": "0ac7189708f4d6f8b69e5c1540eccf05",
+    "mtime": 1784580964.5113964,
+    "ast_hash": "25b496c60aee67361f1e334286f4edfb",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/items.ts": {
-    "mtime": 1784573483.695222,
-    "ast_hash": "1473cb4a2a6030bfc195f1ece737563c",
+    "mtime": 1784580805.8472123,
+    "ast_hash": "8c32eb878d091bb5e8c7baceabb7500e",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/rewardInbox.test.ts": {
-    "mtime": 1784573818.3927083,
-    "ast_hash": "9a1aae0a12e85b628fb8e05135b0c6f0",
+    "mtime": 1784580900.9703429,
+    "ast_hash": "85443578025d35f3fe5a50b514754466",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/rewardInbox.ts": {
-    "mtime": 1784573484.9404347,
-    "ast_hash": "f1bc903c5f35ba1d51463aed82600109",
+    "mtime": 1784580807.083266,
+    "ast_hash": "9cf81997293ef748f400bb5948df47f9",
     "semantic_hash": ""
   }
 }

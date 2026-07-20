@@ -208,14 +208,19 @@ function parseSavePayload(payload: string): SaveImportResult {
 
 export function migrateSaveBalance(input: unknown): SaveBalanceMigrationResult {
   if (!input || typeof input !== 'object' || Array.isArray(input)) return { ok: false, reason: 'invalid-save' };
-  const candidate = JSON.parse(JSON.stringify(input)) as Record<string, unknown>;
+  let candidate: Record<string, unknown>;
+  try {
+    candidate = JSON.parse(JSON.stringify(input)) as Record<string, unknown>;
+  } catch {
+    return { ok: false, reason: 'invalid-save' };
+  }
   const version = candidate.balanceVersion === undefined ? 0 : candidate.balanceVersion;
   if (typeof version !== 'number' || !Number.isInteger(version) || version < 0 || version > CURRENT_BALANCE_VERSION) {
     return { ok: false, reason: 'unsupported-balance-version' };
   }
   const migrations: Record<number, (save: Record<string, unknown>) => Record<string, unknown>> = {
     0: (save) => ({ ...save, balanceVersion: 1 }),
-    1: (save) => ({ ...save, balanceVersion: 2, inventory: { ...(save.inventory as object), itemInventory: { stacks: {} }, rewardInbox: createRewardInbox((save.profile as PlayerProfile).playerId) } })
+    1: migrateBalanceV1ToV2
   };
   let working = candidate;
   for (let current = version; current < CURRENT_BALANCE_VERSION; current += 1) {
@@ -225,6 +230,23 @@ export function migrateSaveBalance(input: unknown): SaveBalanceMigrationResult {
   }
   if (!isValidSaveState(working)) return { ok: false, reason: 'invalid-save' };
   return { ok: true, state: working };
+}
+
+function migrateBalanceV1ToV2(save: Record<string, unknown>): Record<string, unknown> {
+  const profile = save.profile;
+  if (!profile || typeof profile !== 'object' || Array.isArray(profile)) return { ...save, balanceVersion: 2 };
+  const playerId = (profile as { playerId?: unknown }).playerId;
+  if (typeof playerId !== 'string') return { ...save, balanceVersion: 2 };
+  const inventory = save.inventory;
+  return {
+    ...save,
+    balanceVersion: 2,
+    inventory: {
+      ...(inventory && typeof inventory === 'object' && !Array.isArray(inventory) ? inventory : {}),
+      itemInventory: { stacks: {} },
+      rewardInbox: createRewardInbox(playerId)
+    }
+  };
 }
 
 function readJson<T>(key: string): T | null {
