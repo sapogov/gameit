@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import type { CreatureLabelMode, InputAction, LocationRoomState, MonsterRpgSaveState } from '../sim';
 import { getGameMap } from '../sim';
 import { VillageScene } from './scenes/VillageScene';
+import { getGeneratedMapForClient } from './generatedMapAdapter';
 
 export interface MonsterRpgGameRuntime {
   setCreatureLabelMode: (mode: CreatureLabelMode) => void;
@@ -17,10 +18,13 @@ interface BootGameOptions {
 }
 
 export function bootGame(parent: HTMLElement, options: BootGameOptions): MonsterRpgGameRuntime {
+  const initialMap = options.initialState.mapId === 'tracer-water-town' || options.initialState.mapId === 'tracer-world-route'
+    ? getGeneratedMapForClient(options.initialState.mapId).runtimeMap
+    : getGameMap(options.initialState.mapId);
   const villageScene = new VillageScene({
     initialState: options.initialState,
     creatureLabelMode: options.creatureLabelMode,
-    map: getGameMap(options.initialState.mapId),
+    map: initialMap,
     onAction: options.onAction
   });
 

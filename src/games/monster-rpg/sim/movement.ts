@@ -1,5 +1,6 @@
 import type { Direction, GameMap, InputAction, MonsterRpgSaveState, MovementResult } from './types';
 import { canEnterTile, getExitAt, getTileAt } from './maps';
+import type { SquareGridMapAdapter } from './generatedMapSchema';
 
 const directionDelta: Record<Direction, { x: number; y: number }> = {
   north: { x: 0, y: -1 },
@@ -7,6 +8,11 @@ const directionDelta: Record<Direction, { x: number; y: number }> = {
   south: { x: 0, y: 1 },
   west: { x: -1, y: 0 }
 };
+
+export function moveOnSquareGrid(grid: SquareGridMapAdapter, x: number, y: number, direction: Direction) {
+  const delta = directionDelta[direction]; const next = { x: x + delta.x, y: y + delta.y };
+  return grid.isBlocked(next.x, next.y) ? { x, y, moved: false } : { ...next, moved: true };
+}
 
 export function movePlayer(state: MonsterRpgSaveState, action: InputAction, map: GameMap): MovementResult {
   if (action.type !== 'move') {

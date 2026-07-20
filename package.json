@@ -13,6 +13,7 @@
     "build:server": "tsc -p server/tsconfig.json",
     "check:monster-rpg": "npm run check:monster-rpg-assets && tsx scripts/monster-rpg-phase4-checks.ts",
     "check:monster-rpg-assets": "node scripts/monster-rpg-asset-checks.mjs && node --test scripts/monster-rpg-asset-checks.node-test.mjs",
+    "convert:monster-rpg-tmx": "tsx scripts/convert-monster-rpg-tmx.ts",
     "preview": "vite preview",
     "test": "vitest run"
   },

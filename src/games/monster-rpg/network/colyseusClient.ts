@@ -17,7 +17,7 @@ import type {
   WildEncounterClaimedMessage,
   WorldPosition
 } from '../sim';
-import { CURRENT_BALANCE_VERSION, getGameMap, isMapId, MONSTER_RPG_SCHEMA_VERSION } from '../sim';
+import { CURRENT_BALANCE_VERSION, generatedMapRegistry, getGameMap, isMapId, MONSTER_RPG_SCHEMA_VERSION } from '../sim';
 
 const DEFAULT_SERVER_URL = 'http://127.0.0.1:2567';
 const ROOM_NAME = 'location';
@@ -71,14 +71,22 @@ export interface LocationTransitionMessage {
 
 export async function connectToLocation(
   mapId: MapId,
-  options: Omit<JoinLocationOptions, 'balanceVersion'>,
+  options: Omit<JoinLocationOptions, 'balanceVersion' | 'mapSetId' | 'mapSetVersion'>,
   handlers: ConnectionHandlers
 ): Promise<MultiplayerConnection> {
   const client = new Client(getServerUrl());
+  const mapSet = generatedMapRegistry.handshake();
   return connectRoomLifecycle({
-    join: () => joinWithBalanceError(client, ROOM_NAME, { ...options, mapId, balanceVersion: CURRENT_BALANCE_VERSION }),
+    join: () => joinWithBalanceError(client, ROOM_NAME, {
+      ...options,
+      mapId,
+      balanceVersion: CURRENT_BALANCE_VERSION,
+      mapSetId: mapSet.id,
+      mapSetVersion: mapSet.version
+    }),
     decodeState: (room, state) => {
       assertAdvertisedBalanceVersion(state);
+      assertAdvertisedMapSet(state);
       return toLocationRoomState(state, room.sessionId);
     },
     publishState: handlers.onRoomState,
@@ -274,12 +282,19 @@ function assertAdvertisedBalanceVersion(state: unknown): void {
   if (version !== CURRENT_BALANCE_VERSION) throw new BalanceVersionMismatchError(typeof version === 'number' ? version : -1, CURRENT_BALANCE_VERSION);
 }
 
+function assertAdvertisedMapSet(state: unknown): void {
+  const advertised = state as { mapSetId?: unknown; mapSetVersion?: unknown } | null;
+  const expected = generatedMapRegistry.handshake();
+  if (advertised?.mapSetId !== expected.id || advertised.mapSetVersion !== expected.version) {
+    throw new Error('Generated map-set version mismatch');
+  }
+}
+
 function toLocationRoomState(state: any, localPlayerId: string): LocationRoomState {
   const players: Record<string, LocationPlayerState> = {};
   const encounters: LocationRoomState['encounters'] = {};
   const mapId: MapId = isMapId(state.mapId) ? state.mapId : 'world-map';
   const map = getGameMap(mapId);
-
   state.players?.forEach((player: any, sessionId: string) => {
     players[sessionId] = {
       profile: {
@@ -328,6 +343,8 @@ function toLocationRoomState(state: any, localPlayerId: string): LocationRoomSta
     encounters,
     tileWidth: state.tileWidth,
     tileHeight: state.tileHeight,
+    mapSetId: typeof state.mapSetId === 'string' ? state.mapSetId : '',
+    mapSetVersion: typeof state.mapSetVersion === 'string' ? state.mapSetVersion : '',
     localPlayerId
   };
 }

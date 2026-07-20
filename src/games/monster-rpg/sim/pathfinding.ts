@@ -1,5 +1,6 @@
 import type { Direction, GameMap, WorldPosition } from './types';
 import { canEnterTile } from './maps';
+import type { SquareGridMapAdapter } from './generatedMapSchema';
 
 const steps: Array<{ direction: Direction; dx: number; dy: number }> = [
   { direction: 'north', dx: 0, dy: -1 },
@@ -107,4 +108,13 @@ function canStandOnTile(map: GameMap, x: number, y: number, options: PathOptions
 
 function positionKey(x: number, y: number): string {
   return `${x},${y}`;
+}
+
+export function findSquareGridPath(grid: SquareGridMapAdapter, start: { x: number; y: number }, target: { x: number; y: number }): Direction[] | null {
+  if (grid.isBlocked(start.x, start.y) || grid.isBlocked(target.x, target.y)) return null;
+  const queue = [{ ...start, path: [] as Direction[] }]; const visited = new Set([positionKey(start.x, start.y)]);
+  while (queue.length) { const current = queue.shift()!; if (current.x === target.x && current.y === target.y) return current.path;
+    for (const step of steps) { const x = current.x + step.dx; const y = current.y + step.dy; const key = positionKey(x, y); if (visited.has(key) || grid.isBlocked(x, y)) continue; visited.add(key); queue.push({ x, y, path: [...current.path, step.direction] }); }
+  }
+  return null;
 }

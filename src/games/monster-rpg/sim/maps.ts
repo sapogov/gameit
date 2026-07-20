@@ -10,6 +10,7 @@ import type {
   VillageId,
   WorldPosition
 } from './types';
+import { generatedMapRegistry } from './generatedMapSet';
 
 const WORLD_TILE_SIZE = 16;
 const LOCAL_TILE_SIZE = 24;
@@ -71,6 +72,14 @@ const interiorMaps = Object.fromEntries(
   buildingDefinitions.map((building) => [building.interiorMapId, createInteriorMap(building)])
 ) as Record<InteriorMapId, GameMap>;
 
+const generatedMaps = Object.fromEntries(generatedMapRegistry.mapSet.maps.map((map) => {
+  const spawnObject = map.triggers.find((trigger) => trigger.spawnKey === 'entrance') ?? map.triggers[0];
+  const spawn = { mapId: map.id as MapId, x: Math.floor((spawnObject?.geometry.x ?? 0) / map.tileSize), y: Math.floor((spawnObject?.geometry.y ?? 0) / map.tileSize), facing: spawnObject?.facing ?? 'south' };
+  const tiles = map.blocked.map((row) => row.map((blocked) => blocked ? 'wall' : map.id === 'tracer-world-route' ? 'road' : 'grass')) as TileType[][];
+  const exits: MapExit[] = map.exits.map((exit) => ({ id: exit.id, x: exit.x, y: exit.y, toMapId: exit.toMapId as MapId, spawn: { mapId: exit.toMapId as MapId, x: exit.toX, y: exit.toY, facing: 'south' }, label: exit.id }));
+  return [map.id, { id: map.id as MapId, name: map.name, kind: map.id === 'tracer-world-route' ? 'world-map' : 'village', width: map.width, height: map.height, tileSize: map.tileSize, tiles, spawn, exits } satisfies GameMap];
+})) as Record<'tracer-water-town' | 'tracer-world-route', GameMap>;
+
 export const homeVillageMap = villageMaps['home-village'];
 export const brookhavenVillageMap = villageMaps['brookhaven-village'];
 
@@ -78,6 +87,7 @@ export const gameMaps = {
   'world-map': worldMap,
   ...villageMaps,
   ...interiorMaps
+  , ...generatedMaps
 } as Record<MapId, GameMap>;
 
 export const walkableTiles = new Set<TileType>([
