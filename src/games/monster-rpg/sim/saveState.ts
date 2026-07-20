@@ -28,7 +28,7 @@ import { isValidCreatureContainerLayout, REVIVE_ITEM_ID, STARTING_REVIVE_ITEM_QU
 import { createInitialStationContainer, isValidStationDestination } from './stations';
 import { CURRENT_BALANCE_VERSION, GAME_BALANCE_CONFIG } from './gameBalance';
 import { createItemInventory } from './inventory';
-import { createRewardInbox } from './rewardInbox';
+import { createRewardInbox, isValidRewardBundle, isValidRewardSourceId } from './rewardInbox';
 import { getItemDefinition, isItemId } from './items';
 
 export const MONSTER_RPG_PROFILE_KEY = 'gameit.monsterRpg.profile';
@@ -334,13 +334,15 @@ function isValidItemInventory(value: unknown): boolean {
 
 function isValidRewardInbox(value: unknown, playerId: string): boolean {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
-  const candidate = value as { ownerPlayerId?: unknown; bundles?: unknown };
-  if (candidate.ownerPlayerId !== playerId || !candidate.bundles || typeof candidate.bundles !== 'object' || Array.isArray(candidate.bundles) || Object.keys(candidate.bundles).length > 50) return false;
-  return Object.entries(candidate.bundles).every(([sourceId, bundle]) => {
-    if (!bundle || typeof bundle !== 'object') return false;
-    const record = bundle as { sourceId?: unknown; ownerPlayerId?: unknown; items?: unknown; createdAt?: unknown };
-    return record.sourceId === sourceId && record.ownerPlayerId === playerId && isIsoDate(record.createdAt) && Array.isArray(record.items) && record.items.length > 0 && record.items.every((item) => Boolean(item && typeof item === 'object' && isItemId((item as { itemId?: unknown }).itemId) && isNonNegativeInteger((item as { quantity?: unknown }).quantity) && (item as { quantity: number }).quantity > 0));
-  });
+  const candidate = value as { ownerPlayerId?: unknown; bundles?: unknown; claimedSourceIds?: unknown };
+  if (candidate.ownerPlayerId !== playerId || !isRecord(candidate.bundles) || Object.keys(candidate.bundles).length > 50 || !isRecord(candidate.claimedSourceIds)) return false;
+  const claimedSourcesAreValid = Object.entries(candidate.claimedSourceIds).every(([sourceId, claimed]) => isValidRewardSourceId(sourceId) && claimed === true);
+  if (!claimedSourcesAreValid) return false;
+  return Object.entries(candidate.bundles).every(([sourceId, bundle]) => isValidRewardBundle(bundle, sourceId, playerId) && !Object.prototype.hasOwnProperty.call(candidate.claimedSourceIds, sourceId));
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value && typeof value === 'object' && !Array.isArray(value));
 }
 
 function isCreatureCardRecord(value: unknown, playerId: string): value is Record<string, CreatureCardInstance> {

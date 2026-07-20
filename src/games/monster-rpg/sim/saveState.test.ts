@@ -10,6 +10,7 @@ import {
   saveProgress
 } from './saveState';
 import { REVIVE_ITEM_ID, STARTING_REVIVE_ITEM_QUANTITY } from './creatureParty';
+import { claimReward, enqueueReward } from './rewardInbox';
 
 beforeEach(() => {
   Object.defineProperty(globalThis, 'localStorage', {
@@ -25,7 +26,7 @@ describe('Monster RPG save import and export', () => {
     const legacy = { ...save } as Record<string, unknown>;
     delete legacy.balanceVersion;
     const migrated = migrateSaveBalance(legacy);
-    expect(migrated).toMatchObject({ ok: true, state: { balanceVersion: 2 } });
+    expect(migrated).toMatchObject({ ok: true, state: { balanceVersion: 2, inventory: { rewardInbox: { claimedSourceIds: {} } } } });
   });
 
   test('missing balance migration rejects atomically without mutating input', () => {
@@ -89,6 +90,26 @@ describe('Monster RPG save import and export', () => {
       creatureCards: {},
       eggs: {}
     });
+  });
+
+  test('claimed Reward Inbox sources survive export and import and still reject replay delivery', () => {
+    const save = createInitialSave(createPlayerProfile('Mira', 'scout'));
+    const queued = enqueueReward(save.inventory.rewardInbox, { sourceId: 'battle:persisted', ownerPlayerId: save.profile.playerId, items: [{ itemId: 'worn-key', quantity: 1 }], createdAt: '2026-07-20T00:00:00.000Z' });
+    expect(queued.ok).toBe(true); if (!queued.ok) return;
+    const claimed = claimReward(queued.inbox, save.inventory.itemInventory, save.profile.playerId, 'battle:persisted');
+    expect(claimed.ok).toBe(true); if (!claimed.ok) return;
+    const imported = importSavePayload(exportSave({ ...save, inventory: { ...save.inventory, itemInventory: claimed.inventory, rewardInbox: claimed.inbox } }));
+    expect(imported.ok).toBe(true); if (!imported.ok) return;
+    expect(imported.state.inventory.rewardInbox.claimedSourceIds).toEqual({ 'battle:persisted': true });
+    expect(enqueueReward(imported.state.inventory.rewardInbox, { sourceId: 'battle:persisted', ownerPlayerId: save.profile.playerId, items: [{ itemId: 'worn-key', quantity: 1 }], createdAt: '2026-07-20T00:00:00.000Z' })).toEqual({ ok: false, reason: 'duplicate-source' });
+  });
+
+  test('import rejects malformed claimed-source ledgers', () => {
+    const save = createInitialSave(createPlayerProfile('Mira', 'scout'));
+    for (const claimedSourceIds of [{ toString: true }, { replay: false }, ['replay']]) {
+      const payload = JSON.stringify({ ...save, inventory: { ...save.inventory, rewardInbox: { ...save.inventory.rewardInbox, claimedSourceIds } } });
+      expect(importSavePayload(payload)).toEqual({ ok: false, reason: 'invalid-save' });
+    }
   });
 
   test('invalid JSON import fails without mutating the current save', () => {

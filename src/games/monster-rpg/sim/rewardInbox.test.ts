@@ -7,7 +7,11 @@ test('claims a reward atomically and rejects replay', () => {
   expect(queued.ok).toBe(true); if (!queued.ok) return;
   const claimed = claimReward(queued.inbox, createItemInventory(), 'player', 'battle:1');
   expect(claimed).toMatchObject({ ok: true }); if (!claimed.ok) return;
+  expect(claimed.inbox.claimedSourceIds).toEqual({ 'battle:1': true });
+  const claimedBeforeReplay = JSON.stringify(claimed);
   expect(claimReward(claimed.inbox, claimed.inventory, 'player', 'battle:1')).toMatchObject({ ok: false, reason: 'missing-bundle' });
+  expect(enqueueReward(claimed.inbox, { sourceId: 'battle:1', ownerPlayerId: 'player', items: [{ itemId: 'worn-key', quantity: 2 }], createdAt: '2026-07-20T00:00:00.000Z' })).toEqual({ ok: false, reason: 'duplicate-source' });
+  expect(JSON.stringify(claimed)).toBe(claimedBeforeReplay);
 });
 
 test('rejects duplicate sources and a full inbox without mutation', () => {
@@ -69,4 +73,35 @@ test('reports bundle-wide additional slots across items and partial stacks', () 
   const before = JSON.stringify(inventory);
   expect(claimReward(queued.inbox, inventory, 'player', 'multi-item-overflow')).toMatchObject({ ok: false, reason: 'capacity', requiredSlots: 4 });
   expect(JSON.stringify(inventory)).toBe(before);
+});
+
+test('reports only the additional slot deficit after current free slots', () => {
+  const queued = enqueueReward(createRewardInbox('player'), {
+    sourceId: 'two-slots',
+    ownerPlayerId: 'player',
+    items: [{ itemId: 'worn-key', quantity: 100 }],
+    createdAt: '2026-07-20T00:00:00.000Z'
+  });
+  expect(queued.ok).toBe(true); if (!queued.ok) return;
+  const inventory = { stacks: Object.fromEntries(Array.from({ length: 149 }, (_, index) => [`full:${index}`, { id: `full:${index}`, itemId: 'mending-sprig' as const, quantity: 99 }])) };
+  expect(claimReward(queued.inbox, inventory, 'player', 'two-slots')).toMatchObject({ ok: false, reason: 'capacity', requiredSlots: 1 });
+});
+
+test('rejects malformed delivery and stored bundles without throwing or mutation', () => {
+  const initial = createRewardInbox('player');
+  const invalidDate = { sourceId: 'bad-date', ownerPlayerId: 'player', items: [{ itemId: 'worn-key' as const, quantity: 1 }], createdAt: 'July 20' };
+  expect(() => enqueueReward(initial, null as never)).not.toThrow();
+  expect(enqueueReward(initial, null as never)).toEqual({ ok: false, reason: 'invalid-bundle' });
+  expect(enqueueReward(initial, invalidDate)).toEqual({ ok: false, reason: 'invalid-bundle' });
+
+  const malformed = {
+    ...initial,
+    bundles: { broken: { ...invalidDate, sourceId: 'broken', createdAt: '2026-07-20T00:00:00.000Z', ownerPlayerId: 'other' } }
+  };
+  const inventory = createItemInventory();
+  const before = JSON.stringify(malformed);
+  expect(() => claimReward(malformed, inventory, 'player', 'broken')).not.toThrow();
+  expect(claimReward(malformed, inventory, 'player', 'broken')).toEqual({ ok: false, reason: 'not-owner' });
+  expect(JSON.stringify(malformed)).toBe(before);
+  expect(inventory).toEqual(createItemInventory());
 });
