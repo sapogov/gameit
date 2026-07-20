@@ -8,6 +8,7 @@ import {
   getBattleAttackFatigueCost,
   getFirstBattleReadyCreature,
   getBattleRunChance,
+  resolveWildBattleRewardEntries,
   runFromBattle,
   GAME_BALANCE_CONFIG
 } from '.';
@@ -15,6 +16,29 @@ import type { BattleRewardBundle, CreatureSaveRecord, MonsterRpgSaveState } from
 import { createInitialSave, createPlayerProfile } from './saveState';
 
 describe('battle simulation', () => {
+  it('uses a non-default zone table before species entry replacements and appends', () => {
+    const entry = (id: string, quantity: number) => ({ id, chance: 1, quantity: [quantity, quantity] as const, reward: 'clinks' as const });
+    const entries = resolveWildBattleRewardEntries(
+      { zoneId: 'north', enemyRarity: 'common', speciesId: 3 },
+      [
+        { zoneId: '*', enemyRarity: 'common', entries: [entry('default', 1)] },
+        { zoneId: 'north', enemyRarity: 'common', entries: [entry('zone', 2), entry('replace', 3)] }
+      ],
+      { 3: [entry('replace', 4), entry('species-extra', 5)] }
+    );
+    expect(entries.map((entry) => entry.id)).toEqual(['zone', 'replace', 'species-extra']);
+    expect(entries.find((entry) => entry.id === 'replace')?.quantity).toEqual([4, 4]);
+  });
+
+  it('fails closed for invalid species IDs and ignores inherited species overrides', () => {
+    const entry = { id: 'default', chance: 1, quantity: [1, 1] as const, reward: 'clinks' as const };
+    const inheritedOverrides = Object.create({ 3: [{ ...entry, id: 'inherited' }] }) as Record<number, ReadonlyArray<typeof entry>>;
+    const tables = [{ zoneId: '*', enemyRarity: 'common' as const, entries: [entry] }];
+
+    expect(resolveWildBattleRewardEntries({ zoneId: 'north', enemyRarity: 'common', speciesId: 999 }, tables)).toEqual([]);
+    expect(resolveWildBattleRewardEntries({ zoneId: 'north', enemyRarity: 'common', speciesId: 3 }, tables, inheritedOverrides).map((candidate) => candidate.id)).toEqual(['default']);
+  });
+
   it('selects the first non-fainted active Creature for battle', () => {
     const profile = createPlayerProfile('Battle Tester', 'scout');
     const fainted = createCreature(profile.playerId, 'fainted-creature', 1, 0, true);
@@ -296,7 +320,8 @@ describe('battle simulation', () => {
       encounterId: 'encounter-reward-deterministic',
       playerProfile: profile,
       playerCreature: createCreature(profile.playerId, 'rewarder', 1, 60, false),
-      wildSpeciesId: 3
+      wildSpeciesId: 3,
+      zoneId: 'world-north-fields'
     });
 
     const first = generateWildBattleRewards(state, { seed: 44 });
@@ -307,6 +332,7 @@ describe('battle simulation', () => {
     expect(forcedDrops.packSeed).toBeDefined();
     expect(forcedDrops.materials).toHaveLength(1);
     expect(forcedDrops.directDropEggSpeciesId).toBe(3);
+    expect(forcedDrops.clinks).toBeGreaterThanOrEqual(6);
   });
 
   it('applies win rewards to currencies, XP, pack cards, and exact-species direct-drop eggs once', () => {
@@ -336,6 +362,7 @@ describe('battle simulation', () => {
     const rewards: BattleRewardBundle = {
       seed: 700,
       magicDust: 5,
+      clinks: 7,
       playerExperience: 11,
       battlingCreatureExperience: 20,
       activePartyExperience: 16,
@@ -360,6 +387,7 @@ describe('battle simulation', () => {
     expect(applied.rewardsApplied).toBe(true);
     expect(applied.packTrace?.cards).toHaveLength(5);
     expect(applied.state.inventory.currencies.magicDust).toBe(6);
+    expect(applied.state.inventory.currencies.clinks).toBe(7);
     expect(applied.state.inventory.currencies.galeEssence).toBe(2);
     expect(applied.state.progression.playerExperience).toBe(11);
     expect(applied.state.progression.playerLevel).toBe(2);
@@ -374,10 +402,39 @@ describe('battle simulation', () => {
 
     expect(appliedAgain.rewardsApplied).toBe(false);
     expect(appliedAgain.state.inventory.currencies.magicDust).toBe(6);
+    expect(appliedAgain.state.inventory.currencies.clinks).toBe(7);
     expect(appliedAgain.state.progression.playerExperience).toBe(11);
     expect(appliedAgain.state.progression.playerLevel).toBe(2);
     expect(appliedAgain.claimedLevelRewardIds).toHaveLength(0);
     expect(Object.values(appliedAgain.state.inventory.eggs)).toHaveLength(1);
+  });
+
+  it('does not apply a no-reward receipt or create Clinks', () => {
+    const profile = createPlayerProfile('No Reward', 'scout');
+    const battling = createCreature(profile.playerId, 'no-reward-creature', 1, 40, false);
+    const state: MonsterRpgSaveState = {
+      ...createInitialSave(profile),
+      creatures: {
+        ownerPlayerId: profile.playerId,
+        activePartyCreatureIds: [battling.id],
+        storedCreatureIds: [],
+        creatures: { [battling.id]: battling }
+      }
+    };
+
+    const applied = applyBattleRewardsToSave(state, {
+      battleId: 'battle-no-reward',
+      encounterId: 'encounter-no-reward',
+      outcome: 'ran',
+      playerCreatureId: battling.id,
+      playerCreatureHp: battling.hp,
+      playerCreatureFainted: false,
+      rewardGranted: false
+    });
+
+    expect(applied.rewardsApplied).toBe(false);
+    expect(applied.state.inventory.currencies.clinks).toBe(0);
+    expect(applied.state.progression.flags['battleReward:battle-no-reward']).toBeUndefined();
   });
 });
 

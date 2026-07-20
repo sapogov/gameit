@@ -79,6 +79,14 @@ export type {
   WorldPosition
 } from './types';
 export {
+  applyRewardChanceEntryOverrides,
+  rollRewardChanceMatrix,
+  type RewardChanceContext,
+  type RewardChanceConstraints,
+  type RewardChanceEntry,
+  type RolledReward
+} from './rewardChanceMatrix';
+export {
   CURRENT_BALANCE_VERSION,
   GAME_BALANCE_CONFIG,
   validateGameBalanceConfig,
@@ -346,8 +354,13 @@ export {
   BATTLE_REWARD_MAGIC_DUST_BASE,
   BATTLE_REWARD_MATERIAL_CHANCE,
   BATTLE_REWARD_PACK_CHANCE,
+  CLINKS_CURRENCY_ID,
+  WILD_BATTLE_REWARD_TABLES,
+  WILD_BATTLE_REWARD_SPECIES_OVERRIDES,
   applyBattleRewardsToSave,
   generateWildBattleRewards,
+  resolveWildBattleRewardEntries,
+  rollWildBattleClinks,
   type ApplyBattleRewardsResult
 } from './battleRewards';
 export {

@@ -141,7 +141,7 @@ function createEmptySaveContainers(playerId: string, homeVillageId: PlayerProfil
   return {
     inventory: {
       ownerPlayerId: playerId,
-      currencies: { magicDust: GAME_BALANCE_CONFIG.inventory.startingMagicDust },
+      currencies: { magicDust: GAME_BALANCE_CONFIG.inventory.startingMagicDust, clinks: GAME_BALANCE_CONFIG.inventory.startingClinks },
       items: {
         [REVIVE_ITEM_ID]: {
           id: REVIVE_ITEM_ID,
@@ -151,8 +151,8 @@ function createEmptySaveContainers(playerId: string, homeVillageId: PlayerProfil
       },
       cards: {},
       creatureCards: {},
-      eggs: {}
-      ,itemInventory: createItemInventory(),
+      eggs: {},
+      itemInventory: createItemInventory(),
       rewardInbox: createRewardInbox(playerId)
     },
     creatures: {
@@ -208,15 +208,17 @@ function parseSavePayload(payload: string): SaveImportResult {
 
 export function migrateSaveBalance(input: unknown): SaveBalanceMigrationResult {
   if (!input || typeof input !== 'object' || Array.isArray(input)) return { ok: false, reason: 'invalid-save' };
+  const source = input as Record<string, unknown>;
+  const version = source.balanceVersion === undefined ? 0 : source.balanceVersion;
+  if (typeof version !== 'number' || !Number.isInteger(version) || version < 0 || version > CURRENT_BALANCE_VERSION) {
+    return { ok: false, reason: 'unsupported-balance-version' };
+  }
+  if (version < 2 && !hasValidLegacyCurrencies(source)) return { ok: false, reason: 'invalid-save' };
   let candidate: Record<string, unknown>;
   try {
     candidate = JSON.parse(JSON.stringify(input)) as Record<string, unknown>;
   } catch {
     return { ok: false, reason: 'invalid-save' };
-  }
-  const version = candidate.balanceVersion === undefined ? 0 : candidate.balanceVersion;
-  if (typeof version !== 'number' || !Number.isInteger(version) || version < 0 || version > CURRENT_BALANCE_VERSION) {
-    return { ok: false, reason: 'unsupported-balance-version' };
   }
   const migrations: Record<number, (save: Record<string, unknown>) => Record<string, unknown>> = {
     0: (save) => ({ ...save, balanceVersion: 1 }),
@@ -237,16 +239,43 @@ function migrateBalanceV1ToV2(save: Record<string, unknown>): Record<string, unk
   if (!profile || typeof profile !== 'object' || Array.isArray(profile)) return { ...save, balanceVersion: 2 };
   const playerId = (profile as { playerId?: unknown }).playerId;
   if (typeof playerId !== 'string') return { ...save, balanceVersion: 2 };
-  const inventory = save.inventory;
+  const inventory = save.inventory && typeof save.inventory === 'object' && !Array.isArray(save.inventory)
+    ? save.inventory as Record<string, unknown>
+    : {};
+  const currencies = inventory.currencies && typeof inventory.currencies === 'object' && !Array.isArray(inventory.currencies)
+    ? inventory.currencies as Record<string, unknown>
+    : {};
+  const itemInventory = Object.prototype.hasOwnProperty.call(inventory, 'itemInventory')
+    ? inventory.itemInventory
+    : createItemInventory();
+  const rewardInbox = Object.prototype.hasOwnProperty.call(inventory, 'rewardInbox')
+    ? inventory.rewardInbox
+    : createRewardInbox(playerId);
   return {
     ...save,
     balanceVersion: 2,
     inventory: {
-      ...(inventory && typeof inventory === 'object' && !Array.isArray(inventory) ? inventory : {}),
-      itemInventory: { stacks: {} },
-      rewardInbox: createRewardInbox(playerId)
+      ...inventory,
+      currencies: { ...currencies, clinks: Number(currencies.clinks ?? 0) },
+      itemInventory,
+      rewardInbox
     }
   };
+}
+
+function hasValidLegacyCurrencies(save: Record<string, unknown>): boolean {
+  if (!isPlainObject(save.inventory)) return false;
+  const inventory = save.inventory;
+  if (!isPlainObject(inventory.currencies)) return false;
+  const currencies = inventory.currencies;
+  if (!Object.prototype.hasOwnProperty.call(currencies, 'clinks')) return true;
+  return typeof currencies.clinks === 'number' && Number.isSafeInteger(currencies.clinks) && currencies.clinks >= 0;
+}
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
 }
 
 function readJson<T>(key: string): T | null {

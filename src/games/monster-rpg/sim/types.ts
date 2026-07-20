@@ -236,6 +236,7 @@ export interface BattleRoomState {
   encounterId: string;
   battleKind: BattleKind;
   wildSpeciesId: number;
+  zoneId?: string;
   status: BattleStatus;
   turn: number;
   canRun: boolean;
@@ -257,6 +258,7 @@ export interface BattleMaterialReward {
 export interface BattleRewardBundle {
   seed: number;
   magicDust: number;
+  clinks: number;
   playerExperience: number;
   battlingCreatureExperience: number;
   activePartyExperience: number;

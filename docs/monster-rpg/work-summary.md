@@ -119,6 +119,7 @@
 - Made shop sellability data-driven per Item Definition: ordinary Consumables are sellable by default, while Key and Task Items require an explicit sell-price override.
 - Named the ordinary gold-coin shop currency `Clinks`; Item buying and selling use Clinks, while Magic Dust remains reserved for progression, crafting, evolution, and special systems.
 - Added Clinks to possible Wild Battle Rewards alongside Magic Dust, XP, Packs, materials, and rare direct-drop Eggs.
+- Implemented deterministic, server-authoritative Wild Battle Clinks rewards: common encounters guarantee 6-8 Clinks, with a separate boostable 40% 5-10 bonus; legacy saves normalize missing Clinks to zero.
 - Reused the Chest Reward Chance Matrix model for Wild Battle Reward Tables, including independent entries, quantity ranges, constraints, and explicit 100% guarantees.
 - Selected Wild Battle Reward Tables from Encounter Zone plus enemy Rarity defaults, with per-Species entry overrides taking precedence.
 - Added an explicit `boostable` flag to Reward Chance Matrix entries; drop-chance buffs affect only opted-in entries and cap at 100%.
@@ -629,6 +630,13 @@
 - Pre-ready failures now reject and tear down once without status callbacks; post-ready incompatible state reports offline once, removes only adapter-owned listeners, and never throws from the SDK signal.
 - Exported state/status callback exceptions are contained: first-state publication rejects with the original error, while ready-state publication/status failures still complete one terminal teardown without escaping SDK callbacks.
 - Added adapter timing coverage for pending joins, decoded v1 acceptance, decoded v0/absent/v2 rejection, pre-ready errors/leaves, listener cleanup, and idempotent post-ready teardown.
+
+## 2026-07-20 - Issue #63: Deterministic Wild Battle Clinks
+
+- Added a validated, stable-order Reward Chance Matrix for authoritative wild Battle Clinks, including zone/rarity defaults and species entry-ID overrides.
+- Guaranteed common rewards are immutable balance-config entries granting 6-8 Clinks plus an independent 40% 5-10 bonus; invalid or missing authoritative context fails closed.
+- Stored Clinks as a non-slot currency with strict, non-coercing save migration, win-only/idempotent receipt application, HUD display, and server-propagated encounter zones.
+- Repaired the post-rebase v1-to-v2 migration so existing item stacks, queued reward bundles, and claimed reward source IDs survive while only absent #62 fields are initialized.
 
 ## Next Work
 

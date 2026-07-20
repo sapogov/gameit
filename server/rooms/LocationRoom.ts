@@ -234,7 +234,8 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
       mapId: this.mapId,
       playerProfile: schemaToProfile(player),
       playerCreature: activeCreature,
-      wildSpeciesId: encounter.speciesId
+      wildSpeciesId: encounter.speciesId,
+      zoneId: encounter.zoneId
     });
     this.battleResultCleanups.set(
       battleClaim.battleId,

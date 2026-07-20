@@ -9,8 +9,28 @@ import type {
 import { openPack, type PackOpenTrace } from './cards';
 import { createDirectDropEgg, createRng } from './creatureLifecycle';
 import { applyPlayerExperience, type ApplyPlayerExperienceResult } from './playerProgression';
-import { getSpeciesById } from './speciesCatalog';
+import { getSpeciesById, isKnownSpeciesId } from './speciesCatalog';
 import { GAME_BALANCE_CONFIG } from './gameBalance';
+import { applyRewardChanceEntryOverrides, assertValidMatrix, rollRewardChanceMatrix, type RewardChanceEntry } from './rewardChanceMatrix';
+
+export const CLINKS_CURRENCY_ID = 'clinks' as const;
+const COMMON_CLINKS_ENTRIES: readonly RewardChanceEntry<typeof CLINKS_CURRENCY_ID>[] =
+  GAME_BALANCE_CONFIG.rewards.wildBattleCommonClinks.map((entry) => ({
+    id: entry.id,
+    chance: entry.chance,
+    quantity: [entry.minimum, entry.maximum],
+    reward: CLINKS_CURRENCY_ID,
+    constraints: { outcome: 'defeated' },
+    boostable: entry.boostable
+  }));
+
+export interface WildBattleRewardTable { zoneId: string; enemyRarity: CreatureRarity; entries: readonly RewardChanceEntry<typeof CLINKS_CURRENCY_ID>[] }
+
+// Every rarity has an explicit default table. Zones may later replace only their matching rarity table.
+export const WILD_BATTLE_REWARD_TABLES: readonly WildBattleRewardTable[] = (
+  ['common', 'uncommon', 'rare', 'legendary', 'mythical'] as const
+).map((enemyRarity) => ({ zoneId: '*', enemyRarity, entries: COMMON_CLINKS_ENTRIES }));
+export const WILD_BATTLE_REWARD_SPECIES_OVERRIDES: Readonly<Record<number, readonly RewardChanceEntry<typeof CLINKS_CURRENCY_ID>[]>> = Object.freeze({});
 
 export const BATTLE_REWARD_MAGIC_DUST_BASE = GAME_BALANCE_CONFIG.rewards.battleMagicDustBase;
 export const BATTLE_REWARD_PACK_CHANCE = GAME_BALANCE_CONFIG.rewards.battlePackChance;
@@ -38,10 +58,12 @@ export function generateWildBattleRewards(
   const packRoll = rng();
   const eggRoll = rng();
   const magicDustRoll = rng();
+  const clinks = rollWildBattleClinks(state, rng);
 
   return {
     seed: rngSeed,
     magicDust: BATTLE_REWARD_MAGIC_DUST_BASE + rarityRank + Math.floor(magicDustRoll * 2),
+    clinks,
     playerExperience: 12 + rarityRank * 4,
     battlingCreatureExperience: 20 + rarityRank * 6,
     activePartyExperience: Math.floor((20 + rarityRank * 6) * 0.8),
@@ -154,6 +176,7 @@ function applyRewardNumbers(
 
   const currencies = { ...state.inventory.currencies };
   currencies.magicDust = (currencies.magicDust ?? 0) + rewards.magicDust;
+  currencies[CLINKS_CURRENCY_ID] = (currencies[CLINKS_CURRENCY_ID] ?? 0) + rewards.clinks;
   rewards.materials.forEach((material) => {
     currencies[material.materialId] = (currencies[material.materialId] ?? 0) + material.quantity;
   });
@@ -191,6 +214,35 @@ function applyRewardNumbers(
     state: progression.state,
     progression
   };
+}
+
+export function rollWildBattleClinks(state: BattleRoomState, rng: () => number, boostMultiplier = 1): number {
+  const species = getSpeciesById(state.wildSpeciesId);
+  if (!state.zoneId || !species) return 0;
+  const entries = resolveWildBattleRewardEntries({ zoneId: state.zoneId, enemyRarity: species.rarity, speciesId: state.wildSpeciesId });
+  return rollRewardChanceMatrix(entries, {
+    zoneId: state.zoneId,
+    enemyRarity: species.rarity,
+    speciesId: state.wildSpeciesId,
+    outcome: 'defeated'
+  }, { rng, boostMultiplier }).reduce((total, roll) => total + roll.quantity, 0);
+}
+
+export function resolveWildBattleRewardEntries(
+  context: { zoneId?: string; enemyRarity?: CreatureRarity; speciesId?: number },
+  tables: readonly WildBattleRewardTable[] = WILD_BATTLE_REWARD_TABLES,
+  speciesOverrides: Readonly<Record<number, readonly RewardChanceEntry<typeof CLINKS_CURRENCY_ID>[]>> = WILD_BATTLE_REWARD_SPECIES_OVERRIDES
+): RewardChanceEntry<typeof CLINKS_CURRENCY_ID>[] {
+  const { enemyRarity, speciesId, zoneId } = context;
+  if (!zoneId || !enemyRarity || typeof speciesId !== 'number' || !Number.isSafeInteger(speciesId) || !isKnownSpeciesId(speciesId)) return [];
+  const table = tables.find((candidate) => candidate.zoneId === zoneId && candidate.enemyRarity === enemyRarity)
+    ?? tables.find((candidate) => candidate.zoneId === '*' && candidate.enemyRarity === enemyRarity);
+  if (!table) return [];
+  assertValidMatrix(table.entries);
+  const overrides = Object.prototype.hasOwnProperty.call(speciesOverrides, speciesId)
+    ? speciesOverrides[speciesId]
+    : [];
+  return applyRewardChanceEntryOverrides(table.entries, overrides);
 }
 
 function getBattleRewardFlag(battleId: string): string {

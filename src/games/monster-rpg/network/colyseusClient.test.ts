@@ -204,7 +204,7 @@ describe.each([
     expect(room.leave).not.toHaveBeenCalled();
   });
 
-  test('stays pending without callbacks or message listeners until decoded v1 is published', async () => {
+  test('stays pending without callbacks or message listeners until the current decoded version is published', async () => {
     const room = new FakeRoom();
     const harness = createHarness();
     const order: string[] = [];

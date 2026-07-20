@@ -49,6 +49,7 @@ export function createBattleRoomState({
   playerProfile,
   playerCreature,
   wildSpeciesId,
+  zoneId,
   now = new Date()
 }: {
   battleId: string;
@@ -56,6 +57,7 @@ export function createBattleRoomState({
   playerProfile: PlayerProfile;
   playerCreature: CreatureSaveRecord;
   wildSpeciesId: number;
+  zoneId?: string;
   now?: Date;
 }): BattleRoomState {
   const enemyCreature = createWildBattleCreature(wildSpeciesId, battleId);
@@ -65,6 +67,7 @@ export function createBattleRoomState({
     encounterId,
     battleKind: 'wild',
     wildSpeciesId,
+    zoneId,
     status: 'active',
     turn: 1,
     canRun: true,

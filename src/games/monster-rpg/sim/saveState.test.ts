@@ -11,6 +11,7 @@ import {
 } from './saveState';
 import { REVIVE_ITEM_ID, STARTING_REVIVE_ITEM_QUANTITY } from './creatureParty';
 import { claimReward, enqueueReward } from './rewardInbox';
+import { CURRENT_BALANCE_VERSION } from './gameBalance';
 
 beforeEach(() => {
   Object.defineProperty(globalThis, 'localStorage', {
@@ -22,11 +23,12 @@ beforeEach(() => {
 describe('Monster RPG save import and export', () => {
   test('new saves persist the current balance version and migrate legacy balance v0', () => {
     const save = createInitialSave(createPlayerProfile('Mira', 'scout'));
-    expect(save.balanceVersion).toBe(2);
+    expect(save.balanceVersion).toBe(CURRENT_BALANCE_VERSION);
     const legacy = { ...save } as Record<string, unknown>;
     delete legacy.balanceVersion;
     const migrated = migrateSaveBalance(legacy);
-    expect(migrated).toMatchObject({ ok: true, state: { balanceVersion: 2, inventory: { rewardInbox: { claimedSourceIds: {} } } } });
+    expect(migrated).toMatchObject({ ok: true, state: { balanceVersion: CURRENT_BALANCE_VERSION, inventory: { rewardInbox: { claimedSourceIds: {} } } } });
+    if (migrated.ok) expect(migrated.state.inventory.currencies.clinks).toBe(0);
   });
 
   test('missing balance migration rejects atomically without mutating input', () => {
@@ -48,6 +50,106 @@ describe('Monster RPG save import and export', () => {
     expect(migrateSaveBalance(malformedInventory)).toEqual({ ok: false, reason: 'invalid-save' });
     expect(JSON.stringify(malformedProfile)).toBe(profileBefore);
     expect(JSON.stringify(malformedInventory)).toBe(inventoryBefore);
+  });
+
+  test('v1 to v2 migration adds missing Clinks and preserves valid existing Clinks exactly', () => {
+    for (const clinks of [undefined, 0, 17, Number.MAX_SAFE_INTEGER]) {
+      const save = createInitialSave(createPlayerProfile('Mira', 'scout')) as any;
+      save.balanceVersion = 1;
+      if (clinks === undefined) delete save.inventory.currencies.clinks;
+      else save.inventory.currencies.clinks = clinks;
+
+      const migrated = migrateSaveBalance(save);
+
+      expect(migrated).toMatchObject({ ok: true, state: { inventory: { currencies: { clinks: clinks ?? 0 } } } });
+    }
+  });
+
+  test('v1 to v2 migration preserves #62 item inventory, queued rewards, and claimed replay ledger', () => {
+    const save = createInitialSave(createPlayerProfile('Mira', 'scout')) as any;
+    save.balanceVersion = 1;
+    save.inventory.itemInventory = {
+      stacks: {
+        'worn-key:001': { id: 'worn-key:001', itemId: 'worn-key', quantity: 2 }
+      }
+    };
+    save.inventory.rewardInbox = {
+      ownerPlayerId: save.profile.playerId,
+      bundles: {
+        'battle:queued': {
+          sourceId: 'battle:queued',
+          ownerPlayerId: save.profile.playerId,
+          items: [{ itemId: 'worn-key', quantity: 1 }],
+          createdAt: '2026-07-20T00:00:00.000Z'
+        }
+      },
+      claimedSourceIds: { 'battle:claimed': true }
+    };
+
+    const migrated = migrateSaveBalance(save);
+
+    expect(migrated).toMatchObject({
+      ok: true,
+      state: {
+        balanceVersion: CURRENT_BALANCE_VERSION,
+        inventory: {
+          itemInventory: save.inventory.itemInventory,
+          rewardInbox: save.inventory.rewardInbox
+        }
+      }
+    });
+  });
+
+  test('v1 to v2 migration initializes #62 inventory fields only when absent', () => {
+    const save = createInitialSave(createPlayerProfile('Mira', 'scout')) as any;
+    save.balanceVersion = 1;
+    delete save.inventory.itemInventory;
+    delete save.inventory.rewardInbox;
+
+    const migrated = migrateSaveBalance(save);
+
+    expect(migrated).toMatchObject({
+      ok: true,
+      state: {
+        inventory: {
+          itemInventory: { stacks: {} },
+          rewardInbox: { ownerPlayerId: save.profile.playerId, bundles: {}, claimedSourceIds: {} }
+        }
+      }
+    });
+  });
+
+  test('v1 to v2 migration rejects malformed currency containers and Clinks without mutation', () => {
+    const malformed = [
+      { inventory: null },
+      { inventory: [] },
+      { inventory: 'inventory' },
+      { inventory: false },
+      { inventory: {} },
+      { currencies: null },
+      { currencies: [] },
+      { currencies: 'currencies' },
+      { currencies: false },
+      { clinks: Number.NaN },
+      { clinks: -1 },
+      { clinks: 1.5 },
+      { clinks: Number.MAX_SAFE_INTEGER + 1 },
+      { clinks: '4' },
+      { clinks: null },
+      { clinks: false }
+    ];
+
+    malformed.forEach((failure) => {
+      const save = createInitialSave(createPlayerProfile('Mira', 'scout')) as any;
+      save.balanceVersion = 1;
+      if ('inventory' in failure) save.inventory = failure.inventory;
+      if ('currencies' in failure) save.inventory.currencies = failure.currencies;
+      if ('clinks' in failure) save.inventory.currencies.clinks = failure.clinks;
+      const original = structuredClone(save);
+
+      expect(migrateSaveBalance(save)).toEqual({ ok: false, reason: 'invalid-save' });
+      expect(save).toEqual(original);
+    });
   });
 
   test('stored unsupported balance save preserves its bytes and reports a typed failure', () => {
