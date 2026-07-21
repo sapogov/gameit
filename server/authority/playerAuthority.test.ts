@@ -323,6 +323,7 @@ describe('PlayerAuthority', () => {
     expect((await authority.locationPresence(principal))?.activeBattle?.phase).toBe('reserved');
     expect(await authority.activateTrainerBattle(principal, 'wrong')).toBeNull(); expect(await authority.activateTrainerBattle(principal, request.battleId)).not.toBeNull();
     expect(await authority.releaseReservedTrainerBattle(principal, request.battleId)).toBe(false);
+    expect(await authority.cancelActiveTrainerBattle(principal, 'wrong-battle')).toBe(false);
     expect((await authority.execute(principal, { intentId: 'locked', expectedRevision: 3, intent: { type: 'completeElderDialog' } })).status).toBe('rejected');
     const startingDust = aggregate.save.inventory.currencies.magicDust ?? 0; const startingPlayerXp = aggregate.save.progression.playerExperience; const startingCreatureXp = creature.experience;
     const result = { battleId: request.battleId, encounterId: 'trainer:route-scout-1', outcome: 'defeated' as const, playerCreatureId: switchedCreature.id, playerCreatureHp: 8, playerCreatureFainted: false, playerPartyOutcomes: [{ creatureId: creature.id, hp: 3, fainted: false }, { creatureId: switchedCreature.id, hp: 8, fainted: false }], opponentCreatureHp: 0, opponentCreatureFainted: true, rewardGranted: true };
@@ -339,5 +340,12 @@ describe('PlayerAuthority', () => {
     const repeatCreature = repeated.save.creatures.creatures[switchedCreature.id]!;
     expect(repeatCreature.hp).toBe(6); expect(repeated.save.inventory.currencies.magicDust).toBe(settled.save.inventory.currencies.magicDust); expect(repeated.save.progression.playerExperience).toBe(settled.save.progression.playerExperience); expect(repeatCreature.experience).toBe(settled.save.creatures.creatures[switchedCreature.id]?.experience); expect(repeatCreature.level).toBe(settled.save.creatures.creatures[switchedCreature.id]?.level); expect(repeatCreature.statGrowth?.events).toEqual(settled.save.creatures.creatures[switchedCreature.id]?.statGrowth?.events); expect(repeated.save.progression.flags['trainer-clear:route-scout-1']).toBe(true);
     const persisted = (await repository.read(principal.sub))!; expect(persisted.grantReceipts[request.battleId]).toBeDefined(); expect(persisted.grantReceipts[repeatRequest.battleId]).toBeDefined();
+    const cancelledRequest = { ...request, battleId: 'trainer-battle-cancelled', expectedRosterRevision: repeated.rosterRevision };
+    expect(await authority.reserveTrainerBattle(cancelledRequest)).not.toBeNull(); expect(await authority.activateTrainerBattle(principal, cancelledRequest.battleId)).not.toBeNull();
+    const beforeCancellation = (await authority.locationPresence(principal))!.snapshot.revision;
+    expect(await authority.cancelActiveTrainerBattle(principal, cancelledRequest.battleId)).toBe(true);
+    const afterCancellation = (await authority.locationPresence(principal))!;
+    expect(afterCancellation.activeBattle).toBeUndefined(); expect(afterCancellation.snapshot.revision).toBe(beforeCancellation + 1);
+    expect((await repository.read(principal.sub))!.grantReceipts[cancelledRequest.battleId]).toBeUndefined();
   });
 });

@@ -205,6 +205,9 @@ function isValidActiveBattleTransition(previous: PlayerAggregate, next: PlayerAg
   if (!before && after?.phase === 'reserved') return sameExceptOperational(previous, next);
   if (before?.phase === 'reserved' && after?.phase === 'active') return before.battleId === after.battleId && before.trainerId === after.trainerId && before.mapId === after.mapId && before.locationRoomId === after.locationRoomId && before.reservedAt === after.reservedAt && before.expiresAt === after.expiresAt && sameExceptOperational(previous, next);
   if (before?.phase === 'reserved' && !after) return sameExceptOperational(previous, next);
+  // Registry activation can fail after the canonical lock is active. This exact
+  // operational rollback must not look like a settled battle or mutate receipts.
+  if (before?.phase === 'active' && !after && sameExceptOperational(previous, next)) return true;
   if (before?.phase === 'active' && !after) return next.revision === previous.revision + 1 && next.grantReceipts[before.battleId] === next.revision && previous.grantReceipts[before.battleId] === undefined;
   return false;
 }

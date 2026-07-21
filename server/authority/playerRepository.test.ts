@@ -156,8 +156,10 @@ describe('growth audit ledger', () => {
     expect(isValidLedgerTransition(initial, reserved)).toBe(true);
     expect(isValidLedgerTransition(reserved, active)).toBe(true);
     expect(isValidLedgerTransition(reserved, released)).toBe(true);
+    const cancelled = { ...initial, revision: 3 };
     expect(isValidLedgerTransition(active, settled)).toBe(true);
-    expect(isValidLedgerTransition(active, { ...initial, revision: 3 })).toBe(false);
+    expect(isValidLedgerTransition(active, cancelled)).toBe(true);
+    expect(isValidLedgerTransition(active, { ...cancelled, save: { ...cancelled.save, profile: { ...cancelled.save.profile, name: 'Mutated' } } })).toBe(false);
     expect(isValidLedgerTransition(reserved, { ...reserved, revision: 2, activeBattle: { ...reserved.activeBattle, battleId: 'replacement' } })).toBe(false);
     expect(isValidAggregate({ ...reserved, activeBattle: { ...reserved.activeBattle, reservedAt: '2026-07-21T00:00:00Z' } })).toBe(false);
   });

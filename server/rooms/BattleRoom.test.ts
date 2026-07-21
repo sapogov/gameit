@@ -1,5 +1,5 @@
 import { describe, expect, test, vi } from 'vitest';
-import { BattleRoom } from './BattleRoom';
+import { activateTrainerBattleClaimWithCompensation, BattleRoom } from './BattleRoom';
 import { createBattleRoomState, createPlayerProfile, type BattleRoomState, type CreatureSaveRecord } from '../../src/games/monster-rpg/sim';
 
 type BattleLeaveHarness = {
@@ -44,6 +44,20 @@ describe('BattleRoom reconnection lifecycle', () => {
 
     expect(room.battleState.status).toBe('ran');
     expect(room.publishResult).not.toHaveBeenCalled();
+  });
+});
+
+describe('trainer claim activation compensation', () => {
+  test.each(['registry rejection', 'expired registry claim'])('clears the exact canonical active lock when %s follows activation', async () => {
+    const activate = vi.fn().mockResolvedValue({});
+    const cancel = vi.fn().mockResolvedValue(true);
+    const registry = vi.fn().mockReturnValue(false);
+
+    await expect(activateTrainerBattleClaimWithCompensation('player-1', 'battle-1', { activateTrainerBattle: activate, cancelActiveTrainerBattle: cancel, activateTrainerBattleClaim: registry })).resolves.toBe(false);
+
+    expect(activate).toHaveBeenCalledWith({ sub: 'player-1' }, 'battle-1');
+    expect(registry).toHaveBeenCalledWith('battle-1');
+    expect(cancel).toHaveBeenCalledWith({ sub: 'player-1' }, 'battle-1');
   });
 });
 

@@ -175,7 +175,15 @@ export function switchPlayerBattleCreature(state: BattleRoomState, creatureId: s
   if (!target || target.fainted || target.ownerPlayerId !== state.player.playerId || target.id === state.player.activeCreature.id) return { ok: false, state, reason: 'invalid-attack' };
   const switched = replaceActive(state, 'player', target, state.phase === 'forced-switch' ? state.turn : state.turn + 1);
   if (state.phase === 'forced-switch') return { ok: true, state: withValidAttackIds({ ...switched, phase: 'player-action' }) };
-  return { ok: true, state: withValidAttackIds(advanceAfterEnemyAction({ ...switched, phase: 'player-action' }, new Date())) };
+  const now = new Date();
+  const next = advanceAfterEnemyAction({ ...switched, phase: 'player-action' }, now);
+  if (next.player.activeCreature.fainted) {
+    if (next.playerParty?.some((creature) => !creature.fainted && creature.id !== next.player.activeCreature.id)) {
+      return { ok: true, state: withValidAttackIds({ ...next, phase: 'forced-switch' }) };
+    }
+    return completeBattle(next, 'lost', false, now);
+  }
+  return { ok: true, state: withValidAttackIds(next) };
 }
 
 export function choosePlayerBattleAttack(

@@ -98,8 +98,7 @@ export class BattleRoom extends Room {
     }
 
     if (this.battleState.battleKind === 'trainer' && !this.trainerActivated) {
-      const activated = await playerAuthority.activateTrainerBattle({ sub: this.playerId }, this.battleState.battleId);
-      if (!activated || !activateTrainerBattleClaim(this.battleState.battleId)) {
+      if (!await activateTrainerBattleClaimWithCompensation(this.playerId, this.battleState.battleId)) {
         throw new ServerError(403, 'Trainer battle is unavailable');
       }
       this.trainerActivated = true;
@@ -185,6 +184,24 @@ export class BattleRoom extends Room {
     markBattleClaimResolved(result);
     this.broadcast('battleResult', result);
   }
+}
+
+type TrainerBattleActivationDependencies = Pick<typeof playerAuthority, 'activateTrainerBattle' | 'cancelActiveTrainerBattle'> & {
+  activateTrainerBattleClaim: (battleId: string) => boolean;
+};
+
+export async function activateTrainerBattleClaimWithCompensation(playerId: string, battleId: string, dependencies: TrainerBattleActivationDependencies = {
+  activateTrainerBattle: playerAuthority.activateTrainerBattle.bind(playerAuthority),
+  cancelActiveTrainerBattle: playerAuthority.cancelActiveTrainerBattle.bind(playerAuthority),
+  activateTrainerBattleClaim
+}): Promise<boolean> {
+  const activated = await dependencies.activateTrainerBattle({ sub: playerId }, battleId);
+  if (!activated) return false;
+  let claimActivated = false;
+  try { claimActivated = dependencies.activateTrainerBattleClaim(battleId); } catch { claimActivated = false; }
+  if (claimActivated) return true;
+  await dependencies.cancelActiveTrainerBattle({ sub: playerId }, battleId);
+  return false;
 }
 
 export function authenticateBattleJoin(credential: unknown, now = Date.now(), ttlSeconds = guestCredentialTtlSeconds) {

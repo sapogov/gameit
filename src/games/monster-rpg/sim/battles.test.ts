@@ -108,6 +108,55 @@ describe('battle simulation', () => {
     expect(result.state.player.activeCreature.id).toBe(reserve.id);
   });
 
+  it('requires a forced switch when an enemy action KOs a voluntary Trainer switch target with a ready reserve', () => {
+    const profile = createPlayerProfile('Voluntary Switch KO', 'scout');
+    const active = createCreature(profile.playerId, 'switch-active', 1, 60, false);
+    const incoming = createCreature(profile.playerId, 'switch-incoming', 2, 1, false);
+    const reserve = createCreature(profile.playerId, 'switch-reserve', 3, 60, false);
+    const state = createTrainerBattleRoomState({
+      battleId: 'trainer-voluntary-switch-ko', trainerId: 'route-scout-1', playerProfile: profile, playerParty: [active, incoming, reserve]
+    });
+
+    const result = switchPlayerBattleCreature(state, incoming.id, state.turn);
+
+    expect(result).toMatchObject({ ok: true });
+    if (!result.ok) throw new Error(result.reason);
+    expect(result.result).toBeUndefined();
+    expect(result.state).toMatchObject({ status: 'active', phase: 'forced-switch' });
+    expect(result.state.player.activeCreature).toMatchObject({ id: incoming.id, hp: 0, fainted: true });
+    expect(result.state.playerParty).toEqual(expect.arrayContaining([
+      expect.objectContaining({ id: incoming.id, hp: 0, fainted: true }),
+      expect.objectContaining({ id: reserve.id, hp: reserve.hp, fainted: false })
+    ]));
+  });
+
+  it('ends the Trainer battle when an enemy action KOs a voluntary switch target with no ready reserve', () => {
+    const profile = createPlayerProfile('Voluntary Switch Loss', 'scout');
+    const faintedActive = createCreature(profile.playerId, 'last-active', 1, 0, true);
+    const incoming = createCreature(profile.playerId, 'last-incoming', 2, 1, false);
+    const seeded = createTrainerBattleRoomState({
+      battleId: 'trainer-voluntary-switch-loss', trainerId: 'route-scout-1', playerProfile: profile, playerParty: [faintedActive, incoming]
+    });
+    const faintedActiveBattleCreature = seeded.playerParty?.find((creature) => creature.id === faintedActive.id);
+    if (!faintedActiveBattleCreature) throw new Error('Missing fainted active fixture');
+    const state = {
+      ...seeded,
+      player: { ...seeded.player, activeCreature: faintedActiveBattleCreature },
+      playerActiveCreatureId: faintedActive.id,
+      playerParty: seeded.playerParty?.map((creature) => creature.id === faintedActive.id ? { ...creature, hp: 0, fainted: true } : creature)
+    };
+
+    const result = switchPlayerBattleCreature(state, incoming.id, state.turn);
+
+    expect(result).toMatchObject({ ok: true, result: { outcome: 'lost', playerCreatureId: incoming.id, playerCreatureHp: 0, playerCreatureFainted: true } });
+    if (!result.ok) throw new Error(result.reason);
+    expect(result.state.status).toBe('player-lost');
+    expect(result.state.playerParty).toEqual(expect.arrayContaining([
+      expect.objectContaining({ id: faintedActive.id, hp: 0, fainted: true }),
+      expect.objectContaining({ id: incoming.id, hp: 0, fainted: true })
+    ]));
+  });
+
   it('returns final outcomes for every Trainer party Creature', () => {
     const profile = createPlayerProfile('Trainer Outcomes', 'scout');
     const active = createCreature(profile.playerId, 'active-outcome', 1, 0, true);
