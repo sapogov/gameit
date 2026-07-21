@@ -1030,7 +1030,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_runchecks",
-      "community": 3,
+      "community": 1,
       "norm_label": "runchecks()"
     },
     {
@@ -1060,7 +1060,7 @@
       "source_location": "L106",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_checkoverworldvillageentry",
-      "community": 3,
+      "community": 1,
       "norm_label": "checkoverworldvillageentry()"
     },
     {
@@ -1070,7 +1070,7 @@
       "source_location": "L122",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_checkhomevillageeastgateexit",
-      "community": 3,
+      "community": 1,
       "norm_label": "checkhomevillageeastgateexit()"
     },
     {
@@ -1080,7 +1080,7 @@
       "source_location": "L134",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_checkbuildingentryandexit",
-      "community": 3,
+      "community": 1,
       "norm_label": "checkbuildingentryandexit()"
     },
     {
@@ -1090,7 +1090,7 @@
       "source_location": "L160",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_checkblockedmovement",
-      "community": 3,
+      "community": 1,
       "norm_label": "checkblockedmovement()"
     },
     {
@@ -1100,7 +1100,7 @@
       "source_location": "L172",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_checktaptowalkpathing",
-      "community": 3,
+      "community": 1,
       "norm_label": "checktaptowalkpathing()"
     },
     {
@@ -1110,7 +1110,7 @@
       "source_location": "L186",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_checkgen1speciescatalog",
-      "community": 3,
+      "community": 13,
       "norm_label": "checkgen1speciescatalog()"
     },
     {
@@ -1560,7 +1560,7 @@
       "source_location": "L903",
       "_origin": "ast",
       "id": "scripts_monster_rpg_phase4_checks_createstate",
-      "community": 3,
+      "community": 1,
       "norm_label": "createstate()"
     },
     {
@@ -1890,7 +1890,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "auth_guestcredentials_guestcredentialconfig",
-      "community": 51,
+      "community": 49,
       "norm_label": "guestcredentialconfig"
     },
     {
@@ -2080,7 +2080,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "authority_playerauthority_test",
-      "community": 49,
+      "community": 0,
       "norm_label": "playerauthority.test.ts"
     },
     {
@@ -2090,7 +2090,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "authority_playerauthority_test_authorityfortest",
-      "community": 49,
+      "community": 0,
       "norm_label": "authorityfortest()"
     },
     {
@@ -2100,7 +2100,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "authority_playerauthority_test_onecallclock",
-      "community": 49,
+      "community": 0,
       "norm_label": "onecallclock()"
     },
     {
@@ -2110,7 +2110,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "authority_playerauthority",
-      "community": 1,
+      "community": 49,
       "norm_label": "playerauthority.ts"
     },
     {
@@ -2120,7 +2120,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "authority_playerauthority_principal",
-      "community": 1,
+      "community": 49,
       "norm_label": "principal"
     },
     {
@@ -2130,7 +2130,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "authority_playerauthority_frozenparty",
-      "community": 22,
+      "community": 49,
       "norm_label": "frozenparty"
     },
     {
@@ -2140,7 +2140,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "authority_playerauthority_authenticatedsaveexport",
-      "community": 1,
+      "community": 49,
       "norm_label": "authenticatedsaveexport"
     },
     {
@@ -2150,7 +2150,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "authority_playerauthority_authenticatedimportresult",
-      "community": 1,
+      "community": 49,
       "norm_label": "authenticatedimportresult"
     },
     {
@@ -2160,7 +2160,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "authority_playerauthority_authoritymutationcontext",
-      "community": 1,
+      "community": 49,
       "norm_label": "authoritymutationcontext"
     },
     {
@@ -2180,7 +2180,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "authority_playerauthority_playerauthority_constructor",
-      "community": 51,
+      "community": 49,
       "norm_label": ".constructor()"
     },
     {
@@ -2210,7 +2210,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "authority_playerauthority_playerauthority_bootstrapprofile",
-      "community": 32,
+      "community": 40,
       "norm_label": ".bootstrapprofile()"
     },
     {
@@ -2220,7 +2220,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "authority_playerauthority_playerauthority_importlegacysave",
-      "community": 35,
+      "community": 40,
       "norm_label": ".importlegacysave()"
     },
     {
@@ -2230,7 +2230,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "authority_playerauthority_playerauthority_execute",
-      "community": 7,
+      "community": 42,
       "norm_label": ".execute()"
     },
     {
@@ -2250,7 +2250,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "authority_playerauthority_playerauthority_settleunguardedfarmtheft",
-      "community": 7,
+      "community": 40,
       "norm_label": ".settleunguardedfarmtheft()"
     },
     {
@@ -2270,7 +2270,7 @@
       "source_location": "L132",
       "_origin": "ast",
       "id": "authority_playerauthority_playerauthority_importauthenticatedsave",
-      "community": 35,
+      "community": 49,
       "norm_label": ".importauthenticatedsave()"
     },
     {
@@ -2280,7 +2280,7 @@
       "source_location": "L158",
       "_origin": "ast",
       "id": "authority_playerauthority_playerauthority_importauthenticatedexport",
-      "community": 35,
+      "community": 49,
       "norm_label": ".importauthenticatedexport()"
     },
     {
@@ -2350,7 +2350,7 @@
       "source_location": "L210",
       "_origin": "ast",
       "id": "authority_playerauthority_playerauthority_freezereadyactiveparty",
-      "community": 40,
+      "community": 51,
       "norm_label": ".freezereadyactiveparty()"
     },
     {
@@ -2360,7 +2360,7 @@
       "source_location": "L220",
       "_origin": "ast",
       "id": "authority_playerauthority_playerauthority_settlebattle",
-      "community": 7,
+      "community": 40,
       "norm_label": ".settlebattle()"
     },
     {
@@ -2370,7 +2370,7 @@
       "source_location": "L224",
       "_origin": "ast",
       "id": "authority_playerauthority_playerauthority_settletrainerbattle",
-      "community": 7,
+      "community": 40,
       "norm_label": ".settletrainerbattle()"
     },
     {
@@ -2380,7 +2380,7 @@
       "source_location": "L253",
       "_origin": "ast",
       "id": "authority_playerauthority_playerauthority_settlebattleonce",
-      "community": 7,
+      "community": 40,
       "norm_label": ".settlebattleonce()"
     },
     {
@@ -2390,7 +2390,7 @@
       "source_location": "L272",
       "_origin": "ast",
       "id": "authority_playerauthority_playerauthority_settleguardedtheft",
-      "community": 7,
+      "community": 40,
       "norm_label": ".settleguardedtheft()"
     },
     {
@@ -2400,7 +2400,7 @@
       "source_location": "L281",
       "_origin": "ast",
       "id": "authority_playerauthority_playerauthority_settleguardedtheftonce",
-      "community": 7,
+      "community": 40,
       "norm_label": ".settleguardedtheftonce()"
     },
     {
@@ -2410,7 +2410,7 @@
       "source_location": "L314",
       "_origin": "ast",
       "id": "authority_playerauthority_playerauthority_mutationcontext",
-      "community": 7,
+      "community": 40,
       "norm_label": ".mutationcontext()"
     },
     {
@@ -2430,7 +2430,7 @@
       "source_location": "L319",
       "_origin": "ast",
       "id": "authority_playerauthority_authenticatedexportenvelope",
-      "community": 1,
+      "community": 49,
       "norm_label": "authenticatedexportenvelope"
     },
     {
@@ -2440,7 +2440,7 @@
       "source_location": "L321",
       "_origin": "ast",
       "id": "authority_playerauthority_emptyaggregate",
-      "community": 35,
+      "community": 49,
       "norm_label": "emptyaggregate()"
     },
     {
@@ -2460,7 +2460,7 @@
       "source_location": "L323",
       "_origin": "ast",
       "id": "authority_playerauthority_hash",
-      "community": 1,
+      "community": 49,
       "norm_label": "hash()"
     },
     {
@@ -2470,7 +2470,7 @@
       "source_location": "L324",
       "_origin": "ast",
       "id": "authority_playerauthority_deepfreeze",
-      "community": 40,
+      "community": 51,
       "norm_label": "deepfreeze()"
     },
     {
@@ -2480,7 +2480,7 @@
       "source_location": "L331",
       "_origin": "ast",
       "id": "authority_playerauthority_rosterchanged",
-      "community": 7,
+      "community": 40,
       "norm_label": "rosterchanged()"
     },
     {
@@ -2490,7 +2490,7 @@
       "source_location": "L332",
       "_origin": "ast",
       "id": "authority_playerauthority_rebindsave",
-      "community": 35,
+      "community": 42,
       "norm_label": "rebindsave()"
     },
     {
@@ -2500,7 +2500,7 @@
       "source_location": "L346",
       "_origin": "ast",
       "id": "authority_playerauthority_validateauthenticatedsaveownership",
-      "community": 35,
+      "community": 49,
       "norm_label": "validateauthenticatedsaveownership()"
     },
     {
@@ -2510,7 +2510,7 @@
       "source_location": "L360",
       "_origin": "ast",
       "id": "authority_playerauthority_validateauthenticatedownershipprojection",
-      "community": 35,
+      "community": 49,
       "norm_label": "validateauthenticatedownershipprojection()"
     },
     {
@@ -2520,7 +2520,7 @@
       "source_location": "L377",
       "_origin": "ast",
       "id": "authority_playerauthority_matchespresent",
-      "community": 35,
+      "community": 49,
       "norm_label": "matchespresent()"
     },
     {
@@ -2530,7 +2530,7 @@
       "source_location": "L380",
       "_origin": "ast",
       "id": "authority_playerauthority_isrecord",
-      "community": 35,
+      "community": 49,
       "norm_label": "isrecord()"
     },
     {
@@ -2540,7 +2540,7 @@
       "source_location": "L381",
       "_origin": "ast",
       "id": "authority_playerauthority_hasunsealedgrowth",
-      "community": 35,
+      "community": 49,
       "norm_label": "hasunsealedgrowth()"
     },
     {
@@ -2550,7 +2550,7 @@
       "source_location": "L385",
       "_origin": "ast",
       "id": "authority_playerauthority_sealgrowthevents",
-      "community": 7,
+      "community": 40,
       "norm_label": "sealgrowthevents()"
     },
     {
@@ -2570,7 +2570,7 @@
       "source_location": "L411",
       "_origin": "ast",
       "id": "authority_playerauthority_reduce",
-      "community": 1,
+      "community": 74,
       "norm_label": "reduce()"
     },
     {
@@ -2580,7 +2580,7 @@
       "source_location": "L443",
       "_origin": "ast",
       "id": "authority_playerauthority_movementtransition",
-      "community": 3,
+      "community": 40,
       "norm_label": "movementtransition()"
     },
     {
@@ -2590,7 +2590,7 @@
       "source_location": "L446",
       "_origin": "ast",
       "id": "authority_playerauthority_trainerclearflag",
-      "community": 7,
+      "community": 49,
       "norm_label": "trainerclearflag()"
     },
     {
@@ -2600,7 +2600,7 @@
       "source_location": "L447",
       "_origin": "ast",
       "id": "authority_playerauthority_isfacinggeneratedobject",
-      "community": 40,
+      "community": 49,
       "norm_label": "isfacinggeneratedobject()"
     },
     {
@@ -2610,7 +2610,7 @@
       "source_location": "L451",
       "_origin": "ast",
       "id": "authority_playerauthority_isblockedbyunclearedtrainer",
-      "community": 40,
+      "community": 49,
       "norm_label": "isblockedbyunclearedtrainer()"
     },
     {
@@ -2620,7 +2620,7 @@
       "source_location": "L456",
       "_origin": "ast",
       "id": "authority_playerauthority_simulationcontext",
-      "community": 7,
+      "community": 40,
       "norm_label": "simulationcontext()"
     },
     {
@@ -2630,7 +2630,7 @@
       "source_location": "L457",
       "_origin": "ast",
       "id": "authority_playerauthority_toiteminventory",
-      "community": 1,
+      "community": 49,
       "norm_label": "toiteminventory()"
     },
     {
@@ -2640,7 +2640,7 @@
       "source_location": "L462",
       "_origin": "ast",
       "id": "authority_playerauthority_tosavestacks",
-      "community": 1,
+      "community": 49,
       "norm_label": "tosavestacks()"
     },
     {
@@ -2750,7 +2750,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "authority_playerrepository_playerauthorityrepository",
-      "community": 51,
+      "community": 49,
       "norm_label": "playerauthorityrepository"
     },
     {
@@ -2800,7 +2800,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "authority_playerrepository_processlocalplayerauthorityrepository_compareexchange",
-      "community": 17,
+      "community": 51,
       "norm_label": ".compareexchange()"
     },
     {
@@ -3160,7 +3160,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "server_battleregistry_battleclaim",
-      "community": 22,
+      "community": 10,
       "norm_label": "battleclaim"
     },
     {
@@ -3200,7 +3200,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "server_battleregistry_activatetrainerbattleclaim",
-      "community": 38,
+      "community": 10,
       "norm_label": "activatetrainerbattleclaim()"
     },
     {
@@ -3260,7 +3260,7 @@
       "source_location": "L160",
       "_origin": "ast",
       "id": "server_battleregistry_getbattleclaim",
-      "community": 38,
+      "community": 10,
       "norm_label": "getbattleclaim()"
     },
     {
@@ -3270,7 +3270,7 @@
       "source_location": "L167",
       "_origin": "ast",
       "id": "server_battleregistry_markbattleclaimresolved",
-      "community": 38,
+      "community": 31,
       "norm_label": "markbattleclaimresolved()"
     },
     {
@@ -3280,7 +3280,7 @@
       "source_location": "L176",
       "_origin": "ast",
       "id": "server_battleregistry_getresolvedbattleoutcome",
-      "community": 33,
+      "community": 10,
       "norm_label": "getresolvedbattleoutcome()"
     },
     {
@@ -3300,7 +3300,7 @@
       "source_location": "L197",
       "_origin": "ast",
       "id": "server_battleregistry_onbattleclaimresolved",
-      "community": 10,
+      "community": 33,
       "norm_label": "onbattleclaimresolved()"
     },
     {
@@ -3370,7 +3370,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "server_generatedmapadapter",
-      "community": 39,
+      "community": 1,
       "norm_label": "generatedmapadapter.ts"
     },
     {
@@ -3380,7 +3380,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "server_generatedmapadapter_getgeneratedmapforserver",
-      "community": 39,
+      "community": 1,
       "norm_label": "getgeneratedmapforserver()"
     },
     {
@@ -3390,7 +3390,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "server_index",
-      "community": 37,
+      "community": 25,
       "norm_label": "index.ts"
     },
     {
@@ -3400,7 +3400,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "server_index_port",
-      "community": 37,
+      "community": 25,
       "norm_label": "port"
     },
     {
@@ -3410,7 +3410,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "server_index_transport",
-      "community": 37,
+      "community": 25,
       "norm_label": "transport"
     },
     {
@@ -3420,7 +3420,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "server_index_websockettransport",
-      "community": 37,
+      "community": 25,
       "norm_label": "websockettransport"
     },
     {
@@ -3430,7 +3430,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "server_index_gameserver",
-      "community": 37,
+      "community": 25,
       "norm_label": "gameserver"
     },
     {
@@ -3510,7 +3510,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "rooms_battleroom_test",
-      "community": 38,
+      "community": 37,
       "norm_label": "battleroom.test.ts"
     },
     {
@@ -3520,28 +3520,38 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "rooms_battleroom_test_battleleaveharness",
-      "community": 38,
+      "community": 37,
       "norm_label": "battleleaveharness"
     },
     {
       "label": "leaveHarness()",
       "file_type": "code",
       "source_file": "server/rooms/BattleRoom.test.ts",
-      "source_location": "L64",
+      "source_location": "L86",
       "_origin": "ast",
       "id": "rooms_battleroom_test_leaveharness",
-      "community": 38,
+      "community": 37,
       "norm_label": "leaveharness()"
     },
     {
       "label": "creature()",
       "file_type": "code",
       "source_file": "server/rooms/BattleRoom.test.ts",
-      "source_location": "L84",
+      "source_location": "L106",
       "_origin": "ast",
       "id": "rooms_battleroom_test_creature",
-      "community": 38,
+      "community": 37,
       "norm_label": "creature()"
+    },
+    {
+      "label": "battleCreature()",
+      "file_type": "code",
+      "source_file": "server/rooms/BattleRoom.test.ts",
+      "source_location": "L113",
+      "_origin": "ast",
+      "id": "rooms_battleroom_test_battlecreature",
+      "community": 37,
+      "norm_label": "battlecreature()"
     },
     {
       "label": "BattleRoom.ts",
@@ -3560,7 +3570,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "rooms_battleroom_battleroom",
-      "community": 38,
+      "community": 31,
       "norm_label": "battleroom"
     },
     {
@@ -3577,7 +3587,7 @@
       "label": ".onJoin()",
       "file_type": "code",
       "source_file": "server/rooms/BattleRoom.ts",
-      "source_location": "L90",
+      "source_location": "L87",
       "_origin": "ast",
       "id": "rooms_battleroom_battleroom_onjoin",
       "community": 38,
@@ -3587,67 +3597,77 @@
       "label": ".onLeave()",
       "file_type": "code",
       "source_file": "server/rooms/BattleRoom.ts",
-      "source_location": "L114",
+      "source_location": "L111",
       "_origin": "ast",
       "id": "rooms_battleroom_battleroom_onleave",
-      "community": 38,
+      "community": 31,
       "norm_label": ".onleave()"
     },
     {
       "label": ".handleChooseAttack()",
       "file_type": "code",
       "source_file": "server/rooms/BattleRoom.ts",
-      "source_location": "L136",
+      "source_location": "L133",
       "_origin": "ast",
       "id": "rooms_battleroom_battleroom_handlechooseattack",
-      "community": 38,
+      "community": 31,
       "norm_label": ".handlechooseattack()"
     },
     {
       "label": ".handleRun()",
       "file_type": "code",
       "source_file": "server/rooms/BattleRoom.ts",
-      "source_location": "L152",
+      "source_location": "L149",
       "_origin": "ast",
       "id": "rooms_battleroom_battleroom_handlerun",
-      "community": 38,
+      "community": 31,
       "norm_label": ".handlerun()"
+    },
+    {
+      "label": ".handleSwitchCreature()",
+      "file_type": "code",
+      "source_file": "server/rooms/BattleRoom.ts",
+      "source_location": "L163",
+      "_origin": "ast",
+      "id": "rooms_battleroom_battleroom_handleswitchcreature",
+      "community": 31,
+      "norm_label": ".handleswitchcreature()"
     },
     {
       "label": ".isAuthorized()",
       "file_type": "code",
       "source_file": "server/rooms/BattleRoom.ts",
-      "source_location": "L166",
+      "source_location": "L176",
       "_origin": "ast",
       "id": "rooms_battleroom_battleroom_isauthorized",
-      "community": 38,
+      "community": 31,
       "norm_label": ".isauthorized()"
     },
     {
       "label": ".syncBattleState()",
       "file_type": "code",
       "source_file": "server/rooms/BattleRoom.ts",
-      "source_location": "L170",
+      "source_location": "L180",
       "_origin": "ast",
       "id": "rooms_battleroom_battleroom_syncbattlestate",
-      "community": 38,
+      "community": 31,
       "norm_label": ".syncbattlestate()"
     },
     {
       "label": ".publishResult()",
       "file_type": "code",
       "source_file": "server/rooms/BattleRoom.ts",
-      "source_location": "L175",
+      "source_location": "L185",
       "_origin": "ast",
       "id": "rooms_battleroom_battleroom_publishresult",
-      "community": 38,
+      "community": 31,
       "norm_label": ".publishresult()"
     },
     {
       "label": "TrainerBattleActivationDependencies",
       "file_type": "code",
       "source_file": "server/rooms/BattleRoom.ts",
-      "source_location": "L189",
+      "source_location": "L199",
       "_origin": "ast",
       "id": "rooms_battleroom_trainerbattleactivationdependencies",
       "community": 38,
@@ -3657,7 +3677,7 @@
       "label": "activateTrainerBattleClaimWithCompensation()",
       "file_type": "code",
       "source_file": "server/rooms/BattleRoom.ts",
-      "source_location": "L193",
+      "source_location": "L203",
       "_origin": "ast",
       "id": "rooms_battleroom_activatetrainerbattleclaimwithcompensation",
       "community": 38,
@@ -3667,17 +3687,17 @@
       "label": "authenticateBattleJoin()",
       "file_type": "code",
       "source_file": "server/rooms/BattleRoom.ts",
-      "source_location": "L207",
+      "source_location": "L217",
       "_origin": "ast",
       "id": "rooms_battleroom_authenticatebattlejoin",
-      "community": 38,
+      "community": 25,
       "norm_label": "authenticatebattlejoin()"
     },
     {
       "label": "assertBalanceVersion()",
       "file_type": "code",
       "source_file": "server/rooms/BattleRoom.ts",
-      "source_location": "L211",
+      "source_location": "L221",
       "_origin": "ast",
       "id": "rooms_battleroom_assertbalanceversion",
       "community": 38,
@@ -3687,7 +3707,7 @@
       "label": "isDisconnectedGrace()",
       "file_type": "code",
       "source_file": "server/rooms/BattleRoom.ts",
-      "source_location": "L217",
+      "source_location": "L227",
       "_origin": "ast",
       "id": "rooms_battleroom_isdisconnectedgrace",
       "community": 38,
@@ -3697,7 +3717,7 @@
       "label": "toBattleStateSchema()",
       "file_type": "code",
       "source_file": "server/rooms/BattleRoom.ts",
-      "source_location": "L221",
+      "source_location": "L231",
       "_origin": "ast",
       "id": "rooms_battleroom_tobattlestateschema",
       "community": 38,
@@ -3707,7 +3727,7 @@
       "label": "copyBattleStateToSchema()",
       "file_type": "code",
       "source_file": "server/rooms/BattleRoom.ts",
-      "source_location": "L227",
+      "source_location": "L237",
       "_origin": "ast",
       "id": "rooms_battleroom_copybattlestatetoschema",
       "community": 38,
@@ -3717,7 +3737,7 @@
       "label": "toParticipantSchema()",
       "file_type": "code",
       "source_file": "server/rooms/BattleRoom.ts",
-      "source_location": "L260",
+      "source_location": "L270",
       "_origin": "ast",
       "id": "rooms_battleroom_toparticipantschema",
       "community": 38,
@@ -3727,7 +3747,7 @@
       "label": "toCreatureSchema()",
       "file_type": "code",
       "source_file": "server/rooms/BattleRoom.ts",
-      "source_location": "L269",
+      "source_location": "L279",
       "_origin": "ast",
       "id": "rooms_battleroom_tocreatureschema",
       "community": 38,
@@ -3737,10 +3757,10 @@
       "label": "toAttackSchema()",
       "file_type": "code",
       "source_file": "server/rooms/BattleRoom.ts",
-      "source_location": "L291",
+      "source_location": "L301",
       "_origin": "ast",
       "id": "rooms_battleroom_toattackschema",
-      "community": 38,
+      "community": 0,
       "norm_label": "toattackschema()"
     },
     {
@@ -3750,7 +3770,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "rooms_homevillageroom",
-      "community": 33,
+      "community": 72,
       "norm_label": "homevillageroom.ts"
     },
     {
@@ -3900,7 +3920,7 @@
       "source_location": "L193",
       "_origin": "ast",
       "id": "rooms_locationroom_locationroom_handlemoveintent",
-      "community": 72,
+      "community": 33,
       "norm_label": ".handlemoveintent()"
     },
     {
@@ -3940,7 +3960,7 @@
       "source_location": "L386",
       "_origin": "ast",
       "id": "rooms_locationroom_locationroom_handlechallengetrainer",
-      "community": 10,
+      "community": 33,
       "norm_label": ".handlechallengetrainer()"
     },
     {
@@ -3960,7 +3980,7 @@
       "source_location": "L443",
       "_origin": "ast",
       "id": "rooms_locationroom_locationroom_spawninitialwildencounters",
-      "community": 72,
+      "community": 73,
       "norm_label": ".spawninitialwildencounters()"
     },
     {
@@ -4090,7 +4110,7 @@
       "source_location": "L630",
       "_origin": "ast",
       "id": "rooms_locationroom_schematoprofile",
-      "community": 72,
+      "community": 33,
       "norm_label": "schematoprofile()"
     },
     {
@@ -4190,7 +4210,7 @@
       "source_location": "L794",
       "_origin": "ast",
       "id": "rooms_locationroom_hashstring",
-      "community": 6,
+      "community": 72,
       "norm_label": "hashstring()"
     },
     {
@@ -4220,7 +4240,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "rooms_canonicalmovement_test",
-      "community": 12,
+      "community": 25,
       "norm_label": "canonicalmovement.test.ts"
     },
     {
@@ -4230,7 +4250,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "rooms_canonicalmovement_test_foreignfarm",
-      "community": 12,
+      "community": 25,
       "norm_label": "foreignfarm()"
     },
     {
@@ -4240,7 +4260,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "rooms_canonicalmovement_test_principal",
-      "community": 12,
+      "community": 25,
       "norm_label": "principal()"
     },
     {
@@ -4250,7 +4270,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "rooms_canonicalmovement_test_authorityfor",
-      "community": 12,
+      "community": 25,
       "norm_label": "authorityfor()"
     },
     {
@@ -4260,7 +4280,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "rooms_canonicalmovement_test_move",
-      "community": 12,
+      "community": 25,
       "norm_label": "move()"
     },
     {
@@ -4270,7 +4290,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "rooms_canonicalmovement_test_at",
-      "community": 12,
+      "community": 25,
       "norm_label": "at()"
     },
     {
@@ -4350,7 +4370,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "schema_battlestate_battleattackschema",
-      "community": 22,
+      "community": 56,
       "norm_label": "battleattackschema"
     },
     {
@@ -4360,7 +4380,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "schema_battlestate_battleattackschema_constructor",
-      "community": 22,
+      "community": 56,
       "norm_label": ".constructor()"
     },
     {
@@ -4560,7 +4580,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "security_transportsecurity_test",
-      "community": 37,
+      "community": 25,
       "norm_label": "transportsecurity.test.ts"
     },
     {
@@ -4570,7 +4590,7 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "security_transportsecurity_test_rawupgrade",
-      "community": 37,
+      "community": 25,
       "norm_label": "rawupgrade()"
     },
     {
@@ -4580,7 +4600,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "security_transportsecurity",
-      "community": 37,
+      "community": 25,
       "norm_label": "transportsecurity.ts"
     },
     {
@@ -4590,7 +4610,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "security_transportsecurity_productiontransport",
-      "community": 37,
+      "community": 25,
       "norm_label": "productiontransport"
     },
     {
@@ -4600,7 +4620,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "security_transportsecurity_loadproductiontransport",
-      "community": 37,
+      "community": 25,
       "norm_label": "loadproductiontransport()"
     },
     {
@@ -4610,7 +4630,7 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "security_transportsecurity_istrustedproxyrequest",
-      "community": 37,
+      "community": 25,
       "norm_label": "istrustedproxyrequest()"
     },
     {
@@ -4620,7 +4640,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "security_transportsecurity_createsecurewebsockettransport",
-      "community": 37,
+      "community": 25,
       "norm_label": "createsecurewebsockettransport()"
     },
     {
@@ -4630,7 +4650,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "security_transportsecurity_installtrustedproxyhttpguard",
-      "community": 37,
+      "community": 25,
       "norm_label": "installtrustedproxyhttpguard()"
     },
     {
@@ -4640,7 +4660,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "security_transportsecurity_parsepublicorigin",
-      "community": 37,
+      "community": 25,
       "norm_label": "parsepublicorigin()"
     },
     {
@@ -4820,7 +4840,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "admin_adminpage_adminpage",
-      "community": 9,
+      "community": 26,
       "norm_label": "adminpage()"
     },
     {
@@ -4940,7 +4960,7 @@
       "source_location": "L74",
       "_origin": "ast",
       "id": "app_app_home",
-      "community": 20,
+      "community": 7,
       "norm_label": "home()"
     },
     {
@@ -5050,7 +5070,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_gametile_test",
-      "community": 20,
+      "community": 29,
       "norm_label": "gametile.test.tsx"
     },
     {
@@ -5060,7 +5080,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "components_gametile_test_rendertile",
-      "community": 20,
+      "community": 29,
       "norm_label": "rendertile()"
     },
     {
@@ -5070,7 +5090,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "components_gametile",
-      "community": 20,
+      "community": 29,
       "norm_label": "gametile.tsx"
     },
     {
@@ -5080,7 +5100,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "components_gametile_genrelabels",
-      "community": 20,
+      "community": 29,
       "norm_label": "genrelabels"
     },
     {
@@ -5090,7 +5110,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "components_gametile_gametile",
-      "community": 20,
+      "community": 29,
       "norm_label": "gametile()"
     },
     {
@@ -5220,7 +5240,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "config_games_test",
-      "community": 20,
+      "community": 7,
       "norm_label": "games.test.ts"
     },
     {
@@ -5250,7 +5270,7 @@
       "source_location": "L118",
       "_origin": "ast",
       "id": "config_games_getfeaturedgame",
-      "community": 20,
+      "community": 7,
       "norm_label": "getfeaturedgame()"
     },
     {
@@ -5260,7 +5280,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "config_portalassets",
-      "community": 20,
+      "community": 7,
       "norm_label": "portalassets.ts"
     },
     {
@@ -5270,7 +5290,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "config_portalassets_portalassetsrc",
-      "community": 20,
+      "community": 7,
       "norm_label": "portalassetsrc()"
     },
     {
@@ -5280,7 +5300,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "config_portalassets_portalimageassets",
-      "community": 20,
+      "community": 7,
       "norm_label": "portalimageassets"
     },
     {
@@ -5290,7 +5310,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "config_portalassets_portalcoverassetkeys",
-      "community": 20,
+      "community": 7,
       "norm_label": "portalcoverassetkeys"
     },
     {
@@ -5300,7 +5320,7 @@
       "source_location": "L111",
       "_origin": "ast",
       "id": "config_portalassets_getportalimageasset",
-      "community": 20,
+      "community": 7,
       "norm_label": "getportalimageasset()"
     },
     {
@@ -5310,7 +5330,7 @@
       "source_location": "L117",
       "_origin": "ast",
       "id": "config_portalassets_getportalimagesrc",
-      "community": 20,
+      "community": 7,
       "norm_label": "getportalimagesrc()"
     },
     {
@@ -5370,7 +5390,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "config_registryoverride_registryoverride",
-      "community": 9,
+      "community": 26,
       "norm_label": "registryoverride"
     },
     {
@@ -5520,7 +5540,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "data_defaultgames",
-      "community": 15,
+      "community": 8,
       "norm_label": "defaultgames.ts"
     },
     {
@@ -5830,7 +5850,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "client_generatedmapadapter",
-      "community": 39,
+      "community": 1,
       "norm_label": "generatedmapadapter.ts"
     },
     {
@@ -5870,7 +5890,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "scenes_villagescene_villagesceneoptions",
-      "community": 59,
+      "community": 48,
       "norm_label": "villagesceneoptions"
     },
     {
@@ -6020,7 +6040,7 @@
       "source_location": "L233",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_setsavestate",
-      "community": 75,
+      "community": 71,
       "norm_label": ".setsavestate()"
     },
     {
@@ -6030,7 +6050,7 @@
       "source_location": "L243",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_setroomstate",
-      "community": 75,
+      "community": 71,
       "norm_label": ".setroomstate()"
     },
     {
@@ -6050,7 +6070,7 @@
       "source_location": "L260",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_configureencounteranimations",
-      "community": 71,
+      "community": 47,
       "norm_label": ".configureencounteranimations()"
     },
     {
@@ -6060,7 +6080,7 @@
       "source_location": "L277",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_configurecamera",
-      "community": 59,
+      "community": 71,
       "norm_label": ".configurecamera()"
     },
     {
@@ -6070,7 +6090,7 @@
       "source_location": "L286",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_setactivemap",
-      "community": 59,
+      "community": 71,
       "norm_label": ".setactivemap()"
     },
     {
@@ -6080,7 +6100,7 @@
       "source_location": "L303",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_handleresize",
-      "community": 59,
+      "community": 71,
       "norm_label": ".handleresize()"
     },
     {
@@ -6090,7 +6110,7 @@
       "source_location": "L309",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_handlepointerdown",
-      "community": 3,
+      "community": 12,
       "norm_label": ".handlepointerdown()"
     },
     {
@@ -6130,7 +6150,7 @@
       "source_location": "L387",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_completequeuedmovementstep",
-      "community": 75,
+      "community": 71,
       "norm_label": ".completequeuedmovementstep()"
     },
     {
@@ -6240,7 +6260,7 @@
       "source_location": "L638",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_renderfarms",
-      "community": 75,
+      "community": 12,
       "norm_label": ".renderfarms()"
     },
     {
@@ -6250,7 +6270,7 @@
       "source_location": "L657",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_renderplayers",
-      "community": 75,
+      "community": 71,
       "norm_label": ".renderplayers()"
     },
     {
@@ -6260,7 +6280,7 @@
       "source_location": "L678",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_getrenderableencounters",
-      "community": 71,
+      "community": 12,
       "norm_label": ".getrenderableencounters()"
     },
     {
@@ -6270,7 +6290,7 @@
       "source_location": "L688",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_getrenderablefarms",
-      "community": 47,
+      "community": 12,
       "norm_label": ".getrenderablefarms()"
     },
     {
@@ -6300,7 +6320,7 @@
       "source_location": "L730",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_syncencounterview",
-      "community": 71,
+      "community": 47,
       "norm_label": ".syncencounterview()"
     },
     {
@@ -6320,7 +6340,7 @@
       "source_location": "L766",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_syncfarmview",
-      "community": 47,
+      "community": 12,
       "norm_label": ".syncfarmview()"
     },
     {
@@ -6340,7 +6360,7 @@
       "source_location": "L805",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_syncplayerview",
-      "community": 59,
+      "community": 47,
       "norm_label": ".syncplayerview()"
     },
     {
@@ -6350,7 +6370,7 @@
       "source_location": "L855",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_getrendermetrics",
-      "community": 59,
+      "community": 47,
       "norm_label": ".getrendermetrics()"
     },
     {
@@ -6360,7 +6380,7 @@
       "source_location": "L874",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_getcamerazoom",
-      "community": 59,
+      "community": 47,
       "norm_label": ".getcamerazoom()"
     },
     {
@@ -6390,7 +6410,7 @@
       "source_location": "L891",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_getencounterat",
-      "community": 71,
+      "community": 12,
       "norm_label": ".getencounterat()"
     },
     {
@@ -6400,7 +6420,7 @@
       "source_location": "L895",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_getfarmat",
-      "community": 47,
+      "community": 12,
       "norm_label": ".getfarmat()"
     },
     {
@@ -6410,7 +6430,7 @@
       "source_location": "L899",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_gettrainerat",
-      "community": 3,
+      "community": 12,
       "norm_label": ".gettrainerat()"
     },
     {
@@ -6420,7 +6440,7 @@
       "source_location": "L910",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_isfarmtileat",
-      "community": 47,
+      "community": 12,
       "norm_label": ".isfarmtileat()"
     },
     {
@@ -6460,7 +6480,7 @@
       "source_location": "L943",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_followlocalplayer",
-      "community": 75,
+      "community": 71,
       "norm_label": ".followlocalplayer()"
     },
     {
@@ -6500,7 +6520,7 @@
       "source_location": "L974",
       "_origin": "ast",
       "id": "scenes_villagescene_villagescene_getencounteranimationkey",
-      "community": 71,
+      "community": 47,
       "norm_label": ".getencounteranimationkey()"
     },
     {
@@ -6610,7 +6630,7 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "network_authorityprotocol_authorityintent",
-      "community": 1,
+      "community": 42,
       "norm_label": "authorityintent"
     },
     {
@@ -6620,7 +6640,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "network_authorityprotocol_savecommand",
-      "community": 7,
+      "community": 42,
       "norm_label": "savecommand"
     },
     {
@@ -6640,7 +6660,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "network_authorityprotocol_savecommandresult",
-      "community": 7,
+      "community": 42,
       "norm_label": "savecommandresult"
     },
     {
@@ -6960,7 +6980,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "network_colyseusclient_multiplayerconnection",
-      "community": 23,
+      "community": 33,
       "norm_label": "multiplayerconnection"
     },
     {
@@ -6990,7 +7010,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "network_colyseusclient_accountconnection",
-      "community": 7,
+      "community": 42,
       "norm_label": "accountconnection"
     },
     {
@@ -7150,7 +7170,7 @@
       "source_location": "L408",
       "_origin": "ast",
       "id": "network_colyseusclient_tolocationroomstate",
-      "community": 19,
+      "community": 28,
       "norm_label": "tolocationroomstate()"
     },
     {
@@ -7310,7 +7330,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "sim_battlerewards_wild_battle_reward_tables",
-      "community": 78,
+      "community": 56,
       "norm_label": "wild_battle_reward_tables"
     },
     {
@@ -7500,7 +7520,7 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "sim_battles_battleresolution",
-      "community": 7,
+      "community": 40,
       "norm_label": "battleresolution"
     },
     {
@@ -7520,7 +7540,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "sim_battles_createbattleroomstate",
-      "community": 38,
+      "community": 37,
       "norm_label": "createbattleroomstate()"
     },
     {
@@ -7530,7 +7550,7 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "sim_battles_createguardbattleroomstate",
-      "community": 38,
+      "community": 0,
       "norm_label": "createguardbattleroomstate()"
     },
     {
@@ -7540,7 +7560,7 @@
       "source_location": "L152",
       "_origin": "ast",
       "id": "sim_battles_createtrainerbattleroomstate",
-      "community": 38,
+      "community": 0,
       "norm_label": "createtrainerbattleroomstate()"
     },
     {
@@ -7780,7 +7800,7 @@
       "source_location": "L446",
       "_origin": "ast",
       "id": "sim_battles_tobattlecreature",
-      "community": 38,
+      "community": 0,
       "norm_label": "tobattlecreature()"
     },
     {
@@ -7810,7 +7830,7 @@
       "source_location": "L493",
       "_origin": "ast",
       "id": "sim_battles_hashstring",
-      "community": 0,
+      "community": 6,
       "norm_label": "hashstring()"
     },
     {
@@ -7990,7 +8010,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "sim_cards_carddefinition",
-      "community": 43,
+      "community": 4,
       "norm_label": "carddefinition"
     },
     {
@@ -8020,7 +8040,7 @@
       "source_location": "L75",
       "_origin": "ast",
       "id": "sim_cards_packopentracecard",
-      "community": 4,
+      "community": 36,
       "norm_label": "packopentracecard"
     },
     {
@@ -8360,7 +8380,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_creaturecarddefinitionlike",
-      "community": 4,
+      "community": 36,
       "norm_label": "creaturecarddefinitionlike"
     },
     {
@@ -8400,7 +8420,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "sim_creaturelifecycle_createcreaturecardinstance",
-      "community": 16,
+      "community": 6,
       "norm_label": "createcreaturecardinstance()"
     },
     {
@@ -8660,7 +8680,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_creatureparty_test",
-      "community": 1,
+      "community": 74,
       "norm_label": "creatureparty.test.ts"
     },
     {
@@ -8680,7 +8700,7 @@
       "source_location": "L203",
       "_origin": "ast",
       "id": "sim_creatureparty_test_createcommoncreatures",
-      "community": 16,
+      "community": 6,
       "norm_label": "createcommoncreatures()"
     },
     {
@@ -8690,7 +8710,7 @@
       "source_location": "L230",
       "_origin": "ast",
       "id": "sim_creatureparty_test_withreviveitems",
-      "community": 1,
+      "community": 74,
       "norm_label": "withreviveitems()"
     },
     {
@@ -8700,7 +8720,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_creatureparty",
-      "community": 1,
+      "community": 74,
       "norm_label": "creatureparty.ts"
     },
     {
@@ -8710,7 +8730,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "sim_creatureparty_creatureuserole",
-      "community": 1,
+      "community": 74,
       "norm_label": "creatureuserole"
     },
     {
@@ -8720,7 +8740,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "sim_creatureparty_creaturepartyfailurereason",
-      "community": 1,
+      "community": 74,
       "norm_label": "creaturepartyfailurereason"
     },
     {
@@ -8730,7 +8750,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "sim_creatureparty_creaturepartyresult",
-      "community": 1,
+      "community": 74,
       "norm_label": "creaturepartyresult"
     },
     {
@@ -8750,7 +8770,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "sim_creatureparty_movecreaturetoactiveparty",
-      "community": 1,
+      "community": 74,
       "norm_label": "movecreaturetoactiveparty()"
     },
     {
@@ -8760,7 +8780,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "sim_creatureparty_movecreaturetostorage",
-      "community": 1,
+      "community": 74,
       "norm_label": "movecreaturetostorage()"
     },
     {
@@ -8780,7 +8800,7 @@
       "source_location": "L138",
       "_origin": "ast",
       "id": "sim_creatureparty_healallcreaturesathospital",
-      "community": 1,
+      "community": 74,
       "norm_label": "healallcreaturesathospital()"
     },
     {
@@ -8800,7 +8820,7 @@
       "source_location": "L168",
       "_origin": "ast",
       "id": "sim_creatureparty_usereviveitem",
-      "community": 1,
+      "community": 74,
       "norm_label": "usereviveitem()"
     },
     {
@@ -8810,7 +8830,7 @@
       "source_location": "L216",
       "_origin": "ast",
       "id": "sim_creatureparty_cancreatureuserole",
-      "community": 1,
+      "community": 74,
       "norm_label": "cancreatureuserole()"
     },
     {
@@ -8820,7 +8840,7 @@
       "source_location": "L220",
       "_origin": "ast",
       "id": "sim_creatureparty_iscreaturefainted",
-      "community": 1,
+      "community": 74,
       "norm_label": "iscreaturefainted()"
     },
     {
@@ -8830,7 +8850,7 @@
       "source_location": "L224",
       "_origin": "ast",
       "id": "sim_creatureparty_isvalidcreaturecontainerlayout",
-      "community": 1,
+      "community": 74,
       "norm_label": "isvalidcreaturecontainerlayout()"
     },
     {
@@ -9010,7 +9030,7 @@
       "source_location": "L92",
       "_origin": "ast",
       "id": "sim_farms_farmcardupgraderequirement",
-      "community": 4,
+      "community": 36,
       "norm_label": "farmcardupgraderequirement"
     },
     {
@@ -9020,7 +9040,7 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "sim_farms_farmupgraderequirements",
-      "community": 27,
+      "community": 36,
       "norm_label": "farmupgraderequirements"
     },
     {
@@ -9040,7 +9060,7 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "sim_farms_farmupgradepreview",
-      "community": 27,
+      "community": 36,
       "norm_label": "farmupgradepreview"
     },
     {
@@ -9080,7 +9100,7 @@
       "source_location": "L164",
       "_origin": "ast",
       "id": "sim_farms_createfarmsaverecord",
-      "community": 16,
+      "community": 27,
       "norm_label": "createfarmsaverecord()"
     },
     {
@@ -9110,7 +9130,7 @@
       "source_location": "L282",
       "_origin": "ast",
       "id": "sim_farms_assignfarmguard",
-      "community": 1,
+      "community": 74,
       "norm_label": "assignfarmguard()"
     },
     {
@@ -9120,7 +9140,7 @@
       "source_location": "L322",
       "_origin": "ast",
       "id": "sim_farms_clearfarmguard",
-      "community": 1,
+      "community": 74,
       "norm_label": "clearfarmguard()"
     },
     {
@@ -9340,7 +9360,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_gamebalance_test",
-      "community": 78,
+      "community": 56,
       "norm_label": "gamebalance.test.ts"
     },
     {
@@ -9350,7 +9370,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_gamebalance",
-      "community": 78,
+      "community": 56,
       "norm_label": "gamebalance.ts"
     },
     {
@@ -9360,7 +9380,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "sim_gamebalance_growthstatkeys",
-      "community": 78,
+      "community": 56,
       "norm_label": "growthstatkeys"
     },
     {
@@ -9370,7 +9390,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "sim_gamebalance_rarities",
-      "community": 78,
+      "community": 56,
       "norm_label": "rarities"
     },
     {
@@ -9380,7 +9400,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "sim_gamebalance_creaturetypes",
-      "community": 78,
+      "community": 56,
       "norm_label": "creaturetypes"
     },
     {
@@ -9390,7 +9410,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "sim_gamebalance_current_balance_version",
-      "community": 38,
+      "community": 56,
       "norm_label": "current_balance_version"
     },
     {
@@ -9400,7 +9420,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "sim_gamebalance_audit_balance_catalog",
-      "community": 78,
+      "community": 17,
       "norm_label": "audit_balance_catalog"
     },
     {
@@ -9410,7 +9430,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "sim_gamebalance_rewardchancebalanceentry",
-      "community": 78,
+      "community": 56,
       "norm_label": "rewardchancebalanceentry"
     },
     {
@@ -9420,7 +9440,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "sim_gamebalance_gamebalanceconfig",
-      "community": 22,
+      "community": 56,
       "norm_label": "gamebalanceconfig"
     },
     {
@@ -9430,7 +9450,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "sim_gamebalance_game_balance_config",
-      "community": 78,
+      "community": 38,
       "norm_label": "game_balance_config"
     },
     {
@@ -9440,7 +9460,7 @@
       "source_location": "L64",
       "_origin": "ast",
       "id": "sim_gamebalance_balancevalidationissue",
-      "community": 78,
+      "community": 56,
       "norm_label": "balancevalidationissue"
     },
     {
@@ -9450,7 +9470,7 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "sim_gamebalance_validategamebalanceconfig",
-      "community": 78,
+      "community": 56,
       "norm_label": "validategamebalanceconfig()"
     },
     {
@@ -9460,7 +9480,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "sim_gamebalance_validaterewardchanceentries",
-      "community": 78,
+      "community": 56,
       "norm_label": "validaterewardchanceentries()"
     },
     {
@@ -9470,7 +9490,7 @@
       "source_location": "L156",
       "_origin": "ast",
       "id": "sim_gamebalance_validaterewardentrynumber",
-      "community": 78,
+      "community": 56,
       "norm_label": "validaterewardentrynumber()"
     },
     {
@@ -9480,7 +9500,7 @@
       "source_location": "L173",
       "_origin": "ast",
       "id": "sim_gamebalance_isplainobject",
-      "community": 78,
+      "community": 56,
       "norm_label": "isplainobject()"
     },
     {
@@ -9490,7 +9510,7 @@
       "source_location": "L179",
       "_origin": "ast",
       "id": "sim_gamebalance_validateexactnumbermap",
-      "community": 78,
+      "community": 56,
       "norm_label": "validateexactnumbermap()"
     },
     {
@@ -9500,7 +9520,7 @@
       "source_location": "L191",
       "_origin": "ast",
       "id": "sim_gamebalance_validateexactstringmap",
-      "community": 78,
+      "community": 56,
       "norm_label": "validateexactstringmap()"
     },
     {
@@ -9510,7 +9530,7 @@
       "source_location": "L199",
       "_origin": "ast",
       "id": "sim_gamebalance_validatenumber",
-      "community": 78,
+      "community": 56,
       "norm_label": "validatenumber()"
     },
     {
@@ -9520,7 +9540,7 @@
       "source_location": "L207",
       "_origin": "ast",
       "id": "sim_gamebalance_getpath",
-      "community": 78,
+      "community": 56,
       "norm_label": "getpath()"
     },
     {
@@ -9530,7 +9550,7 @@
       "source_location": "L216",
       "_origin": "ast",
       "id": "sim_gamebalance_balanceconfigissues",
-      "community": 78,
+      "community": 56,
       "norm_label": "balanceconfigissues"
     },
     {
@@ -9720,7 +9740,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "sim_generatedmapschema_squaregridmapadapter",
-      "community": 3,
+      "community": 1,
       "norm_label": "squaregridmapadapter"
     },
     {
@@ -9730,7 +9750,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "sim_generatedmapschema_tosquaregridmap",
-      "community": 39,
+      "community": 1,
       "norm_label": "tosquaregridmap()"
     },
     {
@@ -10010,7 +10030,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_items_test",
-      "community": 18,
+      "community": 35,
       "norm_label": "items.test.ts"
     },
     {
@@ -10020,7 +10040,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_items",
-      "community": 18,
+      "community": 35,
       "norm_label": "items.ts"
     },
     {
@@ -10030,7 +10050,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_items_item_catalog",
-      "community": 18,
+      "community": 35,
       "norm_label": "item_catalog"
     },
     {
@@ -10050,7 +10070,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "sim_items_itemdefinition",
-      "community": 18,
+      "community": 35,
       "norm_label": "itemdefinition"
     },
     {
@@ -10060,7 +10080,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "sim_items_item_definitions",
-      "community": 18,
+      "community": 35,
       "norm_label": "item_definitions"
     },
     {
@@ -10070,7 +10090,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "sim_items_canonicaldefinitions",
-      "community": 18,
+      "community": 35,
       "norm_label": "canonicaldefinitions"
     },
     {
@@ -10080,7 +10100,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "sim_items_itembyid",
-      "community": 18,
+      "community": 35,
       "norm_label": "itembyid"
     },
     {
@@ -10100,7 +10120,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "sim_items_isitemid",
-      "community": 14,
+      "community": 35,
       "norm_label": "isitemid()"
     },
     {
@@ -10110,7 +10130,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "sim_items_validateitemcatalog",
-      "community": 18,
+      "community": 35,
       "norm_label": "validateitemcatalog()"
     },
     {
@@ -10240,7 +10260,7 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "sim_maps_getgamemap",
-      "community": 3,
+      "community": 1,
       "norm_label": "getgamemap()"
     },
     {
@@ -10250,7 +10270,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "sim_maps_getmapbyid",
-      "community": 19,
+      "community": 28,
       "norm_label": "getmapbyid()"
     },
     {
@@ -10260,7 +10280,7 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "sim_maps_ismapid",
-      "community": 19,
+      "community": 28,
       "norm_label": "ismapid()"
     },
     {
@@ -10270,7 +10290,7 @@
       "source_location": "L117",
       "_origin": "ast",
       "id": "sim_maps_normalizemapid",
-      "community": 19,
+      "community": 72,
       "norm_label": "normalizemapid()"
     },
     {
@@ -10280,7 +10300,7 @@
       "source_location": "L121",
       "_origin": "ast",
       "id": "sim_maps_gettileat",
-      "community": 3,
+      "community": 1,
       "norm_label": "gettileat()"
     },
     {
@@ -10290,7 +10310,7 @@
       "source_location": "L126",
       "_origin": "ast",
       "id": "sim_maps_canentertile",
-      "community": 3,
+      "community": 72,
       "norm_label": "canentertile()"
     },
     {
@@ -10340,7 +10360,7 @@
       "source_location": "L238",
       "_origin": "ast",
       "id": "sim_maps_getexitat",
-      "community": 3,
+      "community": 1,
       "norm_label": "getexitat()"
     },
     {
@@ -10490,7 +10510,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_movement_test",
-      "community": 32,
+      "community": 1,
       "norm_label": "movement.test.ts"
     },
     {
@@ -10520,7 +10540,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_movement",
-      "community": 3,
+      "community": 1,
       "norm_label": "movement.ts"
     },
     {
@@ -10530,7 +10550,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "sim_movement_directiondelta",
-      "community": 3,
+      "community": 1,
       "norm_label": "directiondelta"
     },
     {
@@ -10540,7 +10560,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "sim_movement_moveonsquaregrid",
-      "community": 39,
+      "community": 1,
       "norm_label": "moveonsquaregrid()"
     },
     {
@@ -10550,7 +10570,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "sim_movement_moveplayer",
-      "community": 3,
+      "community": 1,
       "norm_label": "moveplayer()"
     },
     {
@@ -10660,7 +10680,7 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "sim_onboarding_isvillageelderdialogcomplete",
-      "community": 74,
+      "community": 16,
       "norm_label": "isvillageelderdialogcomplete()"
     },
     {
@@ -10800,7 +10820,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_pathfinding_test",
-      "community": 3,
+      "community": 1,
       "norm_label": "pathfinding.test.ts"
     },
     {
@@ -10810,7 +10830,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_pathfinding",
-      "community": 3,
+      "community": 1,
       "norm_label": "pathfinding.ts"
     },
     {
@@ -10820,7 +10840,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "sim_pathfinding_steps",
-      "community": 3,
+      "community": 1,
       "norm_label": "steps"
     },
     {
@@ -10830,7 +10850,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "sim_pathfinding_pathoptions",
-      "community": 3,
+      "community": 1,
       "norm_label": "pathoptions"
     },
     {
@@ -10840,7 +10860,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "sim_pathfinding_findwalkpath",
-      "community": 3,
+      "community": 1,
       "norm_label": "findwalkpath()"
     },
     {
@@ -10850,7 +10870,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "sim_pathfinding_findwalkpathtointeractiondistance",
-      "community": 3,
+      "community": 1,
       "norm_label": "findwalkpathtointeractiondistance()"
     },
     {
@@ -10860,7 +10880,7 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "sim_pathfinding_canstandontile",
-      "community": 3,
+      "community": 1,
       "norm_label": "canstandontile()"
     },
     {
@@ -10870,7 +10890,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "sim_pathfinding_positionkey",
-      "community": 3,
+      "community": 1,
       "norm_label": "positionkey()"
     },
     {
@@ -10880,7 +10900,7 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "sim_pathfinding_findsquaregridpath",
-      "community": 3,
+      "community": 1,
       "norm_label": "findsquaregridpath()"
     },
     {
@@ -11300,7 +11320,7 @@
       "source_location": "L73",
       "_origin": "ast",
       "id": "sim_rewardinbox_isvalidrewardsourceid",
-      "community": 14,
+      "community": 18,
       "norm_label": "isvalidrewardsourceid()"
     },
     {
@@ -11310,7 +11330,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "sim_rewardinbox_isvalidrewardbundle",
-      "community": 14,
+      "community": 18,
       "norm_label": "isvalidrewardbundle()"
     },
     {
@@ -11340,7 +11360,7 @@
       "source_location": "L99",
       "_origin": "ast",
       "id": "sim_rewardinbox_isisotimestamp",
-      "community": 14,
+      "community": 18,
       "norm_label": "isisotimestamp()"
     },
     {
@@ -11360,7 +11380,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_savestate_test",
-      "community": 74,
+      "community": 18,
       "norm_label": "savestate.test.ts"
     },
     {
@@ -11370,7 +11390,7 @@
       "source_location": "L431",
       "_origin": "ast",
       "id": "sim_savestate_test_creatememorystorage",
-      "community": 74,
+      "community": 18,
       "norm_label": "creatememorystorage()"
     },
     {
@@ -11380,7 +11400,7 @@
       "source_location": "L456",
       "_origin": "ast",
       "id": "sim_savestate_test_createvalidcreature",
-      "community": 74,
+      "community": 18,
       "norm_label": "createvalidcreature()"
     },
     {
@@ -11450,7 +11470,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "sim_savestate_monsterrpgsaverepository",
-      "community": 36,
+      "community": 48,
       "norm_label": "monsterrpgsaverepository"
     },
     {
@@ -11510,7 +11530,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "sim_savestate_localmonsterrpgsaverepository",
-      "community": 74,
+      "community": 18,
       "norm_label": "localmonsterrpgsaverepository"
     },
     {
@@ -11680,7 +11700,7 @@
       "source_location": "L317",
       "_origin": "ast",
       "id": "sim_savestate_isvalidsavestate",
-      "community": 14,
+      "community": 28,
       "norm_label": "isvalidsavestate()"
     },
     {
@@ -11700,7 +11720,7 @@
       "source_location": "L361",
       "_origin": "ast",
       "id": "sim_savestate_isvaliditeminventory",
-      "community": 14,
+      "community": 35,
       "norm_label": "isvaliditeminventory()"
     },
     {
@@ -11710,7 +11730,7 @@
       "source_location": "L373",
       "_origin": "ast",
       "id": "sim_savestate_isvalidrewardinbox",
-      "community": 14,
+      "community": 18,
       "norm_label": "isvalidrewardinbox()"
     },
     {
@@ -11720,7 +11740,7 @@
       "source_location": "L382",
       "_origin": "ast",
       "id": "sim_savestate_isrecord",
-      "community": 14,
+      "community": 18,
       "norm_label": "isrecord()"
     },
     {
@@ -12110,7 +12130,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_speciescatalog_test",
-      "community": 31,
+      "community": 13,
       "norm_label": "speciescatalog.test.ts"
     },
     {
@@ -12120,7 +12140,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_speciescatalog",
-      "community": 31,
+      "community": 13,
       "norm_label": "speciescatalog.ts"
     },
     {
@@ -12130,7 +12150,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "sim_speciescatalog_creaturerarities",
-      "community": 31,
+      "community": 13,
       "norm_label": "creaturerarities"
     },
     {
@@ -12140,7 +12160,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "sim_speciescatalog_creaturetypes",
-      "community": 31,
+      "community": 13,
       "norm_label": "creaturetypes"
     },
     {
@@ -12150,7 +12170,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "sim_speciescatalog_attackpoolids",
-      "community": 31,
+      "community": 13,
       "norm_label": "attackpoolids"
     },
     {
@@ -12160,7 +12180,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "sim_speciescatalog_speciesbyid",
-      "community": 31,
+      "community": 13,
       "norm_label": "speciesbyid"
     },
     {
@@ -12170,7 +12190,7 @@
       "source_location": "L110",
       "_origin": "ast",
       "id": "sim_speciescatalog_speciesbyslug",
-      "community": 31,
+      "community": 13,
       "norm_label": "speciesbyslug"
     },
     {
@@ -12190,7 +12210,7 @@
       "source_location": "L116",
       "_origin": "ast",
       "id": "sim_speciescatalog_getspeciesbyslug",
-      "community": 31,
+      "community": 13,
       "norm_label": "getspeciesbyslug()"
     },
     {
@@ -12210,7 +12230,7 @@
       "source_location": "L124",
       "_origin": "ast",
       "id": "sim_speciescatalog_validatespeciescatalog",
-      "community": 3,
+      "community": 13,
       "norm_label": "validatespeciescatalog()"
     },
     {
@@ -12220,7 +12240,7 @@
       "source_location": "L158",
       "_origin": "ast",
       "id": "sim_speciescatalog_createplaceholderspecies",
-      "community": 31,
+      "community": 13,
       "norm_label": "createplaceholderspecies()"
     },
     {
@@ -12230,7 +12250,7 @@
       "source_location": "L176",
       "_origin": "ast",
       "id": "sim_speciescatalog_getplaceholderrarity",
-      "community": 31,
+      "community": 13,
       "norm_label": "getplaceholderrarity()"
     },
     {
@@ -12240,7 +12260,7 @@
       "source_location": "L184",
       "_origin": "ast",
       "id": "sim_speciescatalog_getplaceholderattackpools",
-      "community": 31,
+      "community": 13,
       "norm_label": "getplaceholderattackpools()"
     },
     {
@@ -12250,7 +12270,7 @@
       "source_location": "L191",
       "_origin": "ast",
       "id": "sim_speciescatalog_scalestats",
-      "community": 31,
+      "community": 13,
       "norm_label": "scalestats()"
     },
     {
@@ -12260,7 +12280,7 @@
       "source_location": "L210",
       "_origin": "ast",
       "id": "sim_speciescatalog_species",
-      "community": 31,
+      "community": 13,
       "norm_label": "species()"
     },
     {
@@ -12270,7 +12290,7 @@
       "source_location": "L222",
       "_origin": "ast",
       "id": "sim_speciescatalog_stats",
-      "community": 31,
+      "community": 13,
       "norm_label": "stats()"
     },
     {
@@ -12280,7 +12300,7 @@
       "source_location": "L226",
       "_origin": "ast",
       "id": "sim_speciescatalog_capitalize",
-      "community": 31,
+      "community": 13,
       "norm_label": "capitalize()"
     },
     {
@@ -12290,7 +12310,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_statgrowth_test",
-      "community": 78,
+      "community": 13,
       "norm_label": "statgrowth.test.ts"
     },
     {
@@ -12300,7 +12320,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "sim_statgrowth_test_creature",
-      "community": 78,
+      "community": 13,
       "norm_label": "creature"
     },
     {
@@ -12730,7 +12750,7 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "sim_stations_discovercurrentstationdestination",
-      "community": 36,
+      "community": 74,
       "norm_label": "discovercurrentstationdestination()"
     },
     {
@@ -12740,7 +12760,7 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "sim_stations_discoverplayervillageforstation",
-      "community": 36,
+      "community": 74,
       "norm_label": "discoverplayervillageforstation()"
     },
     {
@@ -12780,7 +12800,7 @@
       "source_location": "L191",
       "_origin": "ast",
       "id": "sim_stations_confirmstationtravel",
-      "community": 36,
+      "community": 74,
       "norm_label": "confirmstationtravel()"
     },
     {
@@ -12850,7 +12870,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_trainers",
-      "community": 36,
+      "community": 2,
       "norm_label": "trainers.ts"
     },
     {
@@ -12860,7 +12880,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "sim_trainers_trainer_definitions",
-      "community": 36,
+      "community": 2,
       "norm_label": "trainer_definitions"
     },
     {
@@ -12890,7 +12910,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "sim_types_direction",
-      "community": 80,
+      "community": 59,
       "norm_label": "direction"
     },
     {
@@ -12930,7 +12950,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "sim_types_creaturelabelmode",
-      "community": 53,
+      "community": 48,
       "norm_label": "creaturelabelmode"
     },
     {
@@ -12950,7 +12970,7 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "sim_types_buildingtype",
-      "community": 19,
+      "community": 2,
       "norm_label": "buildingtype"
     },
     {
@@ -12960,7 +12980,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "sim_types_interiormapid",
-      "community": 19,
+      "community": 2,
       "norm_label": "interiormapid"
     },
     {
@@ -12970,7 +12990,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "sim_types_generatedmapid",
-      "community": 39,
+      "community": 1,
       "norm_label": "generatedmapid"
     },
     {
@@ -12990,7 +13010,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "sim_types_mapkind",
-      "community": 80,
+      "community": 43,
       "norm_label": "mapkind"
     },
     {
@@ -13010,7 +13030,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "sim_types_playerprofile",
-      "community": 36,
+      "community": 10,
       "norm_label": "playerprofile"
     },
     {
@@ -13030,7 +13050,7 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "sim_types_cardrarity",
-      "community": 4,
+      "community": 36,
       "norm_label": "cardrarity"
     },
     {
@@ -13080,7 +13100,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "sim_types_creaturetype",
-      "community": 22,
+      "community": 56,
       "norm_label": "creaturetype"
     },
     {
@@ -13090,7 +13110,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "sim_types_attackpoolid",
-      "community": 31,
+      "community": 13,
       "norm_label": "attackpoolid"
     },
     {
@@ -13100,7 +13120,7 @@
       "source_location": "L106",
       "_origin": "ast",
       "id": "sim_types_basestattendencies",
-      "community": 31,
+      "community": 13,
       "norm_label": "basestattendencies"
     },
     {
@@ -13110,7 +13130,7 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "sim_types_creaturestatkey",
-      "community": 22,
+      "community": 56,
       "norm_label": "creaturestatkey"
     },
     {
@@ -13140,7 +13160,7 @@
       "source_location": "L127",
       "_origin": "ast",
       "id": "sim_types_creaturestatgrowthdraftevent",
-      "community": 13,
+      "community": 2,
       "norm_label": "creaturestatgrowthdraftevent"
     },
     {
@@ -13200,7 +13220,7 @@
       "source_location": "L163",
       "_origin": "ast",
       "id": "sim_types_creaturestatgrowthstate",
-      "community": 13,
+      "community": 2,
       "norm_label": "creaturestatgrowthstate"
     },
     {
@@ -13230,7 +13250,7 @@
       "source_location": "L189",
       "_origin": "ast",
       "id": "sim_types_savestack",
-      "community": 1,
+      "community": 4,
       "norm_label": "savestack"
     },
     {
@@ -13250,7 +13270,7 @@
       "source_location": "L201",
       "_origin": "ast",
       "id": "sim_types_creationrequirement",
-      "community": 27,
+      "community": 36,
       "norm_label": "creationrequirement"
     },
     {
@@ -13260,7 +13280,7 @@
       "source_location": "L207",
       "_origin": "ast",
       "id": "sim_types_creaturecardinstance",
-      "community": 6,
+      "community": 2,
       "norm_label": "creaturecardinstance"
     },
     {
@@ -13280,7 +13300,7 @@
       "source_location": "L219",
       "_origin": "ast",
       "id": "sim_types_eggsaverecord",
-      "community": 6,
+      "community": 2,
       "norm_label": "eggsaverecord"
     },
     {
@@ -13300,7 +13320,7 @@
       "source_location": "L242",
       "_origin": "ast",
       "id": "sim_types_creaturesaverecord",
-      "community": 22,
+      "community": 10,
       "norm_label": "creaturesaverecord"
     },
     {
@@ -13370,7 +13390,7 @@
       "source_location": "L292",
       "_origin": "ast",
       "id": "sim_types_battleroomstate",
-      "community": 38,
+      "community": 31,
       "norm_label": "battleroomstate"
     },
     {
@@ -13400,7 +13420,7 @@
       "source_location": "L335",
       "_origin": "ast",
       "id": "sim_types_creaturesavecontainer",
-      "community": 1,
+      "community": 74,
       "norm_label": "creaturesavecontainer"
     },
     {
@@ -13440,7 +13460,7 @@
       "source_location": "L357",
       "_origin": "ast",
       "id": "sim_types_stationdestination",
-      "community": 28,
+      "community": 43,
       "norm_label": "stationdestination"
     },
     {
@@ -13450,7 +13470,7 @@
       "source_location": "L368",
       "_origin": "ast",
       "id": "sim_types_stationsavecontainer",
-      "community": 28,
+      "community": 2,
       "norm_label": "stationsavecontainer"
     },
     {
@@ -13470,7 +13490,7 @@
       "source_location": "L379",
       "_origin": "ast",
       "id": "sim_types_farmsaverecord",
-      "community": 47,
+      "community": 12,
       "norm_label": "farmsaverecord"
     },
     {
@@ -13560,7 +13580,7 @@
       "source_location": "L446",
       "_origin": "ast",
       "id": "sim_types_mapexit",
-      "community": 19,
+      "community": 2,
       "norm_label": "mapexit"
     },
     {
@@ -13570,7 +13590,7 @@
       "source_location": "L457",
       "_origin": "ast",
       "id": "sim_types_villagedefinition",
-      "community": 19,
+      "community": 2,
       "norm_label": "villagedefinition"
     },
     {
@@ -13580,7 +13600,7 @@
       "source_location": "L470",
       "_origin": "ast",
       "id": "sim_types_buildingdefinition",
-      "community": 19,
+      "community": 2,
       "norm_label": "buildingdefinition"
     },
     {
@@ -13590,7 +13610,7 @@
       "source_location": "L483",
       "_origin": "ast",
       "id": "sim_types_gamemap",
-      "community": 59,
+      "community": 73,
       "norm_label": "gamemap"
     },
     {
@@ -13660,7 +13680,7 @@
       "source_location": "L527",
       "_origin": "ast",
       "id": "sim_types_wildencounterstate",
-      "community": 71,
+      "community": 12,
       "norm_label": "wildencounterstate"
     },
     {
@@ -13680,7 +13700,7 @@
       "source_location": "L547",
       "_origin": "ast",
       "id": "sim_types_claimguardedfarmtheftmessage",
-      "community": 23,
+      "community": 33,
       "norm_label": "claimguardedfarmtheftmessage"
     },
     {
@@ -13740,7 +13760,7 @@
       "source_location": "L579",
       "_origin": "ast",
       "id": "sim_types_challengetrainermessage",
-      "community": 23,
+      "community": 33,
       "norm_label": "challengetrainermessage"
     },
     {
@@ -13760,7 +13780,7 @@
       "source_location": "L581",
       "_origin": "ast",
       "id": "sim_types_trainerdefinition",
-      "community": 36,
+      "community": 2,
       "norm_label": "trainerdefinition"
     },
     {
@@ -13820,7 +13840,7 @@
       "source_location": "L645",
       "_origin": "ast",
       "id": "sim_types_movementresult",
-      "community": 74,
+      "community": 43,
       "norm_label": "movementresult"
     },
     {
@@ -13830,7 +13850,7 @@
       "source_location": "L656",
       "_origin": "ast",
       "id": "sim_types_moveintentmessage",
-      "community": 72,
+      "community": 33,
       "norm_label": "moveintentmessage"
     },
     {
@@ -14070,7 +14090,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "ui_gamehud_gamehudprops",
-      "community": 48,
+      "community": 43,
       "norm_label": "gamehudprops"
     },
     {
@@ -14380,7 +14400,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "ui_mobiledpad",
-      "community": 48,
+      "community": 59,
       "norm_label": "mobiledpad.tsx"
     },
     {
@@ -14390,7 +14410,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "ui_mobiledpad_mobiledpadprops",
-      "community": 48,
+      "community": 59,
       "norm_label": "mobiledpadprops"
     },
     {
@@ -14400,7 +14420,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "ui_mobiledpad_controls",
-      "community": 48,
+      "community": 59,
       "norm_label": "controls"
     },
     {
@@ -14410,7 +14430,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "ui_mobiledpad_mobiledpad",
-      "community": 48,
+      "community": 59,
       "norm_label": "mobiledpad()"
     },
     {
@@ -14580,7 +14600,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "placeholders_comingsoongamepage",
-      "community": 20,
+      "community": 7,
       "norm_label": "comingsoongamepage.tsx"
     },
     {
@@ -14590,7 +14610,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "placeholders_comingsoongamepage_backicon",
-      "community": 20,
+      "community": 7,
       "norm_label": "backicon()"
     },
     {
@@ -14600,7 +14620,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "placeholders_comingsoongamepage_comingsoongamepage",
-      "community": 20,
+      "community": 7,
       "norm_label": "comingsoongamepage()"
     },
     {
@@ -15320,7 +15340,7 @@
       "source_location": "L87",
       "_origin": "ast",
       "id": "pages_leaderboardpage_leaderboardpage",
-      "community": 20,
+      "community": 7,
       "norm_label": "leaderboardpage()"
     },
     {
@@ -15730,7 +15750,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "types_game_portalimagerole",
-      "community": 20,
+      "community": 7,
       "norm_label": "portalimagerole"
     },
     {
@@ -15750,7 +15770,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "types_game_portalimageasset",
-      "community": 20,
+      "community": 7,
       "norm_label": "portalimageasset"
     },
     {
@@ -27917,6 +27937,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "server/rooms/BattleRoom.test.ts",
+      "source_location": "L113",
+      "weight": 1.0,
+      "source": "rooms_battleroom_test",
+      "target": "rooms_battleroom_test_battlecreature",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "server/rooms/BattleRoom.test.ts",
       "source_location": "L5",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -27953,6 +27983,17 @@
       "confidence_score": 1.0,
       "source": "rooms_battleroom_test",
       "target": "sim_battles_createbattleroomstate"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/rooms/BattleRoom.test.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "rooms_battleroom_test",
+      "target": "sim_battles_createtrainerbattleroomstate",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -28030,6 +28071,17 @@
       "confidence_score": 1.0,
       "source": "rooms_battleroom_test_leaveharness",
       "target": "sim_savestate_createplayerprofile"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/rooms/BattleRoom.test.ts",
+      "source_location": "L115",
+      "weight": 1.0,
+      "source": "rooms_battleroom_test_battlecreature",
+      "target": "rooms_battleroom_test_creature",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -28462,6 +28514,16 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "server/rooms/BattleRoom.ts",
+      "source_location": "L163",
+      "weight": 1.0,
+      "source": "rooms_battleroom_battleroom",
+      "target": "rooms_battleroom_battleroom_handleswitchcreature",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "server/rooms/BattleRoom.ts",
       "source_location": "L144",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -28847,6 +28909,50 @@
       "weight": 1.0,
       "source": "rooms_battleroom_battleroom_handlerun",
       "target": "sim_battles_runfrombattle"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/rooms/BattleRoom.ts",
+      "source_location": "L164",
+      "weight": 1.0,
+      "source": "rooms_battleroom_battleroom_handleswitchcreature",
+      "target": "rooms_battleroom_battleroom_isauthorized",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/rooms/BattleRoom.ts",
+      "source_location": "L172",
+      "weight": 1.0,
+      "source": "rooms_battleroom_battleroom_handleswitchcreature",
+      "target": "rooms_battleroom_battleroom_publishresult",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "server/rooms/BattleRoom.ts",
+      "source_location": "L170",
+      "weight": 1.0,
+      "source": "rooms_battleroom_battleroom_handleswitchcreature",
+      "target": "rooms_battleroom_battleroom_syncbattlestate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server/rooms/BattleRoom.ts",
+      "source_location": "L165",
+      "weight": 1.0,
+      "source": "rooms_battleroom_battleroom_handleswitchcreature",
+      "target": "sim_battles_switchplayerbattlecreature"
     },
     {
       "relation": "calls",
@@ -65478,5 +65584,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e5fef65155ea776ab6198054b7d93003c30810e6"
+  "built_at_commit": "6df118c99ab04a7a39ddc6cc7dfdcb64c734680f"
 }

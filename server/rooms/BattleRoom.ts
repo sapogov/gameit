@@ -80,10 +80,7 @@ export class BattleRoom extends Room {
       this.handleRun(client);
     });
     this.onMessage('switchCreature', (client, payload: { creatureId?: unknown; expectedTurn?: unknown }) => {
-      if (!this.isAuthorized(client)) return;
-      const result = switchPlayerBattleCreature(this.battleState, typeof payload?.creatureId === 'string' ? payload.creatureId : '', typeof payload?.expectedTurn === 'number' ? payload.expectedTurn : -1);
-      if (!result.ok) client.send('battleActionRejected', { reason: result.reason });
-      else this.syncBattleState(result.state);
+      this.handleSwitchCreature(client, payload);
     });
   }
 
@@ -157,6 +154,19 @@ export class BattleRoom extends Room {
       return;
     }
 
+    this.syncBattleState(result.state);
+    if (result.result) {
+      void this.publishResult(result.result);
+    }
+  }
+
+  private handleSwitchCreature(client: Client, payload: { creatureId?: unknown; expectedTurn?: unknown }) {
+    if (!this.isAuthorized(client)) return;
+    const result = switchPlayerBattleCreature(this.battleState, typeof payload?.creatureId === 'string' ? payload.creatureId : '', typeof payload?.expectedTurn === 'number' ? payload.expectedTurn : -1);
+    if (!result.ok) {
+      client.send('battleActionRejected', { reason: result.reason });
+      return;
+    }
     this.syncBattleState(result.state);
     if (result.result) {
       void this.publishResult(result.result);

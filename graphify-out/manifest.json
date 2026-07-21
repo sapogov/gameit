@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "server/rooms/BattleRoom.ts": {
-    "mtime": 1784637492.9271197,
-    "ast_hash": "1d4e77aa38a4a51ea352041ab080a8ce",
+    "mtime": 1784638549.4682121,
+    "ast_hash": "5ee9c284bd42e33462da60fc946e36dd",
     "semantic_hash": ""
   },
   "server/rooms/HomeVillageRoom.ts": {
@@ -1790,8 +1790,8 @@
     "semantic_hash": ""
   },
   "server/rooms/BattleRoom.test.ts": {
-    "mtime": 1784637483.538834,
-    "ast_hash": "827878754c493b773a542d524e2ca508",
+    "mtime": 1784638550.0042553,
+    "ast_hash": "270f34cb76d7d7464d5ed64f8a97445a",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/trainers.ts": {

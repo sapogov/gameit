@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from 'vitest';
 import { activateTrainerBattleClaimWithCompensation, BattleRoom } from './BattleRoom';
-import { createBattleRoomState, createPlayerProfile, type BattleRoomState, type CreatureSaveRecord } from '../../src/games/monster-rpg/sim';
+import { createBattleRoomState, createPlayerProfile, createTrainerBattleRoomState, type BattleRoomState, type CreatureSaveRecord } from '../../src/games/monster-rpg/sim';
 
 type BattleLeaveHarness = {
   battleState: BattleRoomState;
@@ -61,6 +61,28 @@ describe('trainer claim activation compensation', () => {
   });
 });
 
+describe('trainer switch settlement', () => {
+  test('publishes a terminal result produced by switching creatures', () => {
+    const profile = createPlayerProfile('Switch Tester', 'scout');
+    const faintedActive = battleCreature(profile.playerId, 'fainted-active', 0, true);
+    const incoming = battleCreature(profile.playerId, 'last-incoming', 1, false);
+    const seeded = createTrainerBattleRoomState({ battleId: 'terminal-switch', trainerId: 'route-scout-1', playerProfile: profile, playerParty: [faintedActive, incoming] });
+    const active = seeded.playerParty!.find((candidate) => candidate.id === faintedActive.id)!;
+    const room = {
+      battleState: { ...seeded, player: { ...seeded.player, activeCreature: active }, playerActiveCreatureId: active.id, playerParty: seeded.playerParty!.map((candidate) => candidate.id === active.id ? { ...candidate, hp: 0, fainted: true } : candidate) },
+      isAuthorized: vi.fn(() => true),
+      syncBattleState: vi.fn(),
+      publishResult: vi.fn(async () => undefined)
+    };
+    const handle = (BattleRoom.prototype as unknown as { handleSwitchCreature(client: unknown, payload: unknown): void }).handleSwitchCreature;
+
+    handle.call(room, { send: vi.fn() }, { creatureId: incoming.id, expectedTurn: seeded.turn });
+
+    expect(room.syncBattleState).toHaveBeenCalledWith(expect.objectContaining({ status: 'player-lost' }));
+    expect(room.publishResult).toHaveBeenCalledWith(expect.objectContaining({ battleId: 'terminal-switch', outcome: 'lost', playerCreatureId: incoming.id }));
+  });
+});
+
 function leaveHarness(reconnection: Promise<void>) {
   const profile = createPlayerProfile('Reconnect Tester', 'scout');
   const room: BattleLeaveHarness = {
@@ -85,5 +107,14 @@ function creature(ownerPlayerId: string): CreatureSaveRecord {
   return {
     id: 'reconnect-creature', ownerPlayerId, speciesId: 1, level: 1, experience: 0,
     stats: { hp: 20, attack: 10, defense: 10, speed: 10, stamina: 10 }, attacks: [], hp: 20, maxHp: 20, fainted: false, cooldowns: {}
+  };
+}
+
+function battleCreature(ownerPlayerId: string, id: string, hp: number, fainted: boolean): CreatureSaveRecord {
+  return {
+    ...creature(ownerPlayerId), id, speciesId: id === 'fainted-active' ? 1 : 2, hp, maxHp: 60, fainted,
+    stats: { hp: 60, attack: 28, defense: 14, speed: 18, stamina: 16 },
+    attacks: [{ id: 'heavy-hit', name: 'Heavy Hit', type: 'verdant', power: 32, statFocus: 'attack' }],
+    statGrowth: { model: 'deterministic-default', basis: { level: 1, stats: { hp: 60, attack: 28, defense: 14, speed: 18, stamina: 16 } }, events: [] }
   };
 }
