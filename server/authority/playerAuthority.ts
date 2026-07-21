@@ -190,11 +190,16 @@ export class PlayerAuthority {
   }
   /** Compensates a failed registry activation without recording battle settlement. */
   async cancelActiveTrainerBattle(principal: Principal, battleId: string): Promise<boolean> {
-    const aggregate = await this.repository.read(principal.sub); const lock = aggregate?.activeBattle;
-    if (!aggregate || !lock || lock.phase !== 'active' || lock.battleId !== battleId) return false;
-    const { activeBattle: _lock, ...withoutLock } = aggregate; const next: PlayerAggregate = { ...withoutLock, revision: aggregate.revision + 1 };
-    if (!await this.repository.compareExchange(principal.sub, aggregate.revision, next)) return false;
-    this.emitBattlePresence(principal.sub, undefined, snapshot(next)); return true;
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      const aggregate = await this.repository.read(principal.sub); const lock = aggregate?.activeBattle;
+      if (!aggregate) return false;
+      if (!lock) return true;
+      if (lock.phase !== 'active' || lock.battleId !== battleId) return false;
+      const { activeBattle: _lock, ...withoutLock } = aggregate; const next: PlayerAggregate = { ...withoutLock, revision: aggregate.revision + 1 };
+      if (!await this.repository.compareExchange(principal.sub, aggregate.revision, next)) continue;
+      this.emitBattlePresence(principal.sub, undefined, snapshot(next)); return true;
+    }
+    return false;
   }
   async locationPresence(principal: Principal): Promise<{ snapshot: AuthoritySnapshot; activeBattle: ActiveTrainerBattle | undefined } | null> {
     const aggregate = await this.repository.read(principal.sub); return aggregate ? { snapshot: snapshot(aggregate), activeBattle: clone(aggregate.activeBattle) } : null;

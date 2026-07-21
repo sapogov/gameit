@@ -8,7 +8,7 @@
 - Trainer settlement persists all party HP outcomes, first-clear progression, rewards, XP, and sealed growth once through the existing authority CAS boundary.
 - Repeat clears remain playable without duplicate rewards; stale, foreign, fainted, active-target, and post-terminal switch intents fail closed.
 - Pending claims expire on schedule, matching sessions receive canonical lock snapshots, and successful SDK reconnects resume from grace before accepting more battle intents.
-- Voluntary switch knockouts now force another switch or end the battle, and failed registry activation compensates the exact canonical lock without mutating save or reward state.
+- Voluntary switch knockouts now force another switch or end the battle, and failed registry activation uses bounded exact-lock compensation without mutating save or reward state.
 
 ## 2026-07-21 - Issue #64 Reviewer Closure v7
 

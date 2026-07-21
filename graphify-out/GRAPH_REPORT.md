@@ -1,16 +1,16 @@
 # Graph Report - issue-65  (2026-07-21)
 
 ## Corpus Check
-- 166 files · ~354,499 words
+- 166 files · ~354,587 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1635 nodes · 4599 edges · 74 communities (65 shown, 9 thin omitted)
+- 1635 nodes · 4599 edges · 75 communities (66 shown, 9 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 3 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `22490f70`
+- Built from commit: `e5fef651`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -111,15 +111,15 @@
 ## Import Cycles
 - None detected.
 
-## Communities (74 total, 9 thin omitted)
+## Communities (75 total, 9 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.15
 Nodes (27): abandonDisconnectedBattle(), advanceAfterEnemyAction(), appendBattleLog(), applyAttack(), BattleActionResult, canUseBattleAttack(), chooseEnemyAttack(), choosePlayerBattleAttack() (+19 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.16
-Nodes (14): AuthenticatedExportEnvelope, AuthenticatedImportResult, AuthenticatedSaveExport, AuthorityMutationContext, Principal, reduce(), toItemInventory(), toSaveStacks() (+6 more)
+Cohesion: 0.12
+Nodes (23): AuthenticatedExportEnvelope, AuthenticatedImportResult, AuthenticatedSaveExport, AuthorityMutationContext, Principal, reduce(), toItemInventory(), toSaveStacks() (+15 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.08
@@ -131,7 +131,7 @@ Nodes (80): movementTransition(), assertBalanceReject(), assertPositionRemains()
 
 ### Community 4 - "Community 4"
 Cohesion: 0.07
-Nodes (42): activateBuffCard(), activateCreatureCardViaElder(), activateMaterialCard(), BuffCardDefinition, buildFarmCardViaElder(), CARD_PACK_RARITY_TIERS, CardActionResult, CardActionResultReason (+34 more)
+Nodes (41): activateBuffCard(), activateCreatureCardViaElder(), activateMaterialCard(), BuffCardDefinition, buildFarmCardViaElder(), CARD_PACK_RARITY_TIERS, CardActionResult, CardActionResultReason (+33 more)
 
 ### Community 5 - "Community 5"
 Cohesion: 0.05
@@ -182,8 +182,8 @@ Cohesion: 0.14
 Nodes (21): battleIdFromGrant(), exactDeltaKeys(), IntentReceipt, isCanonicalEvent(), isCanonicalFreshResetSave(), isValidActiveBattle(), isValidActiveBattleTransition(), isValidAggregate() (+13 more)
 
 ### Community 18 - "Community 18"
-Cohesion: 0.11
-Nodes (28): addItem(), createItemInventory(), discardItem(), InventoryResult, ItemInventory, ItemStack, requiredAdditionalSlots(), canonicalDefinitions (+20 more)
+Cohesion: 0.13
+Nodes (25): addItem(), createItemInventory(), discardItem(), InventoryResult, ItemInventory, ItemStack, requiredAdditionalSlots(), canonicalDefinitions (+17 more)
 
 ### Community 19 - "Community 19"
 Cohesion: 0.08
@@ -219,7 +219,7 @@ Nodes (16): isAccent(), isKnownValue(), isRecord(), LEGACY_REGISTRY_OVERRIDE_KEY
 
 ### Community 27 - "Community 27"
 Cohesion: 0.08
-Nodes (42): assignFarmGuard(), attemptFacingFarmTheft(), collectFacingFarm(), consumeFarmCardRequirements(), consumeMaterialRequirements(), createFarmTheftLogEntry(), FarmCollectionFailureReason, FarmCollectionResult (+34 more)
+Nodes (42): setCreatureHp(), attemptFacingFarmTheft(), collectFacingFarm(), consumeFarmCardRequirements(), consumeMaterialRequirements(), createFarmTheftLogEntry(), FarmCollectionFailureReason, FarmCollectionResult (+34 more)
 
 ### Community 28 - "Community 28"
 Cohesion: 0.15
@@ -254,8 +254,8 @@ Cohesion: 0.27
 Nodes (7): emptyAggregate(), hasUnsealedGrowth(), isRecord(), matchesPresent(), rebindSave(), validateAuthenticatedOwnershipProjection(), validateAuthenticatedSaveOwnership()
 
 ### Community 36 - "Community 36"
-Cohesion: 0.11
-Nodes (33): ApplyBattleRewardsResult, getCardRewardTable(), PackOpenTrace, canCreatureUseRole(), CreaturePartyFailureReason, CreaturePartyResult, CreatureUseRole, healAllCreaturesAtHospital() (+25 more)
+Cohesion: 0.15
+Nodes (23): ApplyBattleRewardsResult, getCardRewardTable(), getCardRewardTableForSource(), PackOpenTrace, applyPlayerExperience(), ApplyPlayerExperienceResult, claimAvailableLevelRewards(), ClaimedPlayerLevelReward (+15 more)
 
 ### Community 37 - "Community 37"
 Cohesion: 0.23
@@ -330,7 +330,7 @@ Cohesion: 0.50
 Nodes (3): Artwork attribution, Font notices, Python-Monsters licensed graphics source
 
 ### Community 72 - "Community 72"
-Cohesion: 0.10
+Cohesion: 0.13
 Nodes (19): assertBalanceVersion(), avatarIds, cleanupExpiredTransitions(), consumePendingTransition(), createPendingTransition(), directions, generatedRoute, generatedTown (+11 more)
 
 ### Community 73 - "Community 73"
@@ -338,8 +338,8 @@ Cohesion: 0.22
 Nodes (13): canTargetEncounter(), clamp01(), createWildEncounterSpawn(), EncounterRng, getFacingTile(), getWalkableZoneTiles(), getWildEncounterZonesForMap(), isPositionInsideEncounterZone() (+5 more)
 
 ### Community 74 - "Community 74"
-Cohesion: 0.14
-Nodes (10): getInitialState(), MonsterRpgGame(), moveDeltaByDirection, loadGuestCredential(), isFarmTile(), isVillageElderDialogComplete(), clearProgress(), loadProfile() (+2 more)
+Cohesion: 0.10
+Nodes (15): getInitialState(), MonsterRpgGame(), moveDeltaByDirection, loadGuestCredential(), isAtVillageHospital(), isFarmTile(), isVillageElderDialogComplete(), clearProgress() (+7 more)
 
 ### Community 78 - "Community 78"
 Cohesion: 0.15
@@ -365,9 +365,9 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.012) - this node is a cross-community bridge._
 - **What connects `name`, `version`, `private` to the rest of the system?**
   _253 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `Community 1` be split into smaller, more focused modules?**
+  _Cohesion score 0.11904761904761904 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
   _Cohesion score 0.07977207977207977 - nodes in this community are weakly interconnected._
 - **Should `Community 3` be split into smaller, more focused modules?**
   _Cohesion score 0.06639427987742594 - nodes in this community are weakly interconnected._
-- **Should `Community 4` be split into smaller, more focused modules?**
-  _Cohesion score 0.07215541165587419 - nodes in this community are weakly interconnected._

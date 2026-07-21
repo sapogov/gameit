@@ -1690,13 +1690,13 @@
     "semantic_hash": ""
   },
   "server/authority/playerAuthority.test.ts": {
-    "mtime": 1784637443.3623867,
-    "ast_hash": "5c4da873e37a7412f2c627e00d118943",
+    "mtime": 1784638138.2929175,
+    "ast_hash": "035699ede11309a8dcdff1c8d52d1906",
     "semantic_hash": ""
   },
   "server/authority/playerAuthority.ts": {
-    "mtime": 1784637441.2100503,
-    "ast_hash": "a580c6debed789471b7f60c428b3b3a0",
+    "mtime": 1784638137.7674448,
+    "ast_hash": "cc7ced9b04f5daecd1ccadd3974356e6",
     "semantic_hash": ""
   },
   "server/authority/playerRepository.ts": {
