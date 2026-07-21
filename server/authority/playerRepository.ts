@@ -5,6 +5,7 @@ import { isDeepStrictEqual } from 'node:util';
 import { AUDIT_BALANCE_CATALOG } from '../../src/games/monster-rpg/sim/gameBalance';
 
 export interface IntentReceipt { payloadHash: string; revision: number }
+export interface LocationMovementReceipt { roomId: string; mapId: string; lastSequence: number }
 export type { GrowthAuditEvent } from '../../src/games/monster-rpg/sim';
 export interface PlayerAggregate {
   playerId: string;
@@ -16,6 +17,7 @@ export interface PlayerAggregate {
   grantReceipts: Record<string, number>;
   progressionEvents: GrowthAuditEvent[];
   activeGrowthStartIndex: number;
+  locationMovementReceipts: Record<string, LocationMovementReceipt>;
 }
 
 export interface PlayerAuthorityRepository {
@@ -64,7 +66,7 @@ export class ProcessLocalPlayerAuthorityRepository implements PlayerAuthorityRep
 
 export function clone<T>(value: T): T { return value === null || value === undefined ? value : structuredClone(value); }
 export function isValidLedgerTransition(previous: PlayerAggregate, next: PlayerAggregate): boolean {
-  if (!isValidAggregate(next)) return false;
+  if (!isValidAggregate(next) || !isValidLocationMovementReceiptTransition(previous.locationMovementReceipts, next.locationMovementReceipts)) return false;
   if (next.progressionEvents.length < previous.progressionEvents.length) return false;
   if (!previous.progressionEvents.every((event, index) => equalEvent(event, next.progressionEvents[index]))) return false;
   const appended = next.progressionEvents.slice(previous.progressionEvents.length);
@@ -81,7 +83,7 @@ export function isValidLedgerTransition(previous: PlayerAggregate, next: PlayerA
 
 /** One validation boundary for imported, created, and CAS-persisted aggregates. */
 export function isValidAggregate(aggregate: PlayerAggregate): boolean {
-  if (!aggregate || !Number.isSafeInteger(aggregate.revision) || aggregate.revision < 0 || !Number.isSafeInteger(aggregate.rosterRevision) || aggregate.rosterRevision < 0 || !Number.isSafeInteger(aggregate.activeGrowthStartIndex) || aggregate.activeGrowthStartIndex < 0 || aggregate.activeGrowthStartIndex > aggregate.progressionEvents.length || !validateLedger(aggregate.progressionEvents, aggregate.playerId, aggregate.revision)) return false;
+  if (!aggregate || !Number.isSafeInteger(aggregate.revision) || aggregate.revision < 0 || !Number.isSafeInteger(aggregate.rosterRevision) || aggregate.rosterRevision < 0 || !Number.isSafeInteger(aggregate.activeGrowthStartIndex) || aggregate.activeGrowthStartIndex < 0 || aggregate.activeGrowthStartIndex > aggregate.progressionEvents.length || !validateLedger(aggregate.progressionEvents, aggregate.playerId, aggregate.revision) || !isValidLocationMovementReceipts(aggregate.locationMovementReceipts)) return false;
   const projected = new Map<string, GrowthAuditEvent[]>();
   for (const event of aggregate.progressionEvents.slice(aggregate.activeGrowthStartIndex)) projected.set(event.creatureId, [...(projected.get(event.creatureId) ?? []), event]);
   return Object.entries(aggregate.save.creatures.creatures).every(([creatureId, creature]) => {
@@ -132,40 +134,52 @@ function validEventDelta(event: GrowthAuditEvent): boolean {
   if (event.kind === 'level-up') return event.levelTo === event.levelFrom + 1 && battleIdFromGrant(event.grantId) !== '' && event.grantId === `battle:${battleIdFromGrant(event.grantId)}:creature:${event.creatureId}:level:${event.levelTo}` && (event.model === 'deterministic-default' ? sameDelta(event.deltas, balance.deterministicDelta) : Object.values(event.deltas).every((value) => value >= balance.randomRange.min && value <= balance.randomRange.max));
   return event.levelTo === event.levelFrom && event.targetBalanceVersion === event.balanceVersion && event.targetBalanceVersion in AUDIT_BALANCE_CATALOG;
 }
-function validateCreatureSemantics(creature: { statGrowth?: { basis?: { level?: number; stats?: BaseStatTendencies } }; stats: BaseStatTendencies }, events: readonly GrowthAuditEvent[]): boolean {
-  if (!creature.statGrowth) return events.length === 0;
-  const basis = creature.statGrowth.basis?.stats;
-  const replayable = basis && exactDeltaKeys(basis);
-  const recorded = replayable ? { ...basis } : undefined;
-  const target = replayable ? { ...basis } : undefined;
-  const levelUps: GrowthAuditEvent[] = [];
-  let previousLevel: number | undefined = creature.statGrowth.basis?.level; let effectiveBalance = 1;
+function validateCreatureSemantics(creature: { level: number; stats: BaseStatTendencies; maxHp: number; hp: number; fainted: boolean; statGrowth?: { model?: unknown; basis?: { level?: number; stats?: BaseStatTendencies } } }, events: readonly GrowthAuditEvent[]): boolean {
+  const basis = creature.statGrowth?.basis;
+  if ((creature.statGrowth?.model !== 'deterministic-default' && creature.statGrowth?.model !== 'rarity-weighted-random') || !basis || typeof basis.level !== 'number' || !Number.isSafeInteger(basis.level) || basis.level <= 0 || !isValidPersistedStats(basis.stats) || !exactDeltaKeys(creature.stats)) return false;
+  const replayed = { ...basis.stats }; const levelUps: GrowthAuditEvent[] = [];
+  let replayedLevel = basis.level; let effectiveBalance = 1;
   for (const event of events) {
     if (event.kind === 'level-up') {
-      if (previousLevel !== undefined && event.levelFrom !== previousLevel) return false;
-      previousLevel = event.levelTo;
-      if (recorded && target) {
-        addDelta(recorded, event.deltas);
-        addDelta(target, event.model === 'deterministic-default' ? AUDIT_BALANCE_CATALOG[effectiveBalance as keyof typeof AUDIT_BALANCE_CATALOG].deterministicDelta : event.deltas);
-      }
+      if (event.levelFrom !== replayedLevel || !safeAddDelta(replayed, event.deltas)) return false;
+      replayedLevel = event.levelTo;
       levelUps.push(event);
       continue;
     }
-    if (previousLevel !== undefined && event.levelFrom !== previousLevel) return false;
+    if (event.levelFrom !== replayedLevel) return false;
     if (event.targetBalanceVersion <= effectiveBalance) return false;
-    if (recorded && target && !sameDelta(event.deltas, subtractDelta(target, recorded))) return false;
-    if (recorded) addDelta(recorded, event.deltas);
+    const target = { ...basis.stats };
+    for (const prior of levelUps) if (!safeAddDelta(target, prior.model === 'deterministic-default' ? AUDIT_BALANCE_CATALOG[event.targetBalanceVersion as keyof typeof AUDIT_BALANCE_CATALOG].deterministicDelta : prior.deltas)) return false;
+    if (!sameDelta(event.deltas, subtractDelta(target, replayed)) || !safeAddDelta(replayed, event.deltas)) return false;
     effectiveBalance = event.targetBalanceVersion;
-    if (target) {
-      Object.assign(target, basis);
-      for (const prior of levelUps) addDelta(target, prior.model === 'deterministic-default' ? AUDIT_BALANCE_CATALOG[effectiveBalance as keyof typeof AUDIT_BALANCE_CATALOG].deterministicDelta : prior.deltas);
-    }
   }
-  return true;
+  return creature.level === replayedLevel && sameDelta(creature.stats, replayed) && creature.maxHp === replayed.hp
+    && Number.isSafeInteger(creature.hp) && creature.hp >= 0 && creature.hp <= creature.maxHp && creature.fainted === (creature.hp === 0);
 }
 function sameDelta(left: BaseStatTendencies, right: BaseStatTendencies): boolean { return ['hp', 'attack', 'defense', 'speed', 'stamina'].every((key) => left[key as keyof BaseStatTendencies] === right[key as keyof BaseStatTendencies]); }
-function addDelta(target: BaseStatTendencies, delta: BaseStatTendencies): void { for (const key of ['hp', 'attack', 'defense', 'speed', 'stamina'] as const) target[key] += delta[key]; }
+function safeAddDelta(target: BaseStatTendencies, delta: BaseStatTendencies): boolean { for (const key of ['hp', 'attack', 'defense', 'speed', 'stamina'] as const) { const value = target[key] + delta[key]; if (!Number.isSafeInteger(value) || value < 0 || (key === 'hp' && value === 0)) return false; target[key] = value; } return true; }
 function subtractDelta(left: BaseStatTendencies, right: BaseStatTendencies): BaseStatTendencies { return { hp: left.hp - right.hp, attack: left.attack - right.attack, defense: left.defense - right.defense, speed: left.speed - right.speed, stamina: left.stamina - right.stamina }; }
+function isValidPersistedStats(value: unknown): value is BaseStatTendencies { return exactDeltaKeys(value) && value.hp > 0 && Object.values(value).every((stat) => stat >= 0); }
+function isValidLocationMovementReceipts(value: unknown): value is Record<string, LocationMovementReceipt> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  return Object.entries(value).every(([sessionId, receipt]) => sessionId.trim().length > 0 && isValidLocationMovementReceipt(receipt));
+}
+function isValidLocationMovementReceipt(value: unknown): value is LocationMovementReceipt {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const receipt = value as Record<string, unknown>; const keys = Object.keys(receipt).sort();
+  return isDeepStrictEqual(keys, ['lastSequence', 'mapId', 'roomId']) && typeof receipt.roomId === 'string' && receipt.roomId.trim().length > 0 && typeof receipt.mapId === 'string' && receipt.mapId.trim().length > 0 && Number.isSafeInteger(receipt.lastSequence) && (receipt.lastSequence as number) > 0;
+}
+function isValidLocationMovementReceiptTransition(previous: Record<string, LocationMovementReceipt>, next: Record<string, LocationMovementReceipt>): boolean {
+  let mutations = 0;
+  for (const [sessionId, prior] of Object.entries(previous)) {
+    const candidate = next[sessionId]; if (!candidate) return false;
+    if (isDeepStrictEqual(candidate, prior)) continue;
+    if (candidate.roomId !== prior.roomId || candidate.mapId !== prior.mapId || candidate.lastSequence !== prior.lastSequence + 1) return false;
+    mutations += 1;
+  }
+  for (const [sessionId, candidate] of Object.entries(next)) if (!previous[sessionId]) { if (candidate.lastSequence !== 1) return false; mutations += 1; }
+  return mutations <= 1;
+}
 function isCanonicalFreshResetSave(previousSave: MonsterRpgSaveState, nextSave: MonsterRpgSaveState, playerId: string): boolean {
   if (previousSave.profile.playerId !== playerId || nextSave.profile.playerId !== playerId || !isDeepStrictEqual(nextSave.profile, previousSave.profile)) return false;
   const resetAt = new Date(nextSave.updatedAt);

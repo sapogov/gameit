@@ -8,6 +8,18 @@ function event(overrides: Partial<GrowthAuditEvent> = {}): GrowthAuditEvent {
   const candidate = { ...base, ...overrides } as GrowthAuditEvent;
   return { ...candidate, eventHash: growthEventHash(candidate) };
 }
+function aggregateWithEvent(record = event()): PlayerAggregate {
+  const profile = createPlayerProfile('A', 'scout'); profile.playerId = 'player-1';
+  const save = createInitialSave(profile, { now: new Date('2026-07-21T00:00:00.000Z') });
+  const basis = { hp: 20, attack: 10, defense: 10, speed: 10, stamina: 10 };
+  const stats = { hp: basis.hp + record.deltas.hp, attack: basis.attack + record.deltas.attack, defense: basis.defense + record.deltas.defense, speed: basis.speed + record.deltas.speed, stamina: basis.stamina + record.deltas.stamina };
+  save.creatures = { ...save.creatures, activePartyCreatureIds: ['creature-1'], creatures: { 'creature-1': { id: 'creature-1', ownerPlayerId: 'player-1', speciesId: 1, level: record.levelTo, experience: 100, stats, attacks: [], hp: stats.hp, maxHp: stats.hp, fainted: false, cooldowns: {}, statGrowth: { model: 'deterministic-default', basis: { level: record.levelFrom, stats: basis }, events: [record] } } } };
+  return { playerId: 'player-1', revision: Math.max(3, record.aggregateRevision), rosterRevision: 0, save, intentReceipts: {}, grantReceipts: {}, progressionEvents: [record], activeGrowthStartIndex: 0, locationMovementReceipts: {} };
+}
+function emptyAggregate(): PlayerAggregate {
+  const profile = createPlayerProfile('A', 'scout'); profile.playerId = 'player-1';
+  return { playerId: 'player-1', revision: 0, rosterRevision: 0, save: createInitialSave(profile, { now: new Date('2026-07-21T00:00:00.000Z') }), intentReceipts: {}, grantReceipts: {}, progressionEvents: [], activeGrowthStartIndex: 0, locationMovementReceipts: {} };
+}
 
 describe('growth audit ledger', () => {
   test('has a stable SHA-256 golden vector', () => {
@@ -22,7 +34,7 @@ describe('growth audit ledger', () => {
     expect(validateLedger([{ ...first, eventHash: 'f'.repeat(64) }, second], 'player-1', 4)).toBe(false);
     expect(validateLedger([first, { ...second, previousHash: genesis }], 'player-1', 4)).toBe(false);
     expect(validateLedger([second, first], 'player-1', 4)).toBe(false);
-    const aggregate = { playerId: 'player-1', revision: 4, rosterRevision: 0, save: { creatures: { creatures: {} } }, intentReceipts: {}, grantReceipts: {}, progressionEvents: [first, second], activeGrowthStartIndex: 0 } as unknown as PlayerAggregate;
+    const aggregate = { playerId: 'player-1', revision: 4, rosterRevision: 0, save: { creatures: { creatures: {} } }, intentReceipts: {}, grantReceipts: {}, progressionEvents: [first, second], activeGrowthStartIndex: 0, locationMovementReceipts: {} } as unknown as PlayerAggregate;
     expect(isValidLedgerTransition(aggregate, { ...aggregate, revision: 5, progressionEvents: [first] })).toBe(false);
   });
 
@@ -40,17 +52,17 @@ describe('growth audit ledger', () => {
     const aggregate = (events: GrowthAuditEvent[], history: GrowthAuditEvent[]) => ({
       playerId: 'player-1', revision: 3, rosterRevision: 0,
       save: { creatures: { creatures: { 'creature-1': { statGrowth: { events: history } } } } },
-      intentReceipts: {}, grantReceipts: {}, progressionEvents: events, activeGrowthStartIndex: 0
+      intentReceipts: {}, grantReceipts: {}, progressionEvents: events, activeGrowthStartIndex: 0, locationMovementReceipts: {}
     }) as unknown as PlayerAggregate;
     const orphan = {
       playerId: 'player-1', revision: 3, rosterRevision: 0,
       save: { creatures: { creatures: {} } },
-      intentReceipts: {}, grantReceipts: {}, progressionEvents: [first], activeGrowthStartIndex: 0
+      intentReceipts: {}, grantReceipts: {}, progressionEvents: [first], activeGrowthStartIndex: 0, locationMovementReceipts: {}
     } as unknown as PlayerAggregate;
     const duplicate = {
       playerId: 'player-1', revision: 3, rosterRevision: 0,
       save: { creatures: { creatures: { 'creature-1': { statGrowth: { events: [first] } }, 'creature-2': { statGrowth: { events: [first] } } } } },
-      intentReceipts: {}, grantReceipts: {}, progressionEvents: [first], activeGrowthStartIndex: 0
+      intentReceipts: {}, grantReceipts: {}, progressionEvents: [first], activeGrowthStartIndex: 0, locationMovementReceipts: {}
     } as unknown as PlayerAggregate;
     expect(isValidAggregate(orphan)).toBe(false);
     expect(isValidAggregate(duplicate)).toBe(false);
@@ -61,13 +73,46 @@ describe('growth audit ledger', () => {
   test('rejects a valid but divergent replacement for an old ledger prefix', () => {
     const first = event();
     const divergent = event({ grantId: 'battle:other:creature:creature-1:level:2' });
-    const aggregate = (record: GrowthAuditEvent, revision: number) => ({
-      playerId: 'player-1', revision, rosterRevision: 0,
-      save: { creatures: { creatures: { 'creature-1': { statGrowth: { events: [record] } } } } },
-      intentReceipts: {}, grantReceipts: {}, progressionEvents: [record], activeGrowthStartIndex: 0
-    }) as unknown as PlayerAggregate;
-    expect(isValidAggregate(aggregate(divergent, 4))).toBe(true);
-    expect(isValidLedgerTransition(aggregate(first, 3), aggregate(divergent, 4))).toBe(false);
+    expect(isValidAggregate(aggregateWithEvent(divergent))).toBe(true);
+    expect(isValidLedgerTransition(aggregateWithEvent(first), { ...aggregateWithEvent(divergent), revision: 4 })).toBe(false);
+  });
+
+  test('replays the active ledger into exact persisted creature terminal state', () => {
+    const valid = aggregateWithEvent(); expect(isValidAggregate(valid)).toBe(true);
+    const mutate = (change: (creature: (typeof valid.save.creatures.creatures)[string]) => void) => { const candidate = structuredClone(valid); change(candidate.save.creatures.creatures['creature-1']); return candidate; };
+    expect(isValidAggregate(mutate((creature) => { creature.statGrowth!.model = 'rarity-weighted-random'; }))).toBe(true);
+    expect(isValidAggregate(mutate((creature) => { delete (creature.statGrowth as unknown as Record<string, unknown>).model; }))).toBe(false);
+    expect(isValidAggregate(mutate((creature) => { (creature.statGrowth as unknown as Record<string, unknown>).model = 'randomized'; }))).toBe(false);
+    expect(isValidAggregate(mutate((creature) => { (creature.statGrowth as unknown as Record<string, unknown>).model = 'rebalance'; }))).toBe(false);
+    expect(isValidAggregate(mutate((creature) => { creature.level += 1; }))).toBe(false);
+    expect(isValidAggregate(mutate((creature) => { creature.stats.attack += 1; }))).toBe(false);
+    expect(isValidAggregate(mutate((creature) => { creature.maxHp += 1; }))).toBe(false);
+    expect(isValidAggregate(mutate((creature) => { creature.hp = creature.maxHp + 1; }))).toBe(false);
+    expect(isValidAggregate(mutate((creature) => { creature.hp = 1; creature.fainted = false; }))).toBe(true);
+    expect(isValidAggregate(mutate((creature) => { creature.hp = 0; creature.fainted = true; }))).toBe(true);
+    expect(isValidAggregate(mutate((creature) => { creature.hp = 0; creature.fainted = false; }))).toBe(false);
+    expect(isValidAggregate(mutate((creature) => { creature.hp = 1; creature.fainted = true; }))).toBe(false);
+    expect(isValidAggregate(mutate((creature) => { delete creature.statGrowth; }))).toBe(false);
+    expect(isValidAggregate(mutate((creature) => { creature.statGrowth!.basis.stats.attack = Number.MAX_SAFE_INTEGER; }))).toBe(false);
+    const reset = structuredClone(valid); reset.activeGrowthStartIndex = reset.progressionEvents.length; reset.save = createInitialSave(structuredClone(valid.save.profile), { now: new Date('2026-07-22T00:00:00.000Z') });
+    expect(isValidAggregate(reset)).toBe(true);
+  });
+
+  test('validates and monotonically advances internal location movement receipts', () => {
+    const empty = emptyAggregate(); expect(isValidAggregate(empty)).toBe(true);
+    const withReceipt = { ...empty, locationMovementReceipts: { session: { roomId: 'room-1', mapId: 'home-village', lastSequence: 1 } } };
+    expect(isValidAggregate(withReceipt)).toBe(true);
+    expect(isValidAggregate({ ...empty, locationMovementReceipts: { '': { roomId: 'room-1', mapId: 'home-village', lastSequence: 1 } } })).toBe(false);
+    expect(isValidAggregate({ ...empty, locationMovementReceipts: { session: { roomId: '', mapId: 'home-village', lastSequence: 1 } } })).toBe(false);
+    expect(isValidAggregate({ ...empty, locationMovementReceipts: { session: { roomId: 'room-1', mapId: 'home-village', lastSequence: 0 } } })).toBe(false);
+    const extraReceiptKey = { ...empty, locationMovementReceipts: { session: { roomId: 'room-1', mapId: 'home-village', lastSequence: 1, extra: true } } } as unknown as PlayerAggregate;
+    expect(isValidAggregate(extraReceiptKey)).toBe(false);
+    expect(isValidLedgerTransition(empty, { ...withReceipt, revision: 1 })).toBe(true);
+    expect(isValidLedgerTransition(withReceipt, { ...withReceipt, revision: 1, locationMovementReceipts: { session: { roomId: 'room-1', mapId: 'home-village', lastSequence: 2 } } })).toBe(true);
+    expect(isValidLedgerTransition(withReceipt, { ...withReceipt, revision: 1, locationMovementReceipts: {} })).toBe(false);
+    expect(isValidLedgerTransition(withReceipt, { ...withReceipt, revision: 1, locationMovementReceipts: { session: { roomId: 'other', mapId: 'home-village', lastSequence: 2 } } })).toBe(false);
+    expect(isValidLedgerTransition(withReceipt, { ...withReceipt, revision: 1, locationMovementReceipts: { session: { roomId: 'room-1', mapId: 'home-village', lastSequence: 3 } } })).toBe(false);
+    expect(isValidLedgerTransition(withReceipt, { ...withReceipt, revision: 1, locationMovementReceipts: { session: { roomId: 'room-1', mapId: 'home-village', lastSequence: 2 }, second: { roomId: 'room-1', mapId: 'home-village', lastSequence: 1 } } })).toBe(false);
   });
 
   test('accepts only a full canonical fresh save when reset advances the cursor', () => {
@@ -76,7 +121,7 @@ describe('growth audit ledger', () => {
     previousSave.creatures = { ...previousSave.creatures, activePartyCreatureIds: ['creature-1'], creatures: {
       'creature-1': { id: 'creature-1', ownerPlayerId: 'player-1', speciesId: 1, level: 2, experience: 100, stats: { hp: 22, attack: 11, defense: 11, speed: 11, stamina: 11 }, attacks: [], hp: 22, maxHp: 22, fainted: false, cooldowns: {}, statGrowth: { model: 'deterministic-default', basis: { level: 1, stats: { hp: 20, attack: 10, defense: 10, speed: 10, stamina: 10 } }, events: [first] } }
     } };
-    const previous = { playerId: 'player-1', revision: 3, rosterRevision: 0, save: previousSave, intentReceipts: {}, grantReceipts: {}, progressionEvents: [first], activeGrowthStartIndex: 0 };
+    const previous = { playerId: 'player-1', revision: 3, rosterRevision: 0, save: previousSave, intentReceipts: {}, grantReceipts: {}, progressionEvents: [first], activeGrowthStartIndex: 0, locationMovementReceipts: {} };
     const canonicalSave = createInitialSave(structuredClone(previousSave.profile), { now: new Date('2026-07-22T00:00:00.000Z') });
     const reset = { ...previous, revision: 4, rosterRevision: 1, activeGrowthStartIndex: 1, save: canonicalSave };
     expect(isValidLedgerTransition(previous, reset)).toBe(true);
@@ -93,7 +138,7 @@ describe('growth audit ledger', () => {
 
   test('allows exactly one concurrent CAS writer for a revision', async () => {
     const repository = new ProcessLocalPlayerAuthorityRepository();
-    const initial = { playerId: 'player-1', revision: 0, rosterRevision: 0, save: { creatures: { creatures: {} }, activePartyCreatureIds: [] }, intentReceipts: {}, grantReceipts: {}, progressionEvents: [], activeGrowthStartIndex: 0 } as unknown as PlayerAggregate;
+    const initial = { playerId: 'player-1', revision: 0, rosterRevision: 0, save: { creatures: { creatures: {} }, activePartyCreatureIds: [] }, intentReceipts: {}, grantReceipts: {}, progressionEvents: [], activeGrowthStartIndex: 0, locationMovementReceipts: {} } as unknown as PlayerAggregate;
     await repository.createIfAbsent(initial);
     const next = { ...initial, revision: 1 };
     const results = await Promise.all([repository.compareExchange('player-1', 0, next), repository.compareExchange('player-1', 0, next)]);

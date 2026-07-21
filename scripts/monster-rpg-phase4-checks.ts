@@ -41,7 +41,7 @@ Object.defineProperty(globalThis, 'localStorage', {
   configurable: true
 });
 
-let sdkMoveSequence = 0;
+const sdkMoveSequencesBySessionId = new Map<string, number>();
 const canonicalPlayersByProfileId = new Map<string, CanonicalPlayer>();
 
 interface CanonicalPlayer {
@@ -275,6 +275,7 @@ async function checkWorldToVillageRoomHandoff(endpoint: string): Promise<void> {
 
   await waitFor(() => getPlayerCount(roomB) === 1, 'transitioning player leaves world room');
   assert.equal(villageRoom.state.mapId, 'home-village');
+  await sendFirstValidMove(villageRoom);
 
   await leaveRoom(villageRoom);
   await leaveRoom(roomB);
@@ -299,6 +300,7 @@ async function checkTwoClientsShareBuildingInterior(endpoint: string): Promise<v
   await waitFor(() => getPlayerCount(interiorA) === 2 && getPlayerCount(interiorB) === 2, 'two clients share building interior');
   assert.equal(interiorA.state.mapKind, 'interior');
   assert.equal(interiorA.state.mapId, 'home-village-shop-interior');
+  await sendFirstValidMove(interiorA);
 
   await leaveRoom(interiorA);
   await leaveRoom(interiorB);
@@ -340,7 +342,7 @@ async function checkSharedWildEncounterClaimFlow(endpoint: string): Promise<void
   assert.equal(roomA.state.players.get(roomA.sessionId)?.inBattle, true);
 
   const beforeBattleMove = getLocalPosition(roomA);
-  roomA.send('moveIntent', nextMoveMessage('north'));
+  roomA.send('moveIntent', nextMoveMessage(roomA, 'north'));
   await new Promise((resolve) => setTimeout(resolve, 75));
   assert.deepEqual(getLocalPosition(roomA), beforeBattleMove);
 
@@ -457,7 +459,7 @@ async function checkBlockedTerrainRejectedOnline(endpoint: string): Promise<void
   await sendMoves(room, ['north', 'north', 'north', 'north']);
   await sendMoves(room, ['east']);
   const beforeBlocked = getLocalPosition(room);
-  room.send('moveIntent', nextMoveMessage('north'));
+  room.send('moveIntent', nextMoveMessage(room, 'north'));
   await waitFor(() => getLocalPosition(room).facing === 'north', 'blocked move updates facing online');
   const afterBlocked = getLocalPosition(room);
 
@@ -548,7 +550,7 @@ function generatedMapIdentity() { const mapSet = generatedMapRegistry.handshake(
 async function sendMoves(room: SdkRoom, directions: Direction[]): Promise<void> {
   for (const direction of directions) {
     const before = getLocalPosition(room);
-    room.send('moveIntent', nextMoveMessage(direction));
+    room.send('moveIntent', nextMoveMessage(room, direction));
     await waitFor(() => {
       const after = getLocalPosition(room);
       return after.x !== before.x || after.y !== before.y || after.facing !== before.facing;
@@ -560,13 +562,30 @@ async function sendMoveForTransition(room: SdkRoom, direction: Direction): Promi
   const transition = new Promise<LocationTransition>((resolve) => {
     room.onMessage('locationTransition', resolve);
   });
-  room.send('moveIntent', nextMoveMessage(direction));
+  room.send('moveIntent', nextMoveMessage(room, direction));
   return withTimeout(transition, `transition ${direction}`);
 }
 
-function nextMoveMessage(direction: Direction): MoveIntentMessage {
-  sdkMoveSequence += 1;
-  return { direction, sequence: sdkMoveSequence };
+async function sendFirstValidMove(room: SdkRoom): Promise<void> {
+  const position = getLocalPosition(room);
+  const map = getGameMap(position.mapId);
+  const move = ([
+    { direction: 'north' as const, x: position.x, y: position.y - 1 },
+    { direction: 'east' as const, x: position.x + 1, y: position.y },
+    { direction: 'south' as const, x: position.x, y: position.y + 1 },
+    { direction: 'west' as const, x: position.x - 1, y: position.y }
+  ]).find((candidate) =>
+    canEnterTile(map, candidate.x, candidate.y) &&
+    !map.exits.some((exit) => exit.x === candidate.x && exit.y === candidate.y)
+  );
+  assert.ok(move, `missing non-transition first move for ${room.sessionId}`);
+  await sendMoves(room, [move.direction]);
+}
+
+function nextMoveMessage(room: SdkRoom, direction: Direction): MoveIntentMessage {
+  const sequence = (sdkMoveSequencesBySessionId.get(room.sessionId) ?? 0) + 1;
+  sdkMoveSequencesBySessionId.set(room.sessionId, sequence);
+  return { direction, sequence };
 }
 
 function getLocalPosition(room: SdkRoom): WorldPosition {

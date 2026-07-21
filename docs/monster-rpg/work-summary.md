@@ -710,6 +710,9 @@
 - Enforced semantic ledger validation for event shape, revision groups, level continuity, balance-version deltas, grants, rebalances, hashes, and active creature histories.
 - Made reset CAS accept only a canonical fresh initial save with the same player profile, and made signed cursor/projection tampering return a typed invalid-save result.
 - Published refreshed authority snapshots after terminal wild and guarded-farm settlements, while preserving the unguarded theft path.
+- Bound Location room, map, session, and monotonic movement sequence to the same authority CAS as the canonical position update, including blocked-move receipt consumption.
+- Completed ledger replay validation against persisted creature level, stats, max HP, current HP, fainted state, and canonical growth model.
+- Routed guarded battles through the canonical reward, XP, multi-level growth sealing, farm, HP, and two-account receipt transaction.
 
 ## 2026-07-20 - Issue #64: Stat-Growth Event Integrity
 

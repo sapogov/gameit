@@ -50,8 +50,8 @@
     "semantic_hash": ""
   },
   "scripts/monster-rpg-phase4-checks.ts": {
-    "mtime": 1784625840.1996586,
-    "ast_hash": "1e31747b6d9bc30bebbde310def2e8e2",
+    "mtime": 1784631405.2591062,
+    "ast_hash": "aaa9a24988813ebcd7334d5abf4d6d52",
     "semantic_hash": ""
   },
   "scripts/slice-monster-rpg-ai-assets.mjs": {
@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "server/rooms/LocationRoom.ts": {
-    "mtime": 1784628522.619799,
-    "ast_hash": "e8546af5506d6f5b79a0492cda501455",
+    "mtime": 1784630425.047097,
+    "ast_hash": "77a77c80d7cb1fc98b1292da8f41cfda",
     "semantic_hash": ""
   },
   "server/rooms/balanceVersion.test.ts": {
@@ -210,8 +210,8 @@
     "semantic_hash": ""
   },
   "src/games/monster-rpg/MonsterRpgGame.tsx": {
-    "mtime": 1784626287.5977707,
-    "ast_hash": "391b11133d707c29f03a8468b37d1701",
+    "mtime": 1784631417.8311827,
+    "ast_hash": "0af585cbbac58970ef6f049d1db8e1a7",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/client/assets/licensedAssetManifest.json": {
@@ -1690,18 +1690,18 @@
     "semantic_hash": ""
   },
   "server/authority/playerAuthority.test.ts": {
-    "mtime": 1784629392.1760938,
-    "ast_hash": "79395df5902695a2ad634a2e42f2b5bb",
+    "mtime": 1784630926.3787694,
+    "ast_hash": "5724720e58372c083421274c9d747f19",
     "semantic_hash": ""
   },
   "server/authority/playerAuthority.ts": {
-    "mtime": 1784629404.0067523,
-    "ast_hash": "1ca70c0ff2226c15c9a39b2217296cb8",
+    "mtime": 1784630990.2086725,
+    "ast_hash": "121a64685e9d499cf5d4d01625c80fd3",
     "semantic_hash": ""
   },
   "server/authority/playerRepository.ts": {
-    "mtime": 1784629550.8068676,
-    "ast_hash": "3cb201c053498063312e2e8c5bed2fb5",
+    "mtime": 1784630919.5660799,
+    "ast_hash": "fe7b768001b707f4e13d7269e67aeefc",
     "semantic_hash": ""
   },
   "server/authority/runtime.ts": {
@@ -1750,8 +1750,8 @@
     "semantic_hash": ""
   },
   "server/authority/playerRepository.test.ts": {
-    "mtime": 1784629551.3383512,
-    "ast_hash": "c8d5b29acdb975adf2f9bc4c73145319",
+    "mtime": 1784631076.3923895,
+    "ast_hash": "f1d2d4bcf1c19ff3eb804fae0497d213",
     "semantic_hash": ""
   },
   "server/authority/runtime.test.ts": {
@@ -1760,8 +1760,8 @@
     "semantic_hash": ""
   },
   "server/rooms/canonicalMovement.test.ts": {
-    "mtime": 1784629178.3125818,
-    "ast_hash": "80aca7630c1894b1376757d4c0fb81f5",
+    "mtime": 1784630605.753765,
+    "ast_hash": "a764015fc2b44ec39407f04df61c6297",
     "semantic_hash": ""
   },
   "server/rooms/maintenanceMode.test.ts": {
@@ -1780,8 +1780,8 @@
     "semantic_hash": ""
   },
   "server/authority/playerAuthority.context.test.ts": {
-    "mtime": 1784627539.1189954,
-    "ast_hash": "c8325bbe70f957589ee509d85b48def6",
+    "mtime": 1784630493.5068486,
+    "ast_hash": "2f7604e5ef3b78b079d132c1ef2c9113",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/movement.test.ts": {

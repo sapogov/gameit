@@ -11,6 +11,7 @@ const foreignFarm = (guardCreatureId = '') => ({ id: 'foreign', ownerPlayerId: '
 
 const principal = (suffix: string) => ({ sub: `123e4567-e89b-42d3-a456-426614174${suffix}` });
 const authorityFor = (repository: ProcessLocalPlayerAuthorityRepository, transferKeys?: ReturnType<typeof loadGuestCredentialConfig>) => new PlayerAuthority(repository, () => new Date(0), transferKeys, () => 0.5);
+const move = (authority: PlayerAuthority, user: { sub: string }, direction: 'north' | 'east' | 'south' | 'west', mapId: 'home-village' | 'world-map', sequence = 1, sessionId = 'movement-session', roomId = 'movement-room') => authority.applyMovement({ principal: user, direction, mapId, sequence, sessionId, roomId });
 
 async function at(authority: PlayerAuthority, repository: ProcessLocalPlayerAuthorityRepository, user: { sub: string }, mapId: 'home-village' | 'world-map', x: number, y: number, facing: 'north' | 'east' | 'south' | 'west' = 'east') {
   await authority.bootstrapProfile(user, { name: 'Mover', avatar: 'scout' });
@@ -24,53 +25,66 @@ describe('canonical location movement', () => {
   test('persists normal, blocked, and transition movement only through canonical authority', async () => {
     const repository = new ProcessLocalPlayerAuthorityRepository(); const authority = authorityFor(repository);
     const normal = principal('201'); await at(authority, repository, normal, 'home-village', 27, 10);
-    const moved = await authority.applyMovement(normal, 'east', { mapId: 'home-village' });
-    expect(moved?.snapshot).toMatchObject({ revision: 1, save: { position: { mapId: 'home-village', x: 28, y: 10, facing: 'east' } } });
+    const moved = await move(authority, normal, 'east', 'home-village');
+    expect(moved).toMatchObject({ status: 'applied', snapshot: { revision: 1, save: { position: { mapId: 'home-village', x: 28, y: 10, facing: 'east' } } } });
 
     const blocked = principal('202'); await at(authority, repository, blocked, 'world-map', 61, 3, 'south');
-    const blockedResult = await authority.applyMovement(blocked, 'east', { mapId: 'world-map' });
-    expect(blockedResult?.snapshot).toMatchObject({ revision: 1, save: { position: { mapId: 'world-map', x: 61, y: 3, facing: 'east' } } });
+    const blockedResult = await move(authority, blocked, 'east', 'world-map');
+    expect(blockedResult).toMatchObject({ status: 'applied', snapshot: { revision: 1, save: { position: { mapId: 'world-map', x: 61, y: 3, facing: 'east' } } } });
 
     const transition = principal('203'); await at(authority, repository, transition, 'home-village', 28, 10);
-    const transitioned = await authority.applyMovement(transition, 'east', { mapId: 'home-village' });
-    expect(transitioned?.transition).toMatchObject({ toMapId: 'world-map' });
-    expect(transitioned?.snapshot.save.position.mapId).toBe('world-map');
+    const transitioned = await move(authority, transition, 'east', 'home-village');
+    expect(transitioned).toMatchObject({ status: 'applied', transition: { toMapId: 'world-map' }, snapshot: { save: { position: { mapId: 'world-map' } } } });
   });
 
   test('rejects unknown principal and stale map context without mutation, and retries a CAS race', async () => {
     const repository = new ProcessLocalPlayerAuthorityRepository(); const authority = authorityFor(repository);
-    expect(await authority.applyMovement(principal('204'), 'east', { mapId: 'home-village' })).toBeNull();
+    expect((await move(authority, principal('204'), 'east', 'home-village')).status).toBe('rejected');
     const user = principal('205'); await at(authority, repository, user, 'home-village', 27, 10);
-    expect(await authority.applyMovement(user, 'east', { mapId: 'world-map' })).toBeNull();
+    expect((await move(authority, user, 'east', 'world-map')).status).toBe('rejected');
     expect((await authority.snapshot(user))?.revision).toBe(0);
     const original = repository.compareExchange.bind(repository); let attempts = 0;
     vi.spyOn(repository, 'compareExchange').mockImplementation(async (...args) => (++attempts === 1 ? false : original(...args)));
-    const result = await authority.applyMovement(user, 'east', { mapId: 'home-village' });
-    expect(attempts).toBe(2); expect(result?.snapshot.revision).toBe(1);
+    const result = await move(authority, user, 'east', 'home-village');
+    expect(attempts).toBe(2); expect(result.status === 'applied' && result.snapshot.revision).toBe(1);
   });
 
-  test('rejects missing-session intents and replays before a second authority mutation', async () => {
+  test('supplies the real room/session identifiers while authority rejects replayed sequences', async () => {
     const apply = vi.spyOn(playerAuthority, 'applyMovement');
     const client = { sessionId: 'session-a', send: vi.fn() };
-    const room = { mapId: 'home-village', moveSequences: new Map([['session-a', 4]]), state: { players: new Map() } };
+    const room = { roomId: 'room-a', mapId: 'home-village', state: { players: new Map() } };
     const handler = (LocationRoom.prototype as unknown as { handleMoveIntent: (client: unknown, payload: unknown) => Promise<void> }).handleMoveIntent;
     await handler.call(room, client, { direction: 'east', sequence: 5 });
     expect(apply).not.toHaveBeenCalled(); expect(client.send).not.toHaveBeenCalled();
     const player = { profile: { id: 'player-a' }, position: {} };
     room.state.players.set('session-a', player);
-    room.moveSequences.set('session-a', 0);
-    apply.mockResolvedValue({ snapshot: { save: { position: { mapId: 'home-village', x: 28, y: 10, facing: 'east' } } } } as never);
+    apply.mockResolvedValue({ status: 'applied', snapshot: { save: { position: { mapId: 'home-village', x: 28, y: 10, facing: 'east' } } } } as never);
     await handler.call(room, client, { direction: 'east', sequence: 1 });
     await handler.call(room, client, { direction: 'east', sequence: 1 });
-    expect(apply).toHaveBeenCalledTimes(1); expect(room.moveSequences.get('session-a')).toBe(1);
+    expect(apply).toHaveBeenCalledTimes(2);
+    expect(apply).toHaveBeenLastCalledWith({ principal: { sub: 'player-a' }, direction: 'east', roomId: 'room-a', mapId: 'home-village', sessionId: 'session-a', sequence: 1 });
     apply.mockRestore();
+  });
+
+  test('atomically consumes exact sequences, including blocked moves, and rejects gaps or tuple changes', async () => {
+    const repository = new ProcessLocalPlayerAuthorityRepository(); const authority = authorityFor(repository); const user = principal('208');
+    await at(authority, repository, user, 'world-map', 61, 3, 'south');
+    const first = await move(authority, user, 'east', 'world-map', 1, 'session-208', 'room-208');
+    expect(first).toMatchObject({ status: 'applied', snapshot: { revision: 1 } });
+    expect((await move(authority, user, 'east', 'world-map', 1, 'session-208', 'room-208')).status).toBe('rejected');
+    expect((await move(authority, user, 'east', 'world-map', 3, 'session-208', 'room-208')).status).toBe('rejected');
+    expect((await move(authority, user, 'east', 'world-map', 2, 'session-208', 'other-room')).status).toBe('rejected');
+    expect((await move(authority, user, 'east', 'home-village', 2, 'session-208', 'room-208')).status).toBe('rejected');
+    const second = await move(authority, user, 'east', 'world-map', 2, 'session-208', 'room-208');
+    expect(second).toMatchObject({ status: 'applied', snapshot: { revision: 2 } });
   });
 
   test('reconnect and authenticated transfer expose the current canonical position', async () => {
     const key = Buffer.alloc(32, 9).toString('base64url'); const keys = loadGuestCredentialConfig({ GAMEIT_GUEST_AUTH_KEYS: `active:${key}`, NODE_ENV: 'test' });
     const sourceRepository = new ProcessLocalPlayerAuthorityRepository(); const source = authorityFor(sourceRepository, keys); const user = principal('206');
     await at(source, sourceRepository, user, 'home-village', 27, 10);
-    const moved = await source.applyMovement(user, 'east', { mapId: 'home-village' });
+    const moved = await move(source, user, 'east', 'home-village');
+    if (moved.status !== 'applied') throw new Error('movement should apply');
     const profile = createPlayerProfile('Mover', 'scout'); profile.playerId = user.sub;
     expect(resolveCanonicalJoinPosition(undefined, moved!.snapshot.save.position, profile, 'home-village')).toEqual(moved!.snapshot.save.position);
     const target = authorityFor(new ProcessLocalPlayerAuthorityRepository(), keys);
@@ -94,7 +108,8 @@ describe('canonical location movement', () => {
   test('leaves the pushed canonical revision usable by the next Account command', async () => {
     const repository = new ProcessLocalPlayerAuthorityRepository(); const authority = authorityFor(repository); const user = principal('207');
     await at(authority, repository, user, 'home-village', 27, 10);
-    const moved = await authority.applyMovement(user, 'east', { mapId: 'home-village' });
+    const moved = await move(authority, user, 'east', 'home-village');
+    if (moved.status !== 'applied') throw new Error('movement should apply');
     const next = await authority.execute(user, { intentId: 'after-move', expectedRevision: moved!.snapshot.revision, intent: { type: 'completeElderDialog' } });
     expect(next).toMatchObject({ status: 'applied', snapshot: { revision: 2 } });
   });

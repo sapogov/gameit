@@ -79,8 +79,6 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
   private encounterTimerVersions = new Map<string, number>();
   private battleResultCleanups = new Map<string, () => void>();
   private finalizedBattleIds = new Set<string>();
-  /** Per-connection monotonic intent fence; it is never client-authoritative state. */
-  private moveSequences = new Map<string, number>();
 
   async onCreate(options?: Partial<JoinLocationOptions>) {
     if (!authorityEnabled) throw new ServerError(503, JSON.stringify({ code: 'AUTHORITY_MAINTENANCE' }));
@@ -159,26 +157,23 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
     player.battleId = '';
 
     this.state.players.set(client.sessionId, player);
-    this.moveSequences.set(client.sessionId, 0);
     console.log(`[location:${this.mapId}] join ${client.sessionId} ${profile.name}`);
   }
 
   onLeave(client: Client) {
     this.state.players.delete(client.sessionId);
-    this.moveSequences.delete(client.sessionId);
     console.log(`[location:${this.mapId}] leave ${client.sessionId}`);
   }
 
   private async handleMoveIntent(client: Client, payload: MoveIntentMessage) {
-    if (!payload || !directions.has(payload.direction) || !Number.isSafeInteger(payload.sequence) || payload.sequence <= (this.moveSequences.get(client.sessionId) ?? 0)) return;
+    if (!payload || !directions.has(payload.direction) || !Number.isSafeInteger(payload.sequence) || payload.sequence < 1) return;
 
     const player = this.state.players.get(client.sessionId);
     if (!player) return;
     if (player.inBattle) return;
 
-    const result = await playerAuthority.applyMovement({ sub: player.profile.id }, payload.direction, { mapId: this.mapId });
-    if (!result) return;
-    this.moveSequences.set(client.sessionId, payload.sequence);
+    const result = await playerAuthority.applyMovement({ principal: { sub: player.profile.id }, direction: payload.direction, roomId: this.roomId, mapId: this.mapId, sessionId: client.sessionId, sequence: payload.sequence });
+    if (result.status !== 'applied') return;
 
     if (result.transition) {
       const transitionId = createPendingTransition(player.profile.id, result.transition.toMapId as MapId, result.transition.spawn as WorldPosition);

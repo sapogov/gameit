@@ -60,18 +60,26 @@ export class PlayerAuthority {
     if (!await this.repository.compareExchange(principal.sub, aggregate.revision, next)) return { status: 'rejected', code: 'STALE_REVISION', snapshot: snapshot((await this.repository.read(principal.sub))!) };
     return { status: 'applied', snapshot: snapshot(next) };
   }
-  /** Canonical location mutation seam; only this method advances location revision. */
-  async applyMovement(principal: Principal, direction: Direction, locationContext?: { mapId: string }): Promise<{ snapshot: AuthoritySnapshot; transition?: { toMapId: string; spawn: unknown } } | null> {
+  /** Canonical location mutation seam; receipt and move/no-op commit together. */
+  async applyMovement(input: { principal: Principal; direction: Direction; roomId: string; mapId: string; sessionId: string; sequence: number }): Promise<{ status: 'applied'; snapshot: AuthoritySnapshot; transition?: { toMapId: string; spawn: unknown } } | { status: 'rejected' }> {
+    if (!input.principal.sub || !input.roomId || !input.mapId || !input.sessionId || !Number.isSafeInteger(input.sequence) || input.sequence < 1) return { status: 'rejected' };
     const mutationContext = this.mutationContext();
     for (let attempt = 0; attempt < 3; attempt += 1) {
-      const aggregate = await this.repository.read(principal.sub); if (!aggregate || (locationContext && aggregate.save.mapId !== locationContext.mapId)) return null;
-      const transition = movementTransition(aggregate, direction, mutationContext);
-      const changed = JSON.stringify(transition.state.position) !== JSON.stringify(aggregate.save.position);
-      if (!changed) return { snapshot: snapshot(aggregate), ...(transition.transition ? { transition: transition.transition } : {}) };
-      const next = { ...aggregate, revision: aggregate.revision + 1, save: transition.state };
-      if (await this.repository.compareExchange(principal.sub, aggregate.revision, next)) return { snapshot: snapshot(next), ...(transition.transition ? { transition: transition.transition } : {}) };
+      const aggregate = await this.repository.read(input.principal.sub);
+      if (!aggregate || aggregate.save.mapId !== input.mapId || aggregate.save.position.mapId !== input.mapId) return { status: 'rejected' };
+      const receipt = aggregate.locationMovementReceipts[input.sessionId];
+      if (receipt && (receipt.roomId !== input.roomId || receipt.mapId !== input.mapId || input.sequence !== receipt.lastSequence + 1)) return { status: 'rejected' };
+      if (!receipt && input.sequence !== 1) return { status: 'rejected' };
+      const transition = movementTransition(aggregate, input.direction, mutationContext);
+      const next: PlayerAggregate = {
+        ...aggregate,
+        revision: aggregate.revision + 1,
+        save: transition.state,
+        locationMovementReceipts: { ...aggregate.locationMovementReceipts, [input.sessionId]: { roomId: input.roomId, mapId: input.mapId, lastSequence: input.sequence } }
+      };
+      if (await this.repository.compareExchange(input.principal.sub, aggregate.revision, next)) return { status: 'applied', snapshot: snapshot(next), ...(transition.transition ? { transition: transition.transition } : {}) };
     }
-    return null;
+    return { status: 'rejected' };
   }
   /** Location-only settlement: canonical account state, never room or client coordinates, authorizes theft. */
   async settleUnguardedFarmTheft(input: { principal: Principal; intentId: string; expectedRevision: number; roomMapId: string; farmId: string }): Promise<SaveCommandResult> {
@@ -171,19 +179,24 @@ export class PlayerAuthority {
   }
   /** Three bounded attempts absorb a concurrent save command without risking partial settlement. */
   async settleGuardedTheft(input: { attackerId: string; ownerId: string; farmId: string; guardCreatureId: string; result: BattleResolution }): Promise<boolean> {
-    const context = this.mutationContext();
+    let context: AuthorityMutationContext | undefined;
+    const mutationContext = () => context ??= this.mutationContext();
     for (let attempt = 0; attempt < 3; attempt += 1) {
-      const outcome = await this.settleGuardedTheftOnce(input, context);
+      const outcome = await this.settleGuardedTheftOnce(input, mutationContext);
       if (outcome !== 'race') return outcome;
     }
     return false;
   }
-  private async settleGuardedTheftOnce(input: { attackerId: string; ownerId: string; farmId: string; guardCreatureId: string; result: BattleResolution }, context: AuthorityMutationContext): Promise<boolean | 'race'> {
+  private async settleGuardedTheftOnce(input: { attackerId: string; ownerId: string; farmId: string; guardCreatureId: string; result: BattleResolution }, getMutationContext: () => AuthorityMutationContext): Promise<boolean | 'race'> {
     const attacker = await this.repository.read(input.attackerId);
     const owner = await this.repository.read(input.ownerId);
-    if (!attacker || !owner || attacker.grantReceipts[input.result.battleId] !== undefined) return Boolean(attacker?.grantReceipts[input.result.battleId]);
+    if (!attacker || !owner) return false;
+    const attackerReceipt = attacker.grantReceipts[input.result.battleId] !== undefined;
+    const ownerReceipt = owner.grantReceipts[input.result.battleId] !== undefined;
+    if (attackerReceipt || ownerReceipt) return attackerReceipt && ownerReceipt;
     const farm = owner.save.farms.farms[input.farmId];
     if (!farm || farm.ownerPlayerId !== owner.playerId || !farm.guardCreatureId || farm.guardCreatureId !== input.guardCreatureId) return false;
+    const context = getMutationContext();
     const foreignFarmState = clone(attacker.save);
     foreignFarmState.farms = { ...foreignFarmState.farms, farms: { ...foreignFarmState.farms.farms, [farm.id]: clone(farm) } };
     const resolved = resolveGuardedFarmTheft(foreignFarmState, {
@@ -193,15 +206,17 @@ export class PlayerAuthority {
       now: context.transactionAt
     });
     if (!resolved.ok) return false;
-    const attackerSave = resolved.state;
-    const { [farm.id]: _foreignFarm, ...attackerFarms } = attackerSave.farms.farms;
-    attackerSave.farms = { ...attackerSave.farms, farms: attackerFarms };
+    const resolvedAttackerSave = resolved.state;
+    const { [farm.id]: _foreignFarm, ...attackerFarms } = resolvedAttackerSave.farms.farms;
+    const theftSettledSave = { ...resolvedAttackerSave, farms: { ...resolvedAttackerSave.farms, farms: attackerFarms } };
+    const rewarded = applyBattleRewardsToSave(theftSettledSave, input.result, simulationContext(context));
+    const sealed = sealGrowthEvents(attacker, rewarded.state, input.result.battleId, attacker.revision + 1, context.transactionAt);
     const ownerFarm = resolved.farm;
     const guard = owner.save.creatures.creatures[input.guardCreatureId];
     const ownerSave = clone(owner.save);
     ownerSave.farms = { ...ownerSave.farms, farms: { ...ownerSave.farms.farms, [ownerFarm.id]: ownerFarm } };
     if (guard) ownerSave.creatures = { ...ownerSave.creatures, creatures: { ...ownerSave.creatures.creatures, [guard.id]: { ...guard, hp: Math.max(0, Math.min(guard.maxHp, input.result.opponentCreatureHp)), fainted: input.result.opponentCreatureFainted || input.result.opponentCreatureHp <= 0 } } };
-    const attackerNext: PlayerAggregate = { ...attacker, revision: attacker.revision + 1, rosterRevision: rosterChanged(attacker.save, attackerSave) ? attacker.rosterRevision + 1 : attacker.rosterRevision, save: attackerSave, grantReceipts: { ...attacker.grantReceipts, [input.result.battleId]: attacker.revision + 1 } };
+    const attackerNext: PlayerAggregate = { ...attacker, revision: attacker.revision + 1, rosterRevision: rosterChanged(attacker.save, sealed.save) ? attacker.rosterRevision + 1 : attacker.rosterRevision, save: sealed.save, grantReceipts: { ...attacker.grantReceipts, [input.result.battleId]: attacker.revision + 1 }, progressionEvents: sealed.events };
     const ownerNext: PlayerAggregate = { ...owner, revision: owner.revision + 1, rosterRevision: rosterChanged(owner.save, ownerSave) ? owner.rosterRevision + 1 : owner.rosterRevision, save: ownerSave, grantReceipts: { ...owner.grantReceipts, [input.result.battleId]: owner.revision + 1 } };
     return (await this.repository.compareExchangeMany([{ playerId: attacker.playerId, expectedRevision: attacker.revision, next: attackerNext }, { playerId: owner.playerId, expectedRevision: owner.revision, next: ownerNext }])) ? true : 'race';
   }
@@ -211,7 +226,7 @@ export class PlayerAuthority {
 /** The export is an authenticated transfer envelope, not a durable backup mechanism. */
 export type AuthenticatedExportEnvelope = AuthenticatedSaveExport;
 
-function emptyAggregate(playerId: string, save: MonsterRpgSaveState): PlayerAggregate { return { playerId, revision: 0, rosterRevision: 0, save, intentReceipts: {}, grantReceipts: {}, progressionEvents: [], activeGrowthStartIndex: 0 }; }
+function emptyAggregate(playerId: string, save: MonsterRpgSaveState): PlayerAggregate { return { playerId, revision: 0, rosterRevision: 0, save, intentReceipts: {}, grantReceipts: {}, locationMovementReceipts: {}, progressionEvents: [], activeGrowthStartIndex: 0 }; }
 function snapshot(aggregate: PlayerAggregate): AuthoritySnapshot { return { playerId: aggregate.playerId, revision: aggregate.revision, rosterRevision: aggregate.rosterRevision, save: clone(aggregate.save) }; }
 function hash(value: string) { return createHash('sha256').update(value).digest('hex'); }
 function deepFreeze<T>(value: T): T {

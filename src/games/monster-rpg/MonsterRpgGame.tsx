@@ -514,6 +514,7 @@ export function MonsterRpgGame() {
         if (pendingTransitionRef.current?.transitionId === pendingTransition?.transitionId) {
           pendingTransitionRef.current = null;
         }
+        moveSequenceRef.current = 0;
         updateMultiplayerStatus('online');
       } catch (error) {
         if (cancelled) return;

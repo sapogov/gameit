@@ -12,9 +12,10 @@ describe('PlayerAuthority mutation context forwarding', () => {
       'createInitialSave(profile, simulationContext(context))',
       'createInitialSave(aggregate.save.profile, simulationContext(context))',
       'reduce(aggregate.save, command.intent, context)',
-      'movementTransition(aggregate, direction, mutationContext)',
+      'movementTransition(aggregate, input.direction, mutationContext)',
       'attemptFacingFarmTheft(simulated, context.transactionAt, simulationContext(context))',
       'applyBattleRewardsToSave(aggregate.save, result, simulationContext(context))',
+      'applyBattleRewardsToSave(theftSettledSave, input.result, simulationContext(context))',
       'resolveGuardedFarmTheft(foreignFarmState, {',
       'now: context.transactionAt'
     ];
