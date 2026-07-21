@@ -90,15 +90,20 @@ export function getStationDestinations(state: MonsterRpgSaveState): StationDesti
   );
 }
 
-export function discoverCurrentStationDestination(state: MonsterRpgSaveState): MonsterRpgSaveState {
+export function discoverCurrentStationDestination(
+  state: MonsterRpgSaveState,
+  options: { now?: Date } = {}
+): MonsterRpgSaveState {
   if (!isVillageId(state.mapId)) return state;
-  return discoverPlayerVillageForStation(state, state.mapId);
+  return discoverPlayerVillageForStation(state, state.mapId, options);
 }
 
 export function discoverPlayerVillageForStation(
   state: MonsterRpgSaveState,
-  villageId: VillageId
+  villageId: VillageId,
+  options: { now?: Date } = {}
 ): MonsterRpgSaveState {
+  const now = options.now ?? new Date();
   const destination = createPlayerVillageStationDestination(villageId, {
     ownerPlayerId: villageId === state.village.id ? state.village.ownerPlayerId : undefined,
     level: villageId === state.village.id ? state.village.level : undefined
@@ -125,7 +130,7 @@ export function discoverPlayerVillageForStation(
             [destination.id]: destination
           }
         },
-    updatedAt: new Date().toISOString()
+    updatedAt: now.toISOString()
   };
 }
 
@@ -183,7 +188,12 @@ export function quoteStationTravel(state: MonsterRpgSaveState, destinationId: st
   };
 }
 
-export function confirmStationTravel(state: MonsterRpgSaveState, destinationId: string): StationTravelResult {
+export function confirmStationTravel(
+  state: MonsterRpgSaveState,
+  destinationId: string,
+  options: { now?: Date } = {}
+): StationTravelResult {
+  const now = options.now ?? new Date();
   const quote = quoteStationTravel(state, destinationId);
   if (!quote.ok) {
     return {
@@ -206,12 +216,12 @@ export function confirmStationTravel(state: MonsterRpgSaveState, destinationId: 
         [STATION_TRAVEL_RESOURCE_ID]: state.inventory.currencies[STATION_TRAVEL_RESOURCE_ID] - quote.cost
       }
     },
-    updatedAt: new Date().toISOString()
+    updatedAt: now.toISOString()
   };
 
   return {
     ok: true,
-    state: discoverCurrentStationDestination(nextState),
+    state: discoverCurrentStationDestination(nextState, { now }),
     destination: quote.destination,
     costPaid: quote.cost
   };

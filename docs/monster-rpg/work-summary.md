@@ -1,5 +1,58 @@
 # Monster RPG Work Summary
 
+## 2026-07-21 - Issue #64 Reviewer Closure v7
+
+- Replaced persisted growth drafts with a closed, versioned, account-bound SHA-256 audit chain; repository create/CAS/import boundaries now reject tampering, truncation, divergent prefixes, duplicate grants/rebalances, orphan history copies, and transient drafts.
+- Routed Account and Location movement through one canonical CAS seam, fenced Location intents by canonical map and monotonic session sequence, rejected mismatched joins, and synchronized authority snapshots so reconnects, exports, and later commands use the latest revision.
+- Added pre-character authenticated recovery states, success-only cleanup of legacy browser save keys, strict read-only authority maintenance mode, and confirmed progress reset that preserves identity and audit receipts while advancing aggregate and roster revisions.
+- Removed Account-room movement and farm-theft commands; movement now requires a Location session, while unguarded theft revalidates canonical map, position, facing, ownership, guard state, revision, and receipts before atomic settlement.
+- Added one required authority mutation context so bootstrap, Account reducers, movement, battle rewards, and theft settlements share one injected server timestamp and RNG stream through all nested simulation operations.
+- Added focused ledger, movement, recovery, reset, maintenance, Account-abuse, deterministic-clock/RNG (including guarded-theft CAS retries), and SDK handoff coverage; the complete suite passes 279 tests and the Phase 4 simulation/SDK check passes.
+
+## 2026-07-21 - Issue #64 Reviewer Repair v6
+
+- Removed free pack and profile-reset intents, added confirmed progress reset, transfer-v2 envelope payloads, strict authority maintenance gating, and canonical authority movement updates.
+- Recovery imports now expect the signed authority-save-v2 payload and browser legacy profile/save keys are removed only after a canonical snapshot is adopted.
+
+## 2026-07-21 - Issue #64 Authority Cutover Validation (phase 2C)
+
+- Separated aggregate and roster revision tracking in the client so wild and guarded-farm battle claims present the canonical Active Party revision.
+- Updated the Phase 4 SDK check to provision battle-ready canonical parties through authority commands and exercise credentialed two-client Location/Battle flows without client-owned Creature data.
+- Verified the full SDK flow, including authoritative claim, battle settlement, encounter release/cooldown, and explicit rejection reporting.
+
+## 2026-07-21 - Issue #64 Security Amendment (S64.1–S64.5)
+
+- Added bounded guest credential TTL verification and same-sub renewal on valid AccountRoom joins.
+- Made production transport fail closed around direct TLS or exact trusted-proxy HTTP/WebSocket validation.
+- Replaced forgeable exports with rotating-key HMAC envelopes; manual import is account-bound and create-if-absent only. Process-local persistence cannot retain replay high-water marks across restart, and retired keys revoke old transfers.
+
+## 2026-07-21 - Issue #64 Client authority wiring (phase 2B)
+
+- Added AccountRoom SDK connection, guest-credential storage, canonical snapshot adoption, and credentialed Location/Battle joins.
+- Profile creation now bootstraps through AccountRoom; a pre-authority browser save is offered only as the first legacy import.
+- Normalized AccountRoom legacy-import replies to the typed authority-result envelope.
+
+## 2026-07-21 - Issue #64 Authority Room Wiring (phase 2A)
+
+- Added an Account Room that issues or verifies rotating guest credentials, reports canonical authority readiness, and routes typed save commands through the server authority aggregate.
+- Location and Battle joins now require a verified credential and derive identity from its authenticated subject; Location claims use canonical active-party/farm reads rather than supplied Creature or Farm projections.
+- Terminal battle results now settle once through the canonical authority reward/HP reducer before Location cleanup. The repository remains process-local and is not durable, multi-process, or deploy-safe.
+- Guarded-theft settlement now retries a bounded three times on aggregate races and commits attacker/owner changes through one multi-record compare-and-exchange; canonical farm lookup is repository-backed.
+
+## 2026-07-20 - Issue #64 Authority Core (phase 1)
+
+- Added server-only rotating guest credentials, versioned authority command protocol, process-local canonical aggregate repository, command revision/idempotency seam, authenticated transfer envelopes, and one-time legacy ownership rebind/import.
+- Added `freezeReadyActiveParty` as the battle handoff seam: it requires exact canonical Active Party ordering, current roster revision, uniform authenticated ownership, and ready Creatures, then returns a frozen deep clone.
+- Deliberately deferred Account/Location/Battle room integration, client credential storage/SDK wiring, authoritative battle settlement, and durable repository deployment to later phases.
+
+## 2026-07-20 - Deterministic Creature Stat Growth
+
+- Added append-only Creature stat-growth basis and event history, with deterministic default growth and opt-in rarity-weighted random future growth.
+- Routed battle Creature XP through the growth seam; Fainted Creatures remain at 0 HP, while ready Creatures gain positive max-HP increases as current HP.
+- Added explicit rebalance events and a balance-v1 to v2 save migration that snapshots existing stats and level without reinterpreting prior progression.
+- Hardened import validation by replaying ordered growth events against the persisted basis, rejecting forged, duplicate, or out-of-order stat histories; random events now use canonical Species and Creature Type preferences.
+- Persisted each Creature's selected future-growth model, normalized unsafe RNG values, hardened growth/save input validation, and made rebalance a deterministic replay-based adjustment rather than caller-authored deltas.
+
 ## 2026-07-20 - Issue #62: Item inventory and Reward Inbox
 
 - Added the validated 14-item catalog, deterministic 150-slot multi-stack inventory, confirmed discard path, and a persistent atomic 50-bundle Reward Inbox.
@@ -642,6 +695,29 @@
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.
 - Keep production persistence behind repository interfaces until core gameplay loops are proven.
+
+## 2026-07-21 - Issue #64 v7 Ledger Closure Repair
+
+- Centralized server aggregate ledger validation for create, import, and CAS boundaries: canonical SHA-256 event hashes, genesis/previous links, immutable prefixes, grant/rebalance uniqueness, revision ordering, and exact creature-history projections now fail closed.
+- Added the shared closed growth-audit event union, required authority clock/RNG injection, canonical farm-theft dependency injection, exact reset roster-revision behavior, and the missing Colyseus authority-snapshot listener assertion.
+- Split simulation-only growth drafts from persisted `GrowthAuditEvent` histories. Authority sealing consumes drafts before CAS; repository and save import validation reject any draft-bearing record.
+- Routed Account movement through the same authoritative movement transition used by location rooms, while retaining Account command receipts and CAS revision ownership.
+
+## 2026-07-21 - Issue #64 v10 Authority Closure
+
+- Restored the external authenticated-transfer v1 envelope while carrying authority-save-v2 payloads, and rejected expired or future-dated signed imports before payload parsing.
+- Added an active growth-ledger cursor so progress reset preserves immutable audit history while projecting only the new roster epoch.
+- Enforced semantic ledger validation for event shape, revision groups, level continuity, balance-version deltas, grants, rebalances, hashes, and active creature histories.
+- Made reset CAS accept only a canonical fresh initial save with the same player profile, and made signed cursor/projection tampering return a typed invalid-save result.
+- Published refreshed authority snapshots after terminal wild and guarded-farm settlements, while preserving the unguarded theft path.
+- Bound Location room, map, session, and monotonic movement sequence to the same authority CAS as the canonical position update, including blocked-move receipt consumption.
+- Completed ledger replay validation against persisted creature level, stats, max HP, current HP, fainted state, and canonical growth model.
+- Routed guarded battles through the canonical reward, XP, multi-level growth sealing, farm, HP, and two-account receipt transaction.
+
+## 2026-07-20 - Issue #64: Stat-Growth Event Integrity
+
+- Hardened persisted stat-growth replay validation: level-ups are contiguous and canonical from the basis, deterministic deltas match the balance config, and rebalances use canonical ordered IDs.
+- Added coverage rejecting replay-consistent forged deterministic growth while allowing valid non-zero repeated rebalance adjustments.
 
 ## 2026-07-19 - Issue #59: Licensed Art Vendor And Manifest
 

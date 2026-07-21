@@ -53,6 +53,14 @@ export type {
   CreatureSaveRecord,
   CreatureSpeciesRecord,
   CreatureStatKey,
+  CreatureStatGrowthBasis,
+  CreatureStatGrowthDraftEvent,
+  GrowthAuditEvent,
+  GrowthAuditEventHashInput,
+  GrowthAuditLevelUpEvent,
+  GrowthAuditRebalanceEvent,
+  CreatureStatGrowthState,
+  StatGrowthModel,
   CreatureType,
   JournalSpeciesState,
   JournalSpeciesViewState,
@@ -95,6 +103,7 @@ export {
 export { ITEM_CATALOG, ITEM_DEFINITIONS, getItemDefinition, isItemId, validateItemCatalog, type ItemDefinition, type ItemId } from './items';
 export { ITEM_INVENTORY_SLOT_LIMIT, addItem, createItemInventory, discardItem, requiredAdditionalSlots, type ItemInventory, type ItemStack } from './inventory';
 export { REWARD_INBOX_LIMIT, claimReward, createRewardInbox, enqueueReward, type RewardBundle, type RewardInbox } from './rewardInbox';
+export { applyCreatureExperience, appendStatGrowth, createLevelGrowthEvent, getCreatureLevelForExperience, getGrowthDeltas, isValidStatGrowthState, rebalanceCreatureStats, replayStatGrowth, type ApplyCreatureExperienceOptions, type RebalanceCreatureStatsOptions, type StatGrowthDependencies } from './statGrowth';
 export {
   buildingDefinitions,
   brookhavenVillageMap,
@@ -172,7 +181,8 @@ export {
   type MonsterRpgSaveRepository,
   type SaveImportResult,
   type SaveBalanceMigrationResult,
-  type SaveLoadResult
+  type SaveLoadResult,
+  type SaveBootstrapOptions
 } from './saveState';
 export {
   STATION_TRAVEL_BASE_COST,
@@ -235,7 +245,7 @@ export {
   drawCardFromRewardTable,
   openPack
 } from './cards';
-export type { CardDefinition, CardRewardTable, CardRewardTableEntry, PackOpenTrace } from './cards';
+export type { CardDefinition, CardMutationOptions, CardRewardTable, CardRewardTableEntry, PackOpenTrace } from './cards';
 export {
   PLAYER_LEVEL_REWARDS,
   PLAYER_LEVEL_THRESHOLDS,
@@ -306,6 +316,7 @@ export {
   rollStats,
   selectCreatureAttacks,
   type CreatureCardDefinitionLike,
+  type CreatureLifecycleOptions,
   type CreatureLifecycleFailureReason,
   type CreatureLifecycleResult
 } from './creatureLifecycle';
@@ -380,6 +391,7 @@ export {
   STARTER_PACK_ONBOARDING_TEXT,
   starterCreatureCards,
   villageElderFlags,
+  type OnboardingOptions,
   type StarterCreatureConversionResult,
   type StarterFarmBuildResult,
   type VillageElderOnboardingStep

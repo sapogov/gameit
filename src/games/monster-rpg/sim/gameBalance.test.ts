@@ -25,14 +25,18 @@ describe('game balance config', () => {
       { id: 'clinks-common-guaranteed', chance: 1, minimum: 6, maximum: 8, boostable: false },
       { id: 'clinks-common-bonus', chance: 0.4, minimum: 5, maximum: 10, boostable: true }
     ]);
+    expect(Object.isFrozen(GAME_BALANCE_CONFIG.creatureStatGrowth.deterministicDelta)).toBe(true);
+    expect(Object.isFrozen(GAME_BALANCE_CONFIG.creatureStatGrowth.randomRange)).toBe(true);
+    expect(Object.isFrozen(GAME_BALANCE_CONFIG.creatureStatGrowth.rarityBonus)).toBe(true);
+    expect(Object.isFrozen(GAME_BALANCE_CONFIG.creatureStatGrowth.typeStatPreference)).toBe(true);
     expect(Object.keys(GAME_BALANCE_CONFIG)).toEqual([
-      'version', 'creatures', 'battles', 'items', 'inventory', 'chests', 'rewards', 'economy', 'maps'
+      'version', 'creatures', 'creatureStatGrowth', 'battles', 'items', 'inventory', 'chests', 'rewards', 'economy', 'maps'
     ]);
     expect(validateGameBalanceConfig()).toEqual([]);
   });
 
   test('reports actionable validation issues for missing and invalid sections', () => {
-    expect(validateGameBalanceConfig({ version: 1, creatures: { activePartyLimit: 1, reviveRestoreRatio: 2 } })).toEqual(
+    expect(validateGameBalanceConfig({ version: CURRENT_BALANCE_VERSION, creatures: { activePartyLimit: 1, reviveRestoreRatio: 2 } })).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ path: 'creatures.reviveRestoreRatio' }),
         expect.objectContaining({ path: 'battles.disconnectGraceMs', message: 'must be a finite number' })
@@ -42,7 +46,7 @@ describe('game balance config', () => {
 
   test('validates every required property and cross-field rule', () => {
     const requiredPaths = [
-      'creatures.activePartyLimit', 'creatures.reviveRestoreRatio', 'battles.disconnectGraceMs',
+      'creatures.activePartyLimit', 'creatures.reviveRestoreRatio', 'creatureStatGrowth.experiencePerLevel', 'creatureStatGrowth.deterministicDelta.hp', 'creatureStatGrowth.randomRange.min', 'battles.disconnectGraceMs',
       'battles.fatigueRecoveryFloor', 'battles.baseRunChance', 'battles.runAttemptBonus',
       'items.startingReviveQuantity', 'inventory.startingMagicDust', 'inventory.startingClinks',
       'chests.cardPackSize',
@@ -81,6 +85,18 @@ describe('game balance config', () => {
         expect.arrayContaining([expect.objectContaining({ path })])
       );
     });
+  });
+
+  test('rejects incomplete and unknown growth map keys', () => {
+    const invalid = structuredClone(GAME_BALANCE_CONFIG) as any;
+    delete invalid.creatureStatGrowth.rarityBonus.rare;
+    invalid.creatureStatGrowth.typeStatPreference.ember = 'unknown';
+    invalid.creatureStatGrowth.typeStatPreference.void = 'attack';
+    expect(validateGameBalanceConfig(invalid)).toEqual(expect.arrayContaining([
+      expect.objectContaining({ path: 'creatureStatGrowth.rarityBonus.rare' }),
+      expect.objectContaining({ path: 'creatureStatGrowth.typeStatPreference.ember' }),
+      expect.objectContaining({ path: 'creatureStatGrowth.typeStatPreference.void' })
+    ]));
   });
 
   test('exports configured values consumed by their runtime domains', () => {

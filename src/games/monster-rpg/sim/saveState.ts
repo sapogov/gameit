@@ -30,6 +30,8 @@ import { CURRENT_BALANCE_VERSION, GAME_BALANCE_CONFIG } from './gameBalance';
 import { createItemInventory } from './inventory';
 import { createRewardInbox, isValidRewardBundle, isValidRewardSourceId } from './rewardInbox';
 import { getItemDefinition, isItemId } from './items';
+import type { BaseStatTendencies } from './types';
+import { isValidStatGrowthState } from './statGrowth';
 
 export const MONSTER_RPG_PROFILE_KEY = 'gameit.monsterRpg.profile';
 export const MONSTER_RPG_SAVE_KEY = 'gameit.monsterRpg.save';
@@ -45,6 +47,11 @@ export type SaveBalanceMigrationResult =
 
 export type SaveBalanceMigrationFailure = Extract<SaveBalanceMigrationResult, { ok: false }>;
 export type SaveLoadResult = { ok: true; state: MonsterRpgSaveState | null } | SaveBalanceMigrationFailure;
+
+export interface SaveBootstrapOptions {
+  now?: Date;
+  rng?: () => number;
+}
 
 export interface MonsterRpgSaveRepository {
   loadProfile: () => PlayerProfile | null;
@@ -101,7 +108,8 @@ export function createPlayerProfile(name: string, avatar: AvatarId): PlayerProfi
   };
 }
 
-export function createInitialSave(profile: PlayerProfile): MonsterRpgSaveState {
+export function createInitialSave(profile: PlayerProfile, options?: SaveBootstrapOptions): MonsterRpgSaveState {
+  const now = options?.now ?? new Date();
   return {
     schemaVersion: MONSTER_RPG_SCHEMA_VERSION,
     balanceVersion: CURRENT_BALANCE_VERSION,
@@ -109,7 +117,7 @@ export function createInitialSave(profile: PlayerProfile): MonsterRpgSaveState {
     position: { ...homeVillageMap.spawn },
     mapId: homeVillageMap.id,
     ...createEmptySaveContainers(profile.playerId, profile.homeVillageId),
-    updatedAt: new Date().toISOString()
+    updatedAt: now.toISOString()
   };
 }
 
@@ -230,6 +238,7 @@ export function migrateSaveBalance(input: unknown): SaveBalanceMigrationResult {
     if (!migrate) return { ok: false, reason: 'missing-balance-migration' };
     working = migrate(working);
   }
+  working = migrateCreatureStatGrowth(working);
   if (!isValidSaveState(working)) return { ok: false, reason: 'invalid-save' };
   return { ok: true, state: working };
 }
@@ -436,6 +445,7 @@ function isValidCreatureRecord(record: unknown, playerId: string): record is Cre
 
   return (
     isNonEmptyString(candidate.id) &&
+    !Object.prototype.hasOwnProperty.call(candidate, 'pendingGrowthEvents') &&
     candidate.ownerPlayerId === playerId &&
     Number.isSafeInteger(candidate.speciesId) &&
     isKnownSpeciesId(candidate.speciesId) &&
@@ -453,7 +463,31 @@ function isValidCreatureRecord(record: unknown, playerId: string): record is Cre
     typeof candidate.fainted === 'boolean' &&
     candidate.fainted === (candidate.hp === 0) &&
     isCooldownRecord(candidate.cooldowns)
+    && isValidStatGrowth(candidate.statGrowth, candidate.level, candidate.stats, candidate.maxHp)
   );
+}
+
+function migrateCreatureStatGrowth(save: Record<string, unknown>): Record<string, unknown> {
+  const creatures = save.creatures;
+  if (!creatures || typeof creatures !== 'object' || Array.isArray(creatures)) return { ...save, balanceVersion: CURRENT_BALANCE_VERSION };
+  const container = creatures as Record<string, unknown>;
+  const records = container.creatures;
+  if (!records || typeof records !== 'object' || Array.isArray(records)) return { ...save, balanceVersion: CURRENT_BALANCE_VERSION };
+  const migrated = Object.fromEntries(Object.entries(records as Record<string, unknown>).map(([id, record]) => {
+    if (!record || typeof record !== 'object' || Array.isArray(record)) return [id, record];
+    const creature = record as Record<string, unknown>;
+    return [id, {
+      ...creature,
+      statGrowth: creature.statGrowth && typeof creature.statGrowth === 'object' && !Array.isArray(creature.statGrowth)
+        ? { model: GAME_BALANCE_CONFIG.creatureStatGrowth.model, ...(creature.statGrowth as Record<string, unknown>) }
+        : { model: GAME_BALANCE_CONFIG.creatureStatGrowth.model, basis: { level: creature.level, stats: creature.stats }, events: [] }
+    }];
+  }));
+  return { ...save, balanceVersion: CURRENT_BALANCE_VERSION, creatures: { ...container, creatures: migrated } };
+}
+
+function isValidStatGrowth(value: unknown, level: number, stats: BaseStatTendencies, maxHp: number): boolean {
+  return isValidStatGrowthState(value, level, stats, maxHp);
 }
 
 function isValidVillage(village: unknown, profile: PlayerProfile): village is VillageSaveContainer {

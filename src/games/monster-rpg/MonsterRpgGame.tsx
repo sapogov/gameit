@@ -1,53 +1,24 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { bootGame, type MonsterRpgGameRuntime } from './client';
-import type { BattleConnection, LocationTransitionMessage, MultiplayerConnection } from './network';
+import type { AccountConnection, BattleConnection, LocationTransitionMessage, MultiplayerConnection } from './network';
+import { loadGuestCredential, saveGuestCredential, type AuthoritySnapshot } from './network/authorityProtocol';
+import type { AuthorityIntent } from './network/authorityProtocol';
 import {
-  clearProgress,
   PackOpenTrace,
-  applyBattleRewardsToSave,
-  assignFarmGuard,
-  attemptFacingFarmTheft,
-  buildStarterMagicDustFarm,
-  activateBuffCard,
-  activateCreatureCardViaElder,
-  activateMaterialCard,
-  clearFarmGuard,
-  collectFacingFarm,
-  completeVillageElderDialog,
-  completeVillageElderOnboarding,
-  confirmStationTravel,
   createInitialSave,
-  createPlayerProfile,
-  convertStarterCreatureCards,
-  discoverCurrentStationDestination,
-  buildFarmCardViaElder,
   exportSave,
   getGameMap,
   getFacingFarm,
   getFirstBattleReadyCreature,
   getCardDefinition,
-  healAllCreaturesAtHospital,
-  hatchEgg,
-  openPack,
-  importSavePayload,
   isAtVillageHospital,
   isFarmTile,
   isVillageElderDialogComplete,
   loadMonsterRpgSettings,
   loadProfile,
   loadSaveResult,
-  movePlayer,
-  moveCreatureToActiveParty,
-  moveCreatureToStorage,
-  recordWildCreatureSeen,
-  resolveGuardedFarmTheft,
   saveMonsterRpgSettings,
-  saveProgress,
-  upgradeFarm,
-  useReviveItem,
-  claimReward,
-  discardItem,
   type AvatarId,
   type BattleResultMessage,
   type BattleRoomState,
@@ -55,18 +26,18 @@ import {
   type Direction,
   type InputAction,
   type LocationRoomState,
+  type MapId,
   type MonsterRpgSaveState,
   type MultiplayerStatus,
   type MovementResult
 } from './sim';
 import { CharacterCreator } from './ui/CharacterCreator';
+import { clearLegacyBrowserSave, importAuthenticatedRecovery, RecoveryPanel, type RecoveryState } from './recovery';
 import { GameHud } from './ui/GameHud';
 import {
   appendGameLogEntry,
-  beginImportedSaveGameLogSession,
   beginProfileGameLogSession,
   createGameLogState,
-  resetProfileGameLogSession,
   type GameLogKind
 } from './ui/gameLog';
 import { MobileDpad } from './ui/MobileDpad';
@@ -85,6 +56,11 @@ export function MonsterRpgGame() {
   const canvasHostRef = useRef<HTMLDivElement | null>(null);
   const runtimeRef = useRef<MonsterRpgGameRuntime | null>(null);
   const connectionRef = useRef<MultiplayerConnection | null>(null);
+  const accountConnectionRef = useRef<AccountConnection | null>(null);
+  const credentialRef = useRef<string | null>(loadGuestCredential());
+  const authorityRevisionRef = useRef<number>(0);
+  const authorityRosterRevisionRef = useRef<number>(0);
+  const authorityIntentSequenceRef = useRef(0);
   const battleConnectionRef = useRef<BattleConnection | null>(null);
   const activeBattleClaimRef = useRef<{
     kind: 'wild' | 'guard-theft';
@@ -98,6 +74,7 @@ export function MonsterRpgGame() {
   const multiplayerStatusRef = useRef<MultiplayerStatus>('offline');
   const pendingTransitionRef = useRef<LocationTransitionMessage | null>(null);
   const initialState = useRef(getInitialState());
+  const recoveryPayloadRef = useRef<string | null>(null);
   const [saveState, setSaveState] = useState<MonsterRpgSaveState | null>(initialState.current.state);
   const saveStateRef = useRef<MonsterRpgSaveState | null>(saveState);
   const freeMovementUnlockedRef = useRef(saveState ? isVillageElderDialogComplete(saveState) : false);
@@ -105,16 +82,71 @@ export function MonsterRpgGame() {
   const [roomState, setRoomState] = useState<LocationRoomState | null>(null);
   const [battleState, setBattleState] = useState<BattleRoomState | null>(null);
   const [importStatus, setImportStatus] = useState<string | null>(initialState.current.error);
+  const [recoveryState, setRecoveryState] = useState<RecoveryState>(initialState.current.error ? 'error' : 'idle');
   const [gameLog, setGameLog] = useState(() => createGameLogState(saveState?.profile.playerId ?? null));
   const [packTrace, setPackTrace] = useState<PackOpenTrace | null>(null);
   const [multiplayerStatus, setMultiplayerStatus] = useState<MultiplayerStatus>('offline');
   const [settings, setSettings] = useState(loadMonsterRpgSettings);
   const [farmStatusNow, setFarmStatusNow] = useState(Date.now());
   const [pendingStationDestinationId, setPendingStationDestinationId] = useState<string | null>(null);
+  const [locationMapId, setLocationMapId] = useState<MapId | null>(saveState?.mapId ?? null);
+
+  const adoptAuthoritySnapshot = useCallback((snapshot: AuthoritySnapshot) => {
+    authorityRevisionRef.current = snapshot.revision;
+    authorityRosterRevisionRef.current = snapshot.rosterRevision;
+    saveStateRef.current = snapshot.save;
+    freeMovementUnlockedRef.current = isVillageElderDialogComplete(snapshot.save);
+    setSaveState(snapshot.save);
+    setLocationMapId(snapshot.save.mapId);
+    setImportStatus(null);
+    clearLegacyBrowserSave();
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    void import('./network').then(({ connectToAccount }) => connectToAccount(credentialRef.current ?? undefined)).then(async (account) => {
+      if (cancelled) { account.leave(); return; }
+      accountConnectionRef.current = account;
+      account.onSnapshot(adoptAuthoritySnapshot);
+      if (account.ready.credential) {
+        credentialRef.current = account.ready.credential;
+        saveGuestCredential(account.ready.credential);
+      }
+      if (account.ready.snapshot) {
+        adoptAuthoritySnapshot(account.ready.snapshot);
+        return;
+      }
+      // A pre-authority browser save is only offered once, before this guest aggregate exists.
+      const legacy = initialState.current.state;
+      if (legacy) {
+        // Unsigned browser state is only used for the one-time internal bootstrap path.
+        const result = await account.bootstrapLegacySave(exportSave(legacy));
+        if (result.status === 'applied' || result.status === 'duplicate') adoptAuthoritySnapshot(result.snapshot);
+      }
+    }).catch((error) => {
+      if (!cancelled) setImportStatus(`Authority unavailable: ${error instanceof Error ? error.message : 'unknown error'}`);
+    });
+    return () => { cancelled = true; accountConnectionRef.current?.leave(); accountConnectionRef.current = null; };
+  }, [adoptAuthoritySnapshot]);
 
   const recordGameLog = useCallback((kind: GameLogKind, message: string) => {
     setGameLog((current) => appendGameLogEntry(current, kind, message));
   }, []);
+
+  const submitAuthorityIntent = useCallback((intent: AuthorityIntent, successMessage?: string) => {
+    const account = accountConnectionRef.current;
+    if (!account) { setImportStatus('Authority connection is unavailable'); return; }
+    const intentId = `ui-${Date.now()}-${++authorityIntentSequenceRef.current}`;
+    void account.sendCommand({ intentId, expectedRevision: authorityRevisionRef.current, intent }).then((result) => {
+      if (result.status !== 'rejected') {
+        adoptAuthoritySnapshot(result.snapshot);
+        if (successMessage) recordGameLog('interaction', successMessage);
+      } else {
+        if (result.snapshot) adoptAuthoritySnapshot(result.snapshot);
+        recordGameLog('system', `Command rejected: ${result.code}`);
+      }
+    });
+  }, [adoptAuthoritySnapshot, recordGameLog]);
 
   const updateMultiplayerStatus = useCallback((status: MultiplayerStatus) => {
     multiplayerStatusRef.current = status;
@@ -142,9 +174,6 @@ export function MonsterRpgGame() {
       const farmBlock = getFarmFootprintMoveBlock(currentState, action);
       if (farmBlock) {
         setLastMove(farmBlock);
-        saveProgress(farmBlock.state);
-        saveStateRef.current = farmBlock.state;
-        setSaveState(farmBlock.state);
         setPendingStationDestinationId(null);
         return;
       }
@@ -160,45 +189,20 @@ export function MonsterRpgGame() {
     }
 
     if (action.type === 'interact' && currentState) {
-      const collection = collectFacingFarm(currentState);
-      if (collection.ok) {
-        saveProgress(collection.state);
-        saveStateRef.current = collection.state;
-        setSaveState(collection.state);
+      const farm = getFacingFarm(currentState);
+      if (farm?.ownerPlayerId === currentState.profile.playerId) {
+        submitAuthorityIntent({ type: 'collectFarm' }, 'Farm resources collected');
         setLastMove(null);
         setPackTrace(null);
-        recordGameLog('reward', `Collected ${collection.collectedQuantity} Magic Dust`);
         return;
       }
-
-      if (collection.reason === 'empty' || collection.reason === 'not-owner') {
-        if (collection.reason === 'not-owner') {
-          const theft = attemptFacingFarmTheft(currentState);
-          if (theft.ok) {
-            saveProgress(theft.state);
-            saveStateRef.current = theft.state;
-            setSaveState(theft.state);
-            setLastMove(null);
-            setPackTrace(null);
-            recordGameLog('interaction', formatFarmTheftAttempt(theft));
-            return;
-          }
-          if (theft.reason === 'guarded' && multiplayerStatusRef.current === 'online' && connectionRef.current) {
-            const farm = theft.farm ?? getFacingFarm(currentState);
-            const activeCreature = getFirstBattleReadyCreature(currentState);
-            const guardCreature = farm?.guardCreatureId ? currentState.creatures.creatures[farm.guardCreatureId] : undefined;
-            if (!farm || !activeCreature || !guardCreature) {
-              recordGameLog('battle', !activeCreature ? 'No ready Creature for guard battle' : 'Farm guard data unavailable');
-              return;
-            }
-            connectionRef.current.sendClaimGuardedFarmTheft({ farm, activeCreature, guardCreature });
-            recordGameLog('battle', 'Challenging farm guard');
-            return;
-          }
-          recordGameLog('interaction', formatFarmTheftFailure(theft.reason, theft));
-          return;
+      if (farm && multiplayerStatusRef.current === 'online' && connectionRef.current) {
+        if (farm.guardCreatureId) {
+          connectionRef.current.sendClaimGuardedFarmTheft({ farmId: farm.id, activePartyCreatureIds: currentState.creatures.activePartyCreatureIds, expectedRosterRevision: authorityRosterRevisionRef.current });
+          recordGameLog('battle', 'Challenging farm guard');
+        } else {
+          connectionRef.current.sendAttemptFarmTheft({ farmId: farm.id, intentId: `farm-${Date.now()}-${++authorityIntentSequenceRef.current}`, expectedRevision: authorityRevisionRef.current });
         }
-        recordGameLog('interaction', formatFarmCollectionFailure(collection.reason));
         return;
       }
     }
@@ -211,7 +215,7 @@ export function MonsterRpgGame() {
           recordGameLog('battle', 'No ready Creature for battle');
           return;
         }
-        connectionRef.current.sendClaimWildEncounter({ encounterId: encounter.id, activeCreature });
+        connectionRef.current.sendClaimWildEncounter({ encounterId: encounter.id, activePartyCreatureIds: currentState!.creatures.activePartyCreatureIds, expectedRosterRevision: authorityRosterRevisionRef.current });
         recordGameLog('battle', `Claiming wild Creature #${encounter.speciesId}`);
       } else {
         recordGameLog('battle', 'No wild Creature ahead');
@@ -219,327 +223,77 @@ export function MonsterRpgGame() {
       return;
     }
 
-    setSaveState((current) => {
-      if (!current) return current;
-
-      const result = movePlayer(current, action, getGameMap(current.mapId));
-      const discoveredState = discoverCurrentStationDestination(result.state);
-      const nextResult = discoveredState === result.state ? result : { ...result, state: discoveredState };
-      setLastMove(nextResult);
-      saveProgress(discoveredState);
-      saveStateRef.current = discoveredState;
-      setPendingStationDestinationId(null);
-      return discoveredState;
-    });
-  }, [battleState?.status, roomState]);
+    if (action.type === 'move') recordGameLog('system', 'Movement is unavailable while offline');
+  }, [battleState?.status, roomState, submitAuthorityIntent]);
 
   const handleCreateProfile = (name: string, avatar: AvatarId) => {
-    const profile = createPlayerProfile(name, avatar);
-    const initialSave = createInitialSave(profile);
-    saveProgress(initialSave);
-    setGameLog((current) => beginProfileGameLogSession(current, profile.playerId));
-    setLastMove(null);
-    setSaveState(initialSave);
-  };
-
-  const persistOnboardingUpdate = (updater: (current: MonsterRpgSaveState) => MonsterRpgSaveState) => {
-    setSaveState((current) => {
-      if (!current) return current;
-
-      const nextState = updater(current);
-      saveProgress(nextState);
-      saveStateRef.current = nextState;
-      freeMovementUnlockedRef.current = isVillageElderDialogComplete(nextState);
+    const account = accountConnectionRef.current;
+    if (!account) { setImportStatus('Authority connection is still starting'); return; }
+    void account.bootstrapProfile({ name, avatar }).then((snapshot) => {
+      adoptAuthoritySnapshot(snapshot);
+      setGameLog((current) => beginProfileGameLogSession(current, snapshot.save.profile.playerId));
       setLastMove(null);
-      return nextState;
-    });
+    }).catch(() => setImportStatus('Could not create canonical profile'));
   };
 
   const handleCompleteVillageElderDialog = () => {
-    recordGameLog('reward', 'Starter Pack received');
-    persistOnboardingUpdate(completeVillageElderDialog);
+    submitAuthorityIntent({ type: 'completeElderDialog' }, 'Starter Pack received');
   };
 
-  const handleConvertStarterCards = () => {
-    setSaveState((current) => {
-      if (!current) return current;
+  const handleConvertStarterCards = () => submitAuthorityIntent({ type: 'convertCreatureCard', starter: true }, 'Starter Creatures joined');
 
-      const result = convertStarterCreatureCards(current);
-      if (!result.ok) {
-        recordGameLog('reward', formatStarterConversionFailure(result.reason));
-        return current;
-      }
-
-      saveProgress(result.state);
-      saveStateRef.current = result.state;
-      freeMovementUnlockedRef.current = isVillageElderDialogComplete(result.state);
-      recordGameLog('reward', 'Starter Creatures joined');
-      setLastMove(null);
-      return result.state;
-    });
-  };
-
-  const handleBuildStarterFarm = () => {
-    setSaveState((current) => {
-      if (!current) return current;
-
-      const result = buildStarterMagicDustFarm(current);
-      if (!result.ok) {
-        recordGameLog('interaction', formatStarterFarmFailure(result.reason));
-        return current;
-      }
-
-      saveProgress(result.state);
-      saveStateRef.current = result.state;
-      freeMovementUnlockedRef.current = isVillageElderDialogComplete(result.state);
-      recordGameLog('interaction', 'Magic Dust Farm built');
-      setLastMove(null);
-      return result.state;
-    });
-  };
+  const handleBuildStarterFarm = () => submitAuthorityIntent({ type: 'createFarm', starter: true }, 'Magic Dust Farm built');
 
   const handleFinishVillageElderOnboarding = () => {
-    recordGameLog('interaction', 'Onboarding complete');
-    persistOnboardingUpdate(completeVillageElderOnboarding);
+    submitAuthorityIntent({ type: 'completeOnboarding' }, 'Onboarding complete');
   };
 
-  const handleOpenPack = () => {
-    if (!saveStateRef.current) return;
-    const result = openPack(saveStateRef.current, { seed: Date.now() });
-    setPackTrace(result.trace);
-    saveProgress(result.state);
-    saveStateRef.current = result.state;
-    setLastMove(null);
-    recordGameLog('reward', `Pack opened (${result.trace.cards.length})`);
-    setSaveState(result.state);
-  };
+  const handleDiscardItem = (stackId: string, quantity: number) => { if (window.confirm(`Discard ${quantity} item${quantity === 1 ? '' : 's'}?`)) submitAuthorityIntent({ type: 'discardItem', stackId, quantity, confirmed: true }, 'Item discarded'); };
 
-  const handleDiscardItem = (stackId: string, quantity: number) => {
-    setSaveState((current) => {
-      if (!current || !window.confirm(`Discard ${quantity} item${quantity === 1 ? '' : 's'}?`)) return current;
-      const result = discardItem(current.inventory.itemInventory, stackId, quantity, true);
-      if (!result.ok) { recordGameLog('interaction', 'Item discard failed'); return current; }
-      const state = { ...current, inventory: { ...current.inventory, itemInventory: result.inventory }, updatedAt: new Date().toISOString() };
-      saveProgress(state); saveStateRef.current = state; return state;
-    });
-  };
-
-  const handleClaimReward = (sourceId: string) => {
-    setSaveState((current) => {
-      if (!current) return current;
-      const result = claimReward(current.inventory.rewardInbox, current.inventory.itemInventory, current.profile.playerId, sourceId);
-      if (!result.ok) { recordGameLog('reward', result.reason === 'capacity' ? `Need ${result.requiredSlots ?? 0} more slots` : 'Reward claim failed'); return current; }
-      const state = { ...current, inventory: { ...current.inventory, itemInventory: result.inventory, rewardInbox: result.inbox }, updatedAt: new Date().toISOString() };
-      saveProgress(state); saveStateRef.current = state; recordGameLog('reward', 'Reward claimed'); return state;
-    });
-  };
+  const handleClaimReward = (sourceId: string) => submitAuthorityIntent({ type: 'claimReward', sourceId }, 'Reward claimed');
 
   const handleActivateCard = (cardId: string) => {
-    setSaveState((current) => {
-      if (!current) return current;
-      const definition = getCardDefinition(cardId);
-
-      if (definition?.type === 'material') {
-        const result = activateMaterialCard(current, cardId);
-        if (!result.ok) {
-          recordGameLog('interaction', formatCardFailure(result.reason));
-          return current;
-        }
-        saveProgress(result.state);
-        saveStateRef.current = result.state;
-        setLastMove(null);
-        setPackTrace(null);
-        recordGameLog('interaction', 'Material card activated');
-        return result.state;
-      }
-
-      if (definition?.type === 'buff') {
-        const result = activateBuffCard(current, cardId);
-        if (!result.ok) {
-          recordGameLog('interaction', formatCardFailure(result.reason));
-          return current;
-        }
-        saveProgress(result.state);
-        saveStateRef.current = result.state;
-        setLastMove(null);
-        setPackTrace(null);
-        recordGameLog('interaction', 'Buff card activated');
-        return result.state;
-      }
-
-      recordGameLog('interaction', 'Unknown card action');
-      return current;
-    });
+    const type = getCardDefinition(cardId)?.type;
+    if (type === 'material') submitAuthorityIntent({ type: 'activateMaterialCard', cardId }, 'Material card activated');
+    else if (type === 'buff') submitAuthorityIntent({ type: 'activateBuffCard', cardId }, 'Buff card activated');
+    else recordGameLog('interaction', 'Unknown card action');
   };
 
   const handleRouteCardToElder = (cardId: string) => {
-    setSaveState((current) => {
-      if (!current) return current;
-      const definition = getCardDefinition(cardId);
-
-      if (current.inventory.creatureCards[cardId] || definition?.type === 'creature') {
-        const result = activateCreatureCardViaElder(current, cardId);
-        if (!result.ok) {
-          recordGameLog('interaction', formatCardFailure(result.reason));
-          return current;
-        }
-        saveProgress(result.state);
-        saveStateRef.current = result.state;
-        setLastMove(null);
-        setPackTrace(null);
-        recordGameLog('interaction', 'Creature card routed to Elder');
-        return result.state;
-      }
-
-      if (definition?.type === 'farm') {
-        const result = buildFarmCardViaElder(current, cardId);
-        if (!result.ok) {
-          recordGameLog('interaction', formatCardFailure(result.reason));
-          return current;
-        }
-        saveProgress(result.state);
-        saveStateRef.current = result.state;
-        setLastMove(null);
-        setPackTrace(null);
-        recordGameLog('interaction', 'Farm card routed to Elder');
-        return result.state;
-      }
-
-      recordGameLog('interaction', 'Card cannot use Village Elder action');
-      return current;
-    });
+    const type = getCardDefinition(cardId)?.type;
+    if (type === 'creature') submitAuthorityIntent({ type: 'convertCreatureCard', cardId }, 'Creature card routed to Elder');
+    else if (type === 'farm') submitAuthorityIntent({ type: 'buildFarmCard', cardId }, 'Farm card routed to Elder');
+    else recordGameLog('interaction', 'Card cannot use Village Elder action');
   };
 
   const handleHatchEgg = (eggId: string) => {
-    setSaveState((current) => {
-      if (!current) return current;
-
-      const result = hatchEgg(current, eggId);
-      if (!result.ok) {
-        recordGameLog('reward', formatCardFailure(result.reason));
-        return current;
-      }
-
-      saveProgress(result.state);
-      saveStateRef.current = result.state;
-      setLastMove(null);
-      setPackTrace(null);
-      recordGameLog('reward', 'Egg hatched');
-      return result.state;
-    });
+    setPackTrace(null);
+    submitAuthorityIntent({ type: 'hatchEgg', eggId }, 'Egg hatched');
   };
 
   const handleHospitalHeal = () => {
-    setSaveState((current) => {
-      if (!current) return current;
-      if (!isAtVillageHospital(current)) {
-        recordGameLog('interaction', formatCreaturePartyFailure('not-at-hospital'));
-        return current;
-      }
-
-      const result = healAllCreaturesAtHospital(current);
-      saveProgress(result);
-      saveStateRef.current = result;
-      setLastMove(null);
-      setPackTrace(null);
-      recordGameLog('interaction', 'Hospital full heal complete');
-      return result;
-    });
+    setPackTrace(null);
+    submitAuthorityIntent({ type: 'healAll' }, 'Hospital full heal complete');
   };
 
   const handleReviveCreature = (creatureId: string) => {
-    setSaveState((current) => {
-      if (!current) return current;
-
-      const result = useReviveItem(current, creatureId);
-      if (!result.ok) {
-        recordGameLog('interaction', formatCreaturePartyFailure(result.reason));
-        return current;
-      }
-
-      saveProgress(result.state);
-      saveStateRef.current = result.state;
-      setLastMove(null);
-      setPackTrace(null);
-      recordGameLog('interaction', 'Revive item used');
-      return result.state;
-    });
+    submitAuthorityIntent({ type: 'revive', creatureId }, 'Revive item used');
   };
 
   const handleMoveCreatureToActive = (creatureId: string) => {
-    setSaveState((current) => {
-      if (!current) return current;
-
-      const result = moveCreatureToActiveParty(current, creatureId);
-      if (!result.ok) {
-        recordGameLog('interaction', formatCreaturePartyFailure(result.reason));
-        return current;
-      }
-
-      saveProgress(result.state);
-      saveStateRef.current = result.state;
-      setLastMove(null);
-      setPackTrace(null);
-      recordGameLog('interaction', 'Creature moved to active party');
-      return result.state;
-    });
+    submitAuthorityIntent({ type: 'moveCreatureToActiveParty', creatureId }, 'Creature moved to active party');
   };
 
   const handleMoveCreatureToStorage = (creatureId: string) => {
-    setSaveState((current) => {
-      if (!current) return current;
-
-      const result = moveCreatureToStorage(current, creatureId);
-      if (!result.ok) {
-        recordGameLog('interaction', formatCreaturePartyFailure(result.reason));
-        return current;
-      }
-
-      saveProgress(result.state);
-      saveStateRef.current = result.state;
-      setLastMove(null);
-      setPackTrace(null);
-      recordGameLog('interaction', 'Creature moved to storage');
-      return result.state;
-    });
+    submitAuthorityIntent({ type: 'moveCreatureToStorage', creatureId }, 'Creature moved to storage');
   };
 
   const handleUpgradeFarm = (farmId: string) => {
-    setSaveState((current) => {
-      if (!current) return current;
-
-      const result = upgradeFarm(current, farmId);
-      if (!result.ok) {
-        recordGameLog('interaction', formatFarmUpgradeFailure(result.reason));
-        return current;
-      }
-
-      saveProgress(result.state);
-      saveStateRef.current = result.state;
-      setLastMove(null);
-      setPackTrace(null);
-      recordGameLog('interaction', `Farm upgraded to level ${result.farm.level}`);
-      return result.state;
-    });
+    submitAuthorityIntent({ type: 'upgradeFarm', farmId }, 'Farm upgraded');
   };
 
   const handleAssignFarmGuard = (farmId: string, creatureId: string | null) => {
-    setSaveState((current) => {
-      if (!current) return current;
-
-      const result = creatureId ? assignFarmGuard(current, farmId, creatureId) : clearFarmGuard(current, farmId);
-      if (!result.ok) {
-        recordGameLog('interaction', formatFarmGuardFailure(result.reason));
-        return current;
-      }
-
-      saveProgress(result.state);
-      saveStateRef.current = result.state;
-      setLastMove(null);
-      setPackTrace(null);
-      recordGameLog('interaction', creatureId ? 'Farm guard assigned' : 'Farm guard cleared');
-      return result.state;
-    });
+    submitAuthorityIntent({ type: 'setFarmGuard', farmId, creatureId }, creatureId ? 'Farm guard assigned' : 'Farm guard cleared');
   };
 
   const handlePrepareStationTravel = (destinationId: string) => {
@@ -553,94 +307,48 @@ export function MonsterRpgGame() {
   };
 
   const handleConfirmStationTravel = (destinationId: string) => {
-    setSaveState((current) => {
-      if (!current) return current;
-
-      const result = confirmStationTravel(current, destinationId);
-      if (!result.ok) {
-        recordGameLog('travel', formatStationTravelFailure(result.reason, result));
-        return current;
-      }
-
-      connectionRef.current?.leave({ silent: true });
-      battleConnectionRef.current?.leave({ silent: true });
-      connectionRef.current = null;
-      battleConnectionRef.current = null;
-      activeBattleClaimRef.current = null;
-      pendingTransitionRef.current = null;
-      setRoomState(null);
-      setBattleState(null);
-      updateMultiplayerStatus('offline');
-      saveProgress(result.state);
-      saveStateRef.current = result.state;
-      setLastMove({
-        state: result.state,
-        moved: true,
-        blocked: false,
-        transition: {
-          toMapId: result.destination.mapId,
-          spawn: result.destination.spawn
-        }
-      });
-      setPackTrace(null);
-      setPendingStationDestinationId(null);
-      recordGameLog('travel', `Station travel to ${result.destination.displayName}: paid ${result.costPaid} Magic Dust`);
-      return result.state;
-    });
+    setPendingStationDestinationId(null);
+    submitAuthorityIntent({ type: 'stationTravel', destinationId }, 'Station travel confirmed');
   };
 
-  const handleExportSave = () => {
-    if (!saveState) return;
-
-    const blob = new Blob([exportSave(saveState)], { type: 'application/json' });
+  const handleExportSave = async () => {
+    const account = accountConnectionRef.current;
+    const currentSave = saveStateRef.current;
+    if (!account || !currentSave) return;
+    const playerId = currentSave.profile.playerId;
+    const envelope = await account.exportAuthenticatedSave();
+    const blob = new Blob([envelope], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `gameit-monsters-${saveState.profile.playerId}.json`;
+    link.download = `gameit-monsters-${playerId}.json`;
     link.click();
     URL.revokeObjectURL(url);
     recordGameLog('system', 'Save exported');
   };
 
-  const handleImportSave = async (file: File) => {
-    const payload = await file.text();
-    const result = importSavePayload(payload);
-
-    if (!result.ok) {
-      recordGameLog('system', `Import failed: ${formatImportFailure(result.reason)}`);
-      return;
-    }
-
-    connectionRef.current?.leave();
-    battleConnectionRef.current?.leave();
-    connectionRef.current = null;
-    battleConnectionRef.current = null;
-    activeBattleClaimRef.current = null;
-    pendingTransitionRef.current = null;
-    saveProgress(result.state);
+  const importAuthenticatedPayload = async (payload: string) => {
+    const account = accountConnectionRef.current;
+    if (!account) { setImportStatus('Authority connection is unavailable'); setRecoveryState('error'); return; }
+    setRecoveryState('pending'); setImportStatus('Recovering authenticated progress…');
+    let snapshot: AuthoritySnapshot;
+    try { snapshot = await importAuthenticatedRecovery(account, payload); }
+    catch (error) { const message = `Import failed: ${error instanceof Error ? error.message : 'invalid transfer'}`; setImportStatus(message); setRecoveryState('error'); recordGameLog('system', message); return; }
+    adoptAuthoritySnapshot(snapshot);
+    setRecoveryState('success'); setImportStatus('Authenticated progress recovered.');
     setLastMove(null);
     setRoomState(null);
-    updateMultiplayerStatus('offline');
-    setSaveState(result.state);
-    setGameLog((current) => beginImportedSaveGameLogSession(current, result.state.profile.playerId));
+    recordGameLog('system', 'Authenticated save imported');
+  };
+
+  const handleImportSave = async (file: File) => {
+    try { recoveryPayloadRef.current = await file.text(); }
+    catch { setImportStatus('Import failed: unable to read file'); setRecoveryState('error'); return; }
+    await importAuthenticatedPayload(recoveryPayloadRef.current);
   };
 
   const handleReset = () => {
-    connectionRef.current?.leave();
-    battleConnectionRef.current?.leave();
-    connectionRef.current = null;
-    battleConnectionRef.current = null;
-    activeBattleClaimRef.current = null;
-    pendingTransitionRef.current = null;
-    runtimeRef.current?.destroy();
-    runtimeRef.current = null;
-    clearProgress();
-    setGameLog(resetProfileGameLogSession);
-    setLastMove(null);
-    setRoomState(null);
-    setBattleState(null);
-    updateMultiplayerStatus('offline');
-    setSaveState(null);
+    if (window.confirm('Reset progress? Your profile identity and audit history will be retained.')) submitAuthorityIntent({ type: 'resetProgress', confirmed: true }, 'Progress reset');
   };
 
   const handleBattleAttack = (attackId: string) => {
@@ -706,43 +414,27 @@ export function MonsterRpgGame() {
     let cancelled = false;
     let activeConnection: MultiplayerConnection | null = null;
     const connectState = saveState;
+    const connectMapId = locationMapId ?? connectState.mapId;
     const pendingTransition =
-      pendingTransitionRef.current?.toMapId === connectState.mapId ? pendingTransitionRef.current : null;
+      pendingTransitionRef.current?.toMapId === connectMapId ? pendingTransitionRef.current : null;
     updateMultiplayerStatus('connecting');
 
     async function connect() {
       try {
         const { connectToLocation } = await import('./network');
         const connection = await connectToLocation(
-          connectState.mapId,
+          connectMapId,
           {
-            mapId: connectState.mapId,
-            profile: connectState.profile,
+            mapId: connectMapId,
+            credential: credentialRef.current ?? undefined,
             transitionId: pendingTransition?.transitionId
           },
           {
+            onAuthoritySnapshot: adoptAuthoritySnapshot,
             onRoomState: (nextRoomState) => {
               if (cancelled) return;
 
               setRoomState(nextRoomState);
-              const localPlayerId = nextRoomState.localPlayerId;
-              const localPlayer = localPlayerId ? nextRoomState.players[localPlayerId] : undefined;
-              if (!localPlayer) return;
-
-              setSaveState((current) => {
-                if (!current) return current;
-
-                const nextSave = discoverCurrentStationDestination({
-                  ...current,
-                  profile: localPlayer.profile,
-                  mapId: nextRoomState.mapId,
-                  position: localPlayer.position,
-                  updatedAt: new Date().toISOString()
-                });
-                saveProgress(nextSave);
-                saveStateRef.current = nextSave;
-                return nextSave;
-              });
             },
             onTransition: (transition) => {
               if (cancelled) return;
@@ -756,25 +448,8 @@ export function MonsterRpgGame() {
               }
               setRoomState(null);
               updateMultiplayerStatus('connecting');
-
-              setSaveState((current) => {
-                if (!current) return current;
-
-                const nextSave = discoverCurrentStationDestination({
-                  ...current,
-                  mapId: transition.toMapId,
-                  position: transition.spawn,
-                  updatedAt: new Date().toISOString()
-                });
-                setLastMove({
-                  state: nextSave,
-                  moved: true,
-                  blocked: false,
-                  transition
-                });
-                saveProgress(nextSave);
-                return nextSave;
-              });
+              setLocationMapId(transition.toMapId);
+              setLastMove((current) => current && { ...current, transition, moved: true, blocked: false });
             },
             onWildEncounterClaimed: (claim) => {
               if (cancelled) return;
@@ -811,6 +486,16 @@ export function MonsterRpgGame() {
                 recordGameLog('battle', formatGuardedFarmTheftClaimFailure(message.reason));
               }
             },
+            onFarmTheftResult: (result) => {
+              if (cancelled) return;
+              if (result.status === 'rejected') {
+                if (result.snapshot) adoptAuthoritySnapshot(result.snapshot);
+                recordGameLog('interaction', `Theft failed: ${result.code}`);
+                return;
+              }
+              adoptAuthoritySnapshot(result.snapshot);
+              recordGameLog('interaction', 'Farm theft resolved');
+            },
             onStatus: (status) => {
               if (!cancelled) {
                 updateMultiplayerStatus(status);
@@ -829,6 +514,7 @@ export function MonsterRpgGame() {
         if (pendingTransitionRef.current?.transitionId === pendingTransition?.transitionId) {
           pendingTransitionRef.current = null;
         }
+        moveSequenceRef.current = 0;
         updateMultiplayerStatus('online');
       } catch (error) {
         if (cancelled) return;
@@ -856,7 +542,7 @@ export function MonsterRpgGame() {
       }
       updateMultiplayerStatus('offline');
     };
-  }, [saveState?.profile.playerId, saveState?.mapId, updateMultiplayerStatus]);
+  }, [locationMapId, saveState?.profile.playerId, saveState?.mapId, updateMultiplayerStatus]);
 
   const connectBattleRoom = useCallback(
     async (battleId: string, battleToken: string) => {
@@ -872,7 +558,7 @@ export function MonsterRpgGame() {
           {
             battleId,
             battleToken,
-            profile: currentState.profile
+            credential: credentialRef.current ?? undefined
           },
           {
             onBattleState: (nextBattleState) => {
@@ -910,7 +596,7 @@ export function MonsterRpgGame() {
     if (!claim || claim.battleId !== result.battleId) return;
     recordGameLog('battle', formatBattleOutcome(result));
 
-    if (claim.kind === 'wild' && claim.encounterId && claim.speciesId !== undefined) {
+    if (claim.kind === 'wild' && claim.encounterId) {
       connectionRef.current?.sendResolveWildEncounter({
         encounterId: result.encounterId,
         outcome: result.outcome,
@@ -918,38 +604,6 @@ export function MonsterRpgGame() {
         battleToken
       });
 
-      setSaveState((current) => {
-        if (!current) return current;
-        const applied = applyBattleRewardsToSave(recordWildCreatureSeen(current, claim.speciesId!), result);
-        const nextState = applied.state;
-        if (applied.packTrace) setPackTrace(applied.packTrace);
-        else if (applied.levelRewardPackTraces.length > 0) setPackTrace(applied.levelRewardPackTraces[0]);
-        saveProgress(nextState);
-        saveStateRef.current = nextState;
-        return nextState;
-      });
-    } else if (claim.kind === 'guard-theft' && claim.farmId) {
-      setSaveState((current) => {
-        if (!current) return current;
-        const guardBattle = resolveGuardedFarmTheft(current, {
-          farmId: claim.farmId!,
-          guardCreatureHp: result.outcome === 'defeated' ? 0 : undefined,
-          playerCreatureFainted: result.playerCreatureFainted,
-          playerCreatureHp: result.playerCreatureHp,
-          playerCreatureId: result.playerCreatureId,
-          visitorWon: result.outcome === 'defeated'
-        });
-        if (!guardBattle.ok) {
-          recordGameLog('interaction', formatFarmTheftFailure(guardBattle.reason, guardBattle));
-          return current;
-        }
-
-        saveProgress(guardBattle.state);
-        saveStateRef.current = guardBattle.state;
-        setPackTrace(null);
-        recordGameLog('interaction', formatFarmTheftAttempt(guardBattle));
-        return guardBattle.state;
-      });
     }
     activeBattleClaimRef.current = null;
     battleConnectionRef.current?.leave({ silent: true });
@@ -957,11 +611,19 @@ export function MonsterRpgGame() {
   }, [recordGameLog]);
 
   if (!saveState) {
-    if (importStatus) return <main className="monster-game-shell"><p role="alert">{importStatus}</p></main>;
-    return <CharacterCreator onCreate={handleCreateProfile} />;
+    return <main className="monster-game-shell">
+      <RecoveryPanel
+        canRetry={recoveryPayloadRef.current !== null}
+        onImport={(file) => { void handleImportSave(file); }}
+        onRetry={() => { if (recoveryPayloadRef.current) void importAuthenticatedPayload(recoveryPayloadRef.current); }}
+        state={recoveryState}
+        status={importStatus}
+      />
+      <CharacterCreator onCreate={handleCreateProfile} />
+    </main>;
   }
 
-  const activeMap = getGameMap(saveState.mapId);
+  const activeMap = getGameMap(locationMapId ?? saveState.mapId);
 
   return (
     <main className="monster-game-shell" aria-label="GameIt Monsters">
@@ -983,7 +645,6 @@ export function MonsterRpgGame() {
           battleState={battleState}
           onExport={handleExportSave}
           onImport={handleImportSave}
-          onOpenPack={handleOpenPack}
           onDiscardItem={handleDiscardItem}
           onClaimReward={handleClaimReward}
           onActivateCard={handleActivateCard}
@@ -1024,14 +685,6 @@ function isBalanceVersionMismatch(error: unknown): error is { code: 'BALANCE_VER
   return Boolean(error && typeof error === 'object' && (error as { code?: unknown }).code === 'BALANCE_VERSION_MISMATCH');
 }
 
-function formatImportFailure(reason: 'invalid-json' | 'unsupported-schema' | 'invalid-save' | 'unsupported-balance-version' | 'missing-balance-migration'): string {
-  if (reason === 'missing-balance-migration') return 'No migration path for this game balance version';
-  if (reason === 'unsupported-balance-version') return 'Unsupported game balance version';
-  if (reason === 'invalid-json') return 'bad JSON';
-  if (reason === 'unsupported-schema') return 'unsupported version';
-  return 'invalid save';
-}
-
 const moveDeltaByDirection: Record<Direction, { x: number; y: number }> = {
   north: { x: 0, y: -1 },
   east: { x: 1, y: 0 },
@@ -1069,39 +722,6 @@ function getFarmFootprintMoveBlock(
   };
 }
 
-function formatStarterConversionFailure(reason: 'already-converted' | 'missing-card' | 'missing-magic-dust'): string {
-  if (reason === 'already-converted') return 'Starter Creatures already converted';
-  if (reason === 'missing-card') return 'Missing starter Creature Cards';
-  return 'Not enough Magic Dust';
-}
-
-function formatStarterFarmFailure(reason: 'already-built' | 'missing-card'): string {
-  if (reason === 'already-built') return 'Magic Dust Farm already built';
-  return 'Missing Magic Dust Farm Card';
-}
-
-function formatCardFailure(reason: string | undefined): string {
-  if (reason === 'missing-card') return 'Card not available';
-  if (reason === 'buff-slot-occupied') return 'Buff slot already active';
-  if (reason === 'farm-type-locked') return 'Farm type already built';
-  if (reason === 'wrong-card-type') return 'Card cannot use this action';
-  if (reason === 'invalid-species') return 'Card points to unknown species';
-  if (reason === 'missing-material') return 'Not enough Magic Dust';
-  if (reason === 'missing-egg') return 'Egg not available';
-  return `Card action failed${reason ? `: ${reason}` : ''}`;
-}
-
-function formatCreaturePartyFailure(reason: string | undefined): string {
-  if (reason === 'missing-creature') return 'Creature not found';
-  if (reason === 'party-full') return 'Active party is full';
-  if (reason === 'already-active') return 'Creature already active';
-  if (reason === 'already-stored') return 'Creature already stored';
-  if (reason === 'missing-item') return 'No Revive item';
-  if (reason === 'not-fainted') return 'Creature is not Fainted';
-  if (reason === 'not-at-hospital') return 'Visit a Village Hospital first';
-  return `Creature action failed${reason ? `: ${reason}` : ''}`;
-}
-
 function formatWildEncounterClaimFailure(reason: string | undefined): string {
   if (reason === 'in-battle') return 'Already in battle';
   if (reason === 'unavailable') return 'Wild Creature already claimed';
@@ -1111,33 +731,6 @@ function formatWildEncounterClaimFailure(reason: string | undefined): string {
   return `Wild claim failed${reason ? `: ${reason}` : ''}`;
 }
 
-function formatFarmCollectionFailure(reason: string | undefined): string {
-  if (reason === 'empty') return 'Farm storage empty';
-  if (reason === 'not-owner') return 'Only the village owner can collect';
-  return `Farm collection failed${reason ? `: ${reason}` : ''}`;
-}
-
-function formatFarmTheftAttempt(result: { outcome: 'success' | 'failed'; stolenQuantity: number; costPaid: number }): string {
-  if (result.outcome === 'success') {
-    return `Theft succeeded: stole ${result.stolenQuantity} Magic Dust, paid ${result.costPaid}`;
-  }
-  return `Theft failed: paid ${result.costPaid} Magic Dust`;
-}
-
-function formatFarmTheftFailure(
-  reason: string | undefined,
-  result?: { cooldownUntil?: string; costRequired?: number }
-): string {
-  if (reason === 'cooldown' && result?.cooldownUntil) {
-    return `Theft cooldown until ${new Date(result.cooldownUntil).toLocaleTimeString()}`;
-  }
-  if (reason === 'guarded') return 'Farm has an active guard';
-  if (reason === 'empty') return 'Nothing stored to steal';
-  if (reason === 'missing-magic-dust') return `Need ${result?.costRequired ?? 1} Magic Dust to attempt theft`;
-  if (reason === 'owner-cannot-steal') return 'Owners collect instead of stealing';
-  return `Theft failed${reason ? `: ${reason}` : ''}`;
-}
-
 function formatGuardedFarmTheftClaimFailure(reason: string | undefined): string {
   if (reason === 'range') return 'Face the guarded farm first';
   if (reason === 'in-battle') return 'Battle already in progress';
@@ -1145,34 +738,6 @@ function formatGuardedFarmTheftClaimFailure(reason: string | undefined): string 
   if (reason === 'unguarded') return 'Farm guard is inactive';
   if (reason === 'owner-cannot-steal') return 'Owners collect instead of stealing';
   return `Guard battle failed${reason ? `: ${reason}` : ''}`;
-}
-
-function formatFarmUpgradeFailure(reason: string | undefined): string {
-  if (reason === 'missing-farm') return 'Farm not found';
-  if (reason === 'not-owner') return 'Only the village owner can upgrade';
-  if (reason === 'max-level') return 'Farm is max level';
-  if (reason === 'missing-card') return 'Need matching Farm Card';
-  if (reason === 'missing-material') return 'Not enough Magic Dust';
-  return `Farm upgrade failed${reason ? `: ${reason}` : ''}`;
-}
-
-function formatFarmGuardFailure(reason: string | undefined): string {
-  if (reason === 'missing-farm') return 'Farm not found';
-  if (reason === 'not-owner') return 'Only the village owner can assign guards';
-  if (reason === 'missing-creature') return 'Creature not found';
-  if (reason === 'creature-fainted') return 'Fainted Creatures cannot guard';
-  return `Farm guard failed${reason ? `: ${reason}` : ''}`;
-}
-
-function formatStationTravelFailure(
-  reason: string | undefined,
-  result?: { costRequired?: number; destination?: { displayName: string } }
-): string {
-  if (reason === 'already-there') return 'Already at that station destination';
-  if (reason === 'missing-destination') return 'Station destination not discovered';
-  if (reason === 'unsafe-spawn') return 'Station destination spawn unavailable';
-  if (reason === 'missing-magic-dust') return `Need ${result?.costRequired ?? 0} Magic Dust for station travel`;
-  return `Station travel failed${reason ? `: ${reason}` : ''}`;
 }
 
 function formatBattleOutcome(result: BattleResultMessage): string {

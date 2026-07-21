@@ -27,8 +27,9 @@ describe('Monster RPG station travel', () => {
 
   test('discovering another player village adds a travel destination without duplicating it', () => {
     const save = createInitialSave(createPlayerProfile('Sol', 'ranger'));
-    const discovered = discoverPlayerVillageForStation(save, 'brookhaven-village');
-    const discoveredAgain = discoverPlayerVillageForStation(discovered, 'brookhaven-village');
+    const now = new Date('2026-07-21T10:00:00.000Z');
+    const discovered = discoverPlayerVillageForStation(save, 'brookhaven-village', { now });
+    const discoveredAgain = discoverPlayerVillageForStation(discovered, 'brookhaven-village', { now });
     const destinationId = getPlayerVillageStationDestinationId('brookhaven-village');
 
     expect(discovered.station.discoveredDestinations[destinationId]).toMatchObject({
@@ -37,6 +38,7 @@ describe('Monster RPG station travel', () => {
       displayName: 'Brookhaven'
     });
     expect(discovered.village.discoveredVillageIds).toContain('brookhaven-village');
+    expect(discovered.updatedAt).toBe(now.toISOString());
     expect(getStationDestinations(discoveredAgain).filter((destination) => destination.id === destinationId)).toHaveLength(1);
   });
 
@@ -56,7 +58,8 @@ describe('Monster RPG station travel', () => {
       }
     };
     const quote = quoteStationTravel(fundedSave, destinationId);
-    const result = confirmStationTravel(fundedSave, destinationId);
+    const now = new Date('2026-07-21T10:05:00.000Z');
+    const result = confirmStationTravel(fundedSave, destinationId, { now });
 
     expect(quote.ok).toBe(true);
     expect(result.ok).toBe(true);
@@ -65,6 +68,7 @@ describe('Monster RPG station travel', () => {
     expect(result.state.inventory.currencies.magicDust).toBe(12 - quote.cost);
     expect(result.state.mapId).toBe('brookhaven-village');
     expect(result.state.position).toEqual(result.destination.spawn);
+    expect(result.state.updatedAt).toBe(now.toISOString());
   });
 
   test('station travel refuses missing Magic Dust before moving', () => {

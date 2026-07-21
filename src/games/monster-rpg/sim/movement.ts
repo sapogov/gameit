@@ -14,7 +14,12 @@ export function moveOnSquareGrid(grid: SquareGridMapAdapter, x: number, y: numbe
   return grid.isBlocked(next.x, next.y) ? { x, y, moved: false } : { ...next, moved: true };
 }
 
-export function movePlayer(state: MonsterRpgSaveState, action: InputAction, map: GameMap): MovementResult {
+export function movePlayer(
+  state: MonsterRpgSaveState,
+  action: InputAction,
+  map: GameMap,
+  options: { now?: Date; rng?: () => number } = {}
+): MovementResult {
   if (action.type !== 'move') {
     return {
       state,
@@ -30,13 +35,14 @@ export function movePlayer(state: MonsterRpgSaveState, action: InputAction, map:
     ...state.position,
     facing: action.direction
   };
+  const updatedAt = (options.now ?? new Date()).toISOString();
 
   if (!canEnterTile(map, nextX, nextY)) {
     return {
       state: {
         ...state,
         position: positionWithFacing,
-        updatedAt: new Date().toISOString()
+        updatedAt
       },
       moved: false,
       blocked: true,
@@ -58,7 +64,7 @@ export function movePlayer(state: MonsterRpgSaveState, action: InputAction, map:
       ...state,
       mapId: nextPosition.mapId,
       position: nextPosition,
-      updatedAt: new Date().toISOString()
+      updatedAt
     },
     moved: true,
     blocked: false,

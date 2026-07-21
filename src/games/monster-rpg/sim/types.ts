@@ -113,6 +113,60 @@ export interface BaseStatTendencies {
 
 export type CreatureStatKey = keyof BaseStatTendencies;
 
+export type StatGrowthModel = 'deterministic-default' | 'rarity-weighted-random';
+
+export interface CreatureStatGrowthBasis {
+  level: number;
+  stats: BaseStatTendencies;
+}
+
+/**
+ * A simulation-only proposal. It may exist only between battle settlement and
+ * authority sealing; it is deliberately not part of CreatureStatGrowthState.
+ */
+export interface CreatureStatGrowthDraftEvent {
+  id: string;
+  kind: 'level-up' | 'rebalance';
+  level: number;
+  model: StatGrowthModel | 'rebalance';
+  deltas: BaseStatTendencies;
+  createdAt: string;
+}
+
+/** Immutable server-sealed growth history. Draft growth events never carry these fields. */
+export type GrowthAuditEvent = GrowthAuditLevelUpEvent | GrowthAuditRebalanceEvent;
+export interface GrowthAuditEventBase {
+  v: 1;
+  playerId: string;
+  creatureId: string;
+  grantId: string;
+  balanceVersion: number;
+  levelFrom: number;
+  levelTo: number;
+  deltas: BaseStatTendencies;
+  aggregateRevision: number;
+  createdAt: string;
+  previousHash: string;
+  eventHash: string;
+}
+export interface GrowthAuditLevelUpEvent extends GrowthAuditEventBase {
+  kind: 'level-up';
+  model: StatGrowthModel;
+}
+export interface GrowthAuditRebalanceEvent extends GrowthAuditEventBase {
+  kind: 'rebalance';
+  model: 'rebalance';
+  targetBalanceVersion: number;
+}
+export type GrowthAuditEventHashInput = Omit<GrowthAuditLevelUpEvent, 'eventHash'> | Omit<GrowthAuditRebalanceEvent, 'eventHash'>;
+
+export interface CreatureStatGrowthState {
+  /** Model selected for future level-ups; historical events retain their own model. */
+  model: StatGrowthModel;
+  basis: CreatureStatGrowthBasis;
+  events: GrowthAuditEvent[];
+}
+
 export interface CreatureAttackRecord {
   id: string;
   name: string;
@@ -197,6 +251,10 @@ export interface CreatureSaveRecord {
   maxHp: number;
   fainted: boolean;
   cooldowns: Record<string, string>;
+  /** Historical stat deltas are append-only; omitted only by pre-growth fixtures/legacy records. */
+  statGrowth?: CreatureStatGrowthState;
+  /** Transient authority input; repositories reject it before persistence. */
+  pendingGrowthEvents?: CreatureStatGrowthDraftEvent[];
 }
 
 export type BattleKind = 'wild' | 'guard-theft';
@@ -473,13 +531,16 @@ export interface WildEncounterState {
 
 export interface ClaimWildEncounterMessage {
   encounterId: string;
+  /** Authority v1: exact canonical active-party ordering and revision. */
+  activePartyCreatureIds?: string[];
+  expectedRosterRevision?: number;
   activeCreature?: CreatureSaveRecord;
 }
 
 export interface ClaimGuardedFarmTheftMessage {
-  farm: FarmSaveRecord;
-  activeCreature?: CreatureSaveRecord;
-  guardCreature?: CreatureSaveRecord;
+  farmId: string;
+  activePartyCreatureIds?: string[];
+  expectedRosterRevision?: number;
 }
 
 export interface ResolveWildEncounterMessage {
@@ -509,7 +570,9 @@ export interface BattleAttackIntentMessage {
 export interface JoinBattleOptions {
   battleId: string;
   battleToken: string;
-  profile: PlayerProfile;
+  /** Identity is derived from the guest credential; profile data is never trusted on join. */
+  profile?: PlayerProfile;
+  credential?: string;
   balanceVersion: number;
 }
 
@@ -571,7 +634,9 @@ export interface MoveIntentMessage {
 
 export interface JoinLocationOptions {
   mapId: MapId;
-  profile: PlayerProfile;
+  /** Identity and position are loaded from the canonical account snapshot. */
+  profile?: PlayerProfile;
+  credential?: string;
   balanceVersion: number;
   position?: WorldPosition;
   transitionId?: string;

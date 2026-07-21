@@ -23,6 +23,7 @@ export interface BattleClaim {
   playerProfile: PlayerProfile;
   playerCreature: CreatureSaveRecord;
   guardCreature?: CreatureSaveRecord;
+  guardOwnerPlayerId?: string;
   wildSpeciesId: number;
   zoneId?: string;
   createdAt: number;
@@ -100,6 +101,7 @@ export function createGuardBattleClaim({
     playerProfile,
     playerCreature,
     guardCreature,
+    guardOwnerPlayerId: farm.ownerPlayerId,
     wildSpeciesId: guardCreature.speciesId,
     createdAt: now,
     expiresAt: now + BATTLE_CLAIM_TTL_MS

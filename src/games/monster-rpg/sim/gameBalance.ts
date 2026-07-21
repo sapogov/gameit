@@ -1,4 +1,16 @@
+import type { CreatureStatKey, CreatureType } from './types';
+
+const growthStatKeys: readonly CreatureStatKey[] = ['hp', 'attack', 'defense', 'speed', 'stamina'];
+const rarities = ['common', 'uncommon', 'rare', 'legendary', 'mythical'] as const;
+const creatureTypes = ['verdant', 'ember', 'tide', 'stone', 'gale', 'spark', 'shade', 'lumen', 'frost', 'mystic', 'toxin', 'metal'] as const;
+
 export const CURRENT_BALANCE_VERSION = 2 as const;
+
+/** Frozen vectors used to authenticate historic server growth events. */
+export const AUDIT_BALANCE_CATALOG = Object.freeze({
+  1: Object.freeze({ deterministicDelta: Object.freeze({ hp: 2, attack: 1, defense: 1, speed: 1, stamina: 1 }), randomRange: Object.freeze({ min: 0, max: 6 }) }),
+  2: Object.freeze({ deterministicDelta: Object.freeze({ hp: 2, attack: 1, defense: 1, speed: 1, stamina: 1 }), randomRange: Object.freeze({ min: 0, max: 6 }) })
+});
 
 export interface RewardChanceBalanceEntry {
   readonly id: string;
@@ -11,6 +23,7 @@ export interface RewardChanceBalanceEntry {
 export interface GameBalanceConfig {
   readonly version: typeof CURRENT_BALANCE_VERSION;
   readonly creatures: { readonly activePartyLimit: number; readonly reviveRestoreRatio: number };
+  readonly creatureStatGrowth: { readonly model: 'deterministic-default' | 'rarity-weighted-random'; readonly experiencePerLevel: number; readonly deterministicDelta: { readonly hp: number; readonly attack: number; readonly defense: number; readonly speed: number; readonly stamina: number }; readonly randomRange: { readonly min: number; readonly max: number }; readonly rarityBonus: Record<'common' | 'uncommon' | 'rare' | 'legendary' | 'mythical', number>; readonly speciesPreferenceBonus: number; readonly typePreferenceBonus: number; readonly typeStatPreference: Record<CreatureType, CreatureStatKey> };
   readonly battles: { readonly disconnectGraceMs: number; readonly fatigueRecoveryFloor: number; readonly baseRunChance: number; readonly runAttemptBonus: number };
   readonly items: { readonly startingReviveQuantity: number };
   readonly inventory: { readonly startingMagicDust: number; readonly startingClinks: number };
@@ -29,6 +42,7 @@ export interface GameBalanceConfig {
 export const GAME_BALANCE_CONFIG: Readonly<GameBalanceConfig> = Object.freeze({
   version: CURRENT_BALANCE_VERSION,
   creatures: Object.freeze({ activePartyLimit: 5, reviveRestoreRatio: 0.25 }),
+  creatureStatGrowth: Object.freeze({ model: 'deterministic-default', experiencePerLevel: 100, deterministicDelta: Object.freeze({ hp: 2, attack: 1, defense: 1, speed: 1, stamina: 1 }), randomRange: Object.freeze({ min: 0, max: 2 }), rarityBonus: Object.freeze({ common: 0, uncommon: 0, rare: 1, legendary: 1, mythical: 2 }), speciesPreferenceBonus: 1, typePreferenceBonus: 1, typeStatPreference: Object.freeze({ verdant: 'stamina', ember: 'attack', tide: 'hp', stone: 'defense', gale: 'speed', spark: 'speed', shade: 'attack', lumen: 'stamina', frost: 'defense', mystic: 'stamina', toxin: 'attack', metal: 'defense' }) }),
   battles: Object.freeze({ disconnectGraceMs: 15_000, fatigueRecoveryFloor: 4, baseRunChance: 0.5, runAttemptBonus: 0.25 }),
   items: Object.freeze({ startingReviveQuantity: 1 }),
   inventory: Object.freeze({ startingMagicDust: 0, startingClinks: 0 }),
@@ -58,6 +72,15 @@ export function validateGameBalanceConfig(config: unknown = GAME_BALANCE_CONFIG)
   const probability = (path: string) => validateNumber(candidate, path, issues, { minimum: 0, maximum: 1 });
   integer('creatures.activePartyLimit', 1);
   probability('creatures.reviveRestoreRatio');
+  integer('creatureStatGrowth.experiencePerLevel', 1);
+  integer('creatureStatGrowth.deterministicDelta.hp'); integer('creatureStatGrowth.deterministicDelta.attack'); integer('creatureStatGrowth.deterministicDelta.defense'); integer('creatureStatGrowth.deterministicDelta.speed'); integer('creatureStatGrowth.deterministicDelta.stamina');
+  integer('creatureStatGrowth.randomRange.min'); integer('creatureStatGrowth.randomRange.max');
+  integer('creatureStatGrowth.speciesPreferenceBonus'); integer('creatureStatGrowth.typePreferenceBonus');
+  if (getPath(candidate, 'creatureStatGrowth.model') !== 'deterministic-default' && getPath(candidate, 'creatureStatGrowth.model') !== 'rarity-weighted-random') issues.push({ path: 'creatureStatGrowth.model', message: 'must be a supported model' });
+  const randomMin = getPath(candidate, 'creatureStatGrowth.randomRange.min'); const randomMax = getPath(candidate, 'creatureStatGrowth.randomRange.max');
+  if (typeof randomMin === 'number' && typeof randomMax === 'number' && randomMin > randomMax) issues.push({ path: 'creatureStatGrowth.randomRange', message: 'min must not exceed max' });
+  validateExactNumberMap(candidate, 'creatureStatGrowth.rarityBonus', rarities, issues);
+  validateExactStringMap(candidate, 'creatureStatGrowth.typeStatPreference', creatureTypes, growthStatKeys, issues);
   integer('battles.disconnectGraceMs', 1);
   integer('battles.fatigueRecoveryFloor');
   probability('battles.baseRunChance');
@@ -151,6 +174,26 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
   const prototype = Object.getPrototypeOf(value);
   return prototype === Object.prototype || prototype === null;
+}
+
+function validateExactNumberMap(root: Record<string, unknown>, path: string, keys: readonly string[], issues: BalanceValidationIssue[]): void {
+  const value = getPath(root, path);
+  if (!value || typeof value !== 'object' || Array.isArray(value)) { issues.push({ path, message: 'must be an object' }); return; }
+  const record = value as Record<string, unknown>;
+  for (const key of keys) {
+    const start = issues.length;
+    validateNumber(record, key, issues, { integer: true, minimum: 0 });
+    for (let index = start; index < issues.length; index += 1) issues[index].path = `${path}.${issues[index].path}`;
+  }
+  for (const key of Object.keys(record)) if (!keys.includes(key)) issues.push({ path: `${path}.${key}`, message: 'is not supported' });
+}
+
+function validateExactStringMap(root: Record<string, unknown>, path: string, keys: readonly string[], values: readonly string[], issues: BalanceValidationIssue[]): void {
+  const value = getPath(root, path);
+  if (!value || typeof value !== 'object' || Array.isArray(value)) { issues.push({ path, message: 'must be an object' }); return; }
+  const record = value as Record<string, unknown>;
+  for (const key of keys) if (!values.includes(record[key] as string)) issues.push({ path: `${path}.${key}`, message: 'must be a supported stat key' });
+  for (const key of Object.keys(record)) if (!keys.includes(key)) issues.push({ path: `${path}.${key}`, message: 'is not supported' });
 }
 
 function validateNumber(root: Record<string, unknown>, path: string, issues: BalanceValidationIssue[], rules: { integer?: boolean; minimum: number; maximum?: number }): void {

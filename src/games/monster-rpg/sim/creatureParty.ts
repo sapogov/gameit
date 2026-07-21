@@ -24,8 +24,10 @@ export type CreaturePartyResult =
 export function placeNewCreature(
   state: MonsterRpgSaveState,
   creatureId: string,
-  creature: CreatureSaveRecord
+  creature: CreatureSaveRecord,
+  options: { now?: Date } = {}
 ): MonsterRpgSaveState {
+  const now = options.now ?? new Date();
   const goesToActiveParty = state.creatures.activePartyCreatureIds.length < ACTIVE_PARTY_LIMIT;
 
   return {
@@ -42,11 +44,17 @@ export function placeNewCreature(
         ...state.creatures.creatures,
         [creatureId]: creature
       }
-    }
+    },
+    updatedAt: now.toISOString()
   };
 }
 
-export function moveCreatureToActiveParty(state: MonsterRpgSaveState, creatureId: string): CreaturePartyResult {
+export function moveCreatureToActiveParty(
+  state: MonsterRpgSaveState,
+  creatureId: string,
+  options: { now?: Date } = {}
+): CreaturePartyResult {
+  const now = options.now ?? new Date();
   if (!state.creatures.creatures[creatureId]) return { ok: false, state, reason: 'missing-creature' };
   if (state.creatures.activePartyCreatureIds.includes(creatureId)) {
     return { ok: false, state, reason: 'already-active' };
@@ -64,12 +72,17 @@ export function moveCreatureToActiveParty(state: MonsterRpgSaveState, creatureId
         activePartyCreatureIds: [...state.creatures.activePartyCreatureIds, creatureId],
         storedCreatureIds: state.creatures.storedCreatureIds.filter((id) => id !== creatureId)
       },
-      updatedAt: new Date().toISOString()
+      updatedAt: now.toISOString()
     }
   };
 }
 
-export function moveCreatureToStorage(state: MonsterRpgSaveState, creatureId: string): CreaturePartyResult {
+export function moveCreatureToStorage(
+  state: MonsterRpgSaveState,
+  creatureId: string,
+  options: { now?: Date } = {}
+): CreaturePartyResult {
+  const now = options.now ?? new Date();
   if (!state.creatures.creatures[creatureId]) return { ok: false, state, reason: 'missing-creature' };
   if (state.creatures.storedCreatureIds.includes(creatureId)) {
     return { ok: false, state, reason: 'already-stored' };
@@ -84,12 +97,18 @@ export function moveCreatureToStorage(state: MonsterRpgSaveState, creatureId: st
         activePartyCreatureIds: state.creatures.activePartyCreatureIds.filter((id) => id !== creatureId),
         storedCreatureIds: [...state.creatures.storedCreatureIds, creatureId]
       },
-      updatedAt: new Date().toISOString()
+      updatedAt: now.toISOString()
     }
   };
 }
 
-export function setCreatureHp(state: MonsterRpgSaveState, creatureId: string, hp: number): CreaturePartyResult {
+export function setCreatureHp(
+  state: MonsterRpgSaveState,
+  creatureId: string,
+  hp: number,
+  options: { now?: Date } = {}
+): CreaturePartyResult {
+  const now = options.now ?? new Date();
   const creature = state.creatures.creatures[creatureId];
   if (!creature) return { ok: false, state, reason: 'missing-creature' };
 
@@ -111,12 +130,16 @@ export function setCreatureHp(state: MonsterRpgSaveState, creatureId: string, hp
           [creatureId]: nextCreature
         }
       },
-      updatedAt: new Date().toISOString()
+      updatedAt: now.toISOString()
     }
   };
 }
 
-export function healAllCreaturesAtHospital(state: MonsterRpgSaveState): MonsterRpgSaveState {
+export function healAllCreaturesAtHospital(
+  state: MonsterRpgSaveState,
+  options: { now?: Date } = {}
+): MonsterRpgSaveState {
+  const now = options.now ?? new Date();
   const healedCreatures = Object.fromEntries(
     Object.entries(state.creatures.creatures).map(([id, creature]) => [
       id,
@@ -134,7 +157,7 @@ export function healAllCreaturesAtHospital(state: MonsterRpgSaveState): MonsterR
       ...state.creatures,
       creatures: healedCreatures
     },
-    updatedAt: new Date().toISOString()
+    updatedAt: now.toISOString()
   };
 }
 
@@ -142,7 +165,12 @@ export function isAtVillageHospital(state: MonsterRpgSaveState): boolean {
   return state.mapId.endsWith('-clinic-interior');
 }
 
-export function useReviveItem(state: MonsterRpgSaveState, creatureId: string): CreaturePartyResult {
+export function useReviveItem(
+  state: MonsterRpgSaveState,
+  creatureId: string,
+  options: { now?: Date } = {}
+): CreaturePartyResult {
+  const now = options.now ?? new Date();
   const creature = state.creatures.creatures[creatureId];
   if (!creature) return { ok: false, state, reason: 'missing-creature' };
   if (!isCreatureFainted(creature)) return { ok: false, state, reason: 'not-fainted' };
@@ -180,7 +208,7 @@ export function useReviveItem(state: MonsterRpgSaveState, creatureId: string): C
           }
         }
       },
-      updatedAt: new Date().toISOString()
+      updatedAt: now.toISOString()
     }
   };
 }

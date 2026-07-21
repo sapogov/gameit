@@ -12,6 +12,7 @@ import { applyPlayerExperience, type ApplyPlayerExperienceResult } from './playe
 import { getSpeciesById, isKnownSpeciesId } from './speciesCatalog';
 import { GAME_BALANCE_CONFIG } from './gameBalance';
 import { applyRewardChanceEntryOverrides, assertValidMatrix, rollRewardChanceMatrix, type RewardChanceEntry } from './rewardChanceMatrix';
+import { applyCreatureExperience } from './statGrowth';
 
 export const CLINKS_CURRENCY_ID = 'clinks' as const;
 const COMMON_CLINKS_ENTRIES: readonly RewardChanceEntry<typeof CLINKS_CURRENCY_ID>[] =
@@ -83,13 +84,15 @@ export function generateWildBattleRewards(
 
 export function applyBattleRewardsToSave(
   state: MonsterRpgSaveState,
-  result: BattleResultMessage
+  result: BattleResultMessage,
+  options: { rng?: () => number; now?: Date } = {}
 ): ApplyBattleRewardsResult {
-  const stateWithBattleCreature = updateBattleCreatureOutcome(state, result);
+  const now = options.now ?? new Date();
+  const stateWithBattleCreature = updateBattleCreatureOutcome(state, result, now);
 
   if (result.outcome !== 'defeated' || !result.rewardGranted || !result.rewards) {
     return {
-      state: withUpdatedAt(stateWithBattleCreature),
+      state: withUpdatedAt(stateWithBattleCreature, now),
       rewardsApplied: false,
       levelRewardPackTraces: [],
       claimedLevelRewardIds: []
@@ -99,14 +102,14 @@ export function applyBattleRewardsToSave(
   const rewardFlag = getBattleRewardFlag(result.battleId);
   if (stateWithBattleCreature.progression.flags[rewardFlag]) {
     return {
-      state: withUpdatedAt(stateWithBattleCreature),
+      state: withUpdatedAt(stateWithBattleCreature, now),
       rewardsApplied: false,
       levelRewardPackTraces: [],
       claimedLevelRewardIds: []
     };
   }
 
-  const rewardNumbers = applyRewardNumbers(stateWithBattleCreature, result);
+  const rewardNumbers = applyRewardNumbers(stateWithBattleCreature, result, options);
   let next = rewardNumbers.state;
   let packTrace: PackOpenTrace | undefined;
 
@@ -133,7 +136,7 @@ export function applyBattleRewardsToSave(
           [rewardFlag]: true
         }
       }
-    }),
+    }, now),
     rewardsApplied: true,
     packTrace,
     levelRewardPackTraces: rewardNumbers.progression.packTraces,
@@ -143,13 +146,15 @@ export function applyBattleRewardsToSave(
 
 function updateBattleCreatureOutcome(
   state: MonsterRpgSaveState,
-  result: BattleResultMessage
+  result: BattleResultMessage,
+  now: Date
 ): MonsterRpgSaveState {
   const creature = state.creatures.creatures[result.playerCreatureId];
   if (!creature) return state;
 
   return {
     ...state,
+    updatedAt: now.toISOString(),
     creatures: {
       ...state.creatures,
       creatures: {
@@ -166,7 +171,8 @@ function updateBattleCreatureOutcome(
 
 function applyRewardNumbers(
   state: MonsterRpgSaveState,
-  result: BattleResultMessage
+  result: BattleResultMessage,
+  options: { rng?: () => number; now?: Date }
 ): { state: MonsterRpgSaveState; progression: ApplyPlayerExperienceResult } {
   const rewards = result.rewards;
   if (!rewards) {
@@ -191,10 +197,9 @@ function applyRewardNumbers(
         ? rewards.battlingCreatureExperience
         : rewards.activePartyExperience;
 
-    creatures[creatureId] = {
-      ...creature,
-      experience: creature.experience + experience
-    };
+    const rarity = getSpeciesById(creature.speciesId)?.rarity;
+    if (!rarity) return;
+    creatures[creatureId] = applyCreatureExperience(creature, experience, rarity, { species: getSpeciesById(creature.speciesId), ...(options.rng ? { rng: options.rng } : {}), ...(options.now ? { now: () => options.now! } : {}) });
   });
 
   const withNumberRewards: MonsterRpgSaveState = {
@@ -249,10 +254,10 @@ function getBattleRewardFlag(battleId: string): string {
   return `battleReward:${battleId}`;
 }
 
-function withUpdatedAt(state: MonsterRpgSaveState): MonsterRpgSaveState {
+function withUpdatedAt(state: MonsterRpgSaveState, now: Date): MonsterRpgSaveState {
   return {
     ...state,
-    updatedAt: new Date().toISOString()
+    updatedAt: now.toISOString()
   };
 }
 

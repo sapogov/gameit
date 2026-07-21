@@ -1,6 +1,6 @@
 import type { MonsterRpgSaveState, SaveStack } from './types';
 import { getCreatureCardById, MAGIC_DUST_CURRENCY_ID, STARTER_FARM_CARD_ID, STARTER_CREATURE_CARD_IDS } from './cards';
-import { convertCreatureCardViaElder, createCreatureCardInstance } from './creatureLifecycle';
+import { convertCreatureCardViaElder, createCreatureCardInstance, type CreatureLifecycleOptions } from './creatureLifecycle';
 import { createFarmSaveRecord, MAGIC_DUST_FARM_ID, MAGIC_DUST_FARM_TYPE } from './farms';
 
 export const STARTER_CREATURE_MAGIC_DUST_COST = 1;
@@ -36,6 +36,8 @@ export type StarterFarmBuildResult =
   | { ok: true; state: MonsterRpgSaveState }
   | { ok: false; state: MonsterRpgSaveState; reason: 'already-built' | 'missing-card' };
 
+export type OnboardingOptions = Pick<CreatureLifecycleOptions, 'now' | 'rng'>;
+
 export function getVillageElderOnboardingStep(state: MonsterRpgSaveState): VillageElderOnboardingStep {
   if (!isVillageElderDialogComplete(state)) return 'elder-dialog';
   if (!hasConvertedStarterCreatureCards(state)) return 'convert-creatures';
@@ -68,15 +70,16 @@ export function getStarterCreatureConversionCost(): number {
   return starterCreatureCards.length * STARTER_CREATURE_MAGIC_DUST_COST;
 }
 
-export function completeVillageElderDialog(state: MonsterRpgSaveState): MonsterRpgSaveState {
-  const withPack = grantStarterPack(state);
+export function completeVillageElderDialog(state: MonsterRpgSaveState, options?: OnboardingOptions): MonsterRpgSaveState {
+  const now = options?.now ?? new Date();
+  const withPack = grantStarterPack(state, { ...options, now });
 
   return withFlags(withPack, {
     [villageElderFlags.dialogComplete]: true
-  });
+  }, now);
 }
 
-export function convertStarterCreatureCards(state: MonsterRpgSaveState): StarterCreatureConversionResult {
+export function convertStarterCreatureCards(state: MonsterRpgSaveState, options?: OnboardingOptions): StarterCreatureConversionResult {
   if (hasConvertedStarterCreatureCards(state)) {
     return { ok: false, state, reason: 'already-converted' };
   }
@@ -98,13 +101,14 @@ export function convertStarterCreatureCards(state: MonsterRpgSaveState): Starter
     return { ok: false, state, reason: 'missing-magic-dust' };
   }
 
+  const now = options?.now ?? new Date();
   const stateWithCreatures = starterCreatureCards.reduce((currentState, card) => {
     const instance = Object.values(currentState.inventory.creatureCards).find(
       (creatureCard) => creatureCard.cardDefinitionId === card.cardId
     );
     if (!instance) throw new Error(`Missing starter Creature Card instance ${card.cardId}`);
 
-    const result = convertCreatureCardViaElder(currentState, instance.id);
+    const result = convertCreatureCardViaElder(currentState, instance.id, { ...options, now });
     if (!result.ok) throw new Error(`Starter Creature Card conversion failed: ${result.reason}`);
 
     return result.state;
@@ -114,11 +118,11 @@ export function convertStarterCreatureCards(state: MonsterRpgSaveState): Starter
     ok: true,
     state: withFlags(stateWithCreatures, {
       [villageElderFlags.starterCreaturesConverted]: true
-    })
+    }, now)
   };
 }
 
-export function buildStarterMagicDustFarm(state: MonsterRpgSaveState): StarterFarmBuildResult {
+export function buildStarterMagicDustFarm(state: MonsterRpgSaveState, options?: OnboardingOptions): StarterFarmBuildResult {
   if (hasBuiltStarterMagicDustFarm(state)) {
     return { ok: false, state, reason: 'already-built' };
   }
@@ -128,6 +132,7 @@ export function buildStarterMagicDustFarm(state: MonsterRpgSaveState): StarterFa
   }
 
   const ownerPlayerId = state.profile.playerId;
+  const now = options?.now ?? new Date();
   const withFarm: MonsterRpgSaveState = {
     ...state,
     inventory: {
@@ -142,7 +147,8 @@ export function buildStarterMagicDustFarm(state: MonsterRpgSaveState): StarterFa
           id: MAGIC_DUST_FARM_ID,
           ownerPlayerId,
           farmType: MAGIC_DUST_FARM_TYPE,
-          villageId: state.profile.homeVillageId
+          villageId: state.profile.homeVillageId,
+          now
         })
       }
     }
@@ -152,19 +158,20 @@ export function buildStarterMagicDustFarm(state: MonsterRpgSaveState): StarterFa
     ok: true,
     state: withFlags(withFarm, {
       [villageElderFlags.starterFarmBuilt]: true
-    })
+    }, now)
   };
 }
 
-export function completeVillageElderOnboarding(state: MonsterRpgSaveState): MonsterRpgSaveState {
+export function completeVillageElderOnboarding(state: MonsterRpgSaveState, options?: OnboardingOptions): MonsterRpgSaveState {
   if (!hasConvertedStarterCreatureCards(state) || !hasBuiltStarterMagicDustFarm(state)) return state;
+  const now = options?.now ?? new Date();
 
   return withFlags(state, {
     [villageElderFlags.onboardingComplete]: true
-  });
+  }, now);
 }
 
-function grantStarterPack(state: MonsterRpgSaveState): MonsterRpgSaveState {
+function grantStarterPack(state: MonsterRpgSaveState, options: OnboardingOptions & { now: Date }): MonsterRpgSaveState {
   if (hasClaimedStarterPack(state)) return state;
 
   const ownerPlayerId = state.profile.playerId;
@@ -178,7 +185,8 @@ function grantStarterPack(state: MonsterRpgSaveState): MonsterRpgSaveState {
     const definition = getCreatureCardById(card.cardId);
     if (!definition) throw new Error(`Missing starter Creature Card definition ${card.cardId}`);
     const instance = createCreatureCardInstance(definition, ownerPlayerId, creatureCards, {
-      seed: card.speciesId * 1_001
+      seed: card.speciesId * 1_001,
+      rng: options.rng
     });
     creatureCards = {
       ...creatureCards,
@@ -210,10 +218,10 @@ function grantStarterPack(state: MonsterRpgSaveState): MonsterRpgSaveState {
 
   return withFlags(withPack, {
     [villageElderFlags.starterPackClaimed]: true
-  });
+  }, options.now);
 }
 
-function withFlags(state: MonsterRpgSaveState, flags: Record<string, boolean>): MonsterRpgSaveState {
+function withFlags(state: MonsterRpgSaveState, flags: Record<string, boolean>, now: Date): MonsterRpgSaveState {
   return {
     ...state,
     progression: {
@@ -223,7 +231,7 @@ function withFlags(state: MonsterRpgSaveState, flags: Record<string, boolean>): 
         ...flags
       }
     },
-    updatedAt: new Date().toISOString()
+    updatedAt: now.toISOString()
   };
 }
 

@@ -32,6 +32,8 @@ export interface BattleResolution {
   playerCreatureId: string;
   playerCreatureHp: number;
   playerCreatureFainted: boolean;
+  opponentCreatureHp: number;
+  opponentCreatureFainted: boolean;
   rewardGranted: boolean;
   rewards?: BattleRewardBundle;
 }
@@ -254,6 +256,8 @@ export function toBattleResult(state: BattleRoomState): BattleResolution | null 
     playerCreatureId: state.player.activeCreature.id,
     playerCreatureHp: state.player.activeCreature.hp,
     playerCreatureFainted: state.player.activeCreature.fainted,
+    opponentCreatureHp: state.enemy.activeCreature.hp,
+    opponentCreatureFainted: state.enemy.activeCreature.fainted,
     rewardGranted: state.rewardGranted,
     rewards: state.rewardGranted ? state.rewards : undefined
   };

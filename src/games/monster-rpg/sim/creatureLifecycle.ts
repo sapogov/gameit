@@ -13,6 +13,7 @@ import type {
 } from './types';
 import { getSpeciesById } from './speciesCatalog';
 import { placeNewCreature } from './creatureParty';
+import { GAME_BALANCE_CONFIG } from './gameBalance';
 
 export const MAGIC_DUST_MATERIAL_ID = 'magicDust';
 export const CREATURE_ATTACK_COUNT = 4;
@@ -34,11 +35,17 @@ export type CreatureLifecycleResult =
   | { ok: true; state: MonsterRpgSaveState; creatureId?: string; eggId?: string }
   | { ok: false; state: MonsterRpgSaveState; reason: CreatureLifecycleFailureReason };
 
+export interface CreatureLifecycleOptions {
+  seed?: number;
+  now?: Date;
+  rng?: () => number;
+}
+
 export function createCreatureCardInstance(
   definition: CreatureCardDefinitionLike,
   ownerPlayerId: string,
   existingCards: Record<string, CreatureCardInstance>,
-  options?: { seed?: number; rng?: () => number }
+  options?: CreatureLifecycleOptions
 ): CreatureCardInstance {
   const species = getSpeciesById(definition.speciesId);
   if (!species) throw new Error(`Unknown Creature Card species ${definition.speciesId}`);
@@ -61,7 +68,7 @@ export function createCreatureCardInstance(
 export function convertCreatureCardViaElder(
   state: MonsterRpgSaveState,
   cardInstanceId: string,
-  options?: { seed?: number; rng?: () => number }
+  options?: CreatureLifecycleOptions
 ): CreatureLifecycleResult {
   const card = findCreatureCardInstance(state, cardInstanceId);
   if (!card) return { ok: false, state, reason: 'missing-card' };
@@ -71,6 +78,7 @@ export function convertCreatureCardViaElder(
 
   const requirements = getCreatureCreationRequirements(species);
   if (!hasRequirements(state, requirements)) return { ok: false, state, reason: 'missing-material' };
+  const now = options?.now ?? new Date();
 
   const stateAfterCost = consumeRequirements(state, requirements);
   const creatureCards = { ...stateAfterCost.inventory.creatureCards };
@@ -113,7 +121,7 @@ export function convertCreatureCardViaElder(
       creatureId,
       state: {
         ...stateWithCreature,
-        updatedAt: new Date().toISOString()
+        updatedAt: now.toISOString()
       }
     };
   }
@@ -128,7 +136,7 @@ export function convertCreatureCardViaElder(
     stats: card.stats,
     inheritedAttacks: card.knownAttacks,
     requirements,
-    createdAt: new Date().toISOString()
+    createdAt: now.toISOString()
   };
 
   return {
@@ -144,7 +152,7 @@ export function convertCreatureCardViaElder(
           [eggId]: egg
         }
       },
-      updatedAt: new Date().toISOString()
+      updatedAt: now.toISOString()
     }
   };
 }
@@ -152,10 +160,11 @@ export function convertCreatureCardViaElder(
 export function createDirectDropEgg(
   state: MonsterRpgSaveState,
   speciesId: number,
-  options?: { seed?: number; rng?: () => number }
+  options?: CreatureLifecycleOptions
 ): CreatureLifecycleResult {
   const species = getSpeciesById(speciesId);
   if (!species) return { ok: false, state, reason: 'invalid-species' };
+  const now = options?.now ?? new Date();
 
   const rng = options?.rng ?? createRng(options?.seed ?? hashString(`${state.profile.playerId}:${species.slug}:egg`));
   const eggId = createNextId(state.inventory.eggs, `egg-${species.slug}`);
@@ -167,7 +176,7 @@ export function createDirectDropEgg(
     origin: 'direct-drop',
     stats: rollStats(species, rng),
     requirements: getCreatureCreationRequirements(species),
-    createdAt: new Date().toISOString()
+    createdAt: now.toISOString()
   };
 
   return {
@@ -182,7 +191,7 @@ export function createDirectDropEgg(
           [eggId]: egg
         }
       },
-      updatedAt: new Date().toISOString()
+      updatedAt: now.toISOString()
     }
   };
 }
@@ -190,7 +199,7 @@ export function createDirectDropEgg(
 export function hatchEgg(
   state: MonsterRpgSaveState,
   eggId: string,
-  options?: { seed?: number; rng?: () => number }
+  options?: CreatureLifecycleOptions
 ): CreatureLifecycleResult {
   const egg = state.inventory.eggs[eggId];
   if (!egg) return { ok: false, state, reason: 'missing-egg' };
@@ -198,6 +207,7 @@ export function hatchEgg(
   const species = getSpeciesById(egg.speciesId);
   if (!species) return { ok: false, state, reason: 'invalid-species' };
   if (!hasRequirements(state, egg.requirements)) return { ok: false, state, reason: 'missing-material' };
+  const now = options?.now ?? new Date();
 
   const rng = options?.rng ?? createRng(options?.seed ?? hashString(egg.id));
   const stats = egg.stats ?? rollStats(species, rng);
@@ -240,7 +250,7 @@ export function hatchEgg(
     creatureId,
     state: {
       ...stateWithCreature,
-      updatedAt: new Date().toISOString()
+      updatedAt: now.toISOString()
     }
   };
 }
@@ -343,7 +353,8 @@ function createCreatureRecord({
     hp: stats.hp,
     maxHp: stats.hp,
     fainted: false,
-    cooldowns: {}
+    cooldowns: {},
+    statGrowth: { model: GAME_BALANCE_CONFIG.creatureStatGrowth.model, basis: { level: 1, stats: { ...stats } }, events: [] }
   };
 }
 

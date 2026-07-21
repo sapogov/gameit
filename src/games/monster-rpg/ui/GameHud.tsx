@@ -56,7 +56,6 @@ interface GameHudProps {
   onExport: () => void;
   onImport: (file: File) => void;
   onReset: () => void;
-  onOpenPack: () => void;
   onDiscardItem: (stackId: string, quantity: number) => void;
   onClaimReward: (sourceId: string) => void;
   onActivateCard: (cardId: string) => void;
@@ -94,7 +93,6 @@ export function GameHud({
   onExport,
   onImport,
   onReset,
-  onOpenPack,
   onDiscardItem,
   onClaimReward,
   onActivateCard,
@@ -399,11 +397,6 @@ export function GameHud({
             })}
             {inboxBundles.length > 0 ? <div className="monster-reward-inbox"><strong>Reward Inbox ({inboxBundles.length}/50)</strong>{inboxBundles.map((bundle) => <div key={bundle.sourceId}><small>{bundle.items.map((item) => `${getItemDefinition(item.itemId)?.name ?? item.itemId} ×${item.quantity}`).join(', ')}</small><button onClick={() => onClaimReward(bundle.sourceId)} type="button">Claim</button></div>)}</div> : null}
           </section>
-          <div className="monster-card-actions">
-            <button onClick={onOpenPack} type="button">
-              Open Pack
-            </button>
-          </div>
           {packOpenTrace ? (
             <small>
               Last pack: {packOpenTrace.cards.length} cards at {new Date(packOpenTrace.openedAt).toLocaleTimeString()}
@@ -504,8 +497,8 @@ export function GameHud({
                 type="file"
               />
             </label>
-            <button onClick={onReset} title="Reset local profile" type="button">
-              Reset
+            <button onClick={onReset} title="Reset progress" type="button">
+              Reset progress
             </button>
           </div>
         </details>

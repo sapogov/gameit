@@ -61,13 +61,15 @@ describe('Monster RPG creature party, storage, and recovery', () => {
     const state = createCommonCreatures(createStateWithMagicDust(5), 1);
     const creatureId = state.creatures.activePartyCreatureIds[0];
 
-    const fainted = setCreatureHp(state, creatureId, 0);
+    const now = new Date('2026-07-21T10:00:00.000Z');
+    const fainted = setCreatureHp(state, creatureId, 0, { now });
     expect(fainted.ok).toBe(true);
     if (!fainted.ok) throw new Error(fainted.reason);
 
     const creature = fainted.state.creatures.creatures[creatureId];
     expect(creature.hp).toBe(0);
     expect(creature.fainted).toBe(true);
+    expect(fainted.state.updatedAt).toBe(now.toISOString());
     expect(canCreatureUseRole(creature, 'battle')).toBe(false);
     expect(canCreatureUseRole(creature, 'guard')).toBe(false);
     expect(canCreatureUseRole(creature, 'mount')).toBe(false);
@@ -80,7 +82,8 @@ describe('Monster RPG creature party, storage, and recovery', () => {
     expect(fainted.ok).toBe(true);
     if (!fainted.ok) throw new Error(fainted.reason);
 
-    const revived = useReviveItem(withReviveItems(fainted.state, 1), creatureId);
+    const reviveNow = new Date('2026-07-21T10:01:00.000Z');
+    const revived = useReviveItem(withReviveItems(fainted.state, 1), creatureId, { now: reviveNow });
     expect(revived.ok).toBe(true);
     if (!revived.ok) throw new Error(revived.reason);
     const revivedCreature = revived.state.creatures.creatures[creatureId];
@@ -88,11 +91,14 @@ describe('Monster RPG creature party, storage, and recovery', () => {
     expect(revivedCreature.hp).toBeGreaterThan(0);
     expect(revivedCreature.hp).toBeLessThan(revivedCreature.maxHp);
     expect(revived.state.inventory.items[REVIVE_ITEM_ID]).toBeUndefined();
+    expect(revived.state.updatedAt).toBe(reviveNow.toISOString());
 
-    const hospitalHealed = healAllCreaturesAtHospital(fainted.state);
+    const healNow = new Date('2026-07-21T10:02:00.000Z');
+    const hospitalHealed = healAllCreaturesAtHospital(fainted.state, { now: healNow });
     const healedCreature = hospitalHealed.creatures.creatures[creatureId];
     expect(healedCreature.fainted).toBe(false);
     expect(healedCreature.hp).toBe(healedCreature.maxHp);
+    expect(hospitalHealed.updatedAt).toBe(healNow.toISOString());
   });
 
   it('detects Village Hospital availability only in clinic interiors', () => {
@@ -113,11 +119,13 @@ describe('Monster RPG creature party, storage, and recovery', () => {
   it('persists party and storage changes across export/import', () => {
     const state = createCommonCreatures(createStateWithMagicDust(10), 2);
     const creatureId = state.creatures.activePartyCreatureIds[0];
-    const stored = moveCreatureToStorage(state, creatureId);
+    const storedNow = new Date('2026-07-21T10:00:00.000Z');
+    const stored = moveCreatureToStorage(state, creatureId, { now: storedNow });
     expect(stored.ok).toBe(true);
     if (!stored.ok) throw new Error(stored.reason);
 
-    const reactivated = moveCreatureToActiveParty(stored.state, creatureId);
+    const activeNow = new Date('2026-07-21T10:01:00.000Z');
+    const reactivated = moveCreatureToActiveParty(stored.state, creatureId, { now: activeNow });
     expect(reactivated.ok).toBe(true);
     if (!reactivated.ok) throw new Error(reactivated.reason);
 
@@ -126,6 +134,8 @@ describe('Monster RPG creature party, storage, and recovery', () => {
     if (!imported.ok) throw new Error(imported.reason);
     expect(imported.state.creatures.activePartyCreatureIds).toEqual(reactivated.state.creatures.activePartyCreatureIds);
     expect(imported.state.creatures.storedCreatureIds).toEqual(reactivated.state.creatures.storedCreatureIds);
+    expect(stored.state.updatedAt).toBe(storedNow.toISOString());
+    expect(reactivated.state.updatedAt).toBe(activeNow.toISOString());
   });
 
   it('rejects imported party layouts above the active cap', () => {
