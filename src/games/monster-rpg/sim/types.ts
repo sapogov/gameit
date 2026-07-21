@@ -113,6 +113,29 @@ export interface BaseStatTendencies {
 
 export type CreatureStatKey = keyof BaseStatTendencies;
 
+export type StatGrowthModel = 'deterministic-default' | 'rarity-weighted-random';
+
+export interface CreatureStatGrowthBasis {
+  level: number;
+  stats: BaseStatTendencies;
+}
+
+export interface CreatureStatGrowthEvent {
+  id: string;
+  kind: 'level-up' | 'rebalance';
+  level: number;
+  model: StatGrowthModel | 'rebalance';
+  deltas: BaseStatTendencies;
+  createdAt: string;
+}
+
+export interface CreatureStatGrowthState {
+  /** Model selected for future level-ups; historical events retain their own model. */
+  model: StatGrowthModel;
+  basis: CreatureStatGrowthBasis;
+  events: CreatureStatGrowthEvent[];
+}
+
 export interface CreatureAttackRecord {
   id: string;
   name: string;
@@ -197,6 +220,8 @@ export interface CreatureSaveRecord {
   maxHp: number;
   fainted: boolean;
   cooldowns: Record<string, string>;
+  /** Historical stat deltas are append-only; omitted only by pre-growth fixtures/legacy records. */
+  statGrowth?: CreatureStatGrowthState;
 }
 
 export type BattleKind = 'wild' | 'guard-theft';

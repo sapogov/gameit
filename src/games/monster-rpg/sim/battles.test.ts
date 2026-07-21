@@ -477,7 +477,8 @@ function createCreature(
     hp,
     maxHp: 60,
     fainted,
-    cooldowns: {}
+    cooldowns: {},
+    statGrowth: { model: 'deterministic-default', basis: { level: 1, stats: { hp: 60, attack: 28, defense: 14, speed: 18, stamina: 16 } }, events: [] }
   };
 }
 

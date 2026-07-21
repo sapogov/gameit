@@ -1,1667 +1,1682 @@
 {
   "package.json": {
-    "mtime": 1784572895.670089,
+    "mtime": 1784572896.0770738,
     "ast_hash": "d6a081e637ffb5f29e8a4d39b1ea645f",
     "semantic_hash": ""
   },
-  "scripts/copy-spa-fallback.mjs": {
-    "mtime": 1784572895.7074606,
-    "ast_hash": "f9414782a0382e698c4714370eed8c2e",
-    "semantic_hash": ""
-  },
-  "scripts/generate-monster-rpg-pixel-assets.mjs": {
-    "mtime": 1784572895.7127924,
-    "ast_hash": "c070b27a6daeddd649184c56cf563c45",
-    "semantic_hash": ""
-  },
-  "scripts/monster-rpg-asset-checks.mjs": {
-    "mtime": 1784572895.713249,
-    "ast_hash": "ee53681d3441e9d7cf72662921388efc",
-    "semantic_hash": ""
-  },
-  "scripts/monster-rpg-asset-checks.node-test.mjs": {
-    "mtime": 1784572895.713586,
-    "ast_hash": "e58b7f57be769079fbafaca350369bdd",
-    "semantic_hash": ""
-  },
-  "scripts/monster-rpg-phase4-checks.ts": {
-    "mtime": 1784583001.9841583,
-    "ast_hash": "d8e6fa2729942e3ffbb78c52177fc520",
-    "semantic_hash": ""
-  },
-  "scripts/slice-monster-rpg-ai-assets.mjs": {
-    "mtime": 1784572895.7144217,
-    "ast_hash": "2f8dec4aacd9602e18f1cd388d4c382d",
-    "semantic_hash": ""
-  },
-  "server/battleRegistry.ts": {
-    "mtime": 1784590172.8734589,
-    "ast_hash": "58fe6ee28782af0d28c9f53588cfd03d",
-    "semantic_hash": ""
-  },
-  "server/index.ts": {
-    "mtime": 1784572895.7153888,
-    "ast_hash": "bb9e86ffda35ac1765d34853111bd113",
-    "semantic_hash": ""
-  },
-  "server/rooms/BattleRoom.ts": {
-    "mtime": 1784590172.874588,
-    "ast_hash": "e1bee4fa40a92f52a2303304f5514122",
-    "semantic_hash": ""
-  },
-  "server/rooms/HomeVillageRoom.ts": {
-    "mtime": 1784572895.71601,
-    "ast_hash": "438807a166f5077e066982c4eb3fa7b5",
-    "semantic_hash": ""
-  },
-  "server/rooms/LocationRoom.ts": {
-    "mtime": 1784590172.8754368,
-    "ast_hash": "da3d29a8188bffa86f9eac3bf9ac2f7c",
-    "semantic_hash": ""
-  },
-  "server/rooms/balanceVersion.test.ts": {
-    "mtime": 1784575174.8129084,
-    "ast_hash": "e9ea55f9e1f5270ca22a146fe379a31a",
-    "semantic_hash": ""
-  },
-  "server/schema/BattleState.ts": {
-    "mtime": 1784572895.717251,
-    "ast_hash": "b46835a3e3187fbef7cb62a15728805f",
-    "semantic_hash": ""
-  },
-  "server/schema/LocationState.ts": {
-    "mtime": 1784572895.7175543,
-    "ast_hash": "9da67dedcef44cbb3099cd18e0dd23cb",
-    "semantic_hash": ""
-  },
-  "server/tsconfig.json": {
-    "mtime": 1784572895.7177932,
-    "ast_hash": "fb9f1b4cf06c74745db6071df543dcc3",
-    "semantic_hash": ""
-  },
-  "src/App.tsx": {
-    "mtime": 1784572895.7182016,
-    "ast_hash": "a5091b977b6a6ca59140f3ac09bb7c14",
-    "semantic_hash": ""
-  },
-  "src/admin/AdminPage.tsx": {
-    "mtime": 1784572895.718723,
-    "ast_hash": "d7be7e24a56817ded2fbc05783173b41",
-    "semantic_hash": ""
-  },
-  "src/app/App.tsx": {
-    "mtime": 1784572895.7191377,
-    "ast_hash": "fe4360ef0c4c2d7e5aa57c23c837c143",
-    "semantic_hash": ""
-  },
-  "src/app/portalNavigation.test.ts": {
-    "mtime": 1784572895.7194881,
-    "ast_hash": "550f82e0507d4337cc587f83714c7575",
-    "semantic_hash": ""
-  },
-  "src/app/portalNavigation.ts": {
-    "mtime": 1784572895.7197585,
-    "ast_hash": "fcc076fd29b276153e04fe8d8c741141",
-    "semantic_hash": ""
-  },
-  "src/components/GameCard.tsx": {
-    "mtime": 1784572895.7201936,
-    "ast_hash": "a5a67122c07675186caddce718aa4205",
-    "semantic_hash": ""
-  },
-  "src/components/GameTile.test.tsx": {
-    "mtime": 1784572895.7205272,
-    "ast_hash": "efc77635b29411173a88e324139aeb16",
-    "semantic_hash": ""
-  },
-  "src/components/GameTile.tsx": {
-    "mtime": 1784572895.7208202,
-    "ast_hash": "3ac67a4a5fd05ddad1d42f0b76de1895",
-    "semantic_hash": ""
-  },
-  "src/components/IconCircleButton.tsx": {
-    "mtime": 1784572895.7210631,
-    "ast_hash": "1b9bf1c19a2b82c2ad60c06999747368",
-    "semantic_hash": ""
-  },
-  "src/components/Layout.tsx": {
-    "mtime": 1784572895.7213173,
-    "ast_hash": "62785dbc6181c37a90725b8e854abff5",
-    "semantic_hash": ""
-  },
-  "src/components/LeaderboardModal.tsx": {
-    "mtime": 1784572895.7215657,
-    "ast_hash": "7c95b5c39664d806975769998b1548c9",
-    "semantic_hash": ""
-  },
-  "src/components/PortalLogo.tsx": {
-    "mtime": 1784572895.7217913,
-    "ast_hash": "f3eeabc0145d5352bbe0b5b57c2b8606",
-    "semantic_hash": ""
-  },
-  "src/config/games.test.ts": {
-    "mtime": 1784572895.7221684,
-    "ast_hash": "5969381c1b2237c42ac87ed973395db4",
-    "semantic_hash": ""
-  },
-  "src/config/games.ts": {
-    "mtime": 1784572895.7224452,
-    "ast_hash": "0c830ef11954e3cbb35e35365df79cf4",
-    "semantic_hash": ""
-  },
-  "src/config/portalAssets.ts": {
-    "mtime": 1784572895.7226932,
-    "ast_hash": "154a19eeea4646bd65f2cd151568e4f9",
-    "semantic_hash": ""
-  },
-  "src/config/registryOverride.test.ts": {
-    "mtime": 1784572895.7230422,
-    "ast_hash": "348b80f791d040468c068895e2049c1d",
-    "semantic_hash": ""
-  },
-  "src/config/registryOverride.ts": {
-    "mtime": 1784572895.7233021,
-    "ast_hash": "2dde50e97ecf174de72d691011814b92",
-    "semantic_hash": ""
-  },
-  "src/config/uiAssets.ts": {
-    "mtime": 1784572895.723478,
-    "ast_hash": "42cc8a2c0faf89ff200542b65832e828",
-    "semantic_hash": ""
-  },
-  "src/data/defaultGames.ts": {
-    "mtime": 1784572895.7238994,
-    "ast_hash": "dc18afbf22b82a7ccf1462a402651600",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/MonsterRpgGame.tsx": {
-    "mtime": 1784590172.6099784,
-    "ast_hash": "0e5ea608b4e08f8daf85a041e5ab11ea",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/licensedAssetManifest.json": {
-    "mtime": 1784572895.725904,
-    "ast_hash": "85f0a1729ebb4d9e7fd45abb0b04fe59",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/monsterRpgAssets.ts": {
-    "mtime": 1784572895.7262092,
-    "ast_hash": "864cf3e4c06ec94f0cf799e63eceac26",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/bootGame.ts": {
-    "mtime": 1784572895.8041532,
-    "ast_hash": "de76dff182f2fef51ffc66fe3cc2c9cb",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/index.ts": {
-    "mtime": 1784572895.8048587,
-    "ast_hash": "a9123cc3f4821fe589f27d94dfc55e02",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/scenes/VillageScene.ts": {
-    "mtime": 1784572895.805604,
-    "ast_hash": "12dcc1801fec77ddac4ab8cda4d56e28",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/network/colyseusClient.test.ts": {
-    "mtime": 1784590172.8759923,
-    "ast_hash": "58a37d20891b559716d58b2ea59a8c52",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/network/colyseusClient.ts": {
-    "mtime": 1784572895.8068123,
-    "ast_hash": "6f6579bef48364c2d1f2af166a89017f",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/network/index.ts": {
-    "mtime": 1784572895.8072374,
-    "ast_hash": "0fe07723568ab21f3d65288b496b94f4",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/battleRewards.ts": {
-    "mtime": 1784590292.092053,
-    "ast_hash": "2ba0f16a08211f962f53b71423d81c34",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/battles.test.ts": {
-    "mtime": 1784590172.8794901,
-    "ast_hash": "0d0d19b80bf82de85491db5190a95510",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/battles.ts": {
-    "mtime": 1784590172.880861,
-    "ast_hash": "0b74250f7f66f413fc03cf9af6393052",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/cards.test.ts": {
-    "mtime": 1784572895.8091843,
-    "ast_hash": "1123df9fc111ab9ec04afc852b061a59",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/cards.ts": {
-    "mtime": 1784572895.8097498,
-    "ast_hash": "cf999d8c9b73e06816c04d139a755178",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/creatureJournal.test.ts": {
-    "mtime": 1784572895.8101435,
-    "ast_hash": "c1d84cbceed60e061ec9caab982a3400",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/creatureJournal.ts": {
-    "mtime": 1784572895.8105404,
-    "ast_hash": "9091a6d021112ba3ad85c3d34f41d6d5",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/creatureLifecycle.ts": {
-    "mtime": 1784572895.8109994,
-    "ast_hash": "7743918a2a5a4de2c7a4d99bd3f3e6cd",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/creatureParty.test.ts": {
-    "mtime": 1784572895.8114254,
-    "ast_hash": "1a01b8f9fc353da713f60bafb0ba26ad",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/creatureParty.ts": {
-    "mtime": 1784572895.8117728,
-    "ast_hash": "82517ea3ca85a86d5683488231b53620",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/farms.test.ts": {
-    "mtime": 1784572895.8123062,
-    "ast_hash": "e16102a0469457bcdd0c87c360d76926",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/farms.ts": {
-    "mtime": 1784572895.8130946,
-    "ast_hash": "dff77d32689b677b6e650e17219fa633",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/gameBalance.test.ts": {
-    "mtime": 1784590292.0931664,
-    "ast_hash": "8250829fa48fcb0bd921859e214c51a4",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/gameBalance.ts": {
-    "mtime": 1784590292.0944886,
-    "ast_hash": "73f868bfc24c86fbcf33f7eb29620e8a",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/index.ts": {
-    "mtime": 1784590172.8822885,
-    "ast_hash": "39e27c709cbbb4d831d2f6ce3046e807",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/maps.ts": {
-    "mtime": 1784572895.819241,
-    "ast_hash": "c279ceafbd4bff8dbc428896da885418",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/movement.ts": {
-    "mtime": 1784572895.819744,
-    "ast_hash": "659758951a64fc6dcb1ae72312fb753b",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/onboarding.test.ts": {
-    "mtime": 1784572895.8201663,
-    "ast_hash": "1bd600a0f5f3256430d3ecd7005b82e5",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/onboarding.ts": {
-    "mtime": 1784572895.8206165,
-    "ast_hash": "4d990a3e63bf96a354b29b1ab90c7108",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/pathfinding.test.ts": {
-    "mtime": 1784572895.8210413,
-    "ast_hash": "b34961458a2b413fcab13fefe99f3099",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/pathfinding.ts": {
-    "mtime": 1784572895.8215082,
-    "ast_hash": "f0d8e539913399e5669bad51c0b2fee3",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/playerProgression.test.ts": {
-    "mtime": 1784572895.821904,
-    "ast_hash": "3329afb610be4b5cc401776897113b4e",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/playerProgression.ts": {
-    "mtime": 1784572895.8223264,
-    "ast_hash": "75480ed80d82eb640668b1fa51d74cac",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/saveState.test.ts": {
-    "mtime": 1784590774.2088091,
-    "ast_hash": "abac6c2b268283ebffa3a7968d08df9d",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/saveState.ts": {
-    "mtime": 1784590761.4686599,
-    "ast_hash": "6b243616ebc8c82f91fa030831d3f41b",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/settings.test.ts": {
-    "mtime": 1784572895.8236117,
-    "ast_hash": "58c5a10c08896e8e791bd207f82d74bb",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/settings.ts": {
-    "mtime": 1784572895.8239746,
-    "ast_hash": "3c65263bb07b42717aa5c203ef079cdb",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/speciesCatalog.test.ts": {
-    "mtime": 1784572895.8242865,
-    "ast_hash": "ba7778aaf2723ad73e5bfb782dbe57ee",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/speciesCatalog.ts": {
-    "mtime": 1784572895.824716,
-    "ast_hash": "0a3989368fbeb0d2ee57fdbf64d22ed3",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/stations.test.ts": {
-    "mtime": 1784572895.8251317,
-    "ast_hash": "1bb6ad9c8de68fdd09fc1d77555c1b82",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/stations.ts": {
-    "mtime": 1784572895.8255398,
-    "ast_hash": "118fb687dfb42109db89036485a9dd3c",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/types.ts": {
-    "mtime": 1784590172.8854609,
-    "ast_hash": "0b94ba0c8eb7de6d690bc5eaef8504e5",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/villageMap.ts": {
-    "mtime": 1784572895.8264537,
-    "ast_hash": "0851830a5fbd19ae1fd4912e5aaebfb1",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/wildEncounters.test.ts": {
-    "mtime": 1784572895.8268316,
-    "ast_hash": "caaa7f35543cacd7a0d1d512538aa28d",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/sim/wildEncounters.ts": {
-    "mtime": 1784572895.8273325,
-    "ast_hash": "057766d895815684dee21cad32efabca",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/ui/CharacterCreator.tsx": {
-    "mtime": 1784572895.8278399,
-    "ast_hash": "3abe4039f03da9d2183dd71fb6ce3f89",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/ui/GameHud.tsx": {
-    "mtime": 1784590172.8860843,
-    "ast_hash": "790896ec902e766ca07b1901e95a4d67",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/ui/GameLogView.test.tsx": {
-    "mtime": 1784572895.828893,
-    "ast_hash": "3059373d2ac06c22a9b0236f5f891e98",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/ui/GameLogView.tsx": {
-    "mtime": 1784572895.829232,
-    "ast_hash": "a696d7562396731d2e1d6bc6d951f83f",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/ui/MobileDpad.tsx": {
-    "mtime": 1784572895.8296528,
-    "ast_hash": "3c9f80bcf71a80d64b761a9d67dc729c",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/ui/VillageElderOnboarding.tsx": {
-    "mtime": 1784572895.830314,
-    "ast_hash": "704320566253d98352bdec21e2c8dca1",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/ui/gameLog.test.ts": {
-    "mtime": 1784572895.8306975,
-    "ast_hash": "163eb07aab90ee1f36124d5e2c7074ff",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/ui/gameLog.ts": {
-    "mtime": 1784572895.8310955,
-    "ast_hash": "4c532184138b55500881f8fd66776af8",
-    "semantic_hash": ""
-  },
-  "src/games/placeholders/ComingSoonGamePage.tsx": {
-    "mtime": 1784572895.831691,
-    "ast_hash": "2b4395c43fe609f03a917c7ee6f9cb43",
-    "semantic_hash": ""
-  },
-  "src/games/snake/SnakeCanvas.tsx": {
-    "mtime": 1784572895.8320987,
-    "ast_hash": "f4b10632e4108a3a8dfce64c350c0534",
-    "semantic_hash": ""
-  },
-  "src/games/snake/SnakeGamePage.tsx": {
-    "mtime": 1784572895.832376,
-    "ast_hash": "aaee48c86ec1cfe583ff7f2e046a848c",
-    "semantic_hash": ""
-  },
-  "src/games/snake/config.test.ts": {
-    "mtime": 1784572895.8326344,
-    "ast_hash": "2d35e85eaa7c2a79ee492bb3f6bf829c",
-    "semantic_hash": ""
-  },
-  "src/games/snake/config.ts": {
-    "mtime": 1784572895.832904,
-    "ast_hash": "f1f263d646e3c00a8cfff6eaec5b9403",
-    "semantic_hash": ""
-  },
-  "src/games/snake/engine.ts": {
-    "mtime": 1784572895.8332713,
-    "ast_hash": "769c3cca55e42f01f6b40d1ce14b6faf",
-    "semantic_hash": ""
-  },
-  "src/games/snake/storage.ts": {
-    "mtime": 1784572895.8335452,
-    "ast_hash": "639d294294f2c86ad21abd17343a8bd3",
-    "semantic_hash": ""
-  },
-  "src/hooks/useTheme.ts": {
-    "mtime": 1784572895.8341413,
-    "ast_hash": "c227c50e544ee67288ac1f059e03d95d",
-    "semantic_hash": ""
-  },
-  "src/lib/storage.ts": {
-    "mtime": 1784572895.834534,
-    "ast_hash": "bf443a220bf223e2e034c89fb4a5f59e",
-    "semantic_hash": ""
-  },
-  "src/main.tsx": {
-    "mtime": 1784572895.8350022,
-    "ast_hash": "eb34d9e224c5bb79a85b87887212c2ff",
-    "semantic_hash": ""
-  },
-  "src/pages/AdminGameConfigPage.tsx": {
-    "mtime": 1784572895.8354957,
-    "ast_hash": "9c5a3bd89c0a1647e4388d31dd2ffa43",
-    "semantic_hash": ""
-  },
-  "src/pages/AdminPage.tsx": {
-    "mtime": 1784572895.8363976,
-    "ast_hash": "2358d29b8705be485c572c7aeb39fb7c",
-    "semantic_hash": ""
-  },
-  "src/pages/GamePage.tsx": {
-    "mtime": 1784572895.8368125,
-    "ast_hash": "6784b38f16b502655f978ef4ce502791",
-    "semantic_hash": ""
-  },
-  "src/pages/HomePage.tsx": {
-    "mtime": 1784572895.837224,
-    "ast_hash": "93b05178448f54c311196530a2e50dbd",
-    "semantic_hash": ""
-  },
-  "src/pages/LeaderboardPage.test.ts": {
-    "mtime": 1784572895.8377087,
-    "ast_hash": "36de887f30bd2a1851ed955494057822",
-    "semantic_hash": ""
-  },
-  "src/pages/LeaderboardPage.tsx": {
-    "mtime": 1784572895.838129,
-    "ast_hash": "8e86c2b8455a1a810b775f9c20d7761c",
-    "semantic_hash": ""
-  },
-  "src/pages/LibraryPage.tsx": {
-    "mtime": 1784572895.8386223,
-    "ast_hash": "890aa2ff4ec1f1b8fa109ff1fa2caf70",
-    "semantic_hash": ""
-  },
-  "src/pages/libraryCatalog.test.ts": {
-    "mtime": 1784572895.839053,
-    "ast_hash": "ef62b55652466b36d51bd133d1f38e5d",
-    "semantic_hash": ""
-  },
-  "src/pages/libraryCatalog.ts": {
-    "mtime": 1784572895.839488,
-    "ast_hash": "5ff71fce648c225959dd85528b9d9b88",
-    "semantic_hash": ""
-  },
-  "src/providers/leaderboardProvider.ts": {
-    "mtime": 1784572895.8399625,
-    "ast_hash": "4f063bb9693aa7b4c2ab2034d7b26f82",
-    "semantic_hash": ""
-  },
-  "src/repositories/localStorageRepository.ts": {
-    "mtime": 1784572895.840526,
-    "ast_hash": "0808afdd5e78dd639289a9b66496ca5f",
-    "semantic_hash": ""
-  },
-  "src/types.ts": {
-    "mtime": 1784572895.8424323,
-    "ast_hash": "6d1a5b0e490e7cadf1fad11b7c75761f",
-    "semantic_hash": ""
-  },
-  "src/types/game.ts": {
-    "mtime": 1784572895.8428943,
-    "ast_hash": "4feb6ee002f328e20cf99a88877d4902",
-    "semantic_hash": ""
-  },
-  "src/vite-env.d.ts": {
-    "mtime": 1784572895.8432627,
-    "ast_hash": "0352474ba2918efe13895edbc3780d94",
-    "semantic_hash": ""
-  },
-  "tsconfig.app.json": {
-    "mtime": 1784572895.8435018,
-    "ast_hash": "fc4242c35761fe102fc6bd90e13e09c4",
-    "semantic_hash": ""
-  },
-  "tsconfig.json": {
-    "mtime": 1784572895.8438683,
-    "ast_hash": "a3d39fa780ebff65444de257f291ce6c",
-    "semantic_hash": ""
-  },
-  "tsconfig.node.json": {
-    "mtime": 1784572895.84435,
-    "ast_hash": "7c06c0c9e34c1610673b63c03b3da41c",
-    "semantic_hash": ""
-  },
-  "vite.config.ts": {
-    "mtime": 1784572895.8446405,
-    "ast_hash": "bc3cd07cbbbb97eda5a751d15739ebe2",
-    "semantic_hash": ""
-  },
-  ".github/workflows/deploy-pages.yml": {
-    "mtime": 1784572895.5903068,
-    "ast_hash": "c6f6d016907964e2fce5b4fe936cc9c5",
-    "semantic_hash": ""
-  },
-  "README.md": {
-    "mtime": 1784572895.5911355,
-    "ast_hash": "24f0dbd06ca5eec1f6a7df04bf469dea",
-    "semantic_hash": ""
-  },
-  "design.html": {
-    "mtime": 1784572895.5921774,
-    "ast_hash": "f413571c91ff41032defdb2df3cfb3c8",
-    "semantic_hash": ""
-  },
-  "index.html": {
-    "mtime": 1784572895.6688528,
-    "ast_hash": "1d5a69ca94759ba4682740fb136ecd6c",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/README.md": {
-    "mtime": 1784572895.7255251,
-    "ast_hash": "cdfd3719da410ca230e0e08f0c860e17",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/OFL-1.1.txt": {
-    "mtime": 1784572895.7386413,
-    "ast_hash": "cdeaadc09201aa4ff8e58d8aa6a128eb",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/SOURCE.md": {
-    "mtime": 1784572895.7393053,
-    "ast_hash": "2bd845859354a00f658f2e1e7fd2e812",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/ui/README.md": {
-    "mtime": 1784572895.829981,
-    "ast_hash": "f057471834711497d90e98f6596a7b26",
-    "semantic_hash": ""
-  },
-  "public/assets/assets.png": {
-    "mtime": 1784572895.6843,
-    "ast_hash": "c3b1ac26fba601b3ea2e2c5bbe277135",
-    "semantic_hash": ""
-  },
-  "public/assets/logos.png": {
-    "mtime": 1784572895.6932945,
-    "ast_hash": "83f5a574e8fe5bf70adf0d4fe203b902",
-    "semantic_hash": ""
-  },
-  "public/assets/portal-hero.png": {
-    "mtime": 1784572895.7004495,
-    "ast_hash": "32c4612ce5fbbb173d42bddd6b670031",
-    "semantic_hash": ""
-  },
-  "public/assets/portal/coming-soon-cover.svg": {
-    "mtime": 1784572895.7018678,
-    "ast_hash": "2099f12965f0d759a3a9dbf11f9d4d4d",
-    "semantic_hash": ""
-  },
-  "public/assets/portal/coming-soon-hero.svg": {
-    "mtime": 1784572895.7022555,
-    "ast_hash": "26e3dc006f7c4ae2ff5ca69d6c1077f7",
-    "semantic_hash": ""
-  },
-  "public/assets/portal/fallback-cover.svg": {
-    "mtime": 1784572895.7026663,
-    "ast_hash": "ea52a808b44d06754b794359683e77bd",
-    "semantic_hash": ""
-  },
-  "public/assets/portal/fallback-hero.svg": {
-    "mtime": 1784572895.7030687,
-    "ast_hash": "94b5445d7f3e1df1553f2bb52ba620a7",
-    "semantic_hash": ""
-  },
-  "public/assets/portal/flappy-bird-cover.svg": {
-    "mtime": 1784572895.7034726,
-    "ast_hash": "91be44e3b02fde5bdfe50923f51b781f",
-    "semantic_hash": ""
-  },
-  "public/assets/portal/flappy-bird-hero.svg": {
-    "mtime": 1784572895.7038825,
-    "ast_hash": "4350c0864fde9843c01e9ef500353723",
-    "semantic_hash": ""
-  },
-  "public/assets/portal/gameit-monsters-cover.svg": {
-    "mtime": 1784572895.7042706,
-    "ast_hash": "9b8ac886f195d374defdecd6dcd57052",
-    "semantic_hash": ""
-  },
-  "public/assets/portal/gameit-monsters-hero.svg": {
-    "mtime": 1784572895.70466,
-    "ast_hash": "22ecce8f1a10a8e477796976d797eae1",
-    "semantic_hash": ""
-  },
-  "public/assets/portal/snake-cover.svg": {
-    "mtime": 1784572895.7050629,
-    "ast_hash": "e4c4af48ba42d01894e02ec9bae7db50",
-    "semantic_hash": ""
-  },
-  "public/assets/portal/snake-hero.svg": {
-    "mtime": 1784572895.7054904,
-    "ast_hash": "bf32f9f4dcee2594ba72b01bac0c3c1d",
-    "semantic_hash": ""
-  },
-  "public/assets/portal/stickman-fight-cover.svg": {
-    "mtime": 1784572895.7059083,
-    "ast_hash": "fef0ba93e38b95cd96b6044ca5abbf55",
-    "semantic_hash": ""
-  },
-  "public/assets/portal/stickman-fight-hero.svg": {
-    "mtime": 1784572895.706327,
-    "ast_hash": "ff0da1232bcf2af769534d56c879b015",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/building-clinic.png": {
-    "mtime": 1784572895.7266953,
-    "ast_hash": "467cd400ecc4a90a6ce55f431e1d0173",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/building-house.png": {
-    "mtime": 1784572895.7269502,
-    "ast_hash": "faf812974fb6976ed12f9f7235dc51ff",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/building-post-office.png": {
-    "mtime": 1784572895.727202,
-    "ast_hash": "06bbba88520daa36f6be7c34f4619767",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/building-shop.png": {
-    "mtime": 1784572895.7274535,
-    "ast_hash": "b72ceff1d64bcf614de0f38bc6254d68",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/building-tavern.png": {
-    "mtime": 1784572895.7277772,
-    "ast_hash": "f1f451fe40f27fdc672e8504d9c2ece9",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/building-town-hall.png": {
-    "mtime": 1784572895.7281704,
-    "ast_hash": "58c5af14b8056c0f6104ae2471e093ee",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/creature-encounters.png": {
-    "mtime": 1784572895.7289665,
-    "ast_hash": "a2be42ab17c76224c4cc7e1eeed3c9d8",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/marker-door.png": {
-    "mtime": 1784572895.7294898,
-    "ast_hash": "ab47a0bf2473365d5a0702dc3b065211",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/marker-sign.png": {
-    "mtime": 1784572895.7298064,
-    "ast_hash": "590a3fe2cf022f21238b27ac0c2d8ebf",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-bridge-water.png": {
-    "mtime": 1784572895.730086,
-    "ast_hash": "9f844807ba8e2fc41b4262be721c721f",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-field-ai-1.png": {
-    "mtime": 1784572895.7303383,
-    "ast_hash": "759e0d32d2091488d014f2937d23e0ec",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-field-ai-2.png": {
-    "mtime": 1784572895.73069,
-    "ast_hash": "323a7c9dd29467313fb18ec493486118",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-field-ai-3.png": {
-    "mtime": 1784572895.7309391,
-    "ast_hash": "562b076bed7fb776030c5cab343fed75",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-field.png": {
-    "mtime": 1784572895.7312312,
-    "ast_hash": "552b72945bcde3b1ec5cfe17e8a91be9",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-forest-ai-1.png": {
-    "mtime": 1784572895.7314918,
-    "ast_hash": "16780ac0556f2da694291cc1d92c6a74",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-forest-ai-2.png": {
-    "mtime": 1784572895.7318652,
-    "ast_hash": "dd5b575012370b4aed99fddc1f4f8fa4",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-forest-ai-3.png": {
-    "mtime": 1784572895.73216,
-    "ast_hash": "3fe326a65a00ae948411dd78174a8cbb",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-forest.png": {
-    "mtime": 1784572895.7324195,
-    "ast_hash": "cddda751383082815e23f649763f3648",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-grass-1.png": {
-    "mtime": 1784572895.7326841,
-    "ast_hash": "e0924c4a955dc3379b2cf8cce085414f",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-grass-2.png": {
-    "mtime": 1784572895.7329562,
-    "ast_hash": "88345c62395d7f2ce55721240c1a250b",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-grass-3.png": {
-    "mtime": 1784572895.7333126,
-    "ast_hash": "af82f671a070205eb4a4309658bf68ad",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-mountain-ai-1.png": {
-    "mtime": 1784572895.7335668,
-    "ast_hash": "81a813965453b725e47095f0aa7c3193",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-mountain-ai-2.png": {
-    "mtime": 1784572895.733807,
-    "ast_hash": "32d613d319b8ea1b7b83b24625829f80",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-mountain.png": {
-    "mtime": 1784572895.7340598,
-    "ast_hash": "86528ae24ff9e53e29a56e1e36a95dd5",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-road-curve.png": {
-    "mtime": 1784572895.734306,
-    "ast_hash": "761f9241111f308862c61efcdc6c640e",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-road-end.png": {
-    "mtime": 1784572895.7346048,
-    "ast_hash": "f08e639e74b9c4acad306d91d65a3dbd",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-road-horizontal.png": {
-    "mtime": 1784572895.73494,
-    "ast_hash": "f6aeee8d378429e87fd3f34d31aa78ae",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-road-vertical.png": {
-    "mtime": 1784572895.735259,
-    "ast_hash": "5cafc5f99069f2ce446c4472b934b818",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-shoreline.png": {
-    "mtime": 1784572895.735578,
-    "ast_hash": "9871c74f959c46406550c2da47f0edae",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-tree-ai-1.png": {
-    "mtime": 1784572895.7359366,
-    "ast_hash": "d4d43a795cb57a9520e6b70f61cca039",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-tree-ai-2.png": {
-    "mtime": 1784572895.736252,
-    "ast_hash": "976a274eef1ad5588862ec6c6f726ecb",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-tree.png": {
-    "mtime": 1784572895.736483,
-    "ast_hash": "3a0234b7ab05ca2734f1310bc97d13fa",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-water-ai-1.png": {
-    "mtime": 1784572895.7368207,
-    "ast_hash": "fbab6dba3f8b8317a0659da0c55760a4",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-water-ai-2.png": {
-    "mtime": 1784572895.737183,
-    "ast_hash": "b60756315828296756946c42eea6fdae",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/terrain-water.png": {
-    "mtime": 1784572895.7374933,
-    "ast_hash": "8c9e2a5e07186868207a28113fbe5c8b",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/village-large.png": {
-    "mtime": 1784572895.737789,
-    "ast_hash": "44ab44cda8a69164b16c83934f8da4f4",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/pixel/village-small.png": {
-    "mtime": 1784572895.7380397,
-    "ast_hash": "7aac7d6b0085d90eddec86df1dc842aa",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/attacks/explosion.png": {
-    "mtime": 1784572895.739883,
-    "ast_hash": "3e9e3b6d8963abfa96cabc3aa5480fc9",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/attacks/fire.png": {
-    "mtime": 1784572895.7403824,
-    "ast_hash": "1e9b6eac549c2cdd635ad3a490d74d12",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/attacks/green.png": {
-    "mtime": 1784572895.7408206,
-    "ast_hash": "437ae5bb96211287b78b4ed0d5ad960d",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/attacks/ice.png": {
-    "mtime": 1784572895.7411382,
-    "ast_hash": "a64421db85e635317aaa1ca5f0b56ed4",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/attacks/scratch.png": {
-    "mtime": 1784572895.7414148,
-    "ast_hash": "8a6149c6dc60bbbe82e6b51df5b53867",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/attacks/splash.png": {
-    "mtime": 1784572895.7417247,
-    "ast_hash": "a5c28bb3de129b34a501c15854056d6a",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/backgrounds/forest.png": {
-    "mtime": 1784572895.7424078,
-    "ast_hash": "5f77960d61b29c3639241525a91c60c1",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/backgrounds/ice.png": {
-    "mtime": 1784572895.7429404,
-    "ast_hash": "e2cb1458b1e966b8d62f2adfa96edfd8",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/backgrounds/sand.png": {
-    "mtime": 1784572895.7435966,
-    "ast_hash": "00551da1df2a51d864e3b0452b22cf4a",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/characters/blond.png": {
-    "mtime": 1784572895.7441945,
-    "ast_hash": "46dc724a53e5843b932548f759fd8ace",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/characters/fire_boss.png": {
-    "mtime": 1784572895.7447548,
-    "ast_hash": "f7ddd7d5979cb9d7033a354aba4b716b",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/characters/grass_boss.png": {
-    "mtime": 1784572895.7452455,
-    "ast_hash": "ae5b8d1083b682d0267093c5d53fb6d7",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/characters/hat_girl.png": {
-    "mtime": 1784572895.7457478,
-    "ast_hash": "f665e310b4caf067c96dc4154328cdc7",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/characters/player.png": {
-    "mtime": 1784572895.746233,
-    "ast_hash": "0f98ee3532f85166a9b331ecd3cdebd3",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/characters/purple_girl.png": {
-    "mtime": 1784572895.7467115,
-    "ast_hash": "6a8aa92f01a89b46b3618cf8a52a09eb",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/characters/straw.png": {
-    "mtime": 1784572895.7473457,
-    "ast_hash": "92f2863330f6c0527f84041d3f00f805",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/characters/water_boss.png": {
-    "mtime": 1784572895.7478826,
-    "ast_hash": "6b75daeff483a3b2e4a4450977bcd1f8",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/characters/young_girl.png": {
-    "mtime": 1784572895.7483602,
-    "ast_hash": "429952db285cb89e52bf24c71879edcf",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/characters/young_guy.png": {
-    "mtime": 1784572895.7488494,
-    "ast_hash": "4a9dc6da7bbafeffbdec2e37b4e10f45",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Atrox.png": {
-    "mtime": 1784572895.7516181,
-    "ast_hash": "0f68700d8e4f25ff51f1b9821c213880",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Charmadillo.png": {
-    "mtime": 1784572895.7518914,
-    "ast_hash": "d1e26af27c98b9aea13cfbf7952efe24",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Cindrill.png": {
-    "mtime": 1784572895.7521484,
-    "ast_hash": "fb881937fab72d8db8da26af951c47cd",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Cleaf.png": {
-    "mtime": 1784572895.752462,
-    "ast_hash": "cd51b52cc3d3c60f41f5e40c0cc68096",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Draem.png": {
-    "mtime": 1784572895.7527885,
-    "ast_hash": "bea8ffc4e83a9b622e036d9c80f70ab4",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Finiette.png": {
-    "mtime": 1784572895.7531228,
-    "ast_hash": "54fc3f76c9b7381b966313b228962759",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Finsta.png": {
-    "mtime": 1784572895.7533913,
-    "ast_hash": "d63cc8398b8eb26aeaa86649b003ebfb",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Friolera.png": {
-    "mtime": 1784572895.7536614,
-    "ast_hash": "3fd041a6501c4a626016373ca5043fd2",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Gulfin.png": {
-    "mtime": 1784572895.7539415,
-    "ast_hash": "f1c223abffedac03ace3efd868e0d232",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Ivieron.png": {
-    "mtime": 1784572895.7542338,
-    "ast_hash": "9958e3a5a20648de4f8d1f43fb503bcd",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Jacana.png": {
-    "mtime": 1784572895.7546124,
-    "ast_hash": "67965f5ae74d230a2b8c99c85c53a680",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Larvea.png": {
-    "mtime": 1784572895.754912,
-    "ast_hash": "0ef7cd6f2eb8bbedd86f997749e309d8",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Pluma.png": {
-    "mtime": 1784572895.7551663,
-    "ast_hash": "51bcbf0dacce19d728b839598b3ad5ab",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Plumette.png": {
-    "mtime": 1784572895.7554379,
-    "ast_hash": "59eb1c0568bbea3715b298aea18650d8",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Pouch.png": {
-    "mtime": 1784572895.7556677,
-    "ast_hash": "b987d99131d97e6c504c387e2f3e948f",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Sparchu.png": {
-    "mtime": 1784572895.755935,
-    "ast_hash": "10bac7eeb37ab7d1c291bfe22d273f25",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Atrox.png": {
-    "mtime": 1784572895.7564986,
-    "ast_hash": "18f07b2a4319260531a6c5ba8d30cdd3",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Charmadillo.png": {
-    "mtime": 1784572895.756985,
-    "ast_hash": "b89c6377f2ebbc2243fe652931c82db4",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Cindrill.png": {
-    "mtime": 1784572895.7574103,
-    "ast_hash": "dfbb1a8ed62ff6969d34edf7d6a20501",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Cleaf.png": {
-    "mtime": 1784572895.7577615,
-    "ast_hash": "8455dbff86a0b25ea0f4ac87e4dafe7a",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Draem.png": {
-    "mtime": 1784572895.7580934,
-    "ast_hash": "12bf2a71b7ba892d1a79435bea392a6f",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Finiette.png": {
-    "mtime": 1784572895.7585552,
-    "ast_hash": "85091f177988a82e98acafbf062e0418",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Finsta.png": {
-    "mtime": 1784572895.7590766,
-    "ast_hash": "8c481389f8d0fbe7ae1e5a256f0bbb6d",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Friolera.png": {
-    "mtime": 1784572895.760062,
-    "ast_hash": "603313466ba2004591400a6547789ff6",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Gulfin.png": {
-    "mtime": 1784572895.7605982,
-    "ast_hash": "5b45d547ec296af2b9b374cedb18824f",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Ivieron.png": {
-    "mtime": 1784572895.761158,
-    "ast_hash": "902897413e072857b5a1f17bec95b8e7",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Jacana.png": {
-    "mtime": 1784572895.7616222,
-    "ast_hash": "3954857228c095615d9be95966e4f487",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Larvea.png": {
-    "mtime": 1784572895.7621038,
-    "ast_hash": "fefafbfe8fb583f73754a432ef3b6e0a",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Pluma.png": {
-    "mtime": 1784572895.7630625,
-    "ast_hash": "5b2bd3637a69c3d19992f6a7d84af6ca",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Plumette.png": {
-    "mtime": 1784572895.7637029,
-    "ast_hash": "86a4ff0a3c8dff4b83a43283924d7806",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Pouch.png": {
-    "mtime": 1784572895.7642632,
-    "ast_hash": "3ae0ab1ea011272c58e71b12ffc1124a",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Sparchu.png": {
-    "mtime": 1784572895.7646804,
-    "ast_hash": "55c4e98d1673a3fb6d72409744ba1a18",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/arean_fire.png": {
-    "mtime": 1784572895.7652953,
-    "ast_hash": "1278a0c33ec891e4afd8297402762e12",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/arena_plant.png": {
-    "mtime": 1784572895.7657516,
-    "ast_hash": "301e5e91b094c349ef5a4d1b57c2ab30",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/arena_water.png": {
-    "mtime": 1784572895.7662323,
-    "ast_hash": "478ffdd2549d41108921cd2713332c2c",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/gate_pillar.png": {
-    "mtime": 1784572895.766637,
-    "ast_hash": "06fe74918c22f5a70aa232a847cfc6fd",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/gate_top.png": {
-    "mtime": 1784572895.7670097,
-    "ast_hash": "2d0495f01e15c199f7ad597a49e0b2cd",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/grass.png": {
-    "mtime": 1784572895.7673845,
-    "ast_hash": "7615a1cd63e4664d9d7b418bdbd78ca0",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/grass_ice.png": {
-    "mtime": 1784572895.7677271,
-    "ast_hash": "b28d13027b0071a697d7bc6f217698e3",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/grassrock1.png": {
-    "mtime": 1784572895.7682266,
-    "ast_hash": "0f3f7237a4faa3c6e04dc4b1c97be275",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/grassrock2.png": {
-    "mtime": 1784572895.768679,
-    "ast_hash": "e18529ce6e521b90528d7ac4ff1f7d4f",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/green_tree.png": {
-    "mtime": 1784572895.7691195,
-    "ast_hash": "7b5cc8e722c0b05e0d338fa16b362ca8",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/green_tree_bushy.png": {
-    "mtime": 1784572895.7695274,
-    "ast_hash": "2f76c2efc68f91e05ddec745e73bd81f",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/green_tree_small.png": {
-    "mtime": 1784572895.7699568,
-    "ast_hash": "9c8e46bd53c47d119a355145517c65cb",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/hospital.png": {
-    "mtime": 1784572895.7704184,
-    "ast_hash": "e8a401d82770875526f023f3f0b98a84",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/house_large.png": {
-    "mtime": 1784572895.7708967,
-    "ast_hash": "4d418ffa6ff37825c0e0f57c1d6e2c33",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/house_large_alt.png": {
-    "mtime": 1784572895.7713518,
-    "ast_hash": "f2f571af505d0bbecce9ce597fe755fb",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/house_small.png": {
-    "mtime": 1784572895.7717936,
-    "ast_hash": "4a7f7342eecf7682670fab3487242145",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/house_small_alt.png": {
-    "mtime": 1784572895.772214,
-    "ast_hash": "fece8130daca5390b30a1832e4988a6d",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/ice_tree.png": {
-    "mtime": 1784572895.7726133,
-    "ast_hash": "cd315c0f83c3f11b9540a9d58b3e983b",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/icerock1.png": {
-    "mtime": 1784572895.7730155,
-    "ast_hash": "47578ce12b3e88c4a6da1c7b47688125",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/icerock2.png": {
-    "mtime": 1784572895.7734525,
-    "ast_hash": "706db8adecbb5ba453efcb8be650ae67",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/palm.png": {
-    "mtime": 1784572895.7738976,
-    "ast_hash": "3a5646ec0306d50acefe71221c385955",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/palm_alt.png": {
-    "mtime": 1784572895.7743099,
-    "ast_hash": "bfa92cf7ec7fdb135f595ef88b1a597b",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/palm_small.png": {
-    "mtime": 1784572895.7747478,
-    "ast_hash": "a61c4f114dd01b7e09c9a281e0d97fbf",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/ruin_gate.png": {
-    "mtime": 1784572895.775147,
-    "ast_hash": "740255518a1f1a19328f0e9cab2b98f1",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/ruin_pillar.png": {
-    "mtime": 1784572895.775554,
-    "ast_hash": "6b9d571f4d8c7eefaee61cf0eb883404",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/ruin_pillar_broke.png": {
-    "mtime": 1784572895.7759943,
-    "ast_hash": "95a2667887ecd65efac3ab8d015bae79",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/ruin_pillar_broke_alt.png": {
-    "mtime": 1784572895.7764513,
-    "ast_hash": "68a63331fec2a94a568ad1c7e22be533",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/sand.png": {
-    "mtime": 1784572895.7768037,
-    "ast_hash": "8b1f9aa3f611bc9d253a9afa1f6f22bc",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/sandrock1.png": {
-    "mtime": 1784572895.7771218,
-    "ast_hash": "05741b768833885a685a8cb63976f12d",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/sandrock2.png": {
-    "mtime": 1784572895.7773883,
-    "ast_hash": "4323f9dc51c44b2f66b3a56cd1fbabab",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/teal_tree.png": {
-    "mtime": 1784572895.7778153,
-    "ast_hash": "3243161b1d79050a094d3814a475d66e",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/teal_tree_bushy.png": {
-    "mtime": 1784572895.7782702,
-    "ast_hash": "e8e506fa8c9f5a4b5b890c526ae1dd3b",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/teal_tree_small.png": {
-    "mtime": 1784572895.7787251,
-    "ast_hash": "17c46d215f3fac9f8ad9c5642e7c798d",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/shadow.png": {
-    "mtime": 1784572895.7791984,
-    "ast_hash": "006e2a507013558a2ec4c31891d3d300",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00002.png": {
-    "mtime": 1784572895.7797227,
-    "ast_hash": "27d50f716c168490031e18eb0bac941f",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00003.png": {
-    "mtime": 1784572895.7800171,
-    "ast_hash": "08ac42822efabd18c51f5b6623b4c343",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00004.png": {
-    "mtime": 1784572895.780414,
-    "ast_hash": "fbed0f0a1f12169fb81286176e57ce95",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00005.png": {
-    "mtime": 1784572895.7807152,
-    "ast_hash": "9015295c3723ba057fb237cf6e1a2024",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00006.png": {
-    "mtime": 1784572895.7810097,
-    "ast_hash": "439915e17160d8c714c42cb089a8328a",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00007.png": {
-    "mtime": 1784572895.7813387,
-    "ast_hash": "249282c0a55f13b5e77952ca75593dfd",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00008.png": {
-    "mtime": 1784572895.7816043,
-    "ast_hash": "018605c10b363f1c342444d8cee24ac3",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00009.png": {
-    "mtime": 1784572895.781978,
-    "ast_hash": "38186c7fa79605f394c0562f9278d2a4",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00010.png": {
-    "mtime": 1784572895.7822816,
-    "ast_hash": "8afbd0702ab9bf8863f3ee1c39990d05",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00011.png": {
-    "mtime": 1784572895.7826211,
-    "ast_hash": "9cb7faa2d8a00ed54378f44311ce5c36",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00012.png": {
-    "mtime": 1784572895.7829015,
-    "ast_hash": "5048baf43d7b71a1782adc62d27aa0cc",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00013.png": {
-    "mtime": 1784572895.7831724,
-    "ast_hash": "39876a470d1268fde76d2847c516c625",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00014.png": {
-    "mtime": 1784572895.7834368,
-    "ast_hash": "6e98aeeb66fa53b6a257c818c478d798",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00015.png": {
-    "mtime": 1784572895.783865,
-    "ast_hash": "54382af0783f04d769841fff7c1b442a",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00016.png": {
-    "mtime": 1784572895.7841964,
-    "ast_hash": "89730b6cda2f665a909e2d7c218fa5f1",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00017.png": {
-    "mtime": 1784572895.7846122,
-    "ast_hash": "a14a6817650061b61dc9b7d89eb78b3f",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00018.png": {
-    "mtime": 1784572895.7851136,
-    "ast_hash": "1f040304c09ee725a2ee754a49e96a7c",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00019.png": {
-    "mtime": 1784572895.7855453,
-    "ast_hash": "60a577140e37a332f27c652015ebd889",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00020.png": {
-    "mtime": 1784572895.786065,
-    "ast_hash": "55db5c80edf0041e02581704969541a5",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00021.png": {
-    "mtime": 1784572895.7865267,
-    "ast_hash": "e9ed3824a686616d2c09c44dfaf8abcd",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00022.png": {
-    "mtime": 1784572895.7869546,
-    "ast_hash": "a421f3ef51028c06bf6748f3b2d1e6dc",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00023.png": {
-    "mtime": 1784572895.7874713,
-    "ast_hash": "12385b8df1ff627d1e2bd7f4bc4a8c06",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00024.png": {
-    "mtime": 1784572895.7879043,
-    "ast_hash": "1753d3514d90017097f23b90577936c3",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00025.png": {
-    "mtime": 1784572895.788339,
-    "ast_hash": "bcb20bc1a496082816f2a52aa34d12a3",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00026.png": {
-    "mtime": 1784572895.78877,
-    "ast_hash": "3572b0a536d3a08938588465f3881e86",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00027.png": {
-    "mtime": 1784572895.7892303,
-    "ast_hash": "b9bb7a31285b9befc7fa87bc00fa9138",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00028.png": {
-    "mtime": 1784572895.7898808,
-    "ast_hash": "5ad5f834384291c8db6c4ff51bc20196",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00029.png": {
-    "mtime": 1784572895.790539,
-    "ast_hash": "845a3f846113f3c51617e2bcadd4cdaa",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/tilesets/coast.png": {
-    "mtime": 1784572895.7916563,
-    "ast_hash": "c049ff6d0f19a80846b75a826ddc24f4",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/tilesets/indoor.png": {
-    "mtime": 1784572895.7922788,
-    "ast_hash": "bd58b748982845af70f8a3707425cd9d",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/tilesets/water/0.png": {
-    "mtime": 1784572895.7928412,
-    "ast_hash": "c0d34a2b2be45836fa83eca9c676bd97",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/tilesets/water/1.png": {
-    "mtime": 1784572895.7932742,
-    "ast_hash": "7243ab4903f846990a2d7bcba0ebe82f",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/tilesets/water/2.png": {
-    "mtime": 1784572895.7936494,
-    "ast_hash": "01b407a874d6ebe10c6c6a9bdc027cda",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/tilesets/water/3.png": {
-    "mtime": 1784572895.7941253,
-    "ast_hash": "054213f26b69202255121cd7e7a6ec32",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/tilesets/world.png": {
-    "mtime": 1784572895.7949772,
-    "ast_hash": "5d68271d03f0a787483ec4b38c1a6339",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/arrows.png": {
-    "mtime": 1784572895.795773,
-    "ast_hash": "d18bd7239e21cac4439f5a6769da0490",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/arrows_highlight.png": {
-    "mtime": 1784572895.7962499,
-    "ast_hash": "13da26a49e505edb24948ece91302d55",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/attack.png": {
-    "mtime": 1784572895.7967567,
-    "ast_hash": "0e64a58ed05ed49efa9688e900bec96e",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/cross.png": {
-    "mtime": 1784572895.7971797,
-    "ast_hash": "3c34c868a7a7c8cfbd5b4b41fa7027e4",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/defense.png": {
-    "mtime": 1784572895.7980788,
-    "ast_hash": "a8798684b7adb755a31845c8e61a1888",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/energy.png": {
-    "mtime": 1784572895.798963,
-    "ast_hash": "df98fd06272c071e5ce8eb09e6503e80",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/hand.png": {
-    "mtime": 1784572895.7994776,
-    "ast_hash": "e2c0e0fb56713b104e88658e1171aafb",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/hand_highlight.png": {
-    "mtime": 1784572895.7999218,
-    "ast_hash": "2e223afa63d2e45c5db20d2e8f8c6eb6",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/health.png": {
-    "mtime": 1784572895.8002868,
-    "ast_hash": "22732c663da52f757486172beee87518",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/notice.png": {
-    "mtime": 1784572895.8006985,
-    "ast_hash": "df63f1cba6022d3fd49bf9b1810ab4bf",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/recovery.png": {
-    "mtime": 1784572895.8010917,
-    "ast_hash": "8ef5ac85358e7cd3b121dad2d58a9dbc",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/shield.png": {
-    "mtime": 1784572895.8016121,
-    "ast_hash": "10d5063ce0042e83b0b927887edf5fa6",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/shield_highlight.png": {
-    "mtime": 1784572895.8021216,
-    "ast_hash": "91082f29b0b7e495ec769773a26459b0",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/speed.png": {
-    "mtime": 1784572895.802501,
-    "ast_hash": "b3074c1c1e89a9b74f57b9ec3ac10c23",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/star.png": {
-    "mtime": 1784572895.8029072,
-    "ast_hash": "c3b4cd9929317a4650ab295766e9d7eb",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/sword.png": {
-    "mtime": 1784572895.803262,
-    "ast_hash": "51fc17ecbbcd82c5d58661cca9b3ff83",
-    "semantic_hash": ""
-  },
-  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/sword_highlight.png": {
-    "mtime": 1784572895.8036594,
-    "ast_hash": "bf8bcdb8132a03ef0ff28309ccca09a7",
-    "semantic_hash": ""
-  },
   "scripts/convert-monster-rpg-tmx.ts": {
-    "mtime": 1784572895.7069702,
+    "mtime": 1784572896.1111329,
     "ast_hash": "20b0b6a3f31ed9a4f85c5a4c595899a7",
     "semantic_hash": ""
   },
+  "scripts/copy-spa-fallback.mjs": {
+    "mtime": 1784572896.1113937,
+    "ast_hash": "f9414782a0382e698c4714370eed8c2e",
+    "semantic_hash": ""
+  },
   "scripts/fixtures/python-monsters/tilesets/Grass.tsx": {
-    "mtime": 1784572895.7113023,
+    "mtime": 1784572896.114617,
     "ast_hash": "eaaa506c002e593daea12fcef8944133",
     "semantic_hash": ""
   },
   "scripts/fixtures/python-monsters/tilesets/indoor.tsx": {
-    "mtime": 1784572895.7115657,
+    "mtime": 1784572896.1150744,
     "ast_hash": "1340296d67633b3c552eaf184a63f934",
     "semantic_hash": ""
   },
   "scripts/fixtures/python-monsters/tilesets/objects.tsx": {
-    "mtime": 1784572895.7119825,
+    "mtime": 1784572896.1154578,
     "ast_hash": "a08c911e4b3cb061246b30ff2e5146be",
     "semantic_hash": ""
   },
   "scripts/fixtures/python-monsters/tilesets/world.tsx": {
-    "mtime": 1784572895.7124302,
+    "mtime": 1784572896.1158078,
     "ast_hash": "317419ff62b0b3daa380ec7456ea2be3",
     "semantic_hash": ""
   },
+  "scripts/generate-monster-rpg-pixel-assets.mjs": {
+    "mtime": 1784572896.1162367,
+    "ast_hash": "c070b27a6daeddd649184c56cf563c45",
+    "semantic_hash": ""
+  },
+  "scripts/monster-rpg-asset-checks.mjs": {
+    "mtime": 1784572896.1167147,
+    "ast_hash": "ee53681d3441e9d7cf72662921388efc",
+    "semantic_hash": ""
+  },
+  "scripts/monster-rpg-asset-checks.node-test.mjs": {
+    "mtime": 1784572896.117123,
+    "ast_hash": "e58b7f57be769079fbafaca350369bdd",
+    "semantic_hash": ""
+  },
+  "scripts/monster-rpg-phase4-checks.ts": {
+    "mtime": 1784584914.8164454,
+    "ast_hash": "d8e6fa2729942e3ffbb78c52177fc520",
+    "semantic_hash": ""
+  },
+  "scripts/slice-monster-rpg-ai-assets.mjs": {
+    "mtime": 1784572896.1179755,
+    "ast_hash": "2f8dec4aacd9602e18f1cd388d4c382d",
+    "semantic_hash": ""
+  },
+  "server/battleRegistry.test.ts": {
+    "mtime": 1784592129.1875656,
+    "ast_hash": "ca2adc6d02d22901a23affe0ba2dde2d",
+    "semantic_hash": ""
+  },
+  "server/battleRegistry.ts": {
+    "mtime": 1784592129.1900203,
+    "ast_hash": "58fe6ee28782af0d28c9f53588cfd03d",
+    "semantic_hash": ""
+  },
   "server/generatedMapAdapter.ts": {
-    "mtime": 1784572895.715143,
+    "mtime": 1784572896.1187818,
     "ast_hash": "d44d78346fb06ae866269faf0fb9e677",
     "semantic_hash": ""
   },
+  "server/index.ts": {
+    "mtime": 1784572896.1191514,
+    "ast_hash": "bb9e86ffda35ac1765d34853111bd113",
+    "semantic_hash": ""
+  },
+  "server/rooms/BattleRoom.ts": {
+    "mtime": 1784592129.192544,
+    "ast_hash": "e1bee4fa40a92f52a2303304f5514122",
+    "semantic_hash": ""
+  },
+  "server/rooms/HomeVillageRoom.ts": {
+    "mtime": 1784572896.11989,
+    "ast_hash": "438807a166f5077e066982c4eb3fa7b5",
+    "semantic_hash": ""
+  },
+  "server/rooms/LocationRoom.ts": {
+    "mtime": 1784592129.1966307,
+    "ast_hash": "da3d29a8188bffa86f9eac3bf9ac2f7c",
+    "semantic_hash": ""
+  },
+  "server/rooms/balanceVersion.test.ts": {
+    "mtime": 1784592240.254973,
+    "ast_hash": "e9ea55f9e1f5270ca22a146fe379a31a",
+    "semantic_hash": ""
+  },
+  "server/schema/BattleState.ts": {
+    "mtime": 1784572896.1210692,
+    "ast_hash": "b46835a3e3187fbef7cb62a15728805f",
+    "semantic_hash": ""
+  },
+  "server/schema/LocationState.ts": {
+    "mtime": 1784572896.121396,
+    "ast_hash": "9da67dedcef44cbb3099cd18e0dd23cb",
+    "semantic_hash": ""
+  },
+  "server/tsconfig.json": {
+    "mtime": 1784572896.121682,
+    "ast_hash": "fb9f1b4cf06c74745db6071df543dcc3",
+    "semantic_hash": ""
+  },
+  "src/App.tsx": {
+    "mtime": 1784572896.1222394,
+    "ast_hash": "a5091b977b6a6ca59140f3ac09bb7c14",
+    "semantic_hash": ""
+  },
+  "src/admin/AdminPage.tsx": {
+    "mtime": 1784572896.1229572,
+    "ast_hash": "d7be7e24a56817ded2fbc05783173b41",
+    "semantic_hash": ""
+  },
+  "src/app/App.tsx": {
+    "mtime": 1784572896.12352,
+    "ast_hash": "fe4360ef0c4c2d7e5aa57c23c837c143",
+    "semantic_hash": ""
+  },
+  "src/app/portalNavigation.test.ts": {
+    "mtime": 1784572896.1239336,
+    "ast_hash": "550f82e0507d4337cc587f83714c7575",
+    "semantic_hash": ""
+  },
+  "src/app/portalNavigation.ts": {
+    "mtime": 1784572896.1242714,
+    "ast_hash": "fcc076fd29b276153e04fe8d8c741141",
+    "semantic_hash": ""
+  },
+  "src/components/GameCard.tsx": {
+    "mtime": 1784572896.1247833,
+    "ast_hash": "a5a67122c07675186caddce718aa4205",
+    "semantic_hash": ""
+  },
+  "src/components/GameTile.test.tsx": {
+    "mtime": 1784572896.1251278,
+    "ast_hash": "efc77635b29411173a88e324139aeb16",
+    "semantic_hash": ""
+  },
+  "src/components/GameTile.tsx": {
+    "mtime": 1784572896.1254168,
+    "ast_hash": "3ac67a4a5fd05ddad1d42f0b76de1895",
+    "semantic_hash": ""
+  },
+  "src/components/IconCircleButton.tsx": {
+    "mtime": 1784572896.1256604,
+    "ast_hash": "1b9bf1c19a2b82c2ad60c06999747368",
+    "semantic_hash": ""
+  },
+  "src/components/Layout.tsx": {
+    "mtime": 1784572896.1260498,
+    "ast_hash": "62785dbc6181c37a90725b8e854abff5",
+    "semantic_hash": ""
+  },
+  "src/components/LeaderboardModal.tsx": {
+    "mtime": 1784572896.1262689,
+    "ast_hash": "7c95b5c39664d806975769998b1548c9",
+    "semantic_hash": ""
+  },
+  "src/components/PortalLogo.tsx": {
+    "mtime": 1784572896.12643,
+    "ast_hash": "f3eeabc0145d5352bbe0b5b57c2b8606",
+    "semantic_hash": ""
+  },
+  "src/config/games.test.ts": {
+    "mtime": 1784572896.1267517,
+    "ast_hash": "5969381c1b2237c42ac87ed973395db4",
+    "semantic_hash": ""
+  },
+  "src/config/games.ts": {
+    "mtime": 1784572896.1270955,
+    "ast_hash": "0c830ef11954e3cbb35e35365df79cf4",
+    "semantic_hash": ""
+  },
+  "src/config/portalAssets.ts": {
+    "mtime": 1784572896.1273649,
+    "ast_hash": "154a19eeea4646bd65f2cd151568e4f9",
+    "semantic_hash": ""
+  },
+  "src/config/registryOverride.test.ts": {
+    "mtime": 1784572896.1276271,
+    "ast_hash": "348b80f791d040468c068895e2049c1d",
+    "semantic_hash": ""
+  },
+  "src/config/registryOverride.ts": {
+    "mtime": 1784572896.1278844,
+    "ast_hash": "2dde50e97ecf174de72d691011814b92",
+    "semantic_hash": ""
+  },
+  "src/config/uiAssets.ts": {
+    "mtime": 1784572896.128052,
+    "ast_hash": "42cc8a2c0faf89ff200542b65832e828",
+    "semantic_hash": ""
+  },
+  "src/data/defaultGames.ts": {
+    "mtime": 1784572896.128483,
+    "ast_hash": "dc18afbf22b82a7ccf1462a402651600",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/MonsterRpgGame.tsx": {
+    "mtime": 1784592129.2009757,
+    "ast_hash": "0e5ea608b4e08f8daf85a041e5ab11ea",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/licensedAssetManifest.json": {
+    "mtime": 1784572896.1300228,
+    "ast_hash": "85f0a1729ebb4d9e7fd45abb0b04fe59",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/monsterRpgAssets.ts": {
+    "mtime": 1784572896.1303613,
+    "ast_hash": "864cf3e4c06ec94f0cf799e63eceac26",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/bootGame.ts": {
+    "mtime": 1784572896.2116947,
+    "ast_hash": "de76dff182f2fef51ffc66fe3cc2c9cb",
+    "semantic_hash": ""
+  },
   "src/games/monster-rpg/client/generatedMapAdapter.ts": {
-    "mtime": 1784572895.8045301,
+    "mtime": 1784572896.2121484,
     "ast_hash": "758906743921cd0248c26e032e910dfd",
     "semantic_hash": ""
   },
+  "src/games/monster-rpg/client/index.ts": {
+    "mtime": 1784572896.2124412,
+    "ast_hash": "a9123cc3f4821fe589f27d94dfc55e02",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/scenes/VillageScene.ts": {
+    "mtime": 1784572896.2132444,
+    "ast_hash": "12dcc1801fec77ddac4ab8cda4d56e28",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/network/colyseusClient.test.ts": {
+    "mtime": 1784592241.1431324,
+    "ast_hash": "c224acdce89219a9df344b6789c60f97",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/network/colyseusClient.ts": {
+    "mtime": 1784572896.2142863,
+    "ast_hash": "6f6579bef48364c2d1f2af166a89017f",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/network/index.ts": {
+    "mtime": 1784572896.214833,
+    "ast_hash": "0fe07723568ab21f3d65288b496b94f4",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/battleRewards.ts": {
+    "mtime": 1784592239.284289,
+    "ast_hash": "aeef44a6a934e20d853d89a55ca239ae",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/battles.test.ts": {
+    "mtime": 1784592130.0341134,
+    "ast_hash": "347d344ffe2d3c40cae63804aff92a16",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/battles.ts": {
+    "mtime": 1784592129.2074974,
+    "ast_hash": "0b74250f7f66f413fc03cf9af6393052",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/cards.test.ts": {
+    "mtime": 1784572896.216795,
+    "ast_hash": "1123df9fc111ab9ec04afc852b061a59",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/cards.ts": {
+    "mtime": 1784572896.2171903,
+    "ast_hash": "cf999d8c9b73e06816c04d139a755178",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/creatureJournal.test.ts": {
+    "mtime": 1784572896.2174995,
+    "ast_hash": "c1d84cbceed60e061ec9caab982a3400",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/creatureJournal.ts": {
+    "mtime": 1784572896.2177415,
+    "ast_hash": "9091a6d021112ba3ad85c3d34f41d6d5",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/creatureLifecycle.ts": {
+    "mtime": 1784592130.0352724,
+    "ast_hash": "a43ac748f4d9dd9823bee46a0a3b68a1",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/creatureParty.test.ts": {
+    "mtime": 1784572896.2186332,
+    "ast_hash": "1a01b8f9fc353da713f60bafb0ba26ad",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/creatureParty.ts": {
+    "mtime": 1784572896.2190952,
+    "ast_hash": "82517ea3ca85a86d5683488231b53620",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/farms.test.ts": {
+    "mtime": 1784572896.2195506,
+    "ast_hash": "e16102a0469457bcdd0c87c360d76926",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/farms.ts": {
+    "mtime": 1784572896.2201805,
+    "ast_hash": "dff77d32689b677b6e650e17219fa633",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/gameBalance.test.ts": {
+    "mtime": 1784592303.444585,
+    "ast_hash": "7818e8f11a832cfd888c2bdc31df76cb",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/gameBalance.ts": {
+    "mtime": 1784592206.7315047,
+    "ast_hash": "88fd8a54d882b5506fefb213c07c3055",
+    "semantic_hash": ""
+  },
   "src/games/monster-rpg/sim/generatedMapArtifact.ts": {
-    "mtime": 1784572895.8165653,
+    "mtime": 1784572896.2220488,
     "ast_hash": "9b79bbc32d6232f3d1e7baf8acc3ca09",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/generatedMapSchema.test.ts": {
-    "mtime": 1784572895.8173358,
+    "mtime": 1784572896.2225587,
     "ast_hash": "5cb573a029bf5441def9a4f9431c7efb",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/generatedMapSchema.ts": {
-    "mtime": 1784572895.8178396,
+    "mtime": 1784572896.2229724,
     "ast_hash": "0e39ad87e87239cbb0dffb6a7186c2cb",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/generatedMapSet.ts": {
-    "mtime": 1784572895.818263,
+    "mtime": 1784572896.2232568,
     "ast_hash": "23aa03979ceb9dae97554fa26f7a1c2b",
     "semantic_hash": ""
   },
+  "src/games/monster-rpg/sim/index.ts": {
+    "mtime": 1784592242.1143107,
+    "ast_hash": "ca0959c17784b47e339046c150e05d3b",
+    "semantic_hash": ""
+  },
   "src/games/monster-rpg/sim/inventory.test.ts": {
-    "mtime": 1784590172.6186402,
+    "mtime": 1784592129.245657,
     "ast_hash": "be44b7f1d019e0215eb59f5dab46c0cc",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/inventory.ts": {
-    "mtime": 1784590172.619981,
+    "mtime": 1784592129.2676852,
     "ast_hash": "3426dd8f3b765029ec136bab3e50bf13",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/items.test.ts": {
-    "mtime": 1784590172.6209388,
+    "mtime": 1784592129.2688215,
     "ast_hash": "25b496c60aee67361f1e334286f4edfb",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/items.ts": {
-    "mtime": 1784590172.621827,
+    "mtime": 1784592129.2720253,
     "ast_hash": "8c32eb878d091bb5e8c7baceabb7500e",
     "semantic_hash": ""
   },
-  "src/games/monster-rpg/sim/rewardInbox.test.ts": {
-    "mtime": 1784590172.6224213,
-    "ast_hash": "a598f37ee0edec5e699d0d6a8988ba07",
+  "src/games/monster-rpg/sim/maps.ts": {
+    "mtime": 1784572896.224007,
+    "ast_hash": "c279ceafbd4bff8dbc428896da885418",
     "semantic_hash": ""
   },
-  "src/games/monster-rpg/sim/rewardInbox.ts": {
-    "mtime": 1784590172.6232805,
-    "ast_hash": "34dd99c36cb5722bae08fff194d2bd2b",
+  "src/games/monster-rpg/sim/movement.ts": {
+    "mtime": 1784572896.2244718,
+    "ast_hash": "659758951a64fc6dcb1ae72312fb753b",
     "semantic_hash": ""
   },
-  "src/games/monster-rpg/ui/GameHud.test.tsx": {
-    "mtime": 1784590172.6266315,
-    "ast_hash": "dfbd3a75c7fa945d7ab690e7c63dfacf",
+  "src/games/monster-rpg/sim/onboarding.test.ts": {
+    "mtime": 1784572896.2247355,
+    "ast_hash": "1bd600a0f5f3256430d3ecd7005b82e5",
     "semantic_hash": ""
   },
-  "server/battleRegistry.test.ts": {
-    "mtime": 1784590172.8720996,
-    "ast_hash": "ca2adc6d02d22901a23affe0ba2dde2d",
+  "src/games/monster-rpg/sim/onboarding.ts": {
+    "mtime": 1784572896.22513,
+    "ast_hash": "4d990a3e63bf96a354b29b1ab90c7108",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/pathfinding.test.ts": {
+    "mtime": 1784572896.2255738,
+    "ast_hash": "b34961458a2b413fcab13fefe99f3099",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/pathfinding.ts": {
+    "mtime": 1784572896.2260253,
+    "ast_hash": "f0d8e539913399e5669bad51c0b2fee3",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/playerProgression.test.ts": {
+    "mtime": 1784572896.226373,
+    "ast_hash": "3329afb610be4b5cc401776897113b4e",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/playerProgression.ts": {
+    "mtime": 1784572896.2268114,
+    "ast_hash": "75480ed80d82eb640668b1fa51d74cac",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/rewardChanceMatrix.test.ts": {
-    "mtime": 1784590292.0954206,
+    "mtime": 1784592129.2749174,
     "ast_hash": "7393093317ba404f6f8c521052d20922",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/rewardChanceMatrix.ts": {
-    "mtime": 1784590172.8836927,
+    "mtime": 1784592129.2768376,
     "ast_hash": "9a469d82d683b1d530786f50af043801",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/rewardInbox.test.ts": {
+    "mtime": 1784592129.2791326,
+    "ast_hash": "a598f37ee0edec5e699d0d6a8988ba07",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/rewardInbox.ts": {
+    "mtime": 1784592129.2809296,
+    "ast_hash": "34dd99c36cb5722bae08fff194d2bd2b",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/saveState.test.ts": {
+    "mtime": 1784592289.0283222,
+    "ast_hash": "2d64c4a10e46cbffcfd11a4885e15917",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/saveState.ts": {
+    "mtime": 1784592283.8676894,
+    "ast_hash": "1c21e03a5974e49bb46da4d9df653ae9",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/settings.test.ts": {
+    "mtime": 1784572896.2282493,
+    "ast_hash": "58c5a10c08896e8e791bd207f82d74bb",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/settings.ts": {
+    "mtime": 1784572896.228618,
+    "ast_hash": "3c65263bb07b42717aa5c203ef079cdb",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/speciesCatalog.test.ts": {
+    "mtime": 1784572896.2290926,
+    "ast_hash": "ba7778aaf2723ad73e5bfb782dbe57ee",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/speciesCatalog.ts": {
+    "mtime": 1784572896.2295275,
+    "ast_hash": "0a3989368fbeb0d2ee57fdbf64d22ed3",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/statGrowth.test.ts": {
+    "mtime": 1784592130.0437973,
+    "ast_hash": "610768152d39f65ee22673d8ba715442",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/statGrowth.ts": {
+    "mtime": 1784592130.0458155,
+    "ast_hash": "384275d2c77b613cc23e9773b53a777d",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/stations.test.ts": {
+    "mtime": 1784572896.2299595,
+    "ast_hash": "1bb6ad9c8de68fdd09fc1d77555c1b82",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/stations.ts": {
+    "mtime": 1784572896.2303808,
+    "ast_hash": "118fb687dfb42109db89036485a9dd3c",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/types.ts": {
+    "mtime": 1784592130.0472665,
+    "ast_hash": "72aba811e42d8dec98b5debf82ba2d25",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/villageMap.ts": {
+    "mtime": 1784572896.23108,
+    "ast_hash": "0851830a5fbd19ae1fd4912e5aaebfb1",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/wildEncounters.test.ts": {
+    "mtime": 1784572896.2314026,
+    "ast_hash": "caaa7f35543cacd7a0d1d512538aa28d",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/sim/wildEncounters.ts": {
+    "mtime": 1784572896.2317572,
+    "ast_hash": "057766d895815684dee21cad32efabca",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/ui/CharacterCreator.tsx": {
+    "mtime": 1784572896.2322946,
+    "ast_hash": "3abe4039f03da9d2183dd71fb6ce3f89",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/ui/GameHud.test.tsx": {
+    "mtime": 1784592129.2934105,
+    "ast_hash": "dfbd3a75c7fa945d7ab690e7c63dfacf",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/ui/GameHud.tsx": {
+    "mtime": 1784592129.2951093,
+    "ast_hash": "790896ec902e766ca07b1901e95a4d67",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/ui/GameLogView.test.tsx": {
+    "mtime": 1784572896.2331307,
+    "ast_hash": "3059373d2ac06c22a9b0236f5f891e98",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/ui/GameLogView.tsx": {
+    "mtime": 1784572896.2334895,
+    "ast_hash": "a696d7562396731d2e1d6bc6d951f83f",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/ui/MobileDpad.tsx": {
+    "mtime": 1784572896.233893,
+    "ast_hash": "3c9f80bcf71a80d64b761a9d67dc729c",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/ui/VillageElderOnboarding.tsx": {
+    "mtime": 1784572896.234833,
+    "ast_hash": "704320566253d98352bdec21e2c8dca1",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/ui/gameLog.test.ts": {
+    "mtime": 1784572896.2354238,
+    "ast_hash": "163eb07aab90ee1f36124d5e2c7074ff",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/ui/gameLog.ts": {
+    "mtime": 1784572896.2358596,
+    "ast_hash": "4c532184138b55500881f8fd66776af8",
+    "semantic_hash": ""
+  },
+  "src/games/placeholders/ComingSoonGamePage.tsx": {
+    "mtime": 1784572896.236493,
+    "ast_hash": "2b4395c43fe609f03a917c7ee6f9cb43",
+    "semantic_hash": ""
+  },
+  "src/games/snake/SnakeCanvas.tsx": {
+    "mtime": 1784572896.236918,
+    "ast_hash": "f4b10632e4108a3a8dfce64c350c0534",
+    "semantic_hash": ""
+  },
+  "src/games/snake/SnakeGamePage.tsx": {
+    "mtime": 1784572896.2372355,
+    "ast_hash": "aaee48c86ec1cfe583ff7f2e046a848c",
+    "semantic_hash": ""
+  },
+  "src/games/snake/config.test.ts": {
+    "mtime": 1784572896.2374818,
+    "ast_hash": "2d35e85eaa7c2a79ee492bb3f6bf829c",
+    "semantic_hash": ""
+  },
+  "src/games/snake/config.ts": {
+    "mtime": 1784572896.2377503,
+    "ast_hash": "f1f263d646e3c00a8cfff6eaec5b9403",
+    "semantic_hash": ""
+  },
+  "src/games/snake/engine.ts": {
+    "mtime": 1784572896.2380226,
+    "ast_hash": "769c3cca55e42f01f6b40d1ce14b6faf",
+    "semantic_hash": ""
+  },
+  "src/games/snake/storage.ts": {
+    "mtime": 1784572896.2384772,
+    "ast_hash": "639d294294f2c86ad21abd17343a8bd3",
+    "semantic_hash": ""
+  },
+  "src/hooks/useTheme.ts": {
+    "mtime": 1784572896.2393093,
+    "ast_hash": "c227c50e544ee67288ac1f059e03d95d",
+    "semantic_hash": ""
+  },
+  "src/lib/storage.ts": {
+    "mtime": 1784572896.2397115,
+    "ast_hash": "bf443a220bf223e2e034c89fb4a5f59e",
+    "semantic_hash": ""
+  },
+  "src/main.tsx": {
+    "mtime": 1784572896.2405887,
+    "ast_hash": "eb34d9e224c5bb79a85b87887212c2ff",
+    "semantic_hash": ""
+  },
+  "src/pages/AdminGameConfigPage.tsx": {
+    "mtime": 1784572896.2411442,
+    "ast_hash": "9c5a3bd89c0a1647e4388d31dd2ffa43",
+    "semantic_hash": ""
+  },
+  "src/pages/AdminPage.tsx": {
+    "mtime": 1784572896.2415228,
+    "ast_hash": "2358d29b8705be485c572c7aeb39fb7c",
+    "semantic_hash": ""
+  },
+  "src/pages/GamePage.tsx": {
+    "mtime": 1784572896.2419324,
+    "ast_hash": "6784b38f16b502655f978ef4ce502791",
+    "semantic_hash": ""
+  },
+  "src/pages/HomePage.tsx": {
+    "mtime": 1784572896.242627,
+    "ast_hash": "93b05178448f54c311196530a2e50dbd",
+    "semantic_hash": ""
+  },
+  "src/pages/LeaderboardPage.test.ts": {
+    "mtime": 1784572896.2430763,
+    "ast_hash": "36de887f30bd2a1851ed955494057822",
+    "semantic_hash": ""
+  },
+  "src/pages/LeaderboardPage.tsx": {
+    "mtime": 1784572896.2434676,
+    "ast_hash": "8e86c2b8455a1a810b775f9c20d7761c",
+    "semantic_hash": ""
+  },
+  "src/pages/LibraryPage.tsx": {
+    "mtime": 1784572896.2438579,
+    "ast_hash": "890aa2ff4ec1f1b8fa109ff1fa2caf70",
+    "semantic_hash": ""
+  },
+  "src/pages/libraryCatalog.test.ts": {
+    "mtime": 1784572896.2442446,
+    "ast_hash": "ef62b55652466b36d51bd133d1f38e5d",
+    "semantic_hash": ""
+  },
+  "src/pages/libraryCatalog.ts": {
+    "mtime": 1784572896.2446244,
+    "ast_hash": "5ff71fce648c225959dd85528b9d9b88",
+    "semantic_hash": ""
+  },
+  "src/providers/leaderboardProvider.ts": {
+    "mtime": 1784572896.245058,
+    "ast_hash": "4f063bb9693aa7b4c2ab2034d7b26f82",
+    "semantic_hash": ""
+  },
+  "src/repositories/localStorageRepository.ts": {
+    "mtime": 1784572896.245678,
+    "ast_hash": "0808afdd5e78dd639289a9b66496ca5f",
+    "semantic_hash": ""
+  },
+  "src/types.ts": {
+    "mtime": 1784572896.2472408,
+    "ast_hash": "6d1a5b0e490e7cadf1fad11b7c75761f",
+    "semantic_hash": ""
+  },
+  "src/types/game.ts": {
+    "mtime": 1784572896.2476988,
+    "ast_hash": "4feb6ee002f328e20cf99a88877d4902",
+    "semantic_hash": ""
+  },
+  "src/vite-env.d.ts": {
+    "mtime": 1784572896.247971,
+    "ast_hash": "0352474ba2918efe13895edbc3780d94",
+    "semantic_hash": ""
+  },
+  "tsconfig.app.json": {
+    "mtime": 1784572896.248221,
+    "ast_hash": "fc4242c35761fe102fc6bd90e13e09c4",
+    "semantic_hash": ""
+  },
+  "tsconfig.json": {
+    "mtime": 1784572896.2485933,
+    "ast_hash": "a3d39fa780ebff65444de257f291ce6c",
+    "semantic_hash": ""
+  },
+  "tsconfig.node.json": {
+    "mtime": 1784572896.249079,
+    "ast_hash": "7c06c0c9e34c1610673b63c03b3da41c",
+    "semantic_hash": ""
+  },
+  "vite.config.ts": {
+    "mtime": 1784572896.2493248,
+    "ast_hash": "bc3cd07cbbbb97eda5a751d15739ebe2",
+    "semantic_hash": ""
+  },
+  ".github/workflows/ci.yml": {
+    "mtime": 1784592129.1487613,
+    "ast_hash": "32df6eea2ae6ee785954ca97ce449795",
+    "semantic_hash": ""
+  },
+  ".github/workflows/deploy-pages.yml": {
+    "mtime": 1784572895.9622638,
+    "ast_hash": "c6f6d016907964e2fce5b4fe936cc9c5",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1784572895.9629471,
+    "ast_hash": "24f0dbd06ca5eec1f6a7df04bf469dea",
+    "semantic_hash": ""
+  },
+  "design.html": {
+    "mtime": 1784572895.9647791,
+    "ast_hash": "f413571c91ff41032defdb2df3cfb3c8",
+    "semantic_hash": ""
+  },
+  "index.html": {
+    "mtime": 1784572896.0752783,
+    "ast_hash": "1d5a69ca94759ba4682740fb136ecd6c",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/README.md": {
+    "mtime": 1784572896.1295881,
+    "ast_hash": "cdfd3719da410ca230e0e08f0c860e17",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/OFL-1.1.txt": {
+    "mtime": 1784572896.1448731,
+    "ast_hash": "cdeaadc09201aa4ff8e58d8aa6a128eb",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/SOURCE.md": {
+    "mtime": 1784572896.145611,
+    "ast_hash": "2bd845859354a00f658f2e1e7fd2e812",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/ui/README.md": {
+    "mtime": 1784572896.234315,
+    "ast_hash": "f057471834711497d90e98f6596a7b26",
+    "semantic_hash": ""
+  },
+  "public/assets/assets.png": {
+    "mtime": 1784572896.0926335,
+    "ast_hash": "c3b1ac26fba601b3ea2e2c5bbe277135",
+    "semantic_hash": ""
+  },
+  "public/assets/logos.png": {
+    "mtime": 1784572896.1019995,
+    "ast_hash": "83f5a574e8fe5bf70adf0d4fe203b902",
+    "semantic_hash": ""
+  },
+  "public/assets/portal-hero.png": {
+    "mtime": 1784572896.1061773,
+    "ast_hash": "32c4612ce5fbbb173d42bddd6b670031",
+    "semantic_hash": ""
+  },
+  "public/assets/portal/coming-soon-cover.svg": {
+    "mtime": 1784572896.1073272,
+    "ast_hash": "2099f12965f0d759a3a9dbf11f9d4d4d",
+    "semantic_hash": ""
+  },
+  "public/assets/portal/coming-soon-hero.svg": {
+    "mtime": 1784572896.1075878,
+    "ast_hash": "26e3dc006f7c4ae2ff5ca69d6c1077f7",
+    "semantic_hash": ""
+  },
+  "public/assets/portal/fallback-cover.svg": {
+    "mtime": 1784572896.1078298,
+    "ast_hash": "ea52a808b44d06754b794359683e77bd",
+    "semantic_hash": ""
+  },
+  "public/assets/portal/fallback-hero.svg": {
+    "mtime": 1784572896.108055,
+    "ast_hash": "94b5445d7f3e1df1553f2bb52ba620a7",
+    "semantic_hash": ""
+  },
+  "public/assets/portal/flappy-bird-cover.svg": {
+    "mtime": 1784572896.1083753,
+    "ast_hash": "91be44e3b02fde5bdfe50923f51b781f",
+    "semantic_hash": ""
+  },
+  "public/assets/portal/flappy-bird-hero.svg": {
+    "mtime": 1784572896.1087685,
+    "ast_hash": "4350c0864fde9843c01e9ef500353723",
+    "semantic_hash": ""
+  },
+  "public/assets/portal/gameit-monsters-cover.svg": {
+    "mtime": 1784572896.1090753,
+    "ast_hash": "9b8ac886f195d374defdecd6dcd57052",
+    "semantic_hash": ""
+  },
+  "public/assets/portal/gameit-monsters-hero.svg": {
+    "mtime": 1784572896.1093628,
+    "ast_hash": "22ecce8f1a10a8e477796976d797eae1",
+    "semantic_hash": ""
+  },
+  "public/assets/portal/snake-cover.svg": {
+    "mtime": 1784572896.1097467,
+    "ast_hash": "e4c4af48ba42d01894e02ec9bae7db50",
+    "semantic_hash": ""
+  },
+  "public/assets/portal/snake-hero.svg": {
+    "mtime": 1784572896.1100433,
+    "ast_hash": "bf32f9f4dcee2594ba72b01bac0c3c1d",
+    "semantic_hash": ""
+  },
+  "public/assets/portal/stickman-fight-cover.svg": {
+    "mtime": 1784572896.1104152,
+    "ast_hash": "fef0ba93e38b95cd96b6044ca5abbf55",
+    "semantic_hash": ""
+  },
+  "public/assets/portal/stickman-fight-hero.svg": {
+    "mtime": 1784572896.110664,
+    "ast_hash": "ff0da1232bcf2af769534d56c879b015",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/building-clinic.png": {
+    "mtime": 1784572896.1307478,
+    "ast_hash": "467cd400ecc4a90a6ce55f431e1d0173",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/building-house.png": {
+    "mtime": 1784572896.131001,
+    "ast_hash": "faf812974fb6976ed12f9f7235dc51ff",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/building-post-office.png": {
+    "mtime": 1784572896.1312664,
+    "ast_hash": "06bbba88520daa36f6be7c34f4619767",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/building-shop.png": {
+    "mtime": 1784572896.1316524,
+    "ast_hash": "b72ceff1d64bcf614de0f38bc6254d68",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/building-tavern.png": {
+    "mtime": 1784572896.1318867,
+    "ast_hash": "f1f451fe40f27fdc672e8504d9c2ece9",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/building-town-hall.png": {
+    "mtime": 1784572896.1321108,
+    "ast_hash": "58c5af14b8056c0f6104ae2471e093ee",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/creature-encounters.png": {
+    "mtime": 1784572896.1328795,
+    "ast_hash": "a2be42ab17c76224c4cc7e1eeed3c9d8",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/marker-door.png": {
+    "mtime": 1784572896.1332192,
+    "ast_hash": "ab47a0bf2473365d5a0702dc3b065211",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/marker-sign.png": {
+    "mtime": 1784572896.1335034,
+    "ast_hash": "590a3fe2cf022f21238b27ac0c2d8ebf",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-bridge-water.png": {
+    "mtime": 1784572896.1337717,
+    "ast_hash": "9f844807ba8e2fc41b4262be721c721f",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-field-ai-1.png": {
+    "mtime": 1784572896.1340113,
+    "ast_hash": "759e0d32d2091488d014f2937d23e0ec",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-field-ai-2.png": {
+    "mtime": 1784572896.1342242,
+    "ast_hash": "323a7c9dd29467313fb18ec493486118",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-field-ai-3.png": {
+    "mtime": 1784572896.134462,
+    "ast_hash": "562b076bed7fb776030c5cab343fed75",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-field.png": {
+    "mtime": 1784572896.1347654,
+    "ast_hash": "552b72945bcde3b1ec5cfe17e8a91be9",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-forest-ai-1.png": {
+    "mtime": 1784572896.1352007,
+    "ast_hash": "16780ac0556f2da694291cc1d92c6a74",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-forest-ai-2.png": {
+    "mtime": 1784572896.1354446,
+    "ast_hash": "dd5b575012370b4aed99fddc1f4f8fa4",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-forest-ai-3.png": {
+    "mtime": 1784572896.1357994,
+    "ast_hash": "3fe326a65a00ae948411dd78174a8cbb",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-forest.png": {
+    "mtime": 1784572896.136033,
+    "ast_hash": "cddda751383082815e23f649763f3648",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-grass-1.png": {
+    "mtime": 1784572896.136268,
+    "ast_hash": "e0924c4a955dc3379b2cf8cce085414f",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-grass-2.png": {
+    "mtime": 1784572896.136554,
+    "ast_hash": "88345c62395d7f2ce55721240c1a250b",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-grass-3.png": {
+    "mtime": 1784572896.1369784,
+    "ast_hash": "af82f671a070205eb4a4309658bf68ad",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-mountain-ai-1.png": {
+    "mtime": 1784572896.1375074,
+    "ast_hash": "81a813965453b725e47095f0aa7c3193",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-mountain-ai-2.png": {
+    "mtime": 1784572896.1379178,
+    "ast_hash": "32d613d319b8ea1b7b83b24625829f80",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-mountain.png": {
+    "mtime": 1784572896.1385052,
+    "ast_hash": "86528ae24ff9e53e29a56e1e36a95dd5",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-road-curve.png": {
+    "mtime": 1784572896.1388743,
+    "ast_hash": "761f9241111f308862c61efcdc6c640e",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-road-end.png": {
+    "mtime": 1784572896.1393085,
+    "ast_hash": "f08e639e74b9c4acad306d91d65a3dbd",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-road-horizontal.png": {
+    "mtime": 1784572896.1399517,
+    "ast_hash": "f6aeee8d378429e87fd3f34d31aa78ae",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-road-vertical.png": {
+    "mtime": 1784572896.1403775,
+    "ast_hash": "5cafc5f99069f2ce446c4472b934b818",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-shoreline.png": {
+    "mtime": 1784572896.1408274,
+    "ast_hash": "9871c74f959c46406550c2da47f0edae",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-tree-ai-1.png": {
+    "mtime": 1784572896.1413329,
+    "ast_hash": "d4d43a795cb57a9520e6b70f61cca039",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-tree-ai-2.png": {
+    "mtime": 1784572896.1416962,
+    "ast_hash": "976a274eef1ad5588862ec6c6f726ecb",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-tree.png": {
+    "mtime": 1784572896.142052,
+    "ast_hash": "3a0234b7ab05ca2734f1310bc97d13fa",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-water-ai-1.png": {
+    "mtime": 1784572896.1426466,
+    "ast_hash": "fbab6dba3f8b8317a0659da0c55760a4",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-water-ai-2.png": {
+    "mtime": 1784572896.14307,
+    "ast_hash": "b60756315828296756946c42eea6fdae",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/terrain-water.png": {
+    "mtime": 1784572896.1434395,
+    "ast_hash": "8c9e2a5e07186868207a28113fbe5c8b",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/village-large.png": {
+    "mtime": 1784572896.1437576,
+    "ast_hash": "44ab44cda8a69164b16c83934f8da4f4",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/pixel/village-small.png": {
+    "mtime": 1784572896.1440475,
+    "ast_hash": "7aac7d6b0085d90eddec86df1dc842aa",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/attacks/explosion.png": {
+    "mtime": 1784572896.1462607,
+    "ast_hash": "3e9e3b6d8963abfa96cabc3aa5480fc9",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/attacks/fire.png": {
+    "mtime": 1784572896.1466649,
+    "ast_hash": "1e9b6eac549c2cdd635ad3a490d74d12",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/attacks/green.png": {
+    "mtime": 1784572896.1470172,
+    "ast_hash": "437ae5bb96211287b78b4ed0d5ad960d",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/attacks/ice.png": {
+    "mtime": 1784572896.1474838,
+    "ast_hash": "a64421db85e635317aaa1ca5f0b56ed4",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/attacks/scratch.png": {
+    "mtime": 1784572896.148003,
+    "ast_hash": "8a6149c6dc60bbbe82e6b51df5b53867",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/attacks/splash.png": {
+    "mtime": 1784572896.1484563,
+    "ast_hash": "a5c28bb3de129b34a501c15854056d6a",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/backgrounds/forest.png": {
+    "mtime": 1784572896.149315,
+    "ast_hash": "5f77960d61b29c3639241525a91c60c1",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/backgrounds/ice.png": {
+    "mtime": 1784572896.1501632,
+    "ast_hash": "e2cb1458b1e966b8d62f2adfa96edfd8",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/backgrounds/sand.png": {
+    "mtime": 1784572896.150879,
+    "ast_hash": "00551da1df2a51d864e3b0452b22cf4a",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/characters/blond.png": {
+    "mtime": 1784572896.1515973,
+    "ast_hash": "46dc724a53e5843b932548f759fd8ace",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/characters/fire_boss.png": {
+    "mtime": 1784572896.1521266,
+    "ast_hash": "f7ddd7d5979cb9d7033a354aba4b716b",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/characters/grass_boss.png": {
+    "mtime": 1784572896.152567,
+    "ast_hash": "ae5b8d1083b682d0267093c5d53fb6d7",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/characters/hat_girl.png": {
+    "mtime": 1784572896.153003,
+    "ast_hash": "f665e310b4caf067c96dc4154328cdc7",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/characters/player.png": {
+    "mtime": 1784572896.1534767,
+    "ast_hash": "0f98ee3532f85166a9b331ecd3cdebd3",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/characters/purple_girl.png": {
+    "mtime": 1784572896.1539946,
+    "ast_hash": "6a8aa92f01a89b46b3618cf8a52a09eb",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/characters/straw.png": {
+    "mtime": 1784572896.1544821,
+    "ast_hash": "92f2863330f6c0527f84041d3f00f805",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/characters/water_boss.png": {
+    "mtime": 1784572896.1549401,
+    "ast_hash": "6b75daeff483a3b2e4a4450977bcd1f8",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/characters/young_girl.png": {
+    "mtime": 1784572896.1553519,
+    "ast_hash": "429952db285cb89e52bf24c71879edcf",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/characters/young_guy.png": {
+    "mtime": 1784572896.1557565,
+    "ast_hash": "4a9dc6da7bbafeffbdec2e37b4e10f45",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Atrox.png": {
+    "mtime": 1784572896.1585786,
+    "ast_hash": "0f68700d8e4f25ff51f1b9821c213880",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Charmadillo.png": {
+    "mtime": 1784572896.1589632,
+    "ast_hash": "d1e26af27c98b9aea13cfbf7952efe24",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Cindrill.png": {
+    "mtime": 1784572896.1593182,
+    "ast_hash": "fb881937fab72d8db8da26af951c47cd",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Cleaf.png": {
+    "mtime": 1784572896.1596453,
+    "ast_hash": "cd51b52cc3d3c60f41f5e40c0cc68096",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Draem.png": {
+    "mtime": 1784572896.1598856,
+    "ast_hash": "bea8ffc4e83a9b622e036d9c80f70ab4",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Finiette.png": {
+    "mtime": 1784572896.1601295,
+    "ast_hash": "54fc3f76c9b7381b966313b228962759",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Finsta.png": {
+    "mtime": 1784572896.1603658,
+    "ast_hash": "d63cc8398b8eb26aeaa86649b003ebfb",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Friolera.png": {
+    "mtime": 1784572896.1605823,
+    "ast_hash": "3fd041a6501c4a626016373ca5043fd2",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Gulfin.png": {
+    "mtime": 1784572896.1608305,
+    "ast_hash": "f1c223abffedac03ace3efd868e0d232",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Ivieron.png": {
+    "mtime": 1784572896.1611776,
+    "ast_hash": "9958e3a5a20648de4f8d1f43fb503bcd",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Jacana.png": {
+    "mtime": 1784572896.1615694,
+    "ast_hash": "67965f5ae74d230a2b8c99c85c53a680",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Larvea.png": {
+    "mtime": 1784572896.1619213,
+    "ast_hash": "0ef7cd6f2eb8bbedd86f997749e309d8",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Pluma.png": {
+    "mtime": 1784572896.1622167,
+    "ast_hash": "51bcbf0dacce19d728b839598b3ad5ab",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Plumette.png": {
+    "mtime": 1784572896.162537,
+    "ast_hash": "59eb1c0568bbea3715b298aea18650d8",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Pouch.png": {
+    "mtime": 1784572896.1628823,
+    "ast_hash": "b987d99131d97e6c504c387e2f3e948f",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/icons/Sparchu.png": {
+    "mtime": 1784572896.1633592,
+    "ast_hash": "10bac7eeb37ab7d1c291bfe22d273f25",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Atrox.png": {
+    "mtime": 1784572896.164004,
+    "ast_hash": "18f07b2a4319260531a6c5ba8d30cdd3",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Charmadillo.png": {
+    "mtime": 1784572896.1646276,
+    "ast_hash": "b89c6377f2ebbc2243fe652931c82db4",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Cindrill.png": {
+    "mtime": 1784572896.1658738,
+    "ast_hash": "dfbb1a8ed62ff6969d34edf7d6a20501",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Cleaf.png": {
+    "mtime": 1784572896.1672907,
+    "ast_hash": "8455dbff86a0b25ea0f4ac87e4dafe7a",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Draem.png": {
+    "mtime": 1784572896.167855,
+    "ast_hash": "12bf2a71b7ba892d1a79435bea392a6f",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Finiette.png": {
+    "mtime": 1784572896.1684332,
+    "ast_hash": "85091f177988a82e98acafbf062e0418",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Finsta.png": {
+    "mtime": 1784572896.1688976,
+    "ast_hash": "8c481389f8d0fbe7ae1e5a256f0bbb6d",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Friolera.png": {
+    "mtime": 1784572896.1694024,
+    "ast_hash": "603313466ba2004591400a6547789ff6",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Gulfin.png": {
+    "mtime": 1784572896.1698434,
+    "ast_hash": "5b45d547ec296af2b9b374cedb18824f",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Ivieron.png": {
+    "mtime": 1784572896.1703007,
+    "ast_hash": "902897413e072857b5a1f17bec95b8e7",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Jacana.png": {
+    "mtime": 1784572896.1707482,
+    "ast_hash": "3954857228c095615d9be95966e4f487",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Larvea.png": {
+    "mtime": 1784572896.1711361,
+    "ast_hash": "fefafbfe8fb583f73754a432ef3b6e0a",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Pluma.png": {
+    "mtime": 1784572896.1716335,
+    "ast_hash": "5b2bd3637a69c3d19992f6a7d84af6ca",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Plumette.png": {
+    "mtime": 1784572896.1721184,
+    "ast_hash": "86a4ff0a3c8dff4b83a43283924d7806",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Pouch.png": {
+    "mtime": 1784572896.1724339,
+    "ast_hash": "3ae0ab1ea011272c58e71b12ffc1124a",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/monsters/Sparchu.png": {
+    "mtime": 1784572896.17294,
+    "ast_hash": "55c4e98d1673a3fb6d72409744ba1a18",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/arean_fire.png": {
+    "mtime": 1784572896.17369,
+    "ast_hash": "1278a0c33ec891e4afd8297402762e12",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/arena_plant.png": {
+    "mtime": 1784572896.1741366,
+    "ast_hash": "301e5e91b094c349ef5a4d1b57c2ab30",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/arena_water.png": {
+    "mtime": 1784572896.1745,
+    "ast_hash": "478ffdd2549d41108921cd2713332c2c",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/gate_pillar.png": {
+    "mtime": 1784572896.1747665,
+    "ast_hash": "06fe74918c22f5a70aa232a847cfc6fd",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/gate_top.png": {
+    "mtime": 1784572896.1750197,
+    "ast_hash": "2d0495f01e15c199f7ad597a49e0b2cd",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/grass.png": {
+    "mtime": 1784572896.175423,
+    "ast_hash": "7615a1cd63e4664d9d7b418bdbd78ca0",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/grass_ice.png": {
+    "mtime": 1784572896.1758177,
+    "ast_hash": "b28d13027b0071a697d7bc6f217698e3",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/grassrock1.png": {
+    "mtime": 1784572896.176121,
+    "ast_hash": "0f3f7237a4faa3c6e04dc4b1c97be275",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/grassrock2.png": {
+    "mtime": 1784572896.1764674,
+    "ast_hash": "e18529ce6e521b90528d7ac4ff1f7d4f",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/green_tree.png": {
+    "mtime": 1784572896.1768694,
+    "ast_hash": "7b5cc8e722c0b05e0d338fa16b362ca8",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/green_tree_bushy.png": {
+    "mtime": 1784572896.177201,
+    "ast_hash": "2f76c2efc68f91e05ddec745e73bd81f",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/green_tree_small.png": {
+    "mtime": 1784572896.1774871,
+    "ast_hash": "9c8e46bd53c47d119a355145517c65cb",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/hospital.png": {
+    "mtime": 1784572896.1778672,
+    "ast_hash": "e8a401d82770875526f023f3f0b98a84",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/house_large.png": {
+    "mtime": 1784572896.1783857,
+    "ast_hash": "4d418ffa6ff37825c0e0f57c1d6e2c33",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/house_large_alt.png": {
+    "mtime": 1784572896.178732,
+    "ast_hash": "f2f571af505d0bbecce9ce597fe755fb",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/house_small.png": {
+    "mtime": 1784572896.179174,
+    "ast_hash": "4a7f7342eecf7682670fab3487242145",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/house_small_alt.png": {
+    "mtime": 1784572896.1795897,
+    "ast_hash": "fece8130daca5390b30a1832e4988a6d",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/ice_tree.png": {
+    "mtime": 1784572896.179856,
+    "ast_hash": "cd315c0f83c3f11b9540a9d58b3e983b",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/icerock1.png": {
+    "mtime": 1784572896.1801376,
+    "ast_hash": "47578ce12b3e88c4a6da1c7b47688125",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/icerock2.png": {
+    "mtime": 1784572896.18057,
+    "ast_hash": "706db8adecbb5ba453efcb8be650ae67",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/palm.png": {
+    "mtime": 1784572896.1810873,
+    "ast_hash": "3a5646ec0306d50acefe71221c385955",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/palm_alt.png": {
+    "mtime": 1784572896.1815004,
+    "ast_hash": "bfa92cf7ec7fdb135f595ef88b1a597b",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/palm_small.png": {
+    "mtime": 1784572896.1821363,
+    "ast_hash": "a61c4f114dd01b7e09c9a281e0d97fbf",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/ruin_gate.png": {
+    "mtime": 1784572896.182494,
+    "ast_hash": "740255518a1f1a19328f0e9cab2b98f1",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/ruin_pillar.png": {
+    "mtime": 1784572896.1832843,
+    "ast_hash": "6b9d571f4d8c7eefaee61cf0eb883404",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/ruin_pillar_broke.png": {
+    "mtime": 1784572896.1836834,
+    "ast_hash": "95a2667887ecd65efac3ab8d015bae79",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/ruin_pillar_broke_alt.png": {
+    "mtime": 1784572896.1843567,
+    "ast_hash": "68a63331fec2a94a568ad1c7e22be533",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/sand.png": {
+    "mtime": 1784572896.1847138,
+    "ast_hash": "8b1f9aa3f611bc9d253a9afa1f6f22bc",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/sandrock1.png": {
+    "mtime": 1784572896.185056,
+    "ast_hash": "05741b768833885a685a8cb63976f12d",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/sandrock2.png": {
+    "mtime": 1784572896.185413,
+    "ast_hash": "4323f9dc51c44b2f66b3a56cd1fbabab",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/teal_tree.png": {
+    "mtime": 1784572896.1862504,
+    "ast_hash": "3243161b1d79050a094d3814a475d66e",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/teal_tree_bushy.png": {
+    "mtime": 1784572896.1866748,
+    "ast_hash": "e8e506fa8c9f5a4b5b890c526ae1dd3b",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/objects/teal_tree_small.png": {
+    "mtime": 1784572896.1872177,
+    "ast_hash": "17c46d215f3fac9f8ad9c5642e7c798d",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/shadow.png": {
+    "mtime": 1784572896.18784,
+    "ast_hash": "006e2a507013558a2ec4c31891d3d300",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00002.png": {
+    "mtime": 1784572896.1885245,
+    "ast_hash": "27d50f716c168490031e18eb0bac941f",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00003.png": {
+    "mtime": 1784572896.1889675,
+    "ast_hash": "08ac42822efabd18c51f5b6623b4c343",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00004.png": {
+    "mtime": 1784572896.1893518,
+    "ast_hash": "fbed0f0a1f12169fb81286176e57ce95",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00005.png": {
+    "mtime": 1784572896.1897137,
+    "ast_hash": "9015295c3723ba057fb237cf6e1a2024",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00006.png": {
+    "mtime": 1784572896.1900828,
+    "ast_hash": "439915e17160d8c714c42cb089a8328a",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00007.png": {
+    "mtime": 1784572896.190543,
+    "ast_hash": "249282c0a55f13b5e77952ca75593dfd",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00008.png": {
+    "mtime": 1784572896.1909297,
+    "ast_hash": "018605c10b363f1c342444d8cee24ac3",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00009.png": {
+    "mtime": 1784572896.1912959,
+    "ast_hash": "38186c7fa79605f394c0562f9278d2a4",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00010.png": {
+    "mtime": 1784572896.1917894,
+    "ast_hash": "8afbd0702ab9bf8863f3ee1c39990d05",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00011.png": {
+    "mtime": 1784572896.1921446,
+    "ast_hash": "9cb7faa2d8a00ed54378f44311ce5c36",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00012.png": {
+    "mtime": 1784572896.192523,
+    "ast_hash": "5048baf43d7b71a1782adc62d27aa0cc",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00013.png": {
+    "mtime": 1784572896.1929317,
+    "ast_hash": "39876a470d1268fde76d2847c516c625",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00014.png": {
+    "mtime": 1784572896.1932757,
+    "ast_hash": "6e98aeeb66fa53b6a257c818c478d798",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00015.png": {
+    "mtime": 1784572896.1937027,
+    "ast_hash": "54382af0783f04d769841fff7c1b442a",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00016.png": {
+    "mtime": 1784572896.1940114,
+    "ast_hash": "89730b6cda2f665a909e2d7c218fa5f1",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00017.png": {
+    "mtime": 1784572896.1943202,
+    "ast_hash": "a14a6817650061b61dc9b7d89eb78b3f",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00018.png": {
+    "mtime": 1784572896.1945953,
+    "ast_hash": "1f040304c09ee725a2ee754a49e96a7c",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00019.png": {
+    "mtime": 1784572896.1949883,
+    "ast_hash": "60a577140e37a332f27c652015ebd889",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00020.png": {
+    "mtime": 1784572896.1953866,
+    "ast_hash": "55db5c80edf0041e02581704969541a5",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00021.png": {
+    "mtime": 1784572896.1959074,
+    "ast_hash": "e9ed3824a686616d2c09c44dfaf8abcd",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00022.png": {
+    "mtime": 1784572896.19639,
+    "ast_hash": "a421f3ef51028c06bf6748f3b2d1e6dc",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00023.png": {
+    "mtime": 1784572896.1968343,
+    "ast_hash": "12385b8df1ff627d1e2bd7f4bc4a8c06",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00024.png": {
+    "mtime": 1784572896.1972578,
+    "ast_hash": "1753d3514d90017097f23b90577936c3",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00025.png": {
+    "mtime": 1784572896.1977289,
+    "ast_hash": "bcb20bc1a496082816f2a52aa34d12a3",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00026.png": {
+    "mtime": 1784572896.198477,
+    "ast_hash": "3572b0a536d3a08938588465f3881e86",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00027.png": {
+    "mtime": 1784572896.1989577,
+    "ast_hash": "b9bb7a31285b9befc7fa87bc00fa9138",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00028.png": {
+    "mtime": 1784572896.1993861,
+    "ast_hash": "5ad5f834384291c8db6c4ff51bc20196",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/other/star animation/00029.png": {
+    "mtime": 1784572896.2000463,
+    "ast_hash": "845a3f846113f3c51617e2bcadd4cdaa",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/tilesets/coast.png": {
+    "mtime": 1784572896.2015011,
+    "ast_hash": "c049ff6d0f19a80846b75a826ddc24f4",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/tilesets/indoor.png": {
+    "mtime": 1784572896.202033,
+    "ast_hash": "bd58b748982845af70f8a3707425cd9d",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/tilesets/water/0.png": {
+    "mtime": 1784572896.202597,
+    "ast_hash": "c0d34a2b2be45836fa83eca9c676bd97",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/tilesets/water/1.png": {
+    "mtime": 1784572896.2030375,
+    "ast_hash": "7243ab4903f846990a2d7bcba0ebe82f",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/tilesets/water/2.png": {
+    "mtime": 1784572896.203312,
+    "ast_hash": "01b407a874d6ebe10c6c6a9bdc027cda",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/tilesets/water/3.png": {
+    "mtime": 1784572896.2036629,
+    "ast_hash": "054213f26b69202255121cd7e7a6ec32",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/tilesets/world.png": {
+    "mtime": 1784572896.2043338,
+    "ast_hash": "5d68271d03f0a787483ec4b38c1a6339",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/arrows.png": {
+    "mtime": 1784572896.204924,
+    "ast_hash": "d18bd7239e21cac4439f5a6769da0490",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/arrows_highlight.png": {
+    "mtime": 1784572896.2053282,
+    "ast_hash": "13da26a49e505edb24948ece91302d55",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/attack.png": {
+    "mtime": 1784572896.2056663,
+    "ast_hash": "0e64a58ed05ed49efa9688e900bec96e",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/cross.png": {
+    "mtime": 1784572896.2060206,
+    "ast_hash": "3c34c868a7a7c8cfbd5b4b41fa7027e4",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/defense.png": {
+    "mtime": 1784572896.206522,
+    "ast_hash": "a8798684b7adb755a31845c8e61a1888",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/energy.png": {
+    "mtime": 1784572896.206794,
+    "ast_hash": "df98fd06272c071e5ce8eb09e6503e80",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/hand.png": {
+    "mtime": 1784572896.2071621,
+    "ast_hash": "e2c0e0fb56713b104e88658e1171aafb",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/hand_highlight.png": {
+    "mtime": 1784572896.2076695,
+    "ast_hash": "2e223afa63d2e45c5db20d2e8f8c6eb6",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/health.png": {
+    "mtime": 1784572896.2080348,
+    "ast_hash": "22732c663da52f757486172beee87518",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/notice.png": {
+    "mtime": 1784572896.2083926,
+    "ast_hash": "df63f1cba6022d3fd49bf9b1810ab4bf",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/recovery.png": {
+    "mtime": 1784572896.208877,
+    "ast_hash": "8ef5ac85358e7cd3b121dad2d58a9dbc",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/shield.png": {
+    "mtime": 1784572896.2092905,
+    "ast_hash": "10d5063ce0042e83b0b927887edf5fa6",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/shield_highlight.png": {
+    "mtime": 1784572896.2097452,
+    "ast_hash": "91082f29b0b7e495ec769773a26459b0",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/speed.png": {
+    "mtime": 1784572896.2101223,
+    "ast_hash": "b3074c1c1e89a9b74f57b9ec3ac10c23",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/star.png": {
+    "mtime": 1784572896.210469,
+    "ast_hash": "c3b4cd9929317a4650ab295766e9d7eb",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/sword.png": {
+    "mtime": 1784572896.2107637,
+    "ast_hash": "51fc17ecbbcd82c5d58661cca9b3ff83",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/sword_highlight.png": {
+    "mtime": 1784572896.211199,
+    "ast_hash": "bf8bcdb8132a03ef0ff28309ccca09a7",
     "semantic_hash": ""
   }
 }

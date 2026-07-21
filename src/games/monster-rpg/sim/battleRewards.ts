@@ -12,6 +12,7 @@ import { applyPlayerExperience, type ApplyPlayerExperienceResult } from './playe
 import { getSpeciesById, isKnownSpeciesId } from './speciesCatalog';
 import { GAME_BALANCE_CONFIG } from './gameBalance';
 import { applyRewardChanceEntryOverrides, assertValidMatrix, rollRewardChanceMatrix, type RewardChanceEntry } from './rewardChanceMatrix';
+import { applyCreatureExperience } from './statGrowth';
 
 export const CLINKS_CURRENCY_ID = 'clinks' as const;
 const COMMON_CLINKS_ENTRIES: readonly RewardChanceEntry<typeof CLINKS_CURRENCY_ID>[] =
@@ -191,10 +192,9 @@ function applyRewardNumbers(
         ? rewards.battlingCreatureExperience
         : rewards.activePartyExperience;
 
-    creatures[creatureId] = {
-      ...creature,
-      experience: creature.experience + experience
-    };
+    const rarity = getSpeciesById(creature.speciesId)?.rarity;
+    if (!rarity) return;
+    creatures[creatureId] = applyCreatureExperience(creature, experience, rarity, { species: getSpeciesById(creature.speciesId) });
   });
 
   const withNumberRewards: MonsterRpgSaveState = {

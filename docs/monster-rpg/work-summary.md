@@ -1,5 +1,13 @@
 # Monster RPG Work Summary
 
+## 2026-07-20 - Deterministic Creature Stat Growth
+
+- Added append-only Creature stat-growth basis and event history, with deterministic default growth and opt-in rarity-weighted random future growth.
+- Routed battle Creature XP through the growth seam; Fainted Creatures remain at 0 HP, while ready Creatures gain positive max-HP increases as current HP.
+- Added explicit rebalance events and a balance-v1 to v2 save migration that snapshots existing stats and level without reinterpreting prior progression.
+- Hardened import validation by replaying ordered growth events against the persisted basis, rejecting forged, duplicate, or out-of-order stat histories; random events now use canonical Species and Creature Type preferences.
+- Persisted each Creature's selected future-growth model, normalized unsafe RNG values, hardened growth/save input validation, and made rebalance a deterministic replay-based adjustment rather than caller-authored deltas.
+
 ## 2026-07-20 - Issue #62: Item inventory and Reward Inbox
 
 - Added the validated 14-item catalog, deterministic 150-slot multi-stack inventory, confirmed discard path, and a persistent atomic 50-bundle Reward Inbox.
@@ -642,6 +650,11 @@
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.
 - Keep production persistence behind repository interfaces until core gameplay loops are proven.
+
+## 2026-07-20 - Issue #64: Stat-Growth Event Integrity
+
+- Hardened persisted stat-growth replay validation: level-ups are contiguous and canonical from the basis, deterministic deltas match the balance config, and rebalances use canonical ordered IDs.
+- Added coverage rejecting replay-consistent forged deterministic growth while allowing valid non-zero repeated rebalance adjustments.
 
 ## 2026-07-19 - Issue #59: Licensed Art Vendor And Manifest
 

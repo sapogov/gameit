@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { CURRENT_BALANCE_VERSION } from '../sim';
 
 const { joinOrCreate } = vi.hoisted(() => ({ joinOrCreate: vi.fn() }));
 
@@ -10,7 +11,6 @@ vi.mock('@colyseus/sdk', () => ({
 }));
 
 import { BalanceVersionMismatchError, connectToBattle, connectToLocation } from './colyseusClient';
-import { CURRENT_BALANCE_VERSION } from '../sim/gameBalance';
 
 type StateHandler = (state: unknown) => void;
 type ErrorHandler = (code: number, message?: string) => void;

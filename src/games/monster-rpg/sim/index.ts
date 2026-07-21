@@ -53,6 +53,10 @@ export type {
   CreatureSaveRecord,
   CreatureSpeciesRecord,
   CreatureStatKey,
+  CreatureStatGrowthBasis,
+  CreatureStatGrowthEvent,
+  CreatureStatGrowthState,
+  StatGrowthModel,
   CreatureType,
   JournalSpeciesState,
   JournalSpeciesViewState,
@@ -95,6 +99,7 @@ export {
 export { ITEM_CATALOG, ITEM_DEFINITIONS, getItemDefinition, isItemId, validateItemCatalog, type ItemDefinition, type ItemId } from './items';
 export { ITEM_INVENTORY_SLOT_LIMIT, addItem, createItemInventory, discardItem, requiredAdditionalSlots, type ItemInventory, type ItemStack } from './inventory';
 export { REWARD_INBOX_LIMIT, claimReward, createRewardInbox, enqueueReward, type RewardBundle, type RewardInbox } from './rewardInbox';
+export { applyCreatureExperience, appendStatGrowth, createLevelGrowthEvent, getCreatureLevelForExperience, getGrowthDeltas, isValidStatGrowthState, rebalanceCreatureStats, replayStatGrowth, type ApplyCreatureExperienceOptions, type RebalanceCreatureStatsOptions, type StatGrowthDependencies } from './statGrowth';
 export {
   buildingDefinitions,
   brookhavenVillageMap,

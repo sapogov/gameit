@@ -13,6 +13,7 @@ import type {
 } from './types';
 import { getSpeciesById } from './speciesCatalog';
 import { placeNewCreature } from './creatureParty';
+import { GAME_BALANCE_CONFIG } from './gameBalance';
 
 export const MAGIC_DUST_MATERIAL_ID = 'magicDust';
 export const CREATURE_ATTACK_COUNT = 4;
@@ -343,7 +344,8 @@ function createCreatureRecord({
     hp: stats.hp,
     maxHp: stats.hp,
     fainted: false,
-    cooldowns: {}
+    cooldowns: {},
+    statGrowth: { model: GAME_BALANCE_CONFIG.creatureStatGrowth.model, basis: { level: 1, stats: { ...stats } }, events: [] }
   };
 }
 

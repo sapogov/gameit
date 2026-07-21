@@ -29,6 +29,43 @@ describe('Monster RPG save import and export', () => {
     const migrated = migrateSaveBalance(legacy);
     expect(migrated).toMatchObject({ ok: true, state: { balanceVersion: CURRENT_BALANCE_VERSION, inventory: { rewardInbox: { claimedSourceIds: {} } } } });
     if (migrated.ok) expect(migrated.state.inventory.currencies.clinks).toBe(0);
+    expect(migrated).toMatchObject({ ok: true, state: { balanceVersion: CURRENT_BALANCE_VERSION, inventory: { rewardInbox: { claimedSourceIds: {} } } } });
+    if (migrated.ok) expect(migrated.state.inventory.currencies.clinks).toBe(0);
+  });
+
+  test('migrates existing Creature stats into a current-stat basis without rebalancing history', () => {
+    const save = createInitialSave(createPlayerProfile('Mira', 'scout'));
+    const { statGrowth: _statGrowth, ...legacyCreature } = createValidCreature(save.profile.playerId);
+    const creature = { ...legacyCreature, level: 4, stats: { hp: 31, attack: 9, defense: 8, speed: 7, stamina: 6 }, hp: 12, maxHp: 31 };
+    const migrated = migrateSaveBalance({
+      ...save,
+      balanceVersion: 1,
+      creatures: { ...save.creatures, activePartyCreatureIds: [creature.id], creatures: { [creature.id]: creature } }
+    });
+    expect(migrated).toMatchObject({ ok: true });
+    if (!migrated.ok) return;
+    expect(migrated.state.creatures.creatures[creature.id].statGrowth).toEqual({ model: 'deterministic-default', basis: { level: 4, stats: creature.stats }, events: [] });
+  });
+
+  test('rejects forged, duplicate, and out-of-order Creature growth events on import', () => {
+    const save = createInitialSave(createPlayerProfile('Mira', 'scout'));
+    const baseCreature = createValidCreature(save.profile.playerId);
+    const event = { id: 'growth:2', kind: 'level-up' as const, model: 'deterministic-default' as const, level: 2, deltas: { hp: 2, attack: 1, defense: 1, speed: 1, stamina: 1 }, createdAt: '2026-07-20T00:00:00.000Z' };
+    const grown = {
+      ...baseCreature,
+      level: 2,
+      stats: { hp: 12, attack: 5, defense: 5, speed: 5, stamina: 5 },
+      hp: 12,
+      maxHp: 12,
+      statGrowth: { model: 'deterministic-default', basis: baseCreature.statGrowth!.basis, events: [event] }
+    };
+    const withCreature = (creature: typeof grown) => JSON.stringify({
+      ...save,
+      creatures: { ...save.creatures, activePartyCreatureIds: [creature.id], creatures: { [creature.id]: creature } }
+    });
+    expect(importSavePayload(withCreature({ ...grown, stats: { ...grown.stats, attack: 99 } }))).toEqual({ ok: false, reason: 'invalid-save' });
+    expect(importSavePayload(withCreature({ ...grown, statGrowth: { ...grown.statGrowth, events: [event, { ...event }] } }))).toEqual({ ok: false, reason: 'invalid-save' });
+    expect(importSavePayload(withCreature({ ...grown, statGrowth: { ...grown.statGrowth, events: [event, { ...event, id: 'growth:1', level: 1 }] } }))).toEqual({ ok: false, reason: 'invalid-save' });
   });
 
   test('missing balance migration rejects atomically without mutating input', () => {
@@ -426,6 +463,11 @@ function createValidCreature(ownerPlayerId: string) {
     hp: 10,
     maxHp: 10,
     fainted: false,
-    cooldowns: {}
+    cooldowns: {},
+    statGrowth: {
+      model: 'deterministic-default',
+      basis: { level: 1, stats: { hp: 10, attack: 4, defense: 4, speed: 4, stamina: 4 } },
+      events: []
+    }
   } as const;
 }
