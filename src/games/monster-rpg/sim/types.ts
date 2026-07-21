@@ -257,7 +257,7 @@ export interface CreatureSaveRecord {
   pendingGrowthEvents?: CreatureStatGrowthDraftEvent[];
 }
 
-export type BattleKind = 'wild' | 'guard-theft';
+export type BattleKind = 'wild' | 'guard-theft' | 'trainer';
 
 export type BattleParticipantKind = 'player' | 'enemy';
 
@@ -306,6 +306,13 @@ export interface BattleRoomState {
   rewardGranted: boolean;
   rewards?: BattleRewardBundle;
   disconnectGraceUntil?: string;
+  trainerId?: string;
+  playerActiveCreatureId?: string;
+  trainerActiveCreatureId?: string;
+  phase?: 'player-action' | 'forced-switch' | 'complete';
+  remainingTrainerSwitches?: number;
+  playerParty?: BattleCreatureState[];
+  trainerParty?: BattleCreatureState[];
 }
 
 export interface BattleMaterialReward {
@@ -567,6 +574,23 @@ export interface BattleAttackIntentMessage {
   attackId: string;
 }
 
+export interface SwitchCreatureIntentMessage { creatureId: string; expectedTurn: number; }
+/** Authority v1: the server derives identity and canonical creature records. */
+export interface ChallengeTrainerMessage { objectId: string; activePartyCreatureIds: string[]; expectedRosterRevision: number; }
+export interface TrainerRewardDefinition { playerXp: number; creatureXp: number; magicDust: number; }
+export interface TrainerDefinition {
+  id: string; trainerId: string; name: string;
+  team: ReadonlyArray<{ speciesId: number; level: number }>;
+  maxProactiveSwitches: number; proactiveSwitchHpRatio: number;
+  reward: TrainerRewardDefinition;
+}
+
+export interface BattleCreatureOutcome {
+  creatureId: string;
+  hp: number;
+  fainted: boolean;
+}
+
 export interface JoinBattleOptions {
   battleId: string;
   battleToken: string;
@@ -583,6 +607,8 @@ export interface BattleResultMessage {
   playerCreatureId: string;
   playerCreatureHp: number;
   playerCreatureFainted: boolean;
+  /** Final canonical outcomes for every participating player-party creature. */
+  playerPartyOutcomes: BattleCreatureOutcome[];
   rewardGranted: boolean;
   rewards?: BattleRewardBundle;
 }

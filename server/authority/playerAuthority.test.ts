@@ -1,9 +1,9 @@
 import { describe, expect, test, vi } from 'vitest';
 import { PlayerAuthority } from './playerAuthority';
-import { ProcessLocalPlayerAuthorityRepository } from './playerRepository';
+import { isValidLedgerTransition, ProcessLocalPlayerAuthorityRepository } from './playerRepository';
 import { loadGuestCredentialConfig } from '../auth/guestCredentials';
 import { signAuthenticatedTransfer } from './authenticatedTransfer';
-import { applyCreatureExperience } from '../../src/games/monster-rpg/sim';
+import { applyCreatureExperience, choosePlayerBattleAttack, createTrainerBattleRoomState, switchPlayerBattleCreature, toBattleResult } from '../../src/games/monster-rpg/sim';
 const authorityForTest = (repository: ProcessLocalPlayerAuthorityRepository, rng = () => 0.5) => new PlayerAuthority(repository, () => new Date(0), undefined, rng);
 const oneCallClock = (at: Date) => {
   let calls = 0;
@@ -85,7 +85,7 @@ describe('PlayerAuthority', () => {
     expect((await authority.execute(principal, { intentId: 'elder', expectedRevision: 0, intent: { type: 'completeElderDialog' } })).status).toBe('applied');
     expect((await authority.execute(principal, { intentId: 'starters', expectedRevision: 1, intent: { type: 'convertCreatureCard', starter: true } })).status).toBe('applied');
     const creatureId = (await repository.read(principal.sub))!.save.creatures.activePartyCreatureIds[0];
-    const settled = await authority.settleBattle(principal, { battleId: 'sealed-battle', encounterId: 'sealed-encounter', outcome: 'defeated', playerCreatureId: creatureId, playerCreatureHp: 10, playerCreatureFainted: false, opponentCreatureHp: 0, opponentCreatureFainted: true, rewardGranted: true, rewards: { seed: 1, magicDust: 0, clinks: 0, playerExperience: 0, battlingCreatureExperience: 100, activePartyExperience: 100, materials: [] } });
+    const settled = await authority.settleBattle(principal, { battleId: 'sealed-battle', encounterId: 'sealed-encounter', outcome: 'defeated', playerCreatureId: creatureId, playerCreatureHp: 10, playerCreatureFainted: false, playerPartyOutcomes: [{ creatureId, hp: 10, fainted: false }], opponentCreatureHp: 0, opponentCreatureFainted: true, rewardGranted: true, rewards: { seed: 1, magicDust: 0, clinks: 0, playerExperience: 0, battlingCreatureExperience: 100, activePartyExperience: 100, materials: [] } });
     const aggregate = (await repository.read(principal.sub))!;
     expect(JSON.stringify(settled)).not.toContain('pendingGrowthEvents');
     expect(JSON.stringify(aggregate)).not.toContain('pendingGrowthEvents');
@@ -101,7 +101,7 @@ describe('PlayerAuthority', () => {
     await source.execute(principal, { intentId: 'elder', expectedRevision: 0, intent: { type: 'completeElderDialog' } });
     await source.execute(principal, { intentId: 'starters', expectedRevision: 1, intent: { type: 'convertCreatureCard', starter: true } });
     const creatureId = (await sourceRepository.read(principal.sub))!.save.creatures.activePartyCreatureIds[0];
-    await source.settleBattle(principal, { battleId: 'cursor-tamper', encounterId: 'cursor-tamper', outcome: 'defeated', playerCreatureId: creatureId, playerCreatureHp: 10, playerCreatureFainted: false, opponentCreatureHp: 0, opponentCreatureFainted: true, rewardGranted: true, rewards: { seed: 1, magicDust: 0, clinks: 0, playerExperience: 0, battlingCreatureExperience: 100, activePartyExperience: 100, materials: [] } });
+    await source.settleBattle(principal, { battleId: 'cursor-tamper', encounterId: 'cursor-tamper', outcome: 'defeated', playerCreatureId: creatureId, playerCreatureHp: 10, playerCreatureFainted: false, playerPartyOutcomes: [{ creatureId, hp: 10, fainted: false }], opponentCreatureHp: 0, opponentCreatureFainted: true, rewardGranted: true, rewards: { seed: 1, magicDust: 0, clinks: 0, playerExperience: 0, battlingCreatureExperience: 100, activePartyExperience: 100, materials: [] } });
     const exported = await source.exportAuthenticatedSave(principal); const payload = JSON.parse(exported!.payload);
     const tampered = signAuthenticatedTransfer({ ...exported!, payload: JSON.stringify({ ...payload, activeGrowthStartIndex: payload.progressionEvents.length }) }, config);
     const target = new PlayerAuthority(new ProcessLocalPlayerAuthorityRepository(), () => new Date(0), config, () => 0.5);
@@ -233,7 +233,7 @@ describe('PlayerAuthority', () => {
     const compareExchangeMany = repository.compareExchangeMany.bind(repository); let compareAttempts = 0;
     const compare = vi.spyOn(repository, 'compareExchangeMany').mockImplementation(async (changes) => (++compareAttempts === 1 ? false : compareExchangeMany(changes)));
     const authority = new PlayerAuthority(repository, oneCallClock(at), undefined, () => 0.25);
-    const settled = await authority.settleGuardedTheft({ attackerId: attacker.sub, ownerId: owner.sub, farmId: 'guarded', guardCreatureId: guard.id, result: { battleId: 'guarded-race', encounterId: 'guarded-encounter', outcome: 'defeated', playerCreatureId: attackerCreature.id, playerCreatureHp: 8, playerCreatureFainted: false, opponentCreatureHp: 0, opponentCreatureFainted: true, rewardGranted: true, rewards: { seed: 7, magicDust: 3, clinks: 0, playerExperience: 0, battlingCreatureExperience: 200, activePartyExperience: 100, materials: [] } } });
+    const settled = await authority.settleGuardedTheft({ attackerId: attacker.sub, ownerId: owner.sub, farmId: 'guarded', guardCreatureId: guard.id, result: { battleId: 'guarded-race', encounterId: 'guarded-encounter', outcome: 'defeated', playerCreatureId: attackerCreature.id, playerCreatureHp: 8, playerCreatureFainted: false, playerPartyOutcomes: [{ creatureId: attackerCreature.id, hp: 8, fainted: false }], opponentCreatureHp: 0, opponentCreatureFainted: true, rewardGranted: true, rewards: { seed: 7, magicDust: 3, clinks: 0, playerExperience: 0, battlingCreatureExperience: 200, activePartyExperience: 100, materials: [] } } });
     expect(settled).toBe(true);
     expect(compare).toHaveBeenCalledTimes(2);
     const settledAttacker = (await repository.read(attacker.sub))!;
@@ -245,10 +245,118 @@ describe('PlayerAuthority', () => {
     expect(settledAttacker.progressionEvents).toHaveLength(2);
     expect(settledAttacker.save.creatures.creatures[attackerCreature.id]?.level).toBe(3);
     expect(settledAttacker.save.creatures.creatures[attackerCreature.id]?.statGrowth?.events).toEqual(settledAttacker.progressionEvents);
-    expect(await authority.settleGuardedTheft({ attackerId: attacker.sub, ownerId: owner.sub, farmId: 'guarded', guardCreatureId: guard.id, result: { battleId: 'guarded-race', encounterId: 'guarded-encounter', outcome: 'defeated', playerCreatureId: attackerCreature.id, playerCreatureHp: 8, playerCreatureFainted: false, opponentCreatureHp: 0, opponentCreatureFainted: true, rewardGranted: true, rewards: { seed: 7, magicDust: 3, clinks: 0, playerExperience: 0, battlingCreatureExperience: 200, activePartyExperience: 100, materials: [] } } })).toBe(true);
+    expect(await authority.settleGuardedTheft({ attackerId: attacker.sub, ownerId: owner.sub, farmId: 'guarded', guardCreatureId: guard.id, result: { battleId: 'guarded-race', encounterId: 'guarded-encounter', outcome: 'defeated', playerCreatureId: attackerCreature.id, playerCreatureHp: 8, playerCreatureFainted: false, playerPartyOutcomes: [{ creatureId: attackerCreature.id, hp: 8, fainted: false }], opponentCreatureHp: 0, opponentCreatureFainted: true, rewardGranted: true, rewards: { seed: 7, magicDust: 3, clinks: 0, playerExperience: 0, battlingCreatureExperience: 200, activePartyExperience: 100, materials: [] } } })).toBe(true);
     delete settledOwner.grantReceipts['guarded-race'];
     expect(await repository.compareExchange(owner.sub, settledOwner.revision, settledOwner)).toBe(true);
-    expect(await authority.settleGuardedTheft({ attackerId: attacker.sub, ownerId: owner.sub, farmId: 'guarded', guardCreatureId: guard.id, result: { battleId: 'guarded-race', encounterId: 'guarded-encounter', outcome: 'defeated', playerCreatureId: attackerCreature.id, playerCreatureHp: 8, playerCreatureFainted: false, opponentCreatureHp: 0, opponentCreatureFainted: true, rewardGranted: true, rewards: { seed: 7, magicDust: 3, clinks: 0, playerExperience: 0, battlingCreatureExperience: 200, activePartyExperience: 100, materials: [] } } })).toBe(false);
+    expect(await authority.settleGuardedTheft({ attackerId: attacker.sub, ownerId: owner.sub, farmId: 'guarded', guardCreatureId: guard.id, result: { battleId: 'guarded-race', encounterId: 'guarded-encounter', outcome: 'defeated', playerCreatureId: attackerCreature.id, playerCreatureHp: 8, playerCreatureFainted: false, playerPartyOutcomes: [{ creatureId: attackerCreature.id, hp: 8, fainted: false }], opponentCreatureHp: 0, opponentCreatureFainted: true, rewardGranted: true, rewards: { seed: 7, magicDust: 3, clinks: 0, playerExperience: 0, battlingCreatureExperience: 200, activePartyExperience: 100, materials: [] } } })).toBe(false);
     vi.restoreAllMocks();
+  });
+
+  test('allows canonical movement on legacy maps without generated trainer metadata', async () => {
+    const repository = new ProcessLocalPlayerAuthorityRepository();
+    const authority = authorityForTest(repository);
+    const principal = { sub: '123e4567-e89b-42d3-a456-426614174050' };
+    const initial = await authority.bootstrapProfile(principal, { name: 'Legacy', avatar: 'scout' });
+
+    await expect(authority.applyMovement({
+      principal,
+      direction: 'south',
+      roomId: 'legacy-room',
+      mapId: initial.save.mapId,
+      sessionId: 'legacy-session',
+      sequence: 1
+    })).resolves.toMatchObject({ status: 'applied' });
+  });
+
+  test('settles the actual switched two-party trainer simulation result', async () => {
+    const repository = new ProcessLocalPlayerAuthorityRepository(); const authority = authorityForTest(repository); const principal = { sub: '123e4567-e89b-42d3-a456-426614174062' };
+    await authority.bootstrapProfile(principal, { name: 'Trainer', avatar: 'scout' });
+    expect((await authority.execute(principal, { intentId: 'elder', expectedRevision: 0, intent: { type: 'completeElderDialog' } })).status).toBe('applied');
+    expect((await authority.execute(principal, { intentId: 'starters', expectedRevision: 1, intent: { type: 'convertCreatureCard', starter: true } })).status).toBe('applied');
+    const aggregate = (await repository.read(principal.sub))!; const originalId = aggregate.save.creatures.activePartyCreatureIds[0]!; const original = aggregate.save.creatures.creatures[originalId]!;
+    const stats = { hp: 200, attack: 200, defense: 200, speed: 200, stamina: 200 };
+    const readyCreature = (id: string) => ({ ...original, id, level: 1, experience: 0, stats, hp: stats.hp, maxHp: stats.hp, fainted: false, cooldowns: {}, statGrowth: { model: 'deterministic-default' as const, basis: { level: 1, stats }, events: [] } });
+    const reserveId = `${original.id}:reserve`; const party = [readyCreature(original.id), readyCreature(reserveId)];
+    aggregate.save = { ...aggregate.save, mapId: 'tracer-world-route' as never, position: { mapId: 'tracer-world-route', x: 12, y: 14, facing: 'south' } as never, creatures: { ...aggregate.save.creatures, activePartyCreatureIds: party.map((creature) => creature.id), creatures: { ...aggregate.save.creatures.creatures, [original.id]: party[0]!, [reserveId]: party[1]! } } }; aggregate.rosterRevision += 1;
+    expect(await repository.compareExchange(principal.sub, aggregate.revision, aggregate)).toBe(true);
+    const request = { principal, battleId: 'trainer-simulated', objectId: 'route-scout-trainer', mapId: 'tracer-world-route', locationRoomId: 'route-room', presentedCreatureIds: party.map((creature) => creature.id), expectedRosterRevision: aggregate.rosterRevision };
+    const reserved = await authority.reserveTrainerBattle(request); expect(reserved).not.toBeNull(); expect(await authority.activateTrainerBattle(principal, request.battleId)).not.toBeNull();
+    let battle = createTrainerBattleRoomState({ battleId: request.battleId, trainerId: 'route-scout-1', playerProfile: reserved!.profile, playerParty: reserved!.frozenParty.creatures });
+    const switched = switchPlayerBattleCreature(battle, reserveId, battle.turn); expect(switched.ok).toBe(true); battle = switched.state;
+    for (let actions = 0; actions < 40 && battle.status === 'active'; actions += 1) {
+      if (battle.phase === 'forced-switch') {
+        const next = battle.playerParty!.find((creature) => !creature.fainted && creature.id !== battle.player.activeCreature.id)!;
+        const forced = switchPlayerBattleCreature(battle, next.id, battle.turn); expect(forced.ok).toBe(true); battle = forced.state; continue;
+      }
+      const attacked = choosePlayerBattleAttack(battle, battle.validPlayerAttackIds[0]!, new Date(0)); expect(attacked.ok).toBe(true); battle = attacked.state;
+    }
+    const result = toBattleResult(battle); expect(result).toMatchObject({ outcome: 'defeated', playerCreatureId: reserveId }); expect(result?.playerPartyOutcomes).toHaveLength(2);
+    const compareExchange = repository.compareExchange.bind(repository); const compare = vi.spyOn(repository, 'compareExchange').mockImplementation(async (playerId, revision, next) => { expect(isValidLedgerTransition((await repository.read(playerId))!, next)).toBe(true); return compareExchange(playerId, revision, next); });
+    await expect(authority.settleTrainerBattle({ principal, trainerId: 'route-scout-1', result: result! })).resolves.not.toBeNull();
+    expect(compare).toHaveBeenCalledTimes(1); compare.mockRestore(); expect((await authority.locationPresence(principal))?.activeBattle).toBeUndefined();
+  });
+
+  test('stops trainer settlement after a permanent CAS rejection', async () => {
+    const repository = new ProcessLocalPlayerAuthorityRepository(); const authority = authorityForTest(repository); const principal = { sub: '123e4567-e89b-42d3-a456-426614174061' };
+    await authority.bootstrapProfile(principal, { name: 'Trainer', avatar: 'scout' }); const aggregate = (await repository.read(principal.sub))!;
+    const creature = { id: 'party-1', ownerPlayerId: principal.sub, speciesId: 1, level: 1, experience: 0, stats: { hp: 10, attack: 2, defense: 2, speed: 2, stamina: 2 }, statGrowth: { model: 'deterministic-default' as const, basis: { level: 1, stats: { hp: 10, attack: 2, defense: 2, speed: 2, stamina: 2 } }, events: [] }, attacks: [], hp: 10, maxHp: 10, fainted: false, cooldowns: {} };
+    aggregate.save.mapId = 'tracer-world-route' as never; aggregate.save.position = { mapId: 'tracer-world-route', x: 11, y: 15, facing: 'east' } as never; aggregate.save.creatures.activePartyCreatureIds = [creature.id]; aggregate.save.creatures.creatures[creature.id] = creature;
+    expect(await repository.compareExchange(principal.sub, 0, aggregate)).toBe(true);
+    const request = { principal, battleId: 'trainer-rejected', objectId: 'route-scout-trainer', mapId: 'tracer-world-route', locationRoomId: 'route-room', presentedCreatureIds: [creature.id], expectedRosterRevision: 0 };
+    expect(await authority.reserveTrainerBattle(request)).not.toBeNull(); expect(await authority.activateTrainerBattle(principal, request.battleId)).not.toBeNull();
+    const compare = vi.spyOn(repository, 'compareExchange').mockResolvedValue(false);
+    await expect(authority.settleTrainerBattle({ principal, trainerId: 'route-scout-1', result: { battleId: request.battleId, encounterId: 'trainer:route-scout-1', outcome: 'defeated', playerCreatureId: creature.id, playerCreatureHp: 8, playerCreatureFainted: false, playerPartyOutcomes: [{ creatureId: creature.id, hp: 8, fainted: false }], opponentCreatureHp: 0, opponentCreatureFainted: true, rewardGranted: true } })).resolves.toBeNull();
+    expect(compare).toHaveBeenCalledTimes(1); compare.mockRestore();
+  });
+
+  test('reserves, activates, settles, and emits one canonical trainer lock lifecycle', async () => {
+    const repository = new ProcessLocalPlayerAuthorityRepository(); const authority = authorityForTest(repository); const principal = { sub: '123e4567-e89b-42d3-a456-426614174060' };
+    await authority.bootstrapProfile(principal, { name: 'Trainer', avatar: 'scout' }); const aggregate = (await repository.read(principal.sub))!;
+    const creature = { id: 'party-1', ownerPlayerId: principal.sub, speciesId: 1, level: 1, experience: 0, stats: { hp: 10, attack: 2, defense: 2, speed: 2, stamina: 2 }, statGrowth: { model: 'deterministic-default' as const, basis: { level: 1, stats: { hp: 10, attack: 2, defense: 2, speed: 2, stamina: 2 } }, events: [] }, attacks: [], hp: 10, maxHp: 10, fainted: false, cooldowns: {} };
+    const switchedCreature = { ...structuredClone(creature), id: 'party-2' };
+    aggregate.save.mapId = 'tracer-world-route' as never; aggregate.save.position = { mapId: 'tracer-world-route', x: 11, y: 15, facing: 'east' } as never; aggregate.save.creatures.activePartyCreatureIds = [creature.id, switchedCreature.id]; aggregate.save.creatures.creatures[creature.id] = creature; aggregate.save.creatures.creatures[switchedCreature.id] = switchedCreature;
+    expect(await repository.compareExchange(principal.sub, 0, aggregate)).toBe(true);
+    const events: Array<string | undefined> = []; authority.onBattlePresenceChanged((_playerId, lock) => events.push(lock?.phase));
+    const request = { principal, battleId: 'trainer-battle', objectId: 'route-scout-trainer', mapId: 'tracer-world-route', locationRoomId: 'route-room', presentedCreatureIds: [creature.id, switchedCreature.id], expectedRosterRevision: 0 };
+    const reserved = await authority.reserveTrainerBattle(request); expect(reserved?.trainerId).toBe('route-scout-1'); expect(reserved?.frozenParty.creatures[0]?.id).toBe(creature.id);
+    expect(await authority.reserveTrainerBattle({ ...request, battleId: 'other' })).toBeNull();
+    expect((await authority.locationPresence(principal))?.activeBattle?.phase).toBe('reserved');
+    expect(await authority.activateTrainerBattle(principal, 'wrong')).toBeNull(); expect(await authority.activateTrainerBattle(principal, request.battleId)).not.toBeNull();
+    expect(await authority.releaseReservedTrainerBattle(principal, request.battleId)).toBe(false);
+    expect(await authority.cancelActiveTrainerBattle(principal, 'wrong-battle')).toBe(false);
+    expect((await authority.execute(principal, { intentId: 'locked', expectedRevision: 3, intent: { type: 'completeElderDialog' } })).status).toBe('rejected');
+    const startingDust = aggregate.save.inventory.currencies.magicDust ?? 0; const startingPlayerXp = aggregate.save.progression.playerExperience; const startingCreatureXp = creature.experience;
+    const result = { battleId: request.battleId, encounterId: 'trainer:route-scout-1', outcome: 'defeated' as const, playerCreatureId: switchedCreature.id, playerCreatureHp: 8, playerCreatureFainted: false, playerPartyOutcomes: [{ creatureId: creature.id, hp: 3, fainted: false }, { creatureId: switchedCreature.id, hp: 8, fainted: false }], opponentCreatureHp: 0, opponentCreatureFainted: true, rewardGranted: true };
+    expect(await authority.settleTrainerBattle({ principal, trainerId: 'wrong', result })).toBeNull();
+    const settled = await authority.settleTrainerBattle({ principal, trainerId: 'route-scout-1', result }); if (!settled) throw new Error('first trainer battle should settle');
+    const firstCreature = settled.save.creatures.creatures[creature.id]!;
+    expect(firstCreature.hp).toBe(3); expect(settled.save.creatures.creatures[switchedCreature.id]?.hp).toBe(8); expect(settled.save.inventory.currencies.magicDust).toBe(startingDust + 4); expect(settled.save.progression.playerExperience).toBe(startingPlayerXp + 12); expect(settled.save.creatures.creatures[switchedCreature.id]?.experience).toBe(startingCreatureXp + 8); expect(settled.save.progression.flags['trainer-clear:route-scout-1']).toBe(true);
+    expect((await authority.locationPresence(principal))?.activeBattle).toBeUndefined(); expect(events).toEqual(['reserved', 'active', undefined]);
+    expect(await authority.settleTrainerBattle({ principal, trainerId: 'route-scout-1', result })).toEqual(settled);
+    const repeatRequest = { ...request, battleId: 'trainer-battle-repeat', expectedRosterRevision: settled.rosterRevision };
+    expect(await authority.reserveTrainerBattle(repeatRequest)).not.toBeNull(); expect(await authority.activateTrainerBattle(principal, repeatRequest.battleId)).not.toBeNull();
+    const repeatResult = { ...result, battleId: repeatRequest.battleId, playerCreatureHp: 6, playerPartyOutcomes: [{ creatureId: creature.id, hp: 3, fainted: false }, { creatureId: switchedCreature.id, hp: 6, fainted: false }] };
+    const repeated = await authority.settleTrainerBattle({ principal, trainerId: 'route-scout-1', result: repeatResult }); if (!repeated) throw new Error('repeat trainer battle should settle');
+    const repeatCreature = repeated.save.creatures.creatures[switchedCreature.id]!;
+    expect(repeatCreature.hp).toBe(6); expect(repeated.save.inventory.currencies.magicDust).toBe(settled.save.inventory.currencies.magicDust); expect(repeated.save.progression.playerExperience).toBe(settled.save.progression.playerExperience); expect(repeatCreature.experience).toBe(settled.save.creatures.creatures[switchedCreature.id]?.experience); expect(repeatCreature.level).toBe(settled.save.creatures.creatures[switchedCreature.id]?.level); expect(repeatCreature.statGrowth?.events).toEqual(settled.save.creatures.creatures[switchedCreature.id]?.statGrowth?.events); expect(repeated.save.progression.flags['trainer-clear:route-scout-1']).toBe(true);
+    const persisted = (await repository.read(principal.sub))!; expect(persisted.grantReceipts[request.battleId]).toBeDefined(); expect(persisted.grantReceipts[repeatRequest.battleId]).toBeDefined();
+    const cancelledRequest = { ...request, battleId: 'trainer-battle-cancelled', expectedRosterRevision: repeated.rosterRevision };
+    expect(await authority.reserveTrainerBattle(cancelledRequest)).not.toBeNull(); expect(await authority.activateTrainerBattle(principal, cancelledRequest.battleId)).not.toBeNull();
+    const beforeCancellation = (await authority.locationPresence(principal))!.snapshot.revision;
+    const compareExchange = repository.compareExchange.bind(repository); let cancellationAttempts = 0;
+    const transientCompare = vi.spyOn(repository, 'compareExchange').mockImplementation(async (...args) => { cancellationAttempts += 1; return cancellationAttempts === 1 ? false : compareExchange(...args); });
+    const eventsBeforeCancellation = events.length;
+    expect(await authority.cancelActiveTrainerBattle(principal, cancelledRequest.battleId)).toBe(true);
+    expect(cancellationAttempts).toBe(2); expect(events.slice(eventsBeforeCancellation)).toEqual([undefined]); transientCompare.mockRestore();
+    const afterCancellation = (await authority.locationPresence(principal))!;
+    expect(afterCancellation.activeBattle).toBeUndefined(); expect(afterCancellation.snapshot.revision).toBe(beforeCancellation + 1);
+    expect((await repository.read(principal.sub))!.grantReceipts[cancelledRequest.battleId]).toBeUndefined();
+    const rejectedCancellation = { ...cancelledRequest, battleId: 'trainer-battle-cancel-rejected' };
+    expect(await authority.reserveTrainerBattle(rejectedCancellation)).not.toBeNull(); expect(await authority.activateTrainerBattle(principal, rejectedCancellation.battleId)).not.toBeNull();
+    const eventsBeforeRejection = events.length;
+    const permanentCompare = vi.spyOn(repository, 'compareExchange').mockResolvedValue(false);
+    expect(await authority.cancelActiveTrainerBattle(principal, rejectedCancellation.battleId)).toBe(false);
+    expect(permanentCompare).toHaveBeenCalledTimes(3); expect(events).toHaveLength(eventsBeforeRejection); permanentCompare.mockRestore();
+    expect((await authority.locationPresence(principal))?.activeBattle).toMatchObject({ battleId: rejectedCancellation.battleId, phase: 'active' });
   });
 });

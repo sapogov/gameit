@@ -15,8 +15,10 @@ import { type ItemInventory, type ItemStack } from '../../src/games/monster-rpg/
 import { getItemDefinition } from '../../src/games/monster-rpg/sim/items';
 import type { SaveStack } from '../../src/games/monster-rpg/sim';
 import type { AuthorityIntent, AuthoritySnapshot, SaveCommand, SaveCommandResult } from '../../src/games/monster-rpg/network/authorityProtocol';
-import { clone, growthEventHash, isValidAggregate, validateLedger, type GrowthAuditEvent, type PlayerAggregate, type PlayerAuthorityRepository } from './playerRepository';
+import { clone, growthEventHash, isValidAggregate, validateLedger, type ActiveTrainerBattle, type GrowthAuditEvent, type PlayerAggregate, type PlayerAuthorityRepository } from './playerRepository';
 import { CURRENT_BALANCE_VERSION, type Direction } from '../../src/games/monster-rpg/sim';
+import { generatedMapRegistry } from '../../src/games/monster-rpg/sim';
+import { getTrainerDefinition } from '../../src/games/monster-rpg/sim/trainers';
 
 export interface Principal { sub: string }
 export interface FrozenParty { playerId: string; rosterRevision: number; creatures: readonly Readonly<CreatureSaveRecord>[] }
@@ -25,6 +27,7 @@ export type AuthenticatedImportResult = { ok: true; snapshot: AuthoritySnapshot 
 export interface AuthorityMutationContext { readonly transactionAt: Date; readonly rng: () => number }
 
 export class PlayerAuthority {
+  private readonly battlePresenceListeners = new Set<(playerId: string, activeBattle: ActiveTrainerBattle | undefined, snapshot: AuthoritySnapshot) => void>();
   constructor(private readonly repository: PlayerAuthorityRepository, private readonly now: () => Date, private readonly transferKeys: GuestCredentialConfig | undefined, private readonly rng: () => number) {}
   async snapshot(principal: Principal): Promise<AuthoritySnapshot | null> { const aggregate = await this.repository.read(principal.sub); return aggregate && snapshot(aggregate); }
   async findFarm(farmId: string) { return this.repository.findFarm(farmId); }
@@ -47,6 +50,7 @@ export class PlayerAuthority {
   async execute(principal: Principal, command: SaveCommand): Promise<SaveCommandResult> {
     const aggregate = await this.repository.read(principal.sub);
     if (!aggregate) return { status: 'rejected', code: 'AUTHORITY_REQUIRED' };
+    if (aggregate.activeBattle) return { status: 'rejected', code: 'REJECTED', snapshot: snapshot(aggregate) };
     const payloadHash = hash(JSON.stringify(command.intent)); const prior = aggregate.intentReceipts[command.intentId];
     if (prior) return prior.payloadHash === payloadHash ? { status: 'duplicate', snapshot: snapshot(aggregate) } : { status: 'rejected', code: 'INTENT_REUSED', snapshot: snapshot(aggregate) };
     if (command.expectedRevision !== aggregate.revision) return { status: 'rejected', code: 'STALE_REVISION', snapshot: snapshot(aggregate) };
@@ -63,21 +67,27 @@ export class PlayerAuthority {
   /** Canonical location mutation seam; receipt and move/no-op commit together. */
   async applyMovement(input: { principal: Principal; direction: Direction; roomId: string; mapId: string; sessionId: string; sequence: number }): Promise<{ status: 'applied'; snapshot: AuthoritySnapshot; transition?: { toMapId: string; spawn: unknown } } | { status: 'rejected' }> {
     if (!input.principal.sub || !input.roomId || !input.mapId || !input.sessionId || !Number.isSafeInteger(input.sequence) || input.sequence < 1) return { status: 'rejected' };
-    const mutationContext = this.mutationContext();
+    let mutationContext: AuthorityMutationContext | undefined;
     for (let attempt = 0; attempt < 3; attempt += 1) {
       const aggregate = await this.repository.read(input.principal.sub);
       if (!aggregate || aggregate.save.mapId !== input.mapId || aggregate.save.position.mapId !== input.mapId) return { status: 'rejected' };
+      if (aggregate.activeBattle) return { status: 'rejected' };
       const receipt = aggregate.locationMovementReceipts[input.sessionId];
       if (receipt && (receipt.roomId !== input.roomId || receipt.mapId !== input.mapId || input.sequence !== receipt.lastSequence + 1)) return { status: 'rejected' };
       if (!receipt && input.sequence !== 1) return { status: 'rejected' };
+      mutationContext ??= this.mutationContext();
       const transition = movementTransition(aggregate, input.direction, mutationContext);
+      const blockedByTrainer = transition.moved && isBlockedByUnclearedTrainer(transition.state, input.mapId);
+      const nextSave = blockedByTrainer
+        ? { ...aggregate.save, position: { ...aggregate.save.position, facing: input.direction }, updatedAt: mutationContext.transactionAt.toISOString() }
+        : transition.state;
       const next: PlayerAggregate = {
         ...aggregate,
         revision: aggregate.revision + 1,
-        save: transition.state,
+        save: nextSave,
         locationMovementReceipts: { ...aggregate.locationMovementReceipts, [input.sessionId]: { roomId: input.roomId, mapId: input.mapId, lastSequence: input.sequence } }
       };
-      if (await this.repository.compareExchange(input.principal.sub, aggregate.revision, next)) return { status: 'applied', snapshot: snapshot(next), ...(transition.transition ? { transition: transition.transition } : {}) };
+      if (await this.repository.compareExchange(input.principal.sub, aggregate.revision, next)) return { status: 'applied', snapshot: snapshot(next), ...(!blockedByTrainer && transition.transition ? { transition: transition.transition } : {}) };
     }
     return { status: 'rejected' };
   }
@@ -146,6 +156,57 @@ export class PlayerAuthority {
   }
   /** Alias kept explicit so callers do not confuse this with unsigned legacy import. */
   async importAuthenticatedExport(principal: Principal, envelope: unknown) { return this.importAuthenticatedSave(principal, envelope); }
+  async reserveTrainerBattle(input: { principal: Principal; battleId: string; objectId: string; mapId: string; locationRoomId: string; presentedCreatureIds: readonly string[]; expectedRosterRevision: number }): Promise<{ snapshot: AuthoritySnapshot; frozenParty: FrozenParty; profile: MonsterRpgSaveState['profile']; trainerId: string } | null> {
+    const aggregate = await this.repository.read(input.principal.sub);
+    const map = generatedMapRegistry.get(input.mapId);
+    const object = map?.objects.find((candidate) => candidate.id === input.objectId);
+    if (!aggregate || aggregate.activeBattle || !map || !object || object.kind !== 'trainer' || !getTrainerDefinition(object.trainerDefinitionId)
+      || aggregate.save.mapId !== input.mapId || aggregate.save.position.mapId !== input.mapId || !isFacingGeneratedObject(aggregate.save.position, object.geometry, map.tileSize)
+      || aggregate.rosterRevision !== input.expectedRosterRevision || !input.battleId.trim() || !input.locationRoomId.trim()) return null;
+    const ids = aggregate.save.creatures.activePartyCreatureIds;
+    if (!ids.length || ids.length !== input.presentedCreatureIds.length || !ids.every((id, index) => id === input.presentedCreatureIds[index])) return null;
+    const creatures = ids.map((id) => aggregate.save.creatures.creatures[id]);
+    if (creatures.some((creature) => !creature || creature.ownerPlayerId !== input.principal.sub || creature.fainted || creature.hp <= 0)) return null;
+    const activeBattle: ActiveTrainerBattle = { battleId: input.battleId, kind: 'trainer', trainerId: object.trainerDefinitionId, mapId: input.mapId, locationRoomId: input.locationRoomId, phase: 'reserved', reservedAt: this.now().toISOString() };
+    const next = { ...aggregate, revision: aggregate.revision + 1, activeBattle };
+    if (!await this.repository.compareExchange(input.principal.sub, aggregate.revision, next)) return null;
+    const frozenParty = deepFreeze({ playerId: input.principal.sub, rosterRevision: aggregate.rosterRevision, creatures: clone(creatures) }) as FrozenParty;
+    const nextSnapshot = snapshot(next); this.emitBattlePresence(input.principal.sub, activeBattle, nextSnapshot);
+    return { snapshot: nextSnapshot, frozenParty, profile: clone(aggregate.save.profile), trainerId: activeBattle.trainerId };
+  }
+  async activateTrainerBattle(principal: Principal, battleId: string): Promise<AuthoritySnapshot | null> {
+    const aggregate = await this.repository.read(principal.sub); const lock = aggregate?.activeBattle;
+    if (!aggregate || !lock || lock.phase !== 'reserved' || lock.battleId !== battleId) return null;
+    const activeBattle: ActiveTrainerBattle = { ...lock, phase: 'active' }; const next = { ...aggregate, revision: aggregate.revision + 1, activeBattle };
+    if (!await this.repository.compareExchange(principal.sub, aggregate.revision, next)) return null;
+    const nextSnapshot = snapshot(next); this.emitBattlePresence(principal.sub, activeBattle, nextSnapshot); return nextSnapshot;
+  }
+  async releaseReservedTrainerBattle(principal: Principal, battleId: string): Promise<boolean> {
+    const aggregate = await this.repository.read(principal.sub); const lock = aggregate?.activeBattle;
+    if (!aggregate || !lock || lock.phase !== 'reserved' || lock.battleId !== battleId) return false;
+    const { activeBattle: _lock, ...withoutLock } = aggregate; const next: PlayerAggregate = { ...withoutLock, revision: aggregate.revision + 1 };
+    if (!await this.repository.compareExchange(principal.sub, aggregate.revision, next)) return false;
+    this.emitBattlePresence(principal.sub, undefined, snapshot(next)); return true;
+  }
+  /** Compensates a failed registry activation without recording battle settlement. */
+  async cancelActiveTrainerBattle(principal: Principal, battleId: string): Promise<boolean> {
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      const aggregate = await this.repository.read(principal.sub); const lock = aggregate?.activeBattle;
+      if (!aggregate) return false;
+      if (!lock) return true;
+      if (lock.phase !== 'active' || lock.battleId !== battleId) return false;
+      const { activeBattle: _lock, ...withoutLock } = aggregate; const next: PlayerAggregate = { ...withoutLock, revision: aggregate.revision + 1 };
+      if (!await this.repository.compareExchange(principal.sub, aggregate.revision, next)) continue;
+      this.emitBattlePresence(principal.sub, undefined, snapshot(next)); return true;
+    }
+    return false;
+  }
+  async locationPresence(principal: Principal): Promise<{ snapshot: AuthoritySnapshot; activeBattle: ActiveTrainerBattle | undefined } | null> {
+    const aggregate = await this.repository.read(principal.sub); return aggregate ? { snapshot: snapshot(aggregate), activeBattle: clone(aggregate.activeBattle) } : null;
+  }
+  onBattlePresenceChanged(listener: (playerId: string, activeBattle: ActiveTrainerBattle | undefined, snapshot: AuthoritySnapshot) => void): () => void {
+    this.battlePresenceListeners.add(listener); return () => { this.battlePresenceListeners.delete(listener); };
+  }
   async freezeReadyActiveParty(input: { principal: Principal; presentedCreatureIds: readonly string[]; expectedRosterRevision: number }): Promise<FrozenParty | null> {
     const aggregate = await this.repository.read(input.principal.sub);
     if (!aggregate || aggregate.rosterRevision !== input.expectedRosterRevision) return null;
@@ -158,6 +219,36 @@ export class PlayerAuthority {
   /** Applies the simulation-produced terminal result once. Results never come from a client command. */
   async settleBattle(principal: Principal, result: BattleResolution): Promise<AuthoritySnapshot | null> {
     return this.settleBattleOnce(principal, result);
+  }
+  /** Trainer clear, party outcomes, rewards, growth and battle receipt share one CAS. */
+  async settleTrainerBattle(input: { principal: Principal; trainerId: string; result: BattleResolution }): Promise<AuthoritySnapshot | null> {
+    const trainer = getTrainerDefinition(input.trainerId);
+    if (!trainer) return null;
+    let context: AuthorityMutationContext | undefined;
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      const aggregate = await this.repository.read(input.principal.sub);
+      if (!aggregate) return null;
+      if (aggregate.grantReceipts[input.result.battleId] !== undefined) return snapshot(aggregate);
+      if (!aggregate.activeBattle || aggregate.activeBattle.phase !== 'active' || aggregate.activeBattle.battleId !== input.result.battleId || aggregate.activeBattle.trainerId !== input.trainerId) return null;
+      context ??= this.mutationContext();
+      const clearFlag = trainerClearFlag(trainer.trainerId);
+      const firstClear = input.result.outcome === 'defeated' && !aggregate.save.progression.flags[clearFlag];
+      const rewards = firstClear ? {
+        seed: 0, magicDust: trainer.reward.magicDust, clinks: 0, playerExperience: trainer.reward.playerXp,
+        battlingCreatureExperience: trainer.reward.creatureXp, activePartyExperience: trainer.reward.creatureXp, materials: []
+      } : undefined;
+      const settled = applyBattleRewardsToSave(aggregate.save, { ...input.result, rewardGranted: firstClear, rewards }, simulationContext(context));
+      const flaggedSave = firstClear ? { ...settled.state, progression: { ...settled.state.progression, flags: { ...settled.state.progression.flags, [clearFlag]: true } } } : settled.state;
+      const sealed = sealGrowthEvents(aggregate, flaggedSave, input.result.battleId, aggregate.revision + 1, context.transactionAt);
+      const { activeBattle: _lock, ...withoutLock } = aggregate;
+      const next: PlayerAggregate = { ...withoutLock, revision: aggregate.revision + 1, rosterRevision: rosterChanged(aggregate.save, sealed.save) ? aggregate.rosterRevision + 1 : aggregate.rosterRevision, save: sealed.save, grantReceipts: { ...aggregate.grantReceipts, [input.result.battleId]: aggregate.revision + 1 }, progressionEvents: sealed.events };
+      if (await this.repository.compareExchange(input.principal.sub, aggregate.revision, next)) {
+        const nextSnapshot = snapshot(next); this.emitBattlePresence(input.principal.sub, undefined, nextSnapshot); return nextSnapshot;
+      }
+      const current = await this.repository.read(input.principal.sub);
+      if (!current || current.revision === aggregate.revision) return null;
+    }
+    return null;
   }
   private async settleBattleOnce(principal: Principal, result: BattleResolution, priorContext?: AuthorityMutationContext): Promise<AuthoritySnapshot | null> {
     const aggregate = await this.repository.read(principal.sub);
@@ -221,6 +312,7 @@ export class PlayerAuthority {
     return (await this.repository.compareExchangeMany([{ playerId: attacker.playerId, expectedRevision: attacker.revision, next: attackerNext }, { playerId: owner.playerId, expectedRevision: owner.revision, next: ownerNext }])) ? true : 'race';
   }
   private mutationContext(): AuthorityMutationContext { return { transactionAt: this.now(), rng: this.rng }; }
+  private emitBattlePresence(playerId: string, activeBattle: ActiveTrainerBattle | undefined, current: AuthoritySnapshot): void { this.battlePresenceListeners.forEach((listener) => listener(playerId, clone(activeBattle), current)); }
 }
 
 /** The export is an authenticated transfer envelope, not a durable backup mechanism. */
@@ -350,6 +442,16 @@ function reduce(save: MonsterRpgSaveState, intent: AuthorityIntent, context: Aut
 }
 function movementTransition(aggregate: PlayerAggregate, direction: Direction, context: AuthorityMutationContext) {
   return movePlayer(aggregate.save, { type: 'move', direction }, getGameMap(aggregate.save.mapId), simulationContext(context));
+}
+function trainerClearFlag(trainerId: string) { return `trainer-clear:${trainerId}`; }
+function isFacingGeneratedObject(position: MonsterRpgSaveState['position'], geometry: { x: number; y: number }, tileSize: number): boolean {
+  const delta = { north: [0, -1], east: [1, 0], south: [0, 1], west: [-1, 0] } as const; const [x, y] = delta[position.facing];
+  return position.x + x === Math.floor(geometry.x / tileSize) && position.y + y === Math.floor(geometry.y / tileSize);
+}
+function isBlockedByUnclearedTrainer(save: MonsterRpgSaveState, mapId: string): boolean {
+  const map = generatedMapRegistry.get(mapId);
+  if (!map) return false;
+  return map.objects.some((object) => object.kind === 'trainer' && object.mode === 'progression-blocking' && !save.progression.flags[trainerClearFlag(object.trainerId)] && Math.floor(object.geometry.x / map.tileSize) === save.position.x && Math.floor(object.geometry.y / map.tileSize) === save.position.y);
 }
 function simulationContext(context: AuthorityMutationContext) { return { now: context.transactionAt, rng: context.rng }; }
 function toItemInventory(stacks: Record<string, SaveStack>): ItemInventory {

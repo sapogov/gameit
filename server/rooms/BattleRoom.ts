@@ -6,20 +6,21 @@ import {
   choosePlayerBattleAttack,
   createBattleRoomState,
   createGuardBattleRoomState,
+  createTrainerBattleRoomState,
   getBattleAttackFatigueCost,
   markBattleDisconnected,
   resumeDisconnectedBattle,
   runFromBattle,
+  switchPlayerBattleCreature,
   toBattleResult,
   type BattleAttackIntentMessage,
   type BattleRoomState,
   type CreatureAttackRecord,
   type JoinBattleOptions
 } from '../../src/games/monster-rpg/sim';
-import { getBattleClaim, markBattleClaimResolved } from '../battleRegistry';
+import { activateTrainerBattleClaim, getBattleClaim, markBattleClaimResolved } from '../battleRegistry';
 import { verifyGuestCredential } from '../auth/guestCredentials';
-import { guestCredentialConfig, guestCredentialTtlSeconds } from '../authority/runtime';
-import { authorityEnabled } from '../authority/runtime';
+import { authorityEnabled, guestCredentialConfig, guestCredentialTtlSeconds, playerAuthority } from '../authority/runtime';
 import {
   BattleAttackSchema,
   BattleCreatureSchema,
@@ -34,6 +35,8 @@ export class BattleRoom extends Room {
   private battleState!: BattleRoomState;
   private battleToken = '';
   private playerId = '';
+  private trainerActivated = false;
+  private publishedResult = false;
 
   onCreate(options?: Partial<JoinBattleOptions>) {
     if (!authorityEnabled) throw new ServerError(503, JSON.stringify({ code: 'AUTHORITY_MAINTENANCE' }));
@@ -48,8 +51,9 @@ export class BattleRoom extends Room {
 
     this.battleToken = battleToken;
     this.playerId = claim.playerProfile.playerId;
-    this.battleState =
-      claim.battleKind === 'guard-theft' && claim.guardCreature && claim.farmId
+    this.battleState = claim.battleKind === 'trainer' && claim.trainerId && claim.playerParty
+      ? createTrainerBattleRoomState({ battleId: claim.battleId, trainerId: claim.trainerId, playerProfile: claim.playerProfile, playerParty: claim.playerParty })
+      : claim.battleKind === 'guard-theft' && claim.guardCreature && claim.farmId
         ? createGuardBattleRoomState({
             battleId: claim.battleId,
             farmId: claim.farmId,
@@ -57,14 +61,14 @@ export class BattleRoom extends Room {
             playerCreature: claim.playerCreature,
             guardCreature: claim.guardCreature
           })
-        : createBattleRoomState({
+        : claim.battleKind === 'wild' ? createBattleRoomState({
             battleId: claim.battleId,
             encounterId: claim.encounterId,
             playerProfile: claim.playerProfile,
             playerCreature: claim.playerCreature,
             wildSpeciesId: claim.wildSpeciesId,
             zoneId: claim.zoneId
-          });
+          }) : (() => { throw new ServerError(400, 'Unsupported battle claim'); })();
     const stateSchema = toBattleStateSchema(this.battleState);
     stateSchema.balanceVersion = CURRENT_BALANCE_VERSION;
     this.setState(stateSchema);
@@ -75,9 +79,12 @@ export class BattleRoom extends Room {
     this.onMessage('run', (client) => {
       this.handleRun(client);
     });
+    this.onMessage('switchCreature', (client, payload: { creatureId?: unknown; expectedTurn?: unknown }) => {
+      this.handleSwitchCreature(client, payload);
+    });
   }
 
-  onJoin(client: Client, options?: JoinBattleOptions) {
+  async onJoin(client: Client, options?: JoinBattleOptions) {
     assertBalanceVersion(options?.balanceVersion);
     if (
       options?.battleToken !== this.battleToken ||
@@ -85,6 +92,13 @@ export class BattleRoom extends Room {
       options?.battleId !== this.battleState.battleId
     ) {
       throw new ServerError(403, 'Spectating disabled');
+    }
+
+    if (this.battleState.battleKind === 'trainer' && !this.trainerActivated) {
+      if (!await activateTrainerBattleClaimWithCompensation(this.playerId, this.battleState.battleId)) {
+        throw new ServerError(403, 'Trainer battle is unavailable');
+      }
+      this.trainerActivated = true;
     }
 
     if (this.battleState.status === 'disconnected-grace') {
@@ -102,13 +116,16 @@ export class BattleRoom extends Room {
 
     try {
       await this.allowReconnection(client, BATTLE_DISCONNECT_GRACE_MS / 1000);
+      if (isDisconnectedGrace(this.battleState)) {
+        this.syncBattleState(resumeDisconnectedBattle(this.battleState));
+      }
     } catch {
+      if (!isDisconnectedGrace(this.battleState)) return;
       const abandoned = abandonDisconnectedBattle(this.battleState);
       this.syncBattleState(abandoned);
       const result = toBattleResult(abandoned);
       if (result) {
-        markBattleClaimResolved(result);
-        this.broadcast('battleResult', result);
+        await this.publishResult(result);
       }
     }
   }
@@ -125,8 +142,7 @@ export class BattleRoom extends Room {
 
     this.syncBattleState(result.state);
     if (result.result) {
-      markBattleClaimResolved(result.result);
-      this.broadcast('battleResult', result.result);
+      void this.publishResult(result.result);
     }
   }
 
@@ -140,8 +156,20 @@ export class BattleRoom extends Room {
 
     this.syncBattleState(result.state);
     if (result.result) {
-      markBattleClaimResolved(result.result);
-      this.broadcast('battleResult', result.result);
+      void this.publishResult(result.result);
+    }
+  }
+
+  private handleSwitchCreature(client: Client, payload: { creatureId?: unknown; expectedTurn?: unknown }) {
+    if (!this.isAuthorized(client)) return;
+    const result = switchPlayerBattleCreature(this.battleState, typeof payload?.creatureId === 'string' ? payload.creatureId : '', typeof payload?.expectedTurn === 'number' ? payload.expectedTurn : -1);
+    if (!result.ok) {
+      client.send('battleActionRejected', { reason: result.reason });
+      return;
+    }
+    this.syncBattleState(result.state);
+    if (result.result) {
+      void this.publishResult(result.result);
     }
   }
 
@@ -153,6 +181,37 @@ export class BattleRoom extends Room {
     this.battleState = state;
     copyBattleStateToSchema(state, this.state as BattleStateSchema);
   }
+
+  private async publishResult(result: ReturnType<typeof toBattleResult> extends infer Result ? Exclude<Result, null> : never) {
+    if (this.publishedResult) return;
+    if (this.battleState.battleKind === 'trainer') {
+      const claim = getBattleClaim(this.battleState.battleId, this.battleToken);
+      if (!claim?.trainerId || !this.trainerActivated) return;
+      const snapshot = await playerAuthority.settleTrainerBattle({ principal: { sub: this.playerId }, trainerId: claim.trainerId, result });
+      if (!snapshot) return;
+    }
+    this.publishedResult = true;
+    markBattleClaimResolved(result);
+    this.broadcast('battleResult', result);
+  }
+}
+
+type TrainerBattleActivationDependencies = Pick<typeof playerAuthority, 'activateTrainerBattle' | 'cancelActiveTrainerBattle'> & {
+  activateTrainerBattleClaim: (battleId: string) => boolean;
+};
+
+export async function activateTrainerBattleClaimWithCompensation(playerId: string, battleId: string, dependencies: TrainerBattleActivationDependencies = {
+  activateTrainerBattle: playerAuthority.activateTrainerBattle.bind(playerAuthority),
+  cancelActiveTrainerBattle: playerAuthority.cancelActiveTrainerBattle.bind(playerAuthority),
+  activateTrainerBattleClaim
+}): Promise<boolean> {
+  const activated = await dependencies.activateTrainerBattle({ sub: playerId }, battleId);
+  if (!activated) return false;
+  let claimActivated = false;
+  try { claimActivated = dependencies.activateTrainerBattleClaim(battleId); } catch { claimActivated = false; }
+  if (claimActivated) return true;
+  await dependencies.cancelActiveTrainerBattle({ sub: playerId }, battleId);
+  return false;
 }
 
 export function authenticateBattleJoin(credential: unknown, now = Date.now(), ttlSeconds = guestCredentialTtlSeconds) {
@@ -163,6 +222,10 @@ export function assertBalanceVersion(clientBalanceVersion: unknown): asserts cli
   if (clientBalanceVersion !== CURRENT_BALANCE_VERSION) {
     throw new ServerError(409, JSON.stringify({ code: 'BALANCE_VERSION_MISMATCH', serverBalanceVersion: CURRENT_BALANCE_VERSION, clientBalanceVersion: typeof clientBalanceVersion === 'number' ? clientBalanceVersion : null }));
   }
+}
+
+function isDisconnectedGrace(state: BattleRoomState): boolean {
+  return state.status === 'disconnected-grace';
 }
 
 function toBattleStateSchema(state: BattleRoomState): BattleStateSchema {
@@ -193,6 +256,15 @@ function copyBattleStateToSchema(state: BattleRoomState, schema: BattleStateSche
   state.validPlayerAttackIds.forEach((attackId) => schema.validPlayerAttackIds.push(attackId));
   schema.rewardGranted = state.rewardGranted;
   schema.disconnectGraceUntil = state.disconnectGraceUntil ?? '';
+  schema.phase = state.phase ?? '';
+  schema.remainingTrainerSwitches = state.remainingTrainerSwitches ?? 0;
+  schema.trainerId = state.trainerId ?? '';
+  schema.playerActiveCreatureId = state.playerActiveCreatureId ?? '';
+  schema.trainerActiveCreatureId = state.trainerActiveCreatureId ?? '';
+  schema.playerParty.clear();
+  (state.playerParty ?? [state.player.activeCreature]).forEach((creature) => schema.playerParty.push(toCreatureSchema(creature)));
+  schema.trainerParty.clear();
+  (state.trainerParty ?? [state.enemy.activeCreature]).forEach((creature) => schema.trainerParty.push(toCreatureSchema(creature)));
 }
 
 function toParticipantSchema(participant: BattleRoomState['player']): BattleParticipantSchema {

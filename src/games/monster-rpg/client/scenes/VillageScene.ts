@@ -18,6 +18,7 @@ import {
   FARM_FOOTPRINT_SIZE,
   findWalkPath,
   findWalkPathToInteractionDistance,
+  generatedMapRegistry,
   getGameMap,
   getSpeciesById,
   isFarmTile
@@ -317,6 +318,7 @@ export class VillageScene extends Phaser.Scene {
 
     const encounter = this.getEncounterAt(targetX, targetY);
     const farm = this.getFarmAt(targetX, targetY);
+    const trainer = this.getTrainerAt(targetX, targetY);
     const pathOptions = { isBlocked: (x: number, y: number) => this.isFarmTileAt(x, y) };
     const path = farm
       ? findWalkPathToInteractionDistance(
@@ -328,12 +330,12 @@ export class VillageScene extends Phaser.Scene {
           FARM_FOOTPRINT_SIZE,
           pathOptions
         )
-      : encounter
+      : encounter || trainer
         ? findWalkPathToInteractionDistance(this.map, localPlayer.position, targetX, targetY, 1, 1, pathOptions)
         : findWalkPath(this.map, localPlayer.position, targetX, targetY, pathOptions);
 
     if (!path) return;
-    this.queueMovement(path, Boolean(farm || encounter));
+    this.queueMovement(path, Boolean(farm || encounter || trainer));
   }
 
   private dispatchManualMove(direction: Direction) {
@@ -517,6 +519,13 @@ export class VillageScene extends Phaser.Scene {
 
   private drawMapMarkers(sprites: Phaser.GameObjects.Container) {
     const { tileSize } = this.map;
+    const generatedMap = generatedMapRegistry.get(this.map.id);
+    generatedMap?.objects.filter((object) => object.kind === 'trainer').forEach((trainer) => {
+      const x = Math.floor(trainer.geometry.x / generatedMap.tileSize) * tileSize;
+      const y = Math.floor(trainer.geometry.y / generatedMap.tileSize) * tileSize;
+      this.addSpriteOverlay(sprites, monsterRpgAssetKeys.markerSign, x, y, tileSize, tileSize);
+      this.addMapLabel(sprites, 'Trainer', x + tileSize / 2, y - tileSize * 0.2);
+    });
 
     if (this.map.kind === 'world-map') {
       this.map.exits.forEach((exit) => {
@@ -885,6 +894,17 @@ export class VillageScene extends Phaser.Scene {
 
   private getFarmAt(x: number, y: number): FarmSaveRecord | null {
     return Object.values(this.getRenderableFarms()).find((farm) => isFarmTile(farm, x, y)) ?? null;
+  }
+
+  private getTrainerAt(x: number, y: number): boolean {
+    const generatedMap = generatedMapRegistry.get(this.map.id);
+    if (!generatedMap) return false;
+
+    return generatedMap.objects.some((object) =>
+      object.kind === 'trainer' &&
+      Math.floor(object.geometry.x / generatedMap.tileSize) === x &&
+      Math.floor(object.geometry.y / generatedMap.tileSize) === y
+    );
   }
 
   private isFarmTileAt(x: number, y: number): boolean {

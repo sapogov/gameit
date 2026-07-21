@@ -91,6 +91,30 @@ describe('canonical location movement', () => {
     expect(await target.importAuthenticatedSave(user, JSON.stringify(await source.exportAuthenticatedSave(user)))).toMatchObject({ ok: true, snapshot: { save: { position: moved!.snapshot.save.position } } });
   });
 
+  test('fans canonical settlement presence snapshots to every connected session of the principal', () => {
+    const first = { sessionId: 'session-first', send: vi.fn() };
+    const second = { sessionId: 'session-second', send: vi.fn() };
+    const other = { sessionId: 'session-other', send: vi.fn() };
+    const room = {
+      clients: [first, second, other],
+      state: { players: new Map([
+        ['session-first', { profile: { id: 'player' }, connected: true, inBattle: true, battleId: 'battle-1' }],
+        ['session-second', { profile: { id: 'player' }, connected: true, inBattle: true, battleId: 'battle-1' }],
+        ['session-other', { profile: { id: 'other' }, connected: true, inBattle: false, battleId: '' }]
+      ]) }
+    };
+    const snapshot = { playerId: 'player', revision: 7, rosterRevision: 2, save: {} };
+    const sync = (LocationRoom.prototype as unknown as { syncBattlePresence: (playerId: string, activeBattle: undefined, snapshot: unknown) => void }).syncBattlePresence;
+
+    sync.call(room, 'player', undefined, snapshot);
+
+    expect(room.state.players.get('session-first')).toMatchObject({ inBattle: false, battleId: '' });
+    expect(room.state.players.get('session-second')).toMatchObject({ inBattle: false, battleId: '' });
+    expect(first.send).toHaveBeenCalledWith('authoritySnapshot', snapshot);
+    expect(second.send).toHaveBeenCalledWith('authoritySnapshot', snapshot);
+    expect(other.send).not.toHaveBeenCalled();
+  });
+
   test('rejects a direct room join when the canonical position is bound to another map', () => {
     const profile = createPlayerProfile('Mover', 'scout');
     const canonicalPosition = { mapId: 'home-village' as const, x: 27, y: 10, facing: 'east' as const };
@@ -140,7 +164,7 @@ describe('canonical location movement', () => {
     expect(client.send).toHaveBeenLastCalledWith('guardedFarmTheftClaimed', expect.objectContaining({ farmId: 'foreign' }));
     const guardedCalls = (client.send as ReturnType<typeof vi.fn>).mock.calls;
     const guardedClaim = guardedCalls[guardedCalls.length - 1]![1];
-    markBattleClaimResolved({ battleId: guardedClaim.battleId, encounterId: 'guard-theft:foreign', outcome: 'defeated', playerCreatureId: 'attacker-creature', playerCreatureHp: 1, playerCreatureFainted: false, opponentCreatureHp: 0, opponentCreatureFainted: true, rewardGranted: false, rewards: { seed: 0, magicDust: 0, clinks: 0, playerExperience: 0, battlingCreatureExperience: 0, activePartyExperience: 0, materials: [] } });
+    markBattleClaimResolved({ battleId: guardedClaim.battleId, encounterId: 'guard-theft:foreign', outcome: 'defeated', playerCreatureId: 'attacker-creature', playerCreatureHp: 1, playerCreatureFainted: false, playerPartyOutcomes: [{ creatureId: 'attacker-creature', hp: 1, fainted: false }], opponentCreatureHp: 0, opponentCreatureFainted: true, rewardGranted: false, rewards: { seed: 0, magicDust: 0, clinks: 0, playerExperience: 0, battlingCreatureExperience: 0, activePartyExperience: 0, materials: [] } });
     await vi.waitFor(() => expect(client.send).toHaveBeenCalledWith('authoritySnapshot', { revision: 6 }));
     const guardedOrder = (client.send as ReturnType<typeof vi.fn>).mock.invocationCallOrder;
     expect(guardedOrder[guardedOrder.length - 1]).toBeLessThan(guardedRoom.finalizeBattleResult.mock.invocationCallOrder[0]);
@@ -159,7 +183,7 @@ describe('canonical location movement', () => {
     await handler.call(room, client, { encounterId: 'encounter', activePartyCreatureIds: ['attacker-creature'], expectedRosterRevision: 0 });
     const calls = (client.send as ReturnType<typeof vi.fn>).mock.calls;
     const claim = calls[calls.length - 1]![1];
-    markBattleClaimResolved({ battleId: claim.battleId, encounterId: 'encounter', outcome: 'lost', playerCreatureId: 'attacker-creature', playerCreatureHp: 1, playerCreatureFainted: false, opponentCreatureHp: 1, opponentCreatureFainted: false, rewardGranted: false, rewards: { seed: 0, magicDust: 0, clinks: 0, playerExperience: 0, battlingCreatureExperience: 0, activePartyExperience: 0, materials: [] } });
+    markBattleClaimResolved({ battleId: claim.battleId, encounterId: 'encounter', outcome: 'lost', playerCreatureId: 'attacker-creature', playerCreatureHp: 1, playerCreatureFainted: false, playerPartyOutcomes: [{ creatureId: 'attacker-creature', hp: 1, fainted: false }], opponentCreatureHp: 1, opponentCreatureFainted: false, rewardGranted: false, rewards: { seed: 0, magicDust: 0, clinks: 0, playerExperience: 0, battlingCreatureExperience: 0, activePartyExperience: 0, materials: [] } });
     await vi.waitFor(() => expect(client.send).toHaveBeenCalledWith('authoritySnapshot', { revision: 5 }));
     const callOrder = (client.send as ReturnType<typeof vi.fn>).mock.invocationCallOrder;
     expect(callOrder[callOrder.length - 1]).toBeLessThan(finalizeBattleResult.mock.invocationCallOrder[0]);

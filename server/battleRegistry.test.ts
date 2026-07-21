@@ -1,5 +1,5 @@
-import { describe, expect, test } from 'vitest';
-import { createBattleClaim, getBattleStateSeed, removeBattleClaim } from './battleRegistry';
+import { afterEach, describe, expect, test, vi } from 'vitest';
+import { activateTrainerBattleClaim, createBattleClaim, getBattleStateSeed, prepareTrainerBattleClaim, registerTrainerBattleClaim, removeBattleClaim } from './battleRegistry';
 import { createBattleRoomState, createPlayerProfile, type CreatureSaveRecord } from '../src/games/monster-rpg/sim';
 
 describe('wild battle claims', () => {
@@ -11,6 +11,40 @@ describe('wild battle claims', () => {
     });
     const battle = createBattleRoomState({ ...getBattleStateSeed(claim), playerProfile: profile, playerCreature: claim.playerCreature });
     expect(battle.zoneId).toBe('world-north-fields');
+    removeBattleClaim(claim.battleId);
+  });
+});
+
+describe('trainer battle claims', () => {
+  afterEach(() => vi.useRealTimers());
+
+  test('releases a pending authority reservation when its unactivated claim expires', async () => {
+    vi.useFakeTimers();
+    const profile = createPlayerProfile('Trainer Tester', 'scout');
+    const release = vi.fn().mockResolvedValue(true);
+    const prepared = prepareTrainerBattleClaim();
+    registerTrainerBattleClaim({
+      prepared, trainerId: 'route-trainer', locationRoomId: 'location-trainer', mapId: 'world-map', playerProfile: profile,
+      playerParty: [creature(profile.playerId)], releaseReservedTrainerBattle: release
+    });
+
+    await vi.advanceTimersByTimeAsync(5 * 60_000);
+    expect(release).toHaveBeenCalledTimes(1);
+  });
+
+  test('activating a trainer claim prevents pending cleanup from releasing its reservation', async () => {
+    vi.useFakeTimers();
+    const profile = createPlayerProfile('Trainer Active', 'scout');
+    const release = vi.fn().mockResolvedValue(true);
+    const prepared = prepareTrainerBattleClaim();
+    const claim = registerTrainerBattleClaim({
+      prepared, trainerId: 'route-trainer', locationRoomId: 'location-trainer', mapId: 'world-map', playerProfile: profile,
+      playerParty: [creature(profile.playerId)], releaseReservedTrainerBattle: release
+    });
+
+    expect(activateTrainerBattleClaim(claim.battleId)).toBe(true);
+    await vi.advanceTimersByTimeAsync(5 * 60_000);
+    expect(release).not.toHaveBeenCalled();
     removeBattleClaim(claim.battleId);
   });
 });

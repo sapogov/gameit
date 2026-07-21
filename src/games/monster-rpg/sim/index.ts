@@ -6,6 +6,11 @@ export type {
   CardRarity,
   CardRewardSource,
   BattleAttackIntentMessage,
+  ChallengeTrainerMessage,
+  SwitchCreatureIntentMessage,
+  TrainerDefinition,
+  TrainerRewardDefinition,
+  BattleCreatureOutcome,
   BattleCreatureState,
   BattleKind,
   BattleParticipantKind,
@@ -144,10 +149,12 @@ export {
   type GeneratedNpcV1,
   type GeneratedServiceV1,
   type GeneratedSpawnV1,
+  type GeneratedTrainerV1,
   type LoadMapSetResult,
   type SquareGridMapAdapter
 } from './generatedMapSchema';
 export { generatedMapRegistry, generatedTracerMapSet } from './generatedMapSet';
+export { TRAINER_DEFINITIONS, getTrainerDefinition } from './trainers';
 export {
   WILD_ENCOUNTER_LOSS_COOLDOWN_MS,
   WILD_ENCOUNTER_MAX_SPAWN_INTERVAL_MS,
@@ -348,6 +355,7 @@ export {
   canUseBattleAttack,
   choosePlayerBattleAttack,
   createBattleRoomState,
+  createTrainerBattleRoomState,
   createGuardBattleRoomState,
   getBattleAttackFatigueCost,
   getBattleRunChance,
@@ -356,6 +364,7 @@ export {
   markBattleDisconnected,
   resumeDisconnectedBattle,
   runFromBattle,
+  switchPlayerBattleCreature,
   toBattleResult,
   type BattleActionResult,
   type BattleResolution

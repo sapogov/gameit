@@ -30,6 +30,7 @@ import {
   findWalkPathToInteractionDistance,
   GAME_BALANCE_CONFIG,
   validateSpeciesCatalog,
+  type CreatureSaveRecord,
   type MonsterRpgSaveState,
   type PlayerProfile
 } from '../src/games/monster-rpg/sim';
@@ -216,6 +217,7 @@ async function checkSdkMultiplayerFlow(): Promise<void> {
     await checkInvalidMapIdRejected(endpoint);
     await checkBlockedTerrainRejectedOnline(endpoint);
     await checkGeneratedMapSdkFlow(endpoint);
+    await checkTrainerBattleSdkFlow(endpoint);
   } finally {
     await server.gracefullyShutdown(false);
   }
@@ -439,6 +441,174 @@ async function checkGeneratedMapSdkFlow(endpoint: string): Promise<void> {
   const start = getLocalPosition(route); const movementProbe = ([{ direction: 'north' as const, x: start.x, y: start.y - 1 }, { direction: 'east' as const, x: start.x + 1, y: start.y }, { direction: 'south' as const, x: start.x, y: start.y + 1 }, { direction: 'west' as const, x: start.x - 1, y: start.y }]).find((candidate) => canEnterTile(routeMap, candidate.x, candidate.y) && !routeMap.exits.some((exit) => exit.x === candidate.x && exit.y === candidate.y));
   assert.ok(movementProbe, 'reachable generated square-grid movement'); await sendMoves(route, [movementProbe.direction]); assert.deepEqual(getLocalPosition(route), { ...start, x: movementProbe.x, y: movementProbe.y, facing: movementProbe.direction }); await leaveRoom(route);
   await assert.rejects(async () => client.joinOrCreate('location', { mapId: 'tracer-water-town', credential: await credentialFor(createProfile('bad-handshake')), balanceVersion: CURRENT_BALANCE_VERSION, mapSetId: 'wrong', mapSetVersion: '0' }), /map-set version mismatch|409|Failed to/);
+}
+
+async function checkTrainerBattleSdkFlow(endpoint: string): Promise<void> {
+  const client = new Client(endpoint);
+  const secondClient = new Client(endpoint);
+  const profile = createProfile('trainer-sdk');
+  const opponent = createProfile('trainer-sdk-opponent');
+  const player = await canonicalPlayerFor(profile);
+  const location = await joinLocation(client, 'tracer-world-route', profile);
+
+  const rejectedOutOfRange = nextMessage<{ objectId: string; reason: string }>(location, 'trainerChallengeRejected');
+  location.send('challengeTrainer', { objectId: 'route-scout-trainer', activePartyCreatureIds: player.snapshot.save.creatures.activePartyCreatureIds, expectedRosterRevision: player.snapshot.rosterRevision });
+  assert.equal((await withTimeout(rejectedOutOfRange, 'out-of-range trainer challenge')).reason, 'REJECTED');
+
+  await prepareTrainerBattleParty(player);
+  const staleRoster = nextMessage<{ objectId: string; reason: string }>(location, 'trainerChallengeRejected');
+  location.send('challengeTrainer', { objectId: 'route-scout-trainer', activePartyCreatureIds: player.snapshot.save.creatures.activePartyCreatureIds, expectedRosterRevision: player.snapshot.rosterRevision - 1 });
+  assert.equal((await withTimeout(staleRoster, 'stale trainer roster rejection')).reason, 'REJECTED');
+
+  const claimMessage = nextMessage<TrainerChallengeClaim>(location, 'trainerChallengeClaimed');
+  location.send('challengeTrainer', trainerChallengePayload(player));
+  const claim = await withTimeout(claimMessage, 'trainer challenge claim');
+  assert.deepEqual({ objectId: claim.objectId, trainerId: claim.trainerId }, { objectId: 'route-scout-trainer', trainerId: 'route-scout-1' });
+
+  const secondLocation = (await secondClient.joinOrCreate('location', {
+    mapId: 'tracer-world-route', credential: player.credential, balanceVersion: CURRENT_BALANCE_VERSION, ...generatedMapIdentity()
+  })) as SdkRoom;
+  await waitFor(() => secondLocation.state?.players?.get?.(secondLocation.sessionId)?.inBattle === true, 'second location session battle lock');
+  const lockedPosition = getLocalPosition(secondLocation);
+  secondLocation.send('moveIntent', nextMoveMessage(secondLocation, 'north'));
+  await assertPositionRemains(secondLocation, lockedPosition, 'locked player remains immobile');
+
+  await assert.rejects(
+    async () => secondClient.joinOrCreate('battle', { battleId: claim.battleId, battleToken: claim.battleToken, credential: await credentialFor(opponent), balanceVersion: CURRENT_BALANCE_VERSION }),
+    /Spectating disabled|Failed to|forbidden/i
+  );
+
+  const battle = (await client.joinOrCreate('battle', {
+    battleId: claim.battleId, battleToken: claim.battleToken, credential: player.credential, balanceVersion: CURRENT_BALANCE_VERSION
+  })) as SdkRoom;
+  await waitFor(() => battle.state.status === 'active' && battle.state.battleKind === 'trainer', 'active trainer battle');
+  assert.equal(battle.state.trainerId, 'route-scout-1');
+
+  const activeCreatureId = battle.state.playerActiveCreatureId;
+  const reserveCreatureId = Array.from(battle.state.playerParty as Iterable<any>).find((creature: any) => creature.id !== activeCreatureId)?.id;
+  assert.equal(typeof reserveCreatureId, 'string', 'trainer SDK party has a reserve');
+  const invalidSwitch = nextMessage<{ reason: string }>(battle, 'battleActionRejected');
+  battle.send('switchCreature', { creatureId: activeCreatureId, expectedTurn: battle.state.turn - 1 });
+  assert.equal((await withTimeout(invalidSwitch, 'invalid trainer switch rejection')).reason, 'invalid-attack');
+  const turnBeforeSwitch = battle.state.turn;
+  battle.send('switchCreature', { creatureId: reserveCreatureId, expectedTurn: turnBeforeSwitch });
+  await waitFor(() => battle.state.playerActiveCreatureId === reserveCreatureId && battle.state.turn > turnBeforeSwitch, 'authoritative trainer switch');
+
+  battle.reconnection.minUptime = 0;
+  battle.reconnection.delay = 25;
+  battle.reconnection.minDelay = 25;
+  battle.reconnection.maxDelay = 25;
+  let reconnectHandshakeReceived = false;
+  const reconnected = new Promise<void>((resolve) => battle.onReconnect(() => {
+    reconnectHandshakeReceived = true;
+    resolve();
+  }));
+  const restoredState = new Promise<void>((resolve) => battle.onStateChange((state) => {
+    if (reconnectHandshakeReceived && state.status === 'active' && state.playerActiveCreatureId === reserveCreatureId && !state.disconnectGraceUntil) resolve();
+  }));
+  battle.connection.close();
+  await withTimeout(reconnected, 'trainer battle automatic reconnect');
+  await withTimeout(restoredState, 'trainer battle post-reconnect authoritative state');
+  const reconnectedBattle = battle;
+  assert.equal(reconnectedBattle.state.status, 'active');
+  assert.equal(reconnectedBattle.state.playerActiveCreatureId, reserveCreatureId);
+  assert.equal(reconnectedBattle.state.disconnectGraceUntil, '');
+
+  let trainerClearSnapshotCount = 0;
+  location.onMessage('authoritySnapshot', (snapshot: AuthoritySnapshot) => {
+    if (snapshot.save.progression.flags['trainer-clear:route-scout-1'] === true) trainerClearSnapshotCount += 1;
+  });
+  const clearSnapshot = nextMessageWhere<AuthoritySnapshot>(location, 'authoritySnapshot', (snapshot) => snapshot.save.progression.flags['trainer-clear:route-scout-1'] === true);
+  const battleResult = nextMessage<{ outcome: string; battleId: string }>(reconnectedBattle, 'battleResult');
+  await defeatTrainerThroughSdk(reconnectedBattle);
+  const result = await withTimeout(battleResult, 'trainer terminal result');
+  assert.equal(result.outcome, 'defeated');
+  const cleared = await withTimeout(clearSnapshot, 'trainer clear authority snapshot');
+  assert.equal(cleared.save.progression.flags['trainer-clear:route-scout-1'], true);
+  assert.equal(cleared.save.inventory.currencies.magicDust, 4);
+  const clearedReserve = cleared.save.creatures.creatures[reserveCreatureId];
+  assert.ok(clearedReserve && clearedReserve.hp > 0 && clearedReserve.hp <= clearedReserve.maxHp, 'trainer snapshot persists player HP');
+  await waitFor(() => location.state.players.get(location.sessionId)?.inBattle === false && secondLocation.state.players.get(secondLocation.sessionId)?.inBattle === false, 'trainer lock cleared in Location');
+
+  const settledDust = cleared.save.inventory.currencies.magicDust;
+  assert.equal(trainerClearSnapshotCount, 1, 'trainer terminal result publishes one clear snapshot');
+  reconnectedBattle.send('chooseAttack', { attackId: reconnectedBattle.state.validPlayerAttackIds[0] ?? 'invalid' });
+  await assertTerminalBattleRemains(reconnectedBattle, 'terminal trainer result remains idempotent');
+  assert.equal(trainerClearSnapshotCount, 1, 'duplicate terminal action does not publish a second clear snapshot');
+  await refreshCanonicalSnapshot(player);
+  assert.equal(player.snapshot.save.progression.flags['trainer-clear:route-scout-1'], true);
+  assert.equal(player.snapshot.save.inventory.currencies.magicDust, settledDust);
+  assert.equal(player.snapshot.save.creatures.creatures[reserveCreatureId]?.hp, clearedReserve.hp);
+
+  await leaveRoom(reconnectedBattle);
+  await leaveRoom(location);
+  await leaveRoom(secondLocation);
+}
+
+function trainerChallengePayload(player: CanonicalPlayer) {
+  return { objectId: 'route-scout-trainer', activePartyCreatureIds: player.snapshot.save.creatures.activePartyCreatureIds, expectedRosterRevision: player.snapshot.rosterRevision };
+}
+
+/** Server-only fixture setup retains the aggregate's valid stat-growth shape; no client submits party state. */
+async function prepareTrainerBattleParty(player: CanonicalPlayer): Promise<void> {
+  const aggregate = await authorityRepository.read(player.principal.sub);
+  assert.ok(aggregate, 'missing trainer SDK aggregate');
+  const originalId = aggregate.save.creatures.activePartyCreatureIds[0];
+  const original = originalId ? aggregate.save.creatures.creatures[originalId] : undefined;
+  assert.ok(original, 'missing canonical starter for trainer SDK');
+  const stats = { hp: 200, attack: 200, defense: 200, speed: 200, stamina: 200 };
+  const readyCreature = (id: string): CreatureSaveRecord => ({ ...original, id, level: 1, experience: 0, stats, hp: stats.hp, maxHp: stats.hp, fainted: false, cooldowns: {}, statGrowth: { model: 'deterministic-default', basis: { level: 1, stats }, events: [] } });
+  const reserveId = `${original.id}:trainer-reserve`;
+  aggregate.save = {
+    ...aggregate.save,
+    mapId: 'tracer-world-route', position: { mapId: 'tracer-world-route', x: 12, y: 14, facing: 'south' },
+    creatures: { ...aggregate.save.creatures, activePartyCreatureIds: [original.id, reserveId], creatures: { ...aggregate.save.creatures.creatures, [original.id]: readyCreature(original.id), [reserveId]: readyCreature(reserveId) } }
+  };
+  aggregate.rosterRevision += 1;
+  assert.equal(await authorityRepository.compareExchange(player.principal.sub, aggregate.revision, aggregate), true, 'trainer SDK setup CAS failed');
+  await refreshCanonicalSnapshot(player);
+}
+
+async function defeatTrainerThroughSdk(room: SdkRoom): Promise<void> {
+  for (let actions = 0; actions < 40 && room.state.status === 'active'; actions += 1) {
+    if (room.state.phase === 'forced-switch') {
+      const reserve = Array.from(room.state.playerParty as Iterable<any>).find((creature: any) => !creature.fainted && creature.id !== room.state.playerActiveCreatureId);
+      assert.ok(reserve, 'forced trainer switch has a ready reserve');
+      room.send('switchCreature', { creatureId: reserve.id, expectedTurn: room.state.turn });
+      await waitFor(() => room.state.playerActiveCreatureId === reserve.id && room.state.phase === 'player-action', 'forced trainer switch');
+      continue;
+    }
+    const attackId = room.state.validPlayerAttackIds[0];
+    assert.equal(typeof attackId, 'string', 'trainer battle exposes an authoritative attack');
+    const previousTurn = room.state.turn;
+    room.send('chooseAttack', { attackId });
+    await waitFor(() => room.state.status !== 'active' || room.state.turn > previousTurn || room.state.phase === 'forced-switch', 'trainer attack progression');
+  }
+  assert.equal(room.state.status, 'player-won', `trainer battle must end in player-won, got ${String(room.state.status)}`);
+}
+
+function nextMessage<T>(room: SdkRoom, type: string): Promise<T> {
+  return new Promise((resolve) => room.onMessage(type, resolve));
+}
+
+function nextMessageWhere<T>(room: SdkRoom, type: string, accepts: (message: T) => boolean): Promise<T> {
+  return new Promise((resolve) => room.onMessage(type, (message: T) => { if (accepts(message)) resolve(message); }));
+}
+
+async function assertPositionRemains(room: SdkRoom, position: WorldPosition, label: string): Promise<void> {
+  const deadline = Date.now() + 125;
+  await waitFor(() => { assert.deepEqual(getLocalPosition(room), position); return Date.now() >= deadline; }, label, 500);
+}
+
+async function assertTerminalBattleRemains(room: SdkRoom, label: string): Promise<void> {
+  const status = room.state.status;
+  const turn = room.state.turn;
+  const deadline = Date.now() + 125;
+  await waitFor(() => {
+    assert.equal(room.state.status, status);
+    assert.equal(room.state.turn, turn);
+    return Date.now() >= deadline;
+  }, label, 500);
 }
 
 async function waitForEncounter(room: SdkRoom): Promise<EncounterTarget> {
@@ -715,6 +885,13 @@ interface LocationTransition {
   toMapId: MapId;
   spawn: WorldPosition;
   transitionId: string;
+}
+
+interface TrainerChallengeClaim {
+  objectId: string;
+  trainerId: string;
+  battleId: string;
+  battleToken: string;
 }
 
 interface EncounterTarget {
