@@ -17,6 +17,8 @@ import {
   type JoinBattleOptions
 } from '../../src/games/monster-rpg/sim';
 import { getBattleClaim, markBattleClaimResolved } from '../battleRegistry';
+import { verifyGuestCredential } from '../auth/guestCredentials';
+import { guestCredentialConfig, guestCredentialTtlSeconds } from '../authority/runtime';
 import {
   BattleAttackSchema,
   BattleCreatureSchema,
@@ -77,7 +79,7 @@ export class BattleRoom extends Room {
     assertBalanceVersion(options?.balanceVersion);
     if (
       options?.battleToken !== this.battleToken ||
-      options?.profile?.playerId !== this.playerId ||
+      authenticateBattleJoin(options?.credential)?.sub !== this.playerId ||
       options?.battleId !== this.battleState.battleId
     ) {
       throw new ServerError(403, 'Spectating disabled');
@@ -149,6 +151,10 @@ export class BattleRoom extends Room {
     this.battleState = state;
     copyBattleStateToSchema(state, this.state as BattleStateSchema);
   }
+}
+
+export function authenticateBattleJoin(credential: unknown, now = Date.now(), ttlSeconds = guestCredentialTtlSeconds) {
+  return verifyGuestCredential(credential, guestCredentialConfig, now, ttlSeconds);
 }
 
 export function assertBalanceVersion(clientBalanceVersion: unknown): asserts clientBalanceVersion is number {

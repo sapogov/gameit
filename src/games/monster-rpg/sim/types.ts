@@ -498,13 +498,16 @@ export interface WildEncounterState {
 
 export interface ClaimWildEncounterMessage {
   encounterId: string;
+  /** Authority v1: exact canonical active-party ordering and revision. */
+  activePartyCreatureIds?: string[];
+  expectedRosterRevision?: number;
   activeCreature?: CreatureSaveRecord;
 }
 
 export interface ClaimGuardedFarmTheftMessage {
-  farm: FarmSaveRecord;
-  activeCreature?: CreatureSaveRecord;
-  guardCreature?: CreatureSaveRecord;
+  farmId: string;
+  activePartyCreatureIds?: string[];
+  expectedRosterRevision?: number;
 }
 
 export interface ResolveWildEncounterMessage {
@@ -534,7 +537,9 @@ export interface BattleAttackIntentMessage {
 export interface JoinBattleOptions {
   battleId: string;
   battleToken: string;
-  profile: PlayerProfile;
+  /** Identity is derived from the guest credential; profile data is never trusted on join. */
+  profile?: PlayerProfile;
+  credential?: string;
   balanceVersion: number;
 }
 
@@ -596,7 +601,9 @@ export interface MoveIntentMessage {
 
 export interface JoinLocationOptions {
   mapId: MapId;
-  profile: PlayerProfile;
+  /** Identity and position are loaded from the canonical account snapshot. */
+  profile?: PlayerProfile;
+  credential?: string;
   balanceVersion: number;
   position?: WorldPosition;
   transitionId?: string;

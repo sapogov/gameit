@@ -52,8 +52,10 @@ class FakeRoom {
 
   emitError(code = 500, message = 'room error') { this.errorSignal.emit(code, message); }
   emitLeave(code = 1006, reason = 'room left') { this.leaveSignal.emit(code, reason); }
+  emitMessage(type: string, message: unknown) { this.messageHandlers.get(type)?.forEach((handler) => handler(message)); }
   lifecycleListenerCount() { return this.stateSignal.count() + this.errorSignal.count() + this.leaveSignal.count(); }
   messageListenerCount() { return [...this.messageHandlers.values()].reduce((count, handlers) => count + handlers.size, 0); }
+  messageListenerTypes() { return [...this.messageHandlers.entries()].filter(([, handlers]) => handlers.size > 0).map(([type]) => type).sort(); }
 }
 
 const profile = {
@@ -67,9 +69,11 @@ const profile = {
 function locationHarness() {
   const onState = vi.fn();
   const onStatus = vi.fn();
+  const onFarmTheftResult = vi.fn();
   return {
     onState,
     onStatus,
+    onFarmTheftResult,
     connect: () => connectToLocation('world-map', { mapId: 'world-map', profile }, {
       onRoomState: onState,
       onStatus,
@@ -77,7 +81,8 @@ function locationHarness() {
       onWildEncounterClaimed: vi.fn(),
       onWildEncounterClaimRejected: vi.fn(),
       onGuardedFarmTheftClaimed: vi.fn(),
-      onGuardedFarmTheftClaimRejected: vi.fn()
+      onGuardedFarmTheftClaimRejected: vi.fn(),
+      onFarmTheftResult
     }),
     decodedState: {
       balanceVersion: CURRENT_BALANCE_VERSION,
@@ -87,7 +92,7 @@ function locationHarness() {
       players: new Map(),
       encounters: new Map()
     },
-    readyMessageCount: 5
+    readyMessageTypes: ['farmTheftResult', 'guardedFarmTheftClaimed', 'guardedFarmTheftClaimRejected', 'locationTransition', 'wildEncounterClaimed', 'wildEncounterClaimRejected']
   };
 }
 
@@ -103,7 +108,7 @@ function battleHarness() {
       onStatus
     }),
     decodedState: { balanceVersion: CURRENT_BALANCE_VERSION },
-    readyMessageCount: 1
+    readyMessageTypes: ['battleResult']
   };
 }
 
@@ -147,6 +152,22 @@ describe('location map-set handshake', () => {
 
     room.publishDecodedState(harness.decodedState);
     await expect(connectionPromise).resolves.toBeDefined();
+  });
+
+  test('decodes and delivers the canonical farm-theft result snapshot', async () => {
+    const room = new FakeRoom();
+    const harness = locationHarness();
+    joinOrCreate.mockResolvedValue(room);
+    const connectionPromise = harness.connect();
+    await Promise.resolve();
+    await Promise.resolve();
+    room.publishDecodedState(harness.decodedState);
+    await connectionPromise;
+
+    const result = { status: 'applied' as const, snapshot: { playerId: 'player-1', revision: 2, rosterRevision: 0, save: { profile } } };
+    room.emitMessage('farmTheftResult', result);
+
+    expect(harness.onFarmTheftResult).toHaveBeenCalledWith(result);
   });
 
   test.each([
@@ -228,7 +249,7 @@ describe.each([
     room.publishDecodedState(harness.decodedState);
     await expect(connectionPromise).resolves.toBeDefined();
     expect(order).toEqual(['published', 'resolved']);
-    expect(room.messageListenerCount()).toBe(harness.readyMessageCount);
+    expect([...room.messageListenerTypes()].sort()).toEqual([...harness.readyMessageTypes].sort());
   });
 
   test.each([0, undefined, CURRENT_BALANCE_VERSION + 1])('rejects decoded balance version %s without throwing from the signal', async (balanceVersion) => {

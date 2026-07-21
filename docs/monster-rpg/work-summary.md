@@ -1,5 +1,36 @@
 # Monster RPG Work Summary
 
+## 2026-07-21 - Issue #64 Authority Cutover Validation (phase 2C)
+
+- Separated aggregate and roster revision tracking in the client so wild and guarded-farm battle claims present the canonical Active Party revision.
+- Updated the Phase 4 SDK check to provision battle-ready canonical parties through authority commands and exercise credentialed two-client Location/Battle flows without client-owned Creature data.
+- Verified the full SDK flow, including authoritative claim, battle settlement, encounter release/cooldown, and explicit rejection reporting.
+
+## 2026-07-21 - Issue #64 Security Amendment (S64.1–S64.5)
+
+- Added bounded guest credential TTL verification and same-sub renewal on valid AccountRoom joins.
+- Made production transport fail closed around direct TLS or exact trusted-proxy HTTP/WebSocket validation.
+- Replaced forgeable exports with rotating-key HMAC envelopes; manual import is account-bound and create-if-absent only. Process-local persistence cannot retain replay high-water marks across restart, and retired keys revoke old transfers.
+
+## 2026-07-21 - Issue #64 Client authority wiring (phase 2B)
+
+- Added AccountRoom SDK connection, guest-credential storage, canonical snapshot adoption, and credentialed Location/Battle joins.
+- Profile creation now bootstraps through AccountRoom; a pre-authority browser save is offered only as the first legacy import.
+- Normalized AccountRoom legacy-import replies to the typed authority-result envelope.
+
+## 2026-07-21 - Issue #64 Authority Room Wiring (phase 2A)
+
+- Added an Account Room that issues or verifies rotating guest credentials, reports canonical authority readiness, and routes typed save commands through the server authority aggregate.
+- Location and Battle joins now require a verified credential and derive identity from its authenticated subject; Location claims use canonical active-party/farm reads rather than supplied Creature or Farm projections.
+- Terminal battle results now settle once through the canonical authority reward/HP reducer before Location cleanup. The repository remains process-local and is not durable, multi-process, or deploy-safe.
+- Guarded-theft settlement now retries a bounded three times on aggregate races and commits attacker/owner changes through one multi-record compare-and-exchange; canonical farm lookup is repository-backed.
+
+## 2026-07-20 - Issue #64 Authority Core (phase 1)
+
+- Added server-only rotating guest credentials, versioned authority command protocol, process-local canonical aggregate repository, command revision/idempotency seam, authenticated transfer envelopes, and one-time legacy ownership rebind/import.
+- Added `freezeReadyActiveParty` as the battle handoff seam: it requires exact canonical Active Party ordering, current roster revision, uniform authenticated ownership, and ready Creatures, then returns a frozen deep clone.
+- Deliberately deferred Account/Location/Battle room integration, client credential storage/SDK wiring, authoritative battle settlement, and durable repository deployment to later phases.
+
 ## 2026-07-20 - Deterministic Creature Stat Growth
 
 - Added append-only Creature stat-growth basis and event history, with deterministic default growth and opt-in rarity-weighted random future growth.

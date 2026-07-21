@@ -50,6 +50,8 @@ import {
 } from '../battleRegistry';
 import { LocationPlayerSchema, LocationStateSchema, WildEncounterSchema } from '../schema/LocationState';
 import { getGeneratedMapForServer } from '../generatedMapAdapter';
+import { verifyGuestCredential } from '../auth/guestCredentials';
+import { guestCredentialConfig, guestCredentialTtlSeconds, playerAuthority } from '../authority/runtime';
 
 const avatarIds = new Set<AvatarId>(['scout', 'ranger', 'keeper']);
 const directions = new Set<Direction>(['north', 'east', 'south', 'west']);
@@ -113,12 +115,15 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
     this.onMessage('claimGuardedFarmTheft', (client, payload: ClaimGuardedFarmTheftMessage) => {
       this.handleClaimGuardedFarmTheft(client, payload);
     });
+    this.onMessage('attemptFarmTheft', (client, payload: unknown) => {
+      void this.handleAttemptFarmTheft(client, payload);
+    });
     this.onMessage('resolveWildEncounter', (client, payload: ResolveWildEncounterMessage) => {
       this.handleResolveWildEncounter(client, payload);
     });
   }
 
-  onJoin(client: Client, options: JoinLocationOptions) {
+  async onJoin(client: Client, options: JoinLocationOptions) {
     assertBalanceVersion(options?.balanceVersion);
     const advertisedMapSet = generatedMapRegistry.handshake();
     if (options.mapSetId !== advertisedMapSet.id || options.mapSetVersion !== advertisedMapSet.version) {
@@ -129,10 +134,13 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
       throw new ServerError(400, 'Invalid map id');
     }
 
+    const principal = authenticateLocationJoin(options?.credential);
+    const canonical = await playerAuthority.snapshot({ sub: principal.sub });
+    if (!canonical) throw new ServerError(403, JSON.stringify({ code: 'AUTHORITY_REQUIRED' }));
     const map = getGameMap(this.mapId);
     const player = new LocationPlayerSchema();
-    const profile = sanitizeProfile(options?.profile);
-    const position = resolveJoinPosition(options, profile, this.mapId);
+    const profile = canonical.save.profile;
+    const position = resolveCanonicalJoinPosition(options, canonical.save.position, profile, this.mapId);
 
     player.profile.id = profile.playerId;
     player.profile.schemaVersion = profile.schemaVersion;
@@ -190,7 +198,7 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
     player.position.facing = result.state.position.facing;
   }
 
-  private handleClaimWildEncounter(client: Client, payload: ClaimWildEncounterMessage) {
+  private async handleClaimWildEncounter(client: Client, payload: ClaimWildEncounterMessage) {
     const encounterId = typeof payload?.encounterId === 'string' ? payload.encounterId : '';
     const encounter = this.state.encounters.get(encounterId);
     const player = this.state.players.get(client.sessionId);
@@ -222,9 +230,10 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
       return;
     }
 
-    const activeCreature = sanitizeBattleCreature(payload?.activeCreature, player.profile.id, encounter.speciesId);
+    const frozen = await this.freezeClaimParty(client, payload?.activePartyCreatureIds, payload?.expectedRosterRevision);
+    const activeCreature = frozen?.creatures[0];
     if (!activeCreature) {
-      client.send('wildEncounterClaimRejected', { encounterId, reason: 'no-ready-creature' });
+      client.send('wildEncounterClaimRejected', { encounterId, reason: 'ROSTER_UNAVAILABLE' });
       return;
     }
 
@@ -240,7 +249,7 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
     this.battleResultCleanups.set(
       battleClaim.battleId,
       onBattleClaimResolved(battleClaim.battleId, (result) => {
-        this.finalizeBattleResult(result);
+        void playerAuthority.settleBattle({ sub: battleClaim.playerProfile.playerId }, result).finally(() => this.finalizeBattleResult(result));
       })
     );
 
@@ -258,9 +267,10 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
     });
   }
 
-  private handleClaimGuardedFarmTheft(client: Client, payload: ClaimGuardedFarmTheftMessage) {
+  private async handleClaimGuardedFarmTheft(client: Client, payload: ClaimGuardedFarmTheftMessage) {
     const player = this.state.players.get(client.sessionId);
-    const farm = sanitizeFarm(payload?.farm);
+    const farmId = typeof payload?.farmId === 'string' ? payload.farmId : '';
+    const farm = await this.loadForeignFarm(client, farmId);
 
     if (!player || !farm) {
       client.send('guardedFarmTheftClaimRejected', { farmId: farm?.id ?? '', reason: 'missing' });
@@ -282,13 +292,16 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
       return;
     }
 
-    const activeCreature = sanitizeBattleCreature(payload?.activeCreature, player.profile.id);
+    const frozen = await this.freezeClaimParty(client, payload?.activePartyCreatureIds, payload?.expectedRosterRevision);
+    const activeCreature = frozen?.creatures[0];
     if (!activeCreature) {
       client.send('guardedFarmTheftClaimRejected', { farmId: farm.id, reason: 'no-ready-creature' });
       return;
     }
 
-    const guardCreature = sanitizeGuardCreature(payload?.guardCreature, farm);
+    const owner = await playerAuthority.snapshot({ sub: farm.ownerPlayerId });
+    const guardCreatureId = farm.guardCreatureId;
+    const guardCreature = owner && guardCreatureId ? sanitizeGuardCreature(owner.save.creatures.creatures[guardCreatureId], farm) : null;
     if (!guardCreature) {
       client.send('guardedFarmTheftClaimRejected', { farmId: farm.id, reason: 'unguarded' });
       return;
@@ -305,7 +318,13 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
     this.battleResultCleanups.set(
       battleClaim.battleId,
       onBattleClaimResolved(battleClaim.battleId, (result) => {
-        this.finalizeBattleResult(result);
+        const ownerId = battleClaim.guardOwnerPlayerId;
+        const farmId = battleClaim.farmId;
+        const guardCreatureId = battleClaim.guardCreature?.id;
+        const settlement = ownerId && farmId && guardCreatureId
+          ? playerAuthority.settleGuardedTheft({ attackerId: battleClaim.playerProfile.playerId, ownerId, farmId, guardCreatureId, result })
+          : Promise.resolve(false);
+        void settlement.finally(() => this.finalizeBattleResult(result));
       })
     );
 
@@ -316,6 +335,24 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
       battleId: battleClaim.battleId,
       battleToken: battleClaim.battleToken
     });
+  }
+
+  private async handleAttemptFarmTheft(client: Client, payload: unknown) {
+    const message = payload as { farmId?: unknown; intentId?: unknown; expectedRevision?: unknown } | null;
+    const player = this.state.players.get(client.sessionId);
+    const farmId = typeof message?.farmId === 'string' ? message.farmId : '';
+    const intentId = typeof message?.intentId === 'string' ? message.intentId : '';
+    const expectedRevision = typeof message?.expectedRevision === 'number' ? message.expectedRevision : -1;
+    const farm = await this.loadForeignFarm(client, farmId);
+    if (!player || !farm || farm.mapId !== this.mapId || !isFacingFarmPosition(player.position, farm) || farm.guardCreatureId || !/^[A-Za-z0-9_-]{1,128}$/.test(intentId) || !Number.isSafeInteger(expectedRevision) || expectedRevision < 0) {
+      client.send('farmTheftResult', { status: 'rejected', code: 'REJECTED' });
+      return;
+    }
+    client.send('farmTheftResult', await playerAuthority.execute({ sub: player.profile.id }, {
+      intentId,
+      expectedRevision,
+      intent: { type: 'attemptFarmTheft', farmId }
+    }));
   }
 
   private handleResolveWildEncounter(client: Client, payload: ResolveWildEncounterMessage) {
@@ -446,6 +483,26 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
     this.battleResultCleanups.get(result.battleId)?.();
     this.battleResultCleanups.delete(result.battleId);
   }
+
+  private async freezeClaimParty(client: Client, ids: unknown, expectedRevision: unknown) {
+    const player = this.state.players.get(client.sessionId);
+    // Colyseus does not retain join options. The room binds the verified player id and reuses it as the sole principal.
+    if (!player || !Array.isArray(ids) || !ids.every((id) => typeof id === 'string') || !Number.isSafeInteger(expectedRevision) || typeof expectedRevision !== 'number') return null;
+    return playerAuthority.freezeReadyActiveParty({ principal: { sub: player.profile.id }, presentedCreatureIds: ids, expectedRosterRevision: expectedRevision });
+  }
+
+  private async loadForeignFarm(client: Client, farmId: string): Promise<FarmSaveRecord | null> {
+    const player = this.state.players.get(client.sessionId);
+    if (!player || !farmId) return null;
+    const found = await playerAuthority.findFarm(farmId);
+    return found && found.playerId !== player.profile.id ? sanitizeFarm(found.farm) : null;
+  }
+}
+
+export function authenticateLocationJoin(credential: unknown, now = Date.now(), ttlSeconds = guestCredentialTtlSeconds) {
+  const principal = verifyGuestCredential(credential, guestCredentialConfig, now, ttlSeconds);
+  if (!principal) throw new ServerError(401, 'Invalid guest credential');
+  return principal;
 }
 
 export function assertBalanceVersion(clientBalanceVersion: unknown): asserts clientBalanceVersion is number {
@@ -485,6 +542,14 @@ function resolveJoinPosition(options: JoinLocationOptions | undefined, profile: 
     throw new ServerError(500, 'Invalid room spawn');
   }
 
+  return { ...map.spawn };
+}
+
+function resolveCanonicalJoinPosition(options: JoinLocationOptions | undefined, canonicalPosition: WorldPosition, profile: PlayerProfile, roomMapId: MapId): WorldPosition {
+  if (options?.transitionId) return consumePendingTransition(options.transitionId, profile.playerId, roomMapId);
+  const map = getGameMap(roomMapId);
+  if (canonicalPosition.mapId === roomMapId && canEnterTile(map, canonicalPosition.x, canonicalPosition.y)) return { ...canonicalPosition };
+  if (!isValidSpawnPosition(roomMapId, map.spawn) || !canEnterTile(map, map.spawn.x, map.spawn.y)) throw new ServerError(500, 'Invalid room spawn');
   return { ...map.spawn };
 }
 
@@ -569,7 +634,7 @@ function sanitizeFarm(farm: FarmSaveRecord | undefined): FarmSaveRecord | null {
   };
 }
 
-function isFacingFarmPosition(position: WorldPosition, farm: FarmSaveRecord): boolean {
+export function isFacingFarmPosition(position: WorldPosition, farm: FarmSaveRecord): boolean {
   const deltaByDirection = {
     north: { x: 0, y: -1 },
     east: { x: 1, y: 0 },

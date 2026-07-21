@@ -2,7 +2,11 @@ import { strict as assert } from 'node:assert';
 import { Client, Room } from '@colyseus/sdk';
 import { matchMaker, Server } from 'colyseus';
 import { BattleRoom } from '../server/rooms/BattleRoom';
+import { AccountRoom } from '../server/rooms/AccountRoom';
 import { LocationRoom } from '../server/rooms/LocationRoom';
+import { issueGuestCredential } from '../server/auth/guestCredentials';
+import { guestCredentialConfig, playerAuthority } from '../server/authority/runtime';
+import type { AuthorityIntent, AuthoritySnapshot } from '../src/games/monster-rpg/network/authorityProtocol';
 import {
   buildingDefinitions,
   canEnterTile,
@@ -38,19 +42,32 @@ Object.defineProperty(globalThis, 'localStorage', {
 });
 
 let sdkMoveSequence = 0;
+const canonicalPlayersByProfileId = new Map<string, CanonicalPlayer>();
 
-checkSaveReset();
-checkInitialSaveStartsInHomeVillage();
-checkHomeVillageEastGateExit();
-checkOverworldVillageEntry();
-checkBuildingEntryAndExit();
-checkBlockedMovement();
-checkTapToWalkPathing();
-checkGen1SpeciesCatalog();
-checkCreatureJournalStates();
-await checkSdkMultiplayerFlow();
+interface CanonicalPlayer {
+  credential: string;
+  principal: { sub: string };
+  snapshot: AuthoritySnapshot;
+}
 
-console.log('monster-rpg phase 4 sim and SDK checks passed');
+void runChecks().catch((error: unknown) => {
+  console.error(error);
+  process.exitCode = 1;
+});
+
+async function runChecks(): Promise<void> {
+  checkSaveReset();
+  checkInitialSaveStartsInHomeVillage();
+  checkHomeVillageEastGateExit();
+  checkOverworldVillageEntry();
+  checkBuildingEntryAndExit();
+  checkBlockedMovement();
+  checkTapToWalkPathing();
+  checkGen1SpeciesCatalog();
+  checkCreatureJournalStates();
+  await checkSdkMultiplayerFlow();
+  console.log('monster-rpg phase 4 sim and SDK checks passed');
+}
 
 function checkSaveReset(): void {
   storage.setItem(
@@ -184,6 +201,7 @@ function checkCreatureJournalStates(): void {
 async function checkSdkMultiplayerFlow(): Promise<void> {
   const port = 26_700 + Math.floor(Math.random() * 200);
   const server = new Server({ greet: false });
+  server.define('account', AccountRoom);
   server.define('location', LocationRoom).filterBy(['mapId']);
   server.define('battle', BattleRoom).filterBy(['battleId']);
   await server.listen(port, '127.0.0.1');
@@ -209,9 +227,11 @@ async function checkBalanceCompatibility(endpoint: string): Promise<void> {
   assert.equal(room.state.balanceVersion, CURRENT_BALANCE_VERSION);
   const playerCount = getPlayerCount(room);
   for (const version of [0, undefined, CURRENT_BALANCE_VERSION + 1]) {
-    await assertBalanceReject(() => client.joinOrCreate('location', { mapId: 'world-map', profile: createProfile(`location-${String(version)}`), ...(version === undefined ? {} : { balanceVersion: version }) }), version);
+    const locationCredential = await credentialFor(createProfile(`location-${String(version)}`));
+    await assertBalanceReject(() => client.joinOrCreate('location', { mapId: 'world-map', credential: locationCredential, ...generatedMapIdentity(), ...(version === undefined ? {} : { balanceVersion: version }) }), version);
     assert.equal(getPlayerCount(room), playerCount);
-    await assertBalanceReject(() => client.joinOrCreate('battle', { battleId: 'missing', battleToken: 'missing', profile: createProfile(`battle-${String(version)}`), ...(version === undefined ? {} : { balanceVersion: version }) }), version);
+    const battleCredential = await credentialFor(createProfile(`battle-${String(version)}`));
+    await assertBalanceReject(() => client.joinOrCreate('battle', { battleId: 'missing', battleToken: 'missing', credential: battleCredential, ...(version === undefined ? {} : { balanceVersion: version }) }), version);
     assert.equal((await matchMaker.query({ name: 'battle' })).length, 0, 'rejected battle version must not create a room');
   }
   await leaveRoom(room);
@@ -292,16 +312,25 @@ async function checkSharedWildEncounterClaimFlow(endpoint: string): Promise<void
   const roomA = await joinLocation(clientA, 'home-village', profileA);
   const roomB = await joinLocation(clientB, 'home-village', profileB);
   const encounter = await waitForEncounter(roomA);
+  const claimant = await canonicalPlayerFor(profileA);
   const path = findPathToAdjacentFacing('home-village', getLocalPosition(roomA), encounter);
 
   assert.ok(path, `missing path to encounter ${encounter.id}`);
   await sendMoves(roomA, path.directions);
 
-  const claimed = new Promise<{ encounterId: string; speciesId: number; battleId: string; battleToken: string }>((resolve) => {
-    roomA.onMessage('wildEncounterClaimed', resolve);
+  const claimed = new Promise<{ status: 'claimed'; encounterId: string; speciesId: number; battleId: string; battleToken: string } | { status: 'rejected'; reason: string }>((resolve) => {
+    roomA.onMessage('wildEncounterClaimed', (message) => resolve({ status: 'claimed', ...message }));
+    roomA.onMessage('wildEncounterClaimRejected', (message) => resolve({ status: 'rejected', reason: message.reason }));
   });
-  roomA.send('claimWildEncounter', { encounterId: encounter.id });
+  roomA.send('claimWildEncounter', {
+    encounterId: encounter.id,
+    activePartyCreatureIds: claimant.snapshot.save.creatures.activePartyCreatureIds,
+    expectedRosterRevision: claimant.snapshot.rosterRevision
+  });
   const claimedMessage = await withTimeout(claimed, 'wild encounter claimed');
+  if (claimedMessage.status === 'rejected') {
+    assert.fail(`wild encounter claim rejected: ${claimedMessage.reason}`);
+  }
 
   assert.equal(claimedMessage.encounterId, encounter.id);
   assert.equal(typeof claimedMessage.speciesId, 'number');
@@ -316,11 +345,11 @@ async function checkSharedWildEncounterClaimFlow(endpoint: string): Promise<void
   assert.deepEqual(getLocalPosition(roomA), beforeBattleMove);
 
   await assert.rejects(
-    () =>
+    async () =>
       clientB.joinOrCreate('battle', {
         battleId: claimedMessage.battleId,
         battleToken: claimedMessage.battleToken,
-        profile: profileB,
+        credential: await credentialFor(profileB),
         balanceVersion: CURRENT_BALANCE_VERSION
       }),
     /Spectating disabled|Failed to|forbidden/i
@@ -329,8 +358,8 @@ async function checkSharedWildEncounterClaimFlow(endpoint: string): Promise<void
   const battleRoom = (await clientA.joinOrCreate('battle', {
     battleId: claimedMessage.battleId,
     battleToken: claimedMessage.battleToken,
-    profile: profileA
-    , balanceVersion: CURRENT_BALANCE_VERSION
+    credential: await credentialFor(profileA),
+    balanceVersion: CURRENT_BALANCE_VERSION
   })) as SdkRoom;
   await waitFor(() => battleRoom.state.status === 'active', 'battle room active');
   assert.equal(battleRoom.state.balanceVersion, CURRENT_BALANCE_VERSION);
@@ -367,10 +396,15 @@ async function checkSharedWildEncounterClaimFlow(endpoint: string): Promise<void
   await waitFor(() => roomA.state.encounters.get(encounter.id)?.status === 'available', 'encounter released after terminal battle');
   assert.equal(roomA.state.players.get(roomA.sessionId)?.inBattle, false);
 
+  await refreshCanonicalSnapshot(claimant);
   const rejected = new Promise<{ encounterId: string; reason: string }>((resolve) => {
     roomA.onMessage('wildEncounterClaimRejected', resolve);
   });
-  roomA.send('claimWildEncounter', { encounterId: encounter.id });
+  roomA.send('claimWildEncounter', {
+    encounterId: encounter.id,
+    activePartyCreatureIds: claimant.snapshot.save.creatures.activePartyCreatureIds,
+    expectedRosterRevision: claimant.snapshot.rosterRevision
+  });
   const rejectedMessage = await withTimeout(rejected, 'wild encounter cooldown reject');
 
   assert.equal(rejectedMessage.reason, 'cooldown');
@@ -383,9 +417,9 @@ async function checkSharedWildEncounterClaimFlow(endpoint: string): Promise<void
 async function checkInvalidMapIdRejected(endpoint: string): Promise<void> {
   const client = new Client(endpoint);
   await assert.rejects(
-    () => client.joinOrCreate('location', {
+    async () => client.joinOrCreate('location', {
       mapId: 'greenway-route',
-      profile: createProfile('invalid-map'),
+      credential: await credentialFor(createProfile('invalid-map')),
       balanceVersion: CURRENT_BALANCE_VERSION,
       ...generatedMapIdentity()
     }),
@@ -402,7 +436,7 @@ async function checkGeneratedMapSdkFlow(endpoint: string): Promise<void> {
   assert.ok(generatedRoute.collisions.length > 0, 'generated collision metadata is preserved'); assert.equal(generatedRoute.blocked.flat().some(Boolean), false, 'geometry collision is not enforced by v1 square movement');
   const start = getLocalPosition(route); const movementProbe = ([{ direction: 'north' as const, x: start.x, y: start.y - 1 }, { direction: 'east' as const, x: start.x + 1, y: start.y }, { direction: 'south' as const, x: start.x, y: start.y + 1 }, { direction: 'west' as const, x: start.x - 1, y: start.y }]).find((candidate) => canEnterTile(routeMap, candidate.x, candidate.y) && !routeMap.exits.some((exit) => exit.x === candidate.x && exit.y === candidate.y));
   assert.ok(movementProbe, 'reachable generated square-grid movement'); await sendMoves(route, [movementProbe.direction]); assert.deepEqual(getLocalPosition(route), { ...start, x: movementProbe.x, y: movementProbe.y, facing: movementProbe.direction }); await leaveRoom(route);
-  await assert.rejects(() => client.joinOrCreate('location', { mapId: 'tracer-water-town', profile: createProfile('bad-handshake'), balanceVersion: CURRENT_BALANCE_VERSION, mapSetId: 'wrong', mapSetVersion: '0' }), /map-set version mismatch|409|Failed to/);
+  await assert.rejects(async () => client.joinOrCreate('location', { mapId: 'tracer-water-town', credential: await credentialFor(createProfile('bad-handshake')), balanceVersion: CURRENT_BALANCE_VERSION, mapSetId: 'wrong', mapSetVersion: '0' }), /map-set version mismatch|409|Failed to/);
 }
 
 async function waitForEncounter(room: SdkRoom): Promise<EncounterTarget> {
@@ -452,13 +486,49 @@ async function joinLocation(
 ): Promise<SdkRoom> {
   const room = (await client.joinOrCreate('location', {
     mapId,
-    profile,
+    credential: await credentialFor(profile),
     balanceVersion: CURRENT_BALANCE_VERSION,
     ...generatedMapIdentity(),
     ...(transitionId ? { transitionId } : {})
   })) as SdkRoom;
   await waitFor(() => room.state.mapId === mapId, `join ${mapId}`);
   return room;
+}
+
+/** Issues one credential and prepares the canonical ready party through public authority commands. */
+async function credentialFor(profile: PlayerProfile): Promise<string> {
+  return (await canonicalPlayerFor(profile)).credential;
+}
+
+async function canonicalPlayerFor(profile: PlayerProfile): Promise<CanonicalPlayer> {
+  const existing = canonicalPlayersByProfileId.get(profile.playerId);
+  if (existing) return existing;
+
+  const issued = issueGuestCredential(guestCredentialConfig);
+  const player: CanonicalPlayer = {
+    credential: issued.credential,
+    principal: { sub: issued.claims.sub },
+    snapshot: await playerAuthority.bootstrapProfile({ sub: issued.claims.sub }, { name: profile.name, avatar: profile.avatar })
+  };
+  await executeCanonicalCommand(player, 'complete-elder-dialog', { type: 'completeElderDialog' });
+  await executeCanonicalCommand(player, 'convert-starter-creatures', { type: 'convertCreatureCard', starter: true });
+  assert.ok(player.snapshot.save.creatures.activePartyCreatureIds.length > 0, `canonical party missing for ${profile.playerId}`);
+  canonicalPlayersByProfileId.set(profile.playerId, player);
+  return player;
+}
+
+async function executeCanonicalCommand(player: CanonicalPlayer, intentId: string, intent: AuthorityIntent): Promise<void> {
+  const result = await playerAuthority.execute(player.principal, { intentId, expectedRevision: player.snapshot.revision, intent });
+  if (result.status === 'rejected') {
+    assert.fail(`authority setup rejected ${intent.type}: ${result.code}`);
+  }
+  player.snapshot = result.snapshot;
+}
+
+async function refreshCanonicalSnapshot(player: CanonicalPlayer): Promise<void> {
+  const snapshot = await playerAuthority.snapshot(player.principal);
+  assert.ok(snapshot, `missing canonical snapshot for ${player.principal.sub}`);
+  player.snapshot = snapshot;
 }
 
 function generatedMapIdentity() { const mapSet = generatedMapRegistry.handshake(); return { mapSetId: mapSet.id, mapSetVersion: mapSet.version }; }

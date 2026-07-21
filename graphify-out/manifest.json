@@ -50,8 +50,8 @@
     "semantic_hash": ""
   },
   "scripts/monster-rpg-phase4-checks.ts": {
-    "mtime": 1784584914.8164454,
-    "ast_hash": "d8e6fa2729942e3ffbb78c52177fc520",
+    "mtime": 1784619809.18265,
+    "ast_hash": "f686a4acee8b892422700b25f7b94e6a",
     "semantic_hash": ""
   },
   "scripts/slice-monster-rpg-ai-assets.mjs": {
@@ -65,8 +65,8 @@
     "semantic_hash": ""
   },
   "server/battleRegistry.ts": {
-    "mtime": 1784592129.1900203,
-    "ast_hash": "58fe6ee28782af0d28c9f53588cfd03d",
+    "mtime": 1784616963.0771122,
+    "ast_hash": "09abcdd23b054b8650071f9607ff6c66",
     "semantic_hash": ""
   },
   "server/generatedMapAdapter.ts": {
@@ -75,13 +75,13 @@
     "semantic_hash": ""
   },
   "server/index.ts": {
-    "mtime": 1784572896.1191514,
-    "ast_hash": "bb9e86ffda35ac1765d34853111bd113",
+    "mtime": 1784621701.497405,
+    "ast_hash": "9238e3a9379e64c2f10ef529ff5b0d6a",
     "semantic_hash": ""
   },
   "server/rooms/BattleRoom.ts": {
-    "mtime": 1784592129.192544,
-    "ast_hash": "e1bee4fa40a92f52a2303304f5514122",
+    "mtime": 1784617232.188768,
+    "ast_hash": "75364c44910638e1637d881e111e0b98",
     "semantic_hash": ""
   },
   "server/rooms/HomeVillageRoom.ts": {
@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "server/rooms/LocationRoom.ts": {
-    "mtime": 1784592129.1966307,
-    "ast_hash": "da3d29a8188bffa86f9eac3bf9ac2f7c",
+    "mtime": 1784618568.1390862,
+    "ast_hash": "cb9b5e8e12a55a0c5f4e2a77d0e786d7",
     "semantic_hash": ""
   },
   "server/rooms/balanceVersion.test.ts": {
@@ -210,8 +210,8 @@
     "semantic_hash": ""
   },
   "src/games/monster-rpg/MonsterRpgGame.tsx": {
-    "mtime": 1784592129.2009757,
-    "ast_hash": "0e5ea608b4e08f8daf85a041e5ab11ea",
+    "mtime": 1784621830.3851795,
+    "ast_hash": "ffbb69f9c99464dde11768d2bf2c0cd8",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/client/assets/licensedAssetManifest.json": {
@@ -245,18 +245,18 @@
     "semantic_hash": ""
   },
   "src/games/monster-rpg/network/colyseusClient.test.ts": {
-    "mtime": 1784592241.1431324,
-    "ast_hash": "c224acdce89219a9df344b6789c60f97",
+    "mtime": 1784618920.4859543,
+    "ast_hash": "3ec23f04a26693d8c1b23bba3f90da59",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/network/colyseusClient.ts": {
-    "mtime": 1784572896.2142863,
-    "ast_hash": "6f6579bef48364c2d1f2af166a89017f",
+    "mtime": 1784620846.12015,
+    "ast_hash": "291753023d219f5cf47f36a6fee58d10",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/network/index.ts": {
-    "mtime": 1784572896.214833,
-    "ast_hash": "0fe07723568ab21f3d65288b496b94f4",
+    "mtime": 1784617463.9227562,
+    "ast_hash": "1dca181838ed5f781d75160f5037e54e",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/battleRewards.ts": {
@@ -270,8 +270,8 @@
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/battles.ts": {
-    "mtime": 1784592129.2074974,
-    "ast_hash": "0b74250f7f66f413fc03cf9af6393052",
+    "mtime": 1784616961.806914,
+    "ast_hash": "f5d4562aa0c2c85227b7c843b49999d2",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/cards.test.ts": {
@@ -440,8 +440,8 @@
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/saveState.ts": {
-    "mtime": 1784592283.8676894,
-    "ast_hash": "1c21e03a5974e49bb46da4d9df653ae9",
+    "mtime": 1784592533.6720266,
+    "ast_hash": "4148f78001433900e3b0c2118bb29e0e",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/settings.test.ts": {
@@ -485,8 +485,8 @@
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/types.ts": {
-    "mtime": 1784592130.0472665,
-    "ast_hash": "72aba811e42d8dec98b5debf82ba2d25",
+    "mtime": 1784617925.4392502,
+    "ast_hash": "c770ba95cecb7140100faae829214458",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/villageMap.ts": {
@@ -1677,6 +1677,76 @@
   "src/games/monster-rpg/client/assets/vendor/python-monsters/graphics/ui/sword_highlight.png": {
     "mtime": 1784572896.211199,
     "ast_hash": "bf8bcdb8132a03ef0ff28309ccca09a7",
+    "semantic_hash": ""
+  },
+  "server/auth/guestCredentials.test.ts": {
+    "mtime": 1784621276.1731415,
+    "ast_hash": "67a90240932214e761f8d951bfffe35f",
+    "semantic_hash": ""
+  },
+  "server/auth/guestCredentials.ts": {
+    "mtime": 1784621642.5248542,
+    "ast_hash": "77e911d841e17ac307dfe76d15cefe0c",
+    "semantic_hash": ""
+  },
+  "server/authority/playerAuthority.test.ts": {
+    "mtime": 1784621516.7243924,
+    "ast_hash": "562205d97f374d6405ab89bb526b6614",
+    "semantic_hash": ""
+  },
+  "server/authority/playerAuthority.ts": {
+    "mtime": 1784621516.0295851,
+    "ast_hash": "ce4ba30aa8e769a7834a6723fbaeb477",
+    "semantic_hash": ""
+  },
+  "server/authority/playerRepository.ts": {
+    "mtime": 1784621077.37851,
+    "ast_hash": "81011a7635c7ca2f209a7ee5248c305a",
+    "semantic_hash": ""
+  },
+  "server/authority/runtime.ts": {
+    "mtime": 1784620751.8756673,
+    "ast_hash": "204a1e64acf9440343775ce4f7792650",
+    "semantic_hash": ""
+  },
+  "server/rooms/AccountRoom.ts": {
+    "mtime": 1784620786.594535,
+    "ast_hash": "0e6132d992f1ddcdadacb7c880e1c7f9",
+    "semantic_hash": ""
+  },
+  "server/rooms/authorityRooms.test.ts": {
+    "mtime": 1784618504.1972926,
+    "ast_hash": "eb5c7a9a356eea9d2d58f74ac17839ee",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/network/authorityProtocol.test.ts": {
+    "mtime": 1784618674.370648,
+    "ast_hash": "568b50800445dd6344088b56dc72966f",
+    "semantic_hash": ""
+  },
+  "src/games/monster-rpg/network/authorityProtocol.ts": {
+    "mtime": 1784621611.388747,
+    "ast_hash": "35beac7e03984166cc6d8252e78b070d",
+    "semantic_hash": ""
+  },
+  "server/authority/authenticatedTransfer.test.ts": {
+    "mtime": 1784620867.3078883,
+    "ast_hash": "1677b53fc0f627e9df6aebba74a705e0",
+    "semantic_hash": ""
+  },
+  "server/authority/authenticatedTransfer.ts": {
+    "mtime": 1784621610.3177211,
+    "ast_hash": "3c97061970e504a12df504dfcb37f82b",
+    "semantic_hash": ""
+  },
+  "server/security/transportSecurity.test.ts": {
+    "mtime": 1784621715.759945,
+    "ast_hash": "44bb66286582c73d52e3d61481e527a9",
+    "semantic_hash": ""
+  },
+  "server/security/transportSecurity.ts": {
+    "mtime": 1784621643.0730472,
+    "ast_hash": "597266ec10e4e7d1d8fdb150caf5c6f7",
     "semantic_hash": ""
   }
 }

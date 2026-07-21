@@ -18,6 +18,7 @@ import type {
   WorldPosition
 } from '../sim';
 import { CURRENT_BALANCE_VERSION, generatedMapRegistry, getGameMap, isMapId, MONSTER_RPG_SCHEMA_VERSION } from '../sim';
+import type { AuthoritySnapshot, SaveCommand, SaveCommandResult } from './authorityProtocol';
 
 const DEFAULT_SERVER_URL = 'http://127.0.0.1:2567';
 const ROOM_NAME = 'location';
@@ -40,6 +41,7 @@ interface ConnectionHandlers {
   onWildEncounterClaimRejected: (message: { encounterId: string; reason: string }) => void;
   onGuardedFarmTheftClaimed: (message: GuardedFarmTheftClaimedMessage) => void;
   onGuardedFarmTheftClaimRejected: (message: { farmId: string; reason: string }) => void;
+  onFarmTheftResult: (result: SaveCommandResult) => void;
 }
 
 export interface MultiplayerConnection {
@@ -47,6 +49,7 @@ export interface MultiplayerConnection {
   sendMoveIntent: (message: MoveIntentMessage) => void;
   sendClaimWildEncounter: (message: ClaimWildEncounterMessage) => void;
   sendClaimGuardedFarmTheft: (message: ClaimGuardedFarmTheftMessage) => void;
+  sendAttemptFarmTheft: (message: { farmId: string; intentId: string; expectedRevision: number }) => void;
   sendResolveWildEncounter: (message: ResolveWildEncounterMessage) => void;
   leave: (options?: { silent?: boolean }) => void;
 }
@@ -55,6 +58,24 @@ export interface BattleConnection {
   sendAttack: (message: BattleAttackIntentMessage) => void;
   sendRun: () => void;
   leave: (options?: { silent?: boolean }) => void;
+}
+
+export interface AccountReady {
+  protocolVersion: 1;
+  status: 'created' | 'authenticated';
+  credential?: string;
+  snapshot?: AuthoritySnapshot;
+}
+
+export interface AccountConnection {
+  readonly ready: AccountReady;
+  sendCommand: (command: SaveCommand) => Promise<SaveCommandResult>;
+  bootstrapProfile: (profile: { name: string; avatar: 'scout' | 'ranger' | 'keeper' }) => Promise<AuthoritySnapshot>;
+  /** Internal first-bootstrap migration only; never expose this as a manual import UI action. */
+  bootstrapLegacySave: (payload: string) => Promise<SaveCommandResult>;
+  exportAuthenticatedSave: () => Promise<string>;
+  importAuthenticatedSave: (payload: string) => Promise<AuthoritySnapshot>;
+  leave: () => void;
 }
 
 interface BattleConnectionHandlers {
@@ -95,18 +116,96 @@ export async function connectToLocation(
       room.onMessage('wildEncounterClaimed', (message: WildEncounterClaimedMessage) => handlers.onWildEncounterClaimed(message)),
       room.onMessage('wildEncounterClaimRejected', (message: { encounterId: string; reason: string }) => handlers.onWildEncounterClaimRejected(message)),
       room.onMessage('guardedFarmTheftClaimed', (message: GuardedFarmTheftClaimedMessage) => handlers.onGuardedFarmTheftClaimed(message)),
-      room.onMessage('guardedFarmTheftClaimRejected', (message: { farmId: string; reason: string }) => handlers.onGuardedFarmTheftClaimRejected(message))
+      room.onMessage('guardedFarmTheftClaimRejected', (message: { farmId: string; reason: string }) => handlers.onGuardedFarmTheftClaimRejected(message)),
+      room.onMessage('farmTheftResult', (result: SaveCommandResult) => handlers.onFarmTheftResult(result))
     ],
     createConnection: (room, leave): MultiplayerConnection => ({
       sessionId: room.sessionId,
       sendMoveIntent: (message) => { room.send('moveIntent', message); },
       sendClaimWildEncounter: (message) => { room.send('claimWildEncounter', message); },
       sendClaimGuardedFarmTheft: (message) => { room.send('claimGuardedFarmTheft', message); },
+      sendAttemptFarmTheft: (message) => { room.send('attemptFarmTheft', message); },
       sendResolveWildEncounter: (message) => { room.send('resolveWildEncounter', message); },
       leave
     }),
     onStatus: handlers.onStatus,
     roomErrorLabel: 'multiplayer room'
+  });
+}
+
+/** Connects the canonical authority room before any location or battle room. */
+export async function connectToAccount(credential?: string): Promise<AccountConnection> {
+  const client = new Client(getServerUrl());
+  const room = await client.joinOrCreate('account', credential ? { credential } : {});
+  return new Promise<AccountConnection>((resolve, reject) => {
+    let ready: AccountReady | undefined;
+    let closed = false;
+    const pending: Array<(result: SaveCommandResult) => void> = [];
+    const transfers = new Map<string, { resolve: (value: unknown) => void; reject: (error: Error) => void }>();
+    let transferSequence = 0;
+    const fail = (error: Error) => {
+      if (closed) return;
+      closed = true;
+      reject(error);
+      while (pending.length) pending.shift()!({ status: 'rejected', code: 'AUTHORITY_REQUIRED' });
+      transfers.forEach(({ reject: rejectTransfer }) => rejectTransfer(error)); transfers.clear();
+    };
+    const leave = () => { if (!closed) { closed = true; void room.leave().catch(() => undefined); } };
+    room.onError((code: number, message?: string) => fail(new Error(`account room error ${code}: ${message ?? 'unknown error'}`)));
+    room.onLeave((code: number, reason?: string) => fail(new Error(`account room left ${code}: ${reason ?? 'unknown reason'}`)));
+    room.onMessage('authorityResult', (result: SaveCommandResult) => pending.shift()?.(result));
+    room.onMessage('authenticatedTransferResult', (message: { requestId?: string; result?: unknown; error?: string }) => {
+      if (!message?.requestId) return;
+      const pendingTransfer = transfers.get(message.requestId); if (!pendingTransfer) return;
+      transfers.delete(message.requestId);
+      message.error ? pendingTransfer.reject(new Error(message.error)) : pendingTransfer.resolve(message.result);
+    });
+    room.onMessage('authorityReady', (message: AccountReady) => {
+      if (!message || message.protocolVersion !== 1 || (message.status !== 'created' && message.status !== 'authenticated')) {
+        fail(new Error('Unsupported authority protocol'));
+        return;
+      }
+      ready = message;
+      resolve({
+        ready,
+        sendCommand(command) {
+          if (closed) return Promise.resolve({ status: 'rejected', code: 'AUTHORITY_REQUIRED' });
+          return new Promise((complete) => { pending.push(complete); room.send('saveCommand', command); });
+        },
+        bootstrapProfile(profile) {
+          if (closed) return Promise.reject(new Error('account room is closed'));
+          return new Promise((complete, rejectProfile) => {
+            const timeout = setTimeout(() => { cleanup(); rejectProfile(new Error('Timed out bootstrapping authority profile')); }, 10_000);
+            const cleanup = room.onMessage('authorityReady', (next: AccountReady) => {
+              if (next.snapshot) { clearTimeout(timeout); cleanup(); complete(next.snapshot); }
+            });
+            room.send('bootstrapProfile', profile);
+          });
+        },
+        exportAuthenticatedSave() {
+          return transfer('exportAuthenticatedSave').then((value) => {
+            if (typeof value !== 'string') throw new Error('Invalid authenticated export response');
+            return value;
+          });
+        },
+        importAuthenticatedSave(payload) {
+          return transfer('importAuthenticatedSave', payload).then((value) => {
+            if (!value || typeof value !== 'object') throw new Error('Invalid authenticated import response');
+            return value as AuthoritySnapshot;
+          });
+        },
+        bootstrapLegacySave(payload) {
+          if (closed) return Promise.resolve({ status: 'rejected', code: 'AUTHORITY_REQUIRED' });
+          return new Promise((complete) => { pending.push(complete); room.send('importLegacySave', payload); });
+        },
+        leave
+      });
+      function transfer(type: 'exportAuthenticatedSave' | 'importAuthenticatedSave', payload?: string): Promise<unknown> {
+        if (closed) return Promise.reject(new Error('account room is closed'));
+        const requestId = `transfer-${Date.now()}-${++transferSequence}`;
+        return new Promise((resolveTransfer, rejectTransfer) => { transfers.set(requestId, { resolve: resolveTransfer, reject: rejectTransfer }); room.send(type, { requestId, ...(payload === undefined ? {} : { payload }) }); });
+      }
+    });
   });
 }
 
