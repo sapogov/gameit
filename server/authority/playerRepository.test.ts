@@ -146,4 +146,19 @@ describe('growth audit ledger', () => {
     expect(results.filter(Boolean)).toHaveLength(1);
     expect((await repository.read('player-1'))?.revision).toBe(1);
   });
+
+  test('permits only the canonical trainer battle lock lifecycle', () => {
+    const initial = emptyAggregate();
+    const reserved = { ...initial, revision: 1, activeBattle: { battleId: 'battle-1', kind: 'trainer' as const, trainerId: 'route-scout-1', mapId: 'tracer-world-route', locationRoomId: 'location-1', phase: 'reserved' as const, reservedAt: '2026-07-21T00:00:00.000Z' } };
+    const active = { ...reserved, revision: 2, activeBattle: { ...reserved.activeBattle, phase: 'active' as const } };
+    const released = { ...initial, revision: 2 };
+    const settled = { ...initial, revision: 3, grantReceipts: { 'battle-1': 3 } };
+    expect(isValidLedgerTransition(initial, reserved)).toBe(true);
+    expect(isValidLedgerTransition(reserved, active)).toBe(true);
+    expect(isValidLedgerTransition(reserved, released)).toBe(true);
+    expect(isValidLedgerTransition(active, settled)).toBe(true);
+    expect(isValidLedgerTransition(active, { ...initial, revision: 3 })).toBe(false);
+    expect(isValidLedgerTransition(reserved, { ...reserved, revision: 2, activeBattle: { ...reserved.activeBattle, battleId: 'replacement' } })).toBe(false);
+    expect(isValidAggregate({ ...reserved, activeBattle: { ...reserved.activeBattle, reservedAt: '2026-07-21T00:00:00Z' } })).toBe(false);
+  });
 });

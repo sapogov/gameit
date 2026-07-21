@@ -7,8 +7,10 @@ import type {
   MonsterRpgSaveState,
   PlayerProfile,
   BattleRewardBundle,
-  WildEncounterOutcome
+  WildEncounterOutcome,
+  BattleCreatureOutcome
 } from './types';
+import { getTrainerDefinition } from './trainers';
 import { generateWildBattleRewards } from './battleRewards';
 import { createRng, rollStats, selectCreatureAttacks } from './creatureLifecycle';
 import { canCreatureUseRole } from './creatureParty';
@@ -36,6 +38,7 @@ export interface BattleResolution {
   opponentCreatureFainted: boolean;
   rewardGranted: boolean;
   rewards?: BattleRewardBundle;
+  playerPartyOutcomes: BattleCreatureOutcome[];
 }
 
 export function getFirstBattleReadyCreature(state: MonsterRpgSaveState): CreatureSaveRecord | null {
@@ -146,6 +149,35 @@ export function createGuardBattleRoomState({
   });
 }
 
+export function createTrainerBattleRoomState({ battleId, trainerId, playerProfile, playerParty }: {
+  battleId: string; trainerId: string; playerProfile: PlayerProfile; playerParty: readonly CreatureSaveRecord[];
+}): BattleRoomState {
+  const trainer = getTrainerDefinition(trainerId);
+  const playerCreature = playerParty.find((creature) => canCreatureUseRole(creature, 'battle'));
+  if (!trainer || !playerCreature) throw new Error('Invalid trainer battle seed');
+  const team = trainer.team.map((entry, index) => createWildBattleCreature(entry.speciesId, `${battleId}:${index}`, entry.level));
+  return withValidAttackIds({
+    battleId, encounterId: `trainer:${trainerId}`, battleKind: 'trainer', wildSpeciesId: team[0].speciesId,
+    trainerId, playerActiveCreatureId: playerCreature.id, trainerActiveCreatureId: team[0].id,
+    phase: 'player-action', remainingTrainerSwitches: trainer.maxProactiveSwitches,
+    status: 'active', turn: 1, canRun: false, runAttempts: 0,
+    player: { kind: 'player', playerId: playerProfile.playerId, name: playerProfile.name, activeCreature: toBattleCreature(playerCreature) },
+    enemy: { kind: 'enemy', playerId: trainerId, name: trainer.name, activeCreature: team[0] },
+    lastLog: [{ id: `${battleId}:start`, message: `${trainer.name} challenges you.` }], validPlayerAttackIds: [], rewardGranted: false,
+    playerParty: playerParty.map(toBattleCreature), trainerParty: team
+  });
+}
+
+export function switchPlayerBattleCreature(state: BattleRoomState, creatureId: string, expectedTurn: number): BattleActionResult {
+  if (state.status !== 'active') return { ok: false, state, reason: 'battle-ended' };
+  if (expectedTurn !== state.turn) return { ok: false, state, reason: 'invalid-attack' };
+  const target = state.playerParty?.find((creature) => creature.id === creatureId);
+  if (!target || target.fainted || target.ownerPlayerId !== state.player.playerId || target.id === state.player.activeCreature.id) return { ok: false, state, reason: 'invalid-attack' };
+  const switched = replaceActive(state, 'player', target, state.phase === 'forced-switch' ? state.turn : state.turn + 1);
+  if (state.phase === 'forced-switch') return { ok: true, state: withValidAttackIds({ ...switched, phase: 'player-action' }) };
+  return { ok: true, state: withValidAttackIds(advanceAfterEnemyAction({ ...switched, phase: 'player-action' }, new Date())) };
+}
+
 export function choosePlayerBattleAttack(
   state: BattleRoomState,
   attackId: string,
@@ -162,12 +194,15 @@ export function choosePlayerBattleAttack(
   let next = appendBattleLog(state, `${state.player.activeCreature.id} used ${playerAttack.name}.`, now);
   next = applyAttack(next, 'player', playerAttack);
   if (next.enemy.activeCreature.fainted) {
+    const reserve = next.trainerParty?.find((creature) => !creature.fainted && creature.id !== next.enemy.activeCreature.id);
+    if (reserve) return { ok: true, state: withValidAttackIds(replaceActive(next, 'enemy', reserve, next.turn + 1)) };
     return completeBattle(next, 'defeated', true, now);
   }
 
   next = advanceAfterEnemyAction(next, now);
 
   if (next.player.activeCreature.fainted) {
+    if (next.playerParty?.some((creature) => !creature.fainted && creature.id !== next.player.activeCreature.id)) return { ok: true, state: withValidAttackIds({ ...next, phase: 'forced-switch' }) };
     return completeBattle(next, 'lost', false, now);
   }
 
@@ -258,6 +293,7 @@ export function toBattleResult(state: BattleRoomState): BattleResolution | null 
     playerCreatureFainted: state.player.activeCreature.fainted,
     opponentCreatureHp: state.enemy.activeCreature.hp,
     opponentCreatureFainted: state.enemy.activeCreature.fainted,
+    playerPartyOutcomes: getPlayerPartyOutcomes(state),
     rewardGranted: state.rewardGranted,
     rewards: state.rewardGranted ? state.rewards : undefined
   };
@@ -277,7 +313,7 @@ function completeBattle(
   const next = withValidAttackIds({
     ...appendBattleLog(state, getCompletionMessage(outcome), now),
     status: statusByOutcome[outcome],
-    rewardGranted: state.rewardGranted || (grantReward && state.battleKind === 'wild'),
+    rewardGranted: state.rewardGranted || (grantReward && state.battleKind !== 'guard-theft'),
     rewards: grantReward && state.battleKind === 'wild' && !state.rewardGranted ? generateWildBattleRewards(state) : state.rewards
   });
 
@@ -303,23 +339,16 @@ function applyAttack(state: BattleRoomState, attacker: 'player' | 'enemy', attac
     fainted: nextHp === 0
   };
 
-  if (attacker === 'player') {
-    return {
-      ...state,
-      player: { ...state.player, activeCreature: nextSource },
-      enemy: { ...state.enemy, activeCreature: nextTarget }
-    };
-  }
-
-  return {
-    ...state,
-    player: { ...state.player, activeCreature: nextTarget },
-    enemy: { ...state.enemy, activeCreature: nextSource }
-  };
+  return attacker === 'player' ? replaceActive(replaceActive(state, 'player', nextSource), 'enemy', nextTarget) : replaceActive(replaceActive(state, 'player', nextTarget), 'enemy', nextSource);
 }
 
 function advanceAfterEnemyAction(state: BattleRoomState, now: Date): BattleRoomState {
   let next = state;
+  const trainer = state.battleKind === 'trainer' && state.trainerId ? getTrainerDefinition(state.trainerId) : undefined;
+  const reserve = next.trainerParty?.find((creature) => !creature.fainted && creature.id !== next.enemy.activeCreature.id);
+  if (trainer && reserve && next.enemy.activeCreature.hp / next.enemy.activeCreature.maxHp <= trainer.proactiveSwitchHpRatio && (next.remainingTrainerSwitches ?? 0) > 0) {
+    return { ...replaceActive(next, 'enemy', reserve, next.turn + 1), remainingTrainerSwitches: (next.remainingTrainerSwitches ?? 0) - 1 };
+  }
   const enemyAttack = chooseEnemyAttack(next);
   if (enemyAttack) {
     next = appendBattleLog(next, `${next.enemy.name} used ${enemyAttack.name}.`, now);
@@ -332,6 +361,14 @@ function advanceAfterEnemyAction(state: BattleRoomState, now: Date): BattleRoomS
     ...recoverFatigue(next),
     turn: next.turn + 1
   };
+}
+
+function replaceActive(state: BattleRoomState, side: 'player' | 'enemy', creature: BattleCreatureState, turn = state.turn): BattleRoomState {
+  const partyKey = side === 'player' ? 'playerParty' : 'trainerParty';
+  const participantKey = side === 'player' ? 'player' : 'enemy';
+  const idKey = side === 'player' ? 'playerActiveCreatureId' : 'trainerActiveCreatureId';
+  const party = state[partyKey]?.map((candidate) => candidate.id === creature.id ? creature : candidate);
+  return { ...state, turn, [participantKey]: { ...state[participantKey], activeCreature: creature }, [partyKey]: party, [idKey]: creature.id };
 }
 
 function getBattleDamage(
@@ -414,7 +451,7 @@ function toBattleCreature(creature: CreatureSaveRecord): BattleCreatureState {
   };
 }
 
-function createWildBattleCreature(speciesId: number, battleId: string): BattleCreatureState {
+function createWildBattleCreature(speciesId: number, battleId: string, level = 1): BattleCreatureState {
   const species = getSpeciesById(speciesId) ?? getSpeciesById(1);
   if (!species) throw new Error(`Unknown wild battle species ${speciesId}`);
 
@@ -422,10 +459,10 @@ function createWildBattleCreature(speciesId: number, battleId: string): BattleCr
   const stats = rollStats(species, rng);
   const attacks = selectCreatureAttacks(species, species.rarity, stats, 4, rng);
   return {
-    id: `wild-${species.slug}`,
+    id: `wild-${species.slug}-${hashString(battleId).toString(36)}`,
     ownerPlayerId: 'wild',
     speciesId: species.id,
-    level: 1,
+    level,
     stats,
     attacks,
     hp: stats.hp,
@@ -434,6 +471,15 @@ function createWildBattleCreature(speciesId: number, battleId: string): BattleCr
     maxFatigue: Math.max(24, stats.stamina * 2),
     fainted: false
   };
+}
+
+function getPlayerPartyOutcomes(state: BattleRoomState): BattleCreatureOutcome[] {
+  const party = state.playerParty ?? [state.player.activeCreature];
+  return party.map((creature) => ({
+    creatureId: creature.id,
+    hp: creature.hp,
+    fainted: creature.fainted
+  }));
 }
 
 function hashString(value: string): number {

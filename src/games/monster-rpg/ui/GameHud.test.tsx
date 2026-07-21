@@ -30,7 +30,7 @@ test('renders item details, capacity, inbox contents, and bounded inventory cont
       onCreatureLabelModeChange={noop} onDiscardItem={noop} onExport={noop} onHatchEgg={noop}
       onHospitalHeal={noop} onImport={noop} onMoveCreatureToActive={noop} onMoveCreatureToStorage={noop}
       onPrepareStationTravel={noop} onReset={noop} onReviveCreature={noop}
-      onRouteCardToElder={noop} onRunBattle={noop} onUpgradeFarm={noop} packOpenTrace={null}
+      onRouteCardToElder={noop} onRunBattle={noop} onBattleSwitchCreature={noop} onUpgradeFarm={noop} packOpenTrace={null}
       pendingStationDestinationId={null} playerCount={1} saveState={saveState}
     />
   );

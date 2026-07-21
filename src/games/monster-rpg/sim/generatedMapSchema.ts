@@ -1,7 +1,7 @@
 /** Build-time TMX output. This module deliberately contains no XML/TMX dependency. */
 export const GENERATED_MAP_SCHEMA_VERSION = 1 as const;
 
-export type GeneratedMapObjectKind = 'npc' | 'spawn' | 'service' | 'monster-patch';
+export type GeneratedMapObjectKind = 'npc' | 'spawn' | 'service' | 'monster-patch' | 'trainer';
 export type GeneratedGeometry =
   | { kind: 'rect'; x: number; y: number; width: number; height: number }
   | { kind: 'polygon' | 'polyline'; x: number; y: number; points: ReadonlyArray<{ x: number; y: number }> }
@@ -12,7 +12,8 @@ export interface GeneratedNpcV1 extends GeneratedObjectBase { kind: 'npc'; chara
 export interface GeneratedSpawnV1 extends GeneratedObjectBase { kind: 'spawn'; spawnKey: string; facing: 'north' | 'east' | 'south' | 'west'; }
 export interface GeneratedEncounterV1 extends GeneratedObjectBase { kind: 'monster-patch'; encounterTableKey: `gameit:${string}`; }
 export interface GeneratedServiceV1 extends GeneratedObjectBase { kind: 'service'; serviceKey: string; }
-export type GeneratedMapObjectV1 = GeneratedNpcV1 | GeneratedSpawnV1 | GeneratedEncounterV1 | GeneratedServiceV1;
+export interface GeneratedTrainerV1 extends GeneratedObjectBase { kind: 'trainer'; trainerId: string; trainerDefinitionId: string; mode: 'optional' | 'progression-blocking'; }
+export type GeneratedMapObjectV1 = GeneratedNpcV1 | GeneratedSpawnV1 | GeneratedEncounterV1 | GeneratedServiceV1 | GeneratedTrainerV1;
 export interface GeneratedCollisionV1 extends GeneratedObjectBase { kind: 'collision'; properties: Readonly<Record<string, string | number | boolean>>; }
 export interface GeneratedExitV1 { id: string; x: number; y: number; toMapId: string; toExitId: string; toX: number; toY: number; }
 export interface GeneratedMapV1 {
@@ -21,7 +22,7 @@ export interface GeneratedMapV1 {
   terrainLayers: ReadonlyArray<ReadonlyArray<ReadonlyArray<number>>>;
   blocked: ReadonlyArray<ReadonlyArray<boolean>>;
   collisions: ReadonlyArray<GeneratedCollisionV1>;
-  objects: ReadonlyArray<GeneratedNpcV1>; triggers: ReadonlyArray<GeneratedSpawnV1>;
+  objects: ReadonlyArray<GeneratedNpcV1 | GeneratedTrainerV1>; triggers: ReadonlyArray<GeneratedSpawnV1>;
   encounters: ReadonlyArray<GeneratedEncounterV1>; services: ReadonlyArray<GeneratedServiceV1>; exits: ReadonlyArray<GeneratedExitV1>;
   metadata: Readonly<Record<string, string | number | boolean>>;
 }
@@ -80,7 +81,7 @@ export function loadMapSet(input: unknown): LoadMapSetResult {
     if (Array.isArray(value.terrainLayers) && !value.terrainLayers.every((layer) => Array.isArray(layer) && layer.every((row) => Array.isArray(row) && row.every((cell) => Number.isSafeInteger(cell) && cell >= 0)))) diagnostics.push(`maps[${index}].terrainLayers: invalid cells`);
     if (Array.isArray(value.blocked) && !value.blocked.every((row) => Array.isArray(row) && row.every((cell) => typeof cell === 'boolean'))) diagnostics.push(`maps[${index}].blocked: invalid cells`);
     if (Array.isArray(value.collisions) && !value.collisions.every((entry) => isRecord(entry) && entry.kind === 'collision' && typeof entry.id === 'string' && validCollisionGeometry(entry.geometry) && isPrimitiveRecord(entry.properties))) diagnostics.push(`maps[${index}].collisions: invalid collision`);
-    if (Array.isArray(value.objects) && !value.objects.every((entry) => isRecord(entry) && entry.kind === 'npc' && typeof entry.id === 'string' && typeof entry.characterKey === 'string' && typeof entry.graphicKey === 'string' && typeof entry.patrolRadius === 'number' && validFacing(entry.facing) && validGeometry(entry.geometry))) diagnostics.push(`maps[${index}].objects: invalid npc`);
+    if (Array.isArray(value.objects) && !value.objects.every((entry) => isRecord(entry) && typeof entry.id === 'string' && validGeometry(entry.geometry) && ((entry.kind === 'npc' && typeof entry.characterKey === 'string' && typeof entry.graphicKey === 'string' && typeof entry.patrolRadius === 'number' && validFacing(entry.facing)) || (entry.kind === 'trainer' && typeof entry.trainerId === 'string' && typeof entry.trainerDefinitionId === 'string' && (entry.mode === 'optional' || entry.mode === 'progression-blocking'))))) diagnostics.push(`maps[${index}].objects: invalid npc or trainer`);
     if (Array.isArray(value.triggers) && !value.triggers.every((entry) => isRecord(entry) && entry.kind === 'spawn' && typeof entry.spawnKey === 'string' && validFacing(entry.facing) && validGeometry(entry.geometry))) diagnostics.push(`maps[${index}].triggers: invalid spawn`);
     if (Array.isArray(value.encounters) && !value.encounters.every((entry) => isRecord(entry) && entry.kind === 'monster-patch' && typeof entry.encounterTableKey === 'string' && entry.encounterTableKey.startsWith('gameit:') && validGeometry(entry.geometry))) diagnostics.push(`maps[${index}].encounters: invalid encounter`);
     if (Array.isArray(value.services) && !value.services.every((entry) => isRecord(entry) && entry.kind === 'service' && typeof entry.serviceKey === 'string' && validGeometry(entry.geometry))) diagnostics.push(`maps[${index}].services: invalid service`);

@@ -88,7 +88,7 @@ export function applyBattleRewardsToSave(
   options: { rng?: () => number; now?: Date } = {}
 ): ApplyBattleRewardsResult {
   const now = options.now ?? new Date();
-  const stateWithBattleCreature = updateBattleCreatureOutcome(state, result, now);
+  const stateWithBattleCreature = updateBattleCreatureOutcomes(state, result, now);
 
   if (result.outcome !== 'defeated' || !result.rewardGranted || !result.rewards) {
     return {
@@ -144,13 +144,21 @@ export function applyBattleRewardsToSave(
   };
 }
 
-function updateBattleCreatureOutcome(
+function updateBattleCreatureOutcomes(
   state: MonsterRpgSaveState,
   result: BattleResultMessage,
   now: Date
 ): MonsterRpgSaveState {
-  const creature = state.creatures.creatures[result.playerCreatureId];
-  if (!creature) return state;
+  const outcomes = result.playerPartyOutcomes;
+  const creatures = { ...state.creatures.creatures };
+  let changed = false;
+  for (const outcome of outcomes) {
+    const creature = creatures[outcome.creatureId];
+    if (!creature) continue;
+    creatures[outcome.creatureId] = { ...creature, hp: outcome.hp, fainted: outcome.fainted };
+    changed = true;
+  }
+  if (!changed) return state;
 
   return {
     ...state,
@@ -158,12 +166,7 @@ function updateBattleCreatureOutcome(
     creatures: {
       ...state.creatures,
       creatures: {
-        ...state.creatures.creatures,
-        [result.playerCreatureId]: {
-          ...creature,
-          hp: result.playerCreatureHp,
-          fainted: result.playerCreatureFainted
-        }
+        ...creatures
       }
     }
   };

@@ -70,10 +70,14 @@ function locationHarness() {
   const onState = vi.fn();
   const onStatus = vi.fn();
   const onFarmTheftResult = vi.fn();
+  const onTrainerChallengeClaimed = vi.fn();
+  const onTrainerChallengeRejected = vi.fn();
   return {
     onState,
     onStatus,
     onFarmTheftResult,
+    onTrainerChallengeClaimed,
+    onTrainerChallengeRejected,
     connect: () => connectToLocation('world-map', { mapId: 'world-map', profile }, {
       onRoomState: onState,
       onStatus,
@@ -82,7 +86,9 @@ function locationHarness() {
       onWildEncounterClaimRejected: vi.fn(),
       onGuardedFarmTheftClaimed: vi.fn(),
       onGuardedFarmTheftClaimRejected: vi.fn(),
-      onFarmTheftResult
+      onFarmTheftResult,
+      onTrainerChallengeClaimed,
+      onTrainerChallengeRejected
     }),
     decodedState: {
       balanceVersion: CURRENT_BALANCE_VERSION,
@@ -92,7 +98,7 @@ function locationHarness() {
       players: new Map(),
       encounters: new Map()
     },
-    readyMessageTypes: ['farmTheftResult', 'guardedFarmTheftClaimed', 'guardedFarmTheftClaimRejected', 'locationTransition', 'wildEncounterClaimed', 'wildEncounterClaimRejected']
+    readyMessageTypes: ['authoritySnapshot', 'farmTheftResult', 'guardedFarmTheftClaimed', 'guardedFarmTheftClaimRejected', 'locationTransition', 'trainerChallengeClaimed', 'trainerChallengeRejected', 'wildEncounterClaimed', 'wildEncounterClaimRejected']
   };
 }
 
@@ -168,6 +174,25 @@ describe('location map-set handshake', () => {
     room.emitMessage('farmTheftResult', result);
 
     expect(harness.onFarmTheftResult).toHaveBeenCalledWith(result);
+  });
+
+  test('delivers trainer challenge claims and rejections after readiness', async () => {
+    const room = new FakeRoom();
+    const harness = locationHarness();
+    joinOrCreate.mockResolvedValue(room);
+    const connectionPromise = harness.connect();
+    await Promise.resolve();
+    await Promise.resolve();
+    room.publishDecodedState(harness.decodedState);
+    await connectionPromise;
+
+    const claim = { objectId: 'route-scout-trainer', trainerId: 'route-scout-1', battleId: 'battle-1', battleToken: 'token' };
+    const rejection = { objectId: 'route-scout-trainer', reason: 'in-battle' };
+    room.emitMessage('trainerChallengeClaimed', claim);
+    room.emitMessage('trainerChallengeRejected', rejection);
+
+    expect(harness.onTrainerChallengeClaimed).toHaveBeenCalledWith(claim);
+    expect(harness.onTrainerChallengeRejected).toHaveBeenCalledWith(rejection);
   });
 
   test.each([
@@ -249,7 +274,7 @@ describe.each([
     room.publishDecodedState(harness.decodedState);
     await expect(connectionPromise).resolves.toBeDefined();
     expect(order).toEqual(['published', 'resolved']);
-    expect([...room.messageListenerTypes()].sort()).toEqual([...(harness.readyMessageTypes.includes('farmTheftResult') ? ['authoritySnapshot'] : []), ...harness.readyMessageTypes].sort());
+    expect([...room.messageListenerTypes()].sort()).toEqual([...harness.readyMessageTypes].sort());
   });
 
   test.each([0, undefined, CURRENT_BALANCE_VERSION + 1])('rejects decoded balance version %s without throwing from the signal', async (balanceVersion) => {
@@ -358,5 +383,70 @@ describe.each([
     expect(room.leave).toHaveBeenCalledTimes(1);
     expect(room.lifecycleListenerCount()).toBe(0);
     expect(room.messageListenerCount()).toBe(0);
+  });
+});
+
+describe('trainer battle SDK adapter', () => {
+  test('sends the authored trainer challenge shape unchanged', async () => {
+    const room = new FakeRoom();
+    const harness = locationHarness();
+    joinOrCreate.mockResolvedValue(room);
+    const connectionPromise = harness.connect();
+    await Promise.resolve();
+    await Promise.resolve();
+    room.publishDecodedState(harness.decodedState);
+    const connection = await connectionPromise;
+    connection.sendChallengeTrainer({
+      objectId: 'route-scout-trainer',
+      activePartyCreatureIds: ['creature-a', 'creature-b'],
+      expectedRosterRevision: 3
+    });
+
+    expect(room.send).toHaveBeenCalledWith('challengeTrainer', {
+      objectId: 'route-scout-trainer',
+      activePartyCreatureIds: ['creature-a', 'creature-b'],
+      expectedRosterRevision: 3
+    });
+  });
+
+  test('sends the exact switch intent and decodes trainer state', async () => {
+    const room = new FakeRoom();
+    const onBattleState = vi.fn();
+    joinOrCreate.mockResolvedValue(room);
+    const connectionPromise = connectToBattle({ battleId: 'battle-1', battleToken: 'token', profile }, {
+      onBattleState,
+      onBattleResult: vi.fn(),
+      onStatus: vi.fn()
+    });
+    await Promise.resolve();
+    await Promise.resolve();
+    room.publishDecodedState({
+      balanceVersion: CURRENT_BALANCE_VERSION,
+      battleId: 'battle-1',
+      encounterId: 'trainer:route-scout-1',
+      battleKind: 'trainer',
+      trainerId: 'route-scout-1',
+      playerActiveCreatureId: 'player-a',
+      trainerActiveCreatureId: 'trainer-a',
+      status: 'active',
+      turn: 4,
+      player: { activeCreature: {} },
+      enemy: { activeCreature: {} },
+      playerParty: [],
+      trainerParty: [],
+      validPlayerAttackIds: [],
+      lastLog: []
+    });
+    const connection = await connectionPromise;
+
+    connection.sendSwitchCreature({ creatureId: 'player-b', expectedTurn: 4 });
+
+    expect(room.send).toHaveBeenCalledWith('switchCreature', { creatureId: 'player-b', expectedTurn: 4 });
+    expect(onBattleState).toHaveBeenLastCalledWith(expect.objectContaining({
+      battleKind: 'trainer',
+      trainerId: 'route-scout-1',
+      playerActiveCreatureId: 'player-a',
+      trainerActiveCreatureId: 'trainer-a'
+    }));
   });
 });

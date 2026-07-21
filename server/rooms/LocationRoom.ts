@@ -24,7 +24,7 @@ import {
   selectCreatureAttacks,
   validateGameMapRegistry,
   generatedMapRegistry,
-  type BattleResolution
+  type BattleResolution, type ChallengeTrainerMessage
 } from '../../src/games/monster-rpg/sim';
 import type {
   AvatarId,
@@ -43,6 +43,8 @@ import type {
 } from '../../src/games/monster-rpg/sim/types';
 import {
   createBattleClaim,
+  prepareTrainerBattleClaim,
+  registerTrainerBattleClaim,
   createGuardBattleClaim,
   getResolvedBattleOutcome,
   onBattleClaimResolved,
@@ -52,6 +54,8 @@ import { LocationPlayerSchema, LocationStateSchema, WildEncounterSchema } from '
 import { getGeneratedMapForServer } from '../generatedMapAdapter';
 import { verifyGuestCredential } from '../auth/guestCredentials';
 import { authorityEnabled, guestCredentialConfig, guestCredentialTtlSeconds, playerAuthority } from '../authority/runtime';
+import type { ActiveTrainerBattle } from '../authority/playerRepository';
+import type { AuthoritySnapshot } from '../../src/games/monster-rpg/network/authorityProtocol';
 
 const avatarIds = new Set<AvatarId>(['scout', 'ranger', 'keeper']);
 const directions = new Set<Direction>(['north', 'east', 'south', 'west']);
@@ -79,6 +83,7 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
   private encounterTimerVersions = new Map<string, number>();
   private battleResultCleanups = new Map<string, () => void>();
   private finalizedBattleIds = new Set<string>();
+  private battlePresenceCleanup?: () => void;
 
   async onCreate(options?: Partial<JoinLocationOptions>) {
     if (!authorityEnabled) throw new ServerError(503, JSON.stringify({ code: 'AUTHORITY_MAINTENANCE' }));
@@ -106,6 +111,7 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
     this.state.mapSetId = mapSet.id;
     this.state.mapSetVersion = mapSet.version;
     this.spawnInitialWildEncounters();
+    this.battlePresenceCleanup = playerAuthority.onBattlePresenceChanged((playerId, activeBattle, snapshot) => this.syncBattlePresence(playerId, activeBattle, snapshot));
 
     this.onMessage('moveIntent', (client, payload: MoveIntentMessage) => {
       this.handleMoveIntent(client, payload);
@@ -122,6 +128,7 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
     this.onMessage('resolveWildEncounter', (client, payload: ResolveWildEncounterMessage) => {
       this.handleResolveWildEncounter(client, payload);
     });
+    this.onMessage('challengeTrainer', (client, payload: ChallengeTrainerMessage) => { void this.handleChallengeTrainer(client, payload); });
   }
 
   async onJoin(client: Client, options: JoinLocationOptions) {
@@ -136,8 +143,9 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
     }
 
     const principal = authenticateLocationJoin(options?.credential);
-    const canonical = await playerAuthority.snapshot({ sub: principal.sub });
-    if (!canonical) throw new ServerError(403, JSON.stringify({ code: 'AUTHORITY_REQUIRED' }));
+    const presence = await playerAuthority.locationPresence({ sub: principal.sub });
+    if (!presence) throw new ServerError(403, JSON.stringify({ code: 'AUTHORITY_REQUIRED' }));
+    const canonical = presence.snapshot;
     const map = getGameMap(this.mapId);
     const player = new LocationPlayerSchema();
     const profile = canonical.save.profile;
@@ -153,8 +161,8 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
     player.position.y = position.y;
     player.position.facing = position.facing;
     player.connected = true;
-    player.inBattle = false;
-    player.battleId = '';
+    player.inBattle = Boolean(presence.activeBattle);
+    player.battleId = presence.activeBattle?.battleId ?? '';
 
     this.state.players.set(client.sessionId, player);
     console.log(`[location:${this.mapId}] join ${client.sessionId} ${profile.name}`);
@@ -163,6 +171,23 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
   onLeave(client: Client) {
     this.state.players.delete(client.sessionId);
     console.log(`[location:${this.mapId}] leave ${client.sessionId}`);
+  }
+
+  onDispose() {
+    this.battlePresenceCleanup?.();
+    this.battlePresenceCleanup = undefined;
+  }
+
+  private syncBattlePresence(playerId: string, activeBattle: ActiveTrainerBattle | undefined, snapshot: AuthoritySnapshot) {
+    this.state.players.forEach((player) => {
+      if (player.profile.id !== playerId) return;
+      player.inBattle = Boolean(activeBattle);
+      player.battleId = activeBattle?.battleId ?? '';
+    });
+    this.clients.forEach((client) => {
+      const player = this.state.players.get(client.sessionId);
+      if (player?.connected && player.profile.id === playerId) client.send('authoritySnapshot', snapshot);
+    });
   }
 
   private async handleMoveIntent(client: Client, payload: MoveIntentMessage) {
@@ -357,6 +382,38 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
       roomMapId: this.mapId,
       farmId
     }));
+  }
+  private async handleChallengeTrainer(client: Client, payload: ChallengeTrainerMessage) {
+    const player = this.state.players.get(client.sessionId);
+    const objectId = typeof payload?.objectId === 'string' ? payload.objectId : '';
+    if (!player || player.inBattle) { client.send('trainerChallengeRejected', { objectId, reason: 'invalid-player' }); return; }
+    const prepared = prepareTrainerBattleClaim();
+    const reserved = await playerAuthority.reserveTrainerBattle({
+      principal: { sub: player.profile.id }, battleId: prepared.battleId, objectId, mapId: this.mapId, locationRoomId: this.roomId,
+      presentedCreatureIds: Array.isArray(payload?.activePartyCreatureIds) && payload.activePartyCreatureIds.every((id) => typeof id === 'string') ? payload.activePartyCreatureIds : [],
+      expectedRosterRevision: typeof payload?.expectedRosterRevision === 'number' && Number.isSafeInteger(payload.expectedRosterRevision) ? payload.expectedRosterRevision : -1
+    });
+    if (!reserved) { client.send('trainerChallengeRejected', { objectId, reason: 'REJECTED' }); return; }
+    let claim;
+    try {
+      claim = registerTrainerBattleClaim({
+        prepared, trainerId: reserved.trainerId, locationRoomId: this.roomId, mapId: this.mapId, playerProfile: reserved.profile, playerParty: reserved.frozenParty.creatures,
+        releaseReservedTrainerBattle: () => playerAuthority.releaseReservedTrainerBattle({ sub: player.profile.id }, prepared.battleId)
+      });
+    } catch {
+      await playerAuthority.releaseReservedTrainerBattle({ sub: player.profile.id }, prepared.battleId);
+      client.send('trainerChallengeRejected', { objectId, reason: 'REJECTED' });
+      return;
+    }
+    this.battleResultCleanups.set(
+      claim.battleId,
+      onBattleClaimResolved(claim.battleId, (result) => {
+        void (async () => {
+          this.finalizeBattleResult(result);
+        })();
+      })
+    );
+    client.send('trainerChallengeClaimed', { objectId, trainerId: reserved.trainerId, battleId: claim.battleId, battleToken: claim.battleToken });
   }
 
   private handleResolveWildEncounter(client: Client, payload: ResolveWildEncounterMessage) {

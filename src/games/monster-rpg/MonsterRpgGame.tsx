@@ -9,6 +9,7 @@ import {
   createInitialSave,
   exportSave,
   getGameMap,
+  generatedMapRegistry,
   getFacingFarm,
   getFirstBattleReadyCreature,
   getCardDefinition,
@@ -63,7 +64,7 @@ export function MonsterRpgGame() {
   const authorityIntentSequenceRef = useRef(0);
   const battleConnectionRef = useRef<BattleConnection | null>(null);
   const activeBattleClaimRef = useRef<{
-    kind: 'wild' | 'guard-theft';
+    kind: 'wild' | 'guard-theft' | 'trainer';
     battleId: string;
     battleToken: string;
     encounterId?: string;
@@ -208,6 +209,16 @@ export function MonsterRpgGame() {
     }
 
     if (action.type === 'interact' && connectionRef.current && multiplayerStatusRef.current === 'online') {
+      const trainer = getFacingTrainer(currentState);
+      if (trainer && currentState) {
+        connectionRef.current.sendChallengeTrainer({
+          objectId: trainer.id,
+          activePartyCreatureIds: currentState.creatures.activePartyCreatureIds,
+          expectedRosterRevision: authorityRosterRevisionRef.current
+        });
+        recordGameLog('battle', 'Challenging Trainer');
+        return;
+      }
       const encounter = getFacingEncounter(roomState, currentState);
       if (encounter) {
         const activeCreature = currentState ? getFirstBattleReadyCreature(currentState) : null;
@@ -359,6 +370,10 @@ export function MonsterRpgGame() {
     battleConnectionRef.current?.sendRun();
   };
 
+  const handleBattleSwitchCreature = (creatureId: string, expectedTurn: number) => {
+    battleConnectionRef.current?.sendSwitchCreature({ creatureId, expectedTurn });
+  };
+
   const handleCreatureLabelModeChange = (creatureLabelMode: CreatureLabelMode) => {
     setSettings((current) => {
       const next = { ...current, creatureLabelMode };
@@ -495,6 +510,15 @@ export function MonsterRpgGame() {
               }
               adoptAuthoritySnapshot(result.snapshot);
               recordGameLog('interaction', 'Farm theft resolved');
+            },
+            onTrainerChallengeClaimed: (claim) => {
+              if (cancelled) return;
+              activeBattleClaimRef.current = { kind: 'trainer', battleId: claim.battleId, battleToken: claim.battleToken };
+              recordGameLog('battle', 'Trainer battle started');
+              void connectBattleRoom(claim.battleId, claim.battleToken);
+            },
+            onTrainerChallengeRejected: (message) => {
+              if (!cancelled) recordGameLog('battle', `Trainer challenge unavailable: ${message.reason}`);
             },
             onStatus: (status) => {
               if (!cancelled) {
@@ -657,6 +681,7 @@ export function MonsterRpgGame() {
           onAssignFarmGuard={handleAssignFarmGuard}
           onCreatureLabelModeChange={handleCreatureLabelModeChange}
           onBattleAttack={handleBattleAttack}
+          onBattleSwitchCreature={handleBattleSwitchCreature}
           onRunBattle={handleRunBattle}
           onReviveCreature={handleReviveCreature}
           pendingStationDestinationId={pendingStationDestinationId}
@@ -779,4 +804,14 @@ function getFacingEncounter(roomState: LocationRoomState | null, saveState: Mons
         encounter.y === targetY
     ) ?? null
   );
+}
+
+function getFacingTrainer(saveState: MonsterRpgSaveState | null) {
+  if (!saveState) return null;
+  const map = generatedMapRegistry.get(saveState.mapId);
+  if (!map) return null;
+  const delta = { north: { x: 0, y: -1 }, east: { x: 1, y: 0 }, south: { x: 0, y: 1 }, west: { x: -1, y: 0 } }[saveState.position.facing];
+  const x = saveState.position.x + delta.x;
+  const y = saveState.position.y + delta.y;
+  return map.objects.find((object) => object.kind === 'trainer' && Math.floor(object.geometry.x / map.tileSize) === x && Math.floor(object.geometry.y / map.tileSize) === y) ?? null;
 }

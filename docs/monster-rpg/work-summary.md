@@ -1,5 +1,14 @@
 # Monster RPG Work Summary
 
+## 2026-07-21 - Issue #65: Authoritative Trainer Battles
+
+- Added a typed authored Route Trainer with optional/progression-blocking map behavior and a server-owned adjacent challenge handoff.
+- Trainer battles keep Location presence visible and immobile while BattleRoom owns manual, forced, and limited AI switching.
+- Canonical authority snapshots supply the player party; client payloads carry only object, roster, and turn selectors.
+- Trainer settlement persists all party HP outcomes, first-clear progression, rewards, XP, and sealed growth once through the existing authority CAS boundary.
+- Repeat clears remain playable without duplicate rewards; stale, foreign, fainted, active-target, and post-terminal switch intents fail closed.
+- Pending claims expire on schedule, matching sessions receive canonical lock snapshots, and successful SDK reconnects resume from grace before accepting more battle intents.
+
 ## 2026-07-21 - Issue #64 Reviewer Closure v7
 
 - Replaced persisted growth drafts with a closed, versioned, account-bound SHA-256 audit chain; repository create/CAS/import boundaries now reject tampering, truncation, divergent prefixes, duplicate grants/rebalances, orphan history copies, and transient drafts.

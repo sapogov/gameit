@@ -68,6 +68,7 @@ interface GameHudProps {
   onAssignFarmGuard: (farmId: string, creatureId: string | null) => void;
   onCreatureLabelModeChange: (mode: CreatureLabelMode) => void;
   onBattleAttack: (attackId: string) => void;
+  onBattleSwitchCreature: (creatureId: string, expectedTurn: number) => void;
   onRunBattle: () => void;
   onReviveCreature: (creatureId: string) => void;
   pendingStationDestinationId: string | null;
@@ -105,6 +106,7 @@ export function GameHud({
   onAssignFarmGuard,
   onCreatureLabelModeChange,
   onBattleAttack,
+  onBattleSwitchCreature,
   onRunBattle,
   onReviveCreature,
   pendingStationDestinationId,
@@ -131,6 +133,9 @@ export function GameHud({
   const reviveCount = saveState.inventory.items[REVIVE_ITEM_ID]?.quantity ?? 0;
   const currencySummary = formatCurrencySummary(saveState.inventory.currencies);
   const canRunFromBattle = battleState?.status === 'active' && battleState.canRun;
+  const switchCandidates = battleState?.battleKind === 'trainer'
+    ? (battleState.playerParty ?? []).filter((creature) => creature.id !== battleState.player.activeCreature.id && !creature.fainted)
+    : [];
   const nextLevelThreshold = getNextPlayerLevelThreshold(saveState.progression.playerLevel);
   const itemStacks = Object.values(saveState.inventory.itemInventory.stacks).sort((a, b) => a.id.localeCompare(b.id));
   const inboxBundles = Object.values(saveState.inventory.rewardInbox.bundles).sort((a, b) => a.sourceId.localeCompare(b.sourceId));
@@ -191,6 +196,16 @@ export function GameHud({
                   Run Away
                 </button>
               ) : null}
+              {switchCandidates.map((creature) => (
+                <button
+                  disabled={battleState.status !== 'active'}
+                  key={creature.id}
+                  onClick={() => onBattleSwitchCreature(creature.id, battleState.turn)}
+                  type="button"
+                >
+                  Switch to {creature.id}
+                </button>
+              ))}
             </div>
             <div className="monster-battle-log">
               {battleState.lastLog.map((entry) => (

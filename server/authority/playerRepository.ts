@@ -6,6 +6,10 @@ import { AUDIT_BALANCE_CATALOG } from '../../src/games/monster-rpg/sim/gameBalan
 
 export interface IntentReceipt { payloadHash: string; revision: number }
 export interface LocationMovementReceipt { roomId: string; mapId: string; lastSequence: number }
+export interface ActiveTrainerBattle {
+  battleId: string; kind: 'trainer'; trainerId: string; mapId: string; locationRoomId: string;
+  phase: 'reserved' | 'active'; reservedAt: string; expiresAt?: string;
+}
 export type { GrowthAuditEvent } from '../../src/games/monster-rpg/sim';
 export interface PlayerAggregate {
   playerId: string;
@@ -18,6 +22,7 @@ export interface PlayerAggregate {
   progressionEvents: GrowthAuditEvent[];
   activeGrowthStartIndex: number;
   locationMovementReceipts: Record<string, LocationMovementReceipt>;
+  activeBattle?: ActiveTrainerBattle;
 }
 
 export interface PlayerAuthorityRepository {
@@ -66,7 +71,7 @@ export class ProcessLocalPlayerAuthorityRepository implements PlayerAuthorityRep
 
 export function clone<T>(value: T): T { return value === null || value === undefined ? value : structuredClone(value); }
 export function isValidLedgerTransition(previous: PlayerAggregate, next: PlayerAggregate): boolean {
-  if (!isValidAggregate(next) || !isValidLocationMovementReceiptTransition(previous.locationMovementReceipts, next.locationMovementReceipts)) return false;
+  if (!isValidAggregate(next) || !isValidActiveBattleTransition(previous, next) || !isValidLocationMovementReceiptTransition(previous.locationMovementReceipts, next.locationMovementReceipts)) return false;
   if (next.progressionEvents.length < previous.progressionEvents.length) return false;
   if (!previous.progressionEvents.every((event, index) => equalEvent(event, next.progressionEvents[index]))) return false;
   const appended = next.progressionEvents.slice(previous.progressionEvents.length);
@@ -83,7 +88,7 @@ export function isValidLedgerTransition(previous: PlayerAggregate, next: PlayerA
 
 /** One validation boundary for imported, created, and CAS-persisted aggregates. */
 export function isValidAggregate(aggregate: PlayerAggregate): boolean {
-  if (!aggregate || !Number.isSafeInteger(aggregate.revision) || aggregate.revision < 0 || !Number.isSafeInteger(aggregate.rosterRevision) || aggregate.rosterRevision < 0 || !Number.isSafeInteger(aggregate.activeGrowthStartIndex) || aggregate.activeGrowthStartIndex < 0 || aggregate.activeGrowthStartIndex > aggregate.progressionEvents.length || !validateLedger(aggregate.progressionEvents, aggregate.playerId, aggregate.revision) || !isValidLocationMovementReceipts(aggregate.locationMovementReceipts)) return false;
+  if (!aggregate || !Number.isSafeInteger(aggregate.revision) || aggregate.revision < 0 || !Number.isSafeInteger(aggregate.rosterRevision) || aggregate.rosterRevision < 0 || !Number.isSafeInteger(aggregate.activeGrowthStartIndex) || aggregate.activeGrowthStartIndex < 0 || aggregate.activeGrowthStartIndex > aggregate.progressionEvents.length || !validateLedger(aggregate.progressionEvents, aggregate.playerId, aggregate.revision) || !isValidLocationMovementReceipts(aggregate.locationMovementReceipts) || !isValidActiveBattle(aggregate.activeBattle)) return false;
   const projected = new Map<string, GrowthAuditEvent[]>();
   for (const event of aggregate.progressionEvents.slice(aggregate.activeGrowthStartIndex)) projected.set(event.creatureId, [...(projected.get(event.creatureId) ?? []), event]);
   return Object.entries(aggregate.save.creatures.creatures).every(([creatureId, creature]) => {
@@ -179,6 +184,29 @@ function isValidLocationMovementReceiptTransition(previous: Record<string, Locat
   }
   for (const [sessionId, candidate] of Object.entries(next)) if (!previous[sessionId]) { if (candidate.lastSequence !== 1) return false; mutations += 1; }
   return mutations <= 1;
+}
+function isValidActiveBattle(value: unknown): value is ActiveTrainerBattle | undefined {
+  if (value === undefined) return true;
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const lock = value as Record<string, unknown>;
+  const expected = ['battleId', 'kind', 'trainerId', 'mapId', 'locationRoomId', 'phase', 'reservedAt', ...(lock.expiresAt === undefined ? [] : ['expiresAt'])].sort();
+  const canonicalDate = (date: unknown) => typeof date === 'string' && Number.isFinite(Date.parse(date)) && new Date(Date.parse(date)).toISOString() === date;
+  return isDeepStrictEqual(Object.keys(lock).sort(), expected) && lock.kind === 'trainer' && (lock.phase === 'reserved' || lock.phase === 'active')
+    && ['battleId', 'trainerId', 'mapId', 'locationRoomId'].every((key) => typeof lock[key] === 'string' && (lock[key] as string).trim().length > 0)
+    && canonicalDate(lock.reservedAt) && (lock.expiresAt === undefined || canonicalDate(lock.expiresAt));
+}
+function sameExceptOperational(previous: PlayerAggregate, next: PlayerAggregate): boolean {
+  const { revision: _pr, activeBattle: _pa, ...prior } = previous; const { revision: _nr, activeBattle: _na, ...candidate } = next;
+  return isDeepStrictEqual(prior, candidate) && next.revision === previous.revision + 1;
+}
+function isValidActiveBattleTransition(previous: PlayerAggregate, next: PlayerAggregate): boolean {
+  const before = previous.activeBattle; const after = next.activeBattle;
+  if (!before && !after) return true;
+  if (!before && after?.phase === 'reserved') return sameExceptOperational(previous, next);
+  if (before?.phase === 'reserved' && after?.phase === 'active') return before.battleId === after.battleId && before.trainerId === after.trainerId && before.mapId === after.mapId && before.locationRoomId === after.locationRoomId && before.reservedAt === after.reservedAt && before.expiresAt === after.expiresAt && sameExceptOperational(previous, next);
+  if (before?.phase === 'reserved' && !after) return sameExceptOperational(previous, next);
+  if (before?.phase === 'active' && !after) return next.revision === previous.revision + 1 && next.grantReceipts[before.battleId] === next.revision && previous.grantReceipts[before.battleId] === undefined;
+  return false;
 }
 function isCanonicalFreshResetSave(previousSave: MonsterRpgSaveState, nextSave: MonsterRpgSaveState, playerId: string): boolean {
   if (previousSave.profile.playerId !== playerId || nextSave.profile.playerId !== playerId || !isDeepStrictEqual(nextSave.profile, previousSave.profile)) return false;

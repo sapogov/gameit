@@ -152,6 +152,13 @@ export class BattleStateSchema extends Schema {
   declare validPlayerAttackIds: ArraySchema<string>;
   declare rewardGranted: boolean;
   declare disconnectGraceUntil: string;
+  declare playerParty: ArraySchema<BattleCreatureSchema>;
+  declare trainerParty: ArraySchema<BattleCreatureSchema>;
+  declare phase: string;
+  declare remainingTrainerSwitches: number;
+  declare trainerId: string;
+  declare playerActiveCreatureId: string;
+  declare trainerActiveCreatureId: string;
 
   constructor() {
     super();
@@ -170,6 +177,13 @@ export class BattleStateSchema extends Schema {
     this.validPlayerAttackIds = new ArraySchema<string>();
     this.rewardGranted = false;
     this.disconnectGraceUntil = '';
+    this.playerParty = new ArraySchema<BattleCreatureSchema>();
+    this.trainerParty = new ArraySchema<BattleCreatureSchema>();
+    this.phase = '';
+    this.remainingTrainerSwitches = 0;
+    this.trainerId = '';
+    this.playerActiveCreatureId = '';
+    this.trainerActiveCreatureId = '';
   }
 }
 defineTypes(BattleStateSchema, {
@@ -187,5 +201,12 @@ defineTypes(BattleStateSchema, {
   lastLog: [BattleLogEntrySchema],
   validPlayerAttackIds: ['string'],
   rewardGranted: 'boolean',
-  disconnectGraceUntil: 'string'
+  disconnectGraceUntil: 'string',
+  playerParty: [BattleCreatureSchema],
+  trainerParty: [BattleCreatureSchema],
+  phase: 'string',
+  remainingTrainerSwitches: 'number',
+  trainerId: 'string',
+  playerActiveCreatureId: 'string',
+  trainerActiveCreatureId: 'string'
 });

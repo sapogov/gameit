@@ -11,6 +11,8 @@ import type {
   MoveIntentMessage,
   MultiplayerStatus,
   ClaimWildEncounterMessage,
+  ChallengeTrainerMessage,
+  SwitchCreatureIntentMessage,
   ClaimGuardedFarmTheftMessage,
   GuardedFarmTheftClaimedMessage,
   ResolveWildEncounterMessage,
@@ -43,6 +45,8 @@ interface ConnectionHandlers {
   onGuardedFarmTheftClaimed: (message: GuardedFarmTheftClaimedMessage) => void;
   onGuardedFarmTheftClaimRejected: (message: { farmId: string; reason: string }) => void;
   onFarmTheftResult: (result: SaveCommandResult) => void;
+  onTrainerChallengeClaimed: (message: { objectId: string; trainerId: string; battleId: string; battleToken: string }) => void;
+  onTrainerChallengeRejected: (message: { objectId: string; reason: string }) => void;
 }
 
 export interface MultiplayerConnection {
@@ -52,12 +56,14 @@ export interface MultiplayerConnection {
   sendClaimGuardedFarmTheft: (message: ClaimGuardedFarmTheftMessage) => void;
   sendAttemptFarmTheft: (message: { farmId: string; intentId: string; expectedRevision: number }) => void;
   sendResolveWildEncounter: (message: ResolveWildEncounterMessage) => void;
+  sendChallengeTrainer: (message: ChallengeTrainerMessage) => void;
   leave: (options?: { silent?: boolean }) => void;
 }
 
 export interface BattleConnection {
   sendAttack: (message: BattleAttackIntentMessage) => void;
   sendRun: () => void;
+  sendSwitchCreature: (message: SwitchCreatureIntentMessage) => void;
   leave: (options?: { silent?: boolean }) => void;
 }
 
@@ -120,7 +126,9 @@ export async function connectToLocation(
       room.onMessage('wildEncounterClaimRejected', (message: { encounterId: string; reason: string }) => handlers.onWildEncounterClaimRejected(message)),
       room.onMessage('guardedFarmTheftClaimed', (message: GuardedFarmTheftClaimedMessage) => handlers.onGuardedFarmTheftClaimed(message)),
       room.onMessage('guardedFarmTheftClaimRejected', (message: { farmId: string; reason: string }) => handlers.onGuardedFarmTheftClaimRejected(message)),
-      room.onMessage('farmTheftResult', (result: SaveCommandResult) => handlers.onFarmTheftResult(result))
+      room.onMessage('farmTheftResult', (result: SaveCommandResult) => handlers.onFarmTheftResult(result)),
+      room.onMessage('trainerChallengeClaimed', (message: { objectId: string; trainerId: string; battleId: string; battleToken: string }) => handlers.onTrainerChallengeClaimed(message)),
+      room.onMessage('trainerChallengeRejected', (message: { objectId: string; reason: string }) => handlers.onTrainerChallengeRejected(message))
     ],
     createConnection: (room, leave): MultiplayerConnection => ({
       sessionId: room.sessionId,
@@ -129,6 +137,7 @@ export async function connectToLocation(
       sendClaimGuardedFarmTheft: (message) => { room.send('claimGuardedFarmTheft', message); },
       sendAttemptFarmTheft: (message) => { room.send('attemptFarmTheft', message); },
       sendResolveWildEncounter: (message) => { room.send('resolveWildEncounter', message); },
+      sendChallengeTrainer: (message) => { room.send('challengeTrainer', message); },
       leave
     }),
     onStatus: handlers.onStatus,
@@ -233,6 +242,7 @@ export async function connectToBattle(
     createConnection: (room, leave): BattleConnection => ({
       sendAttack: (message) => { room.send('chooseAttack', message); },
       sendRun: () => { room.send('run'); },
+      sendSwitchCreature: (message) => { room.send('switchCreature', message); },
       leave
     }),
     onStatus: handlers.onStatus,
@@ -459,7 +469,7 @@ function toBattleRoomState(state: any): BattleRoomState {
     battleId: typeof state.battleId === 'string' ? state.battleId : '',
     encounterId: typeof state.encounterId === 'string' ? state.encounterId : '',
     wildSpeciesId: typeof state.wildSpeciesId === 'number' ? state.wildSpeciesId : 1,
-    battleKind: state.battleKind === 'guard-theft' ? 'guard-theft' : 'wild',
+    battleKind: state.battleKind === 'trainer' ? 'trainer' : state.battleKind === 'guard-theft' ? 'guard-theft' : 'wild',
     status: toBattleStatus(state.status),
     turn: typeof state.turn === 'number' ? state.turn : 1,
     canRun: Boolean(state.canRun),
@@ -472,6 +482,13 @@ function toBattleRoomState(state: any): BattleRoomState {
     })),
     validPlayerAttackIds: toArray(state.validPlayerAttackIds).filter((attackId): attackId is string => typeof attackId === 'string'),
     rewardGranted: Boolean(state.rewardGranted),
+    trainerId: typeof state.trainerId === 'string' && state.trainerId ? state.trainerId : undefined,
+    playerActiveCreatureId: typeof state.playerActiveCreatureId === 'string' && state.playerActiveCreatureId ? state.playerActiveCreatureId : undefined,
+    trainerActiveCreatureId: typeof state.trainerActiveCreatureId === 'string' && state.trainerActiveCreatureId ? state.trainerActiveCreatureId : undefined,
+    playerParty: toArray(state.playerParty).map((creature) => toBattleParticipant({ activeCreature: creature }, 'player').activeCreature),
+    trainerParty: toArray(state.trainerParty).map((creature) => toBattleParticipant({ activeCreature: creature }, 'enemy').activeCreature),
+    phase: typeof state.phase === 'string' ? state.phase : undefined,
+    remainingTrainerSwitches: typeof state.remainingTrainerSwitches === 'number' ? state.remainingTrainerSwitches : undefined,
     disconnectGraceUntil:
       typeof state.disconnectGraceUntil === 'string' && state.disconnectGraceUntil ? state.disconnectGraceUntil : undefined
   };
