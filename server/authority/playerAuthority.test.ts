@@ -94,6 +94,19 @@ describe('PlayerAuthority', () => {
     expect(exported?.payload).not.toContain('pendingGrowthEvents');
     expect(JSON.parse(exported!.payload).progressionEvents).toEqual(aggregate.progressionEvents);
   });
+  test('rejects a signed cursor tamper as an invalid legacy save instead of throwing', async () => {
+    const key = Buffer.alloc(32, 11).toString('base64url'); const config = loadGuestCredentialConfig({ GAMEIT_GUEST_AUTH_KEYS: `active:${key}`, NODE_ENV: 'test' });
+    const principal = { sub: '123e4567-e89b-42d3-a456-426614174093' }; const sourceRepository = new ProcessLocalPlayerAuthorityRepository(); const source = new PlayerAuthority(sourceRepository, () => new Date(0), config, () => 0.5);
+    await source.bootstrapProfile(principal, { name: 'A', avatar: 'scout' });
+    await source.execute(principal, { intentId: 'elder', expectedRevision: 0, intent: { type: 'completeElderDialog' } });
+    await source.execute(principal, { intentId: 'starters', expectedRevision: 1, intent: { type: 'convertCreatureCard', starter: true } });
+    const creatureId = (await sourceRepository.read(principal.sub))!.save.creatures.activePartyCreatureIds[0];
+    await source.settleBattle(principal, { battleId: 'cursor-tamper', encounterId: 'cursor-tamper', outcome: 'defeated', playerCreatureId: creatureId, playerCreatureHp: 10, playerCreatureFainted: false, opponentCreatureHp: 0, opponentCreatureFainted: true, rewardGranted: true, rewards: { seed: 1, magicDust: 0, clinks: 0, playerExperience: 0, battlingCreatureExperience: 100, activePartyExperience: 100, materials: [] } });
+    const exported = await source.exportAuthenticatedSave(principal); const payload = JSON.parse(exported!.payload);
+    const tampered = signAuthenticatedTransfer({ ...exported!, payload: JSON.stringify({ ...payload, activeGrowthStartIndex: payload.progressionEvents.length }) }, config);
+    const target = new PlayerAuthority(new ProcessLocalPlayerAuthorityRepository(), () => new Date(0), config, () => 0.5);
+    await expect(target.importAuthenticatedSave(principal, JSON.stringify(tampered))).resolves.toMatchObject({ ok: false, code: 'INVALID_LEGACY_SAVE' });
+  });
   test('rejects a signed authenticated import containing a pending growth draft', async () => {
     const key = Buffer.alloc(32, 10).toString('base64url'); const config = loadGuestCredentialConfig({ GAMEIT_GUEST_AUTH_KEYS: `active:${key}`, NODE_ENV: 'test' });
     const principal = { sub: '123e4567-e89b-42d3-a456-426614174094' }; const source = new PlayerAuthority(new ProcessLocalPlayerAuthorityRepository(), () => new Date(0), config, () => 0.5);

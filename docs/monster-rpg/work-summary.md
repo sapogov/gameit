@@ -703,6 +703,14 @@
 - Split simulation-only growth drafts from persisted `GrowthAuditEvent` histories. Authority sealing consumes drafts before CAS; repository and save import validation reject any draft-bearing record.
 - Routed Account movement through the same authoritative movement transition used by location rooms, while retaining Account command receipts and CAS revision ownership.
 
+## 2026-07-21 - Issue #64 v10 Authority Closure
+
+- Restored the external authenticated-transfer v1 envelope while carrying authority-save-v2 payloads, and rejected expired or future-dated signed imports before payload parsing.
+- Added an active growth-ledger cursor so progress reset preserves immutable audit history while projecting only the new roster epoch.
+- Enforced semantic ledger validation for event shape, revision groups, level continuity, balance-version deltas, grants, rebalances, hashes, and active creature histories.
+- Made reset CAS accept only a canonical fresh initial save with the same player profile, and made signed cursor/projection tampering return a typed invalid-save result.
+- Published refreshed authority snapshots after terminal wild and guarded-farm settlements, while preserving the unguarded theft path.
+
 ## 2026-07-20 - Issue #64: Stat-Growth Event Integrity
 
 - Hardened persisted stat-growth replay validation: level-ups are contiguous and canonical from the basis, deterministic deltas match the balance config, and rebalances use canonical ordered IDs.

@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "server/rooms/LocationRoom.ts": {
-    "mtime": 1784626310.450805,
-    "ast_hash": "2066822c18322e655eefdefe91340d23",
+    "mtime": 1784628522.619799,
+    "ast_hash": "e8546af5506d6f5b79a0492cda501455",
     "semantic_hash": ""
   },
   "server/rooms/balanceVersion.test.ts": {
@@ -325,8 +325,8 @@
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/gameBalance.ts": {
-    "mtime": 1784592206.7315047,
-    "ast_hash": "88fd8a54d882b5506fefb213c07c3055",
+    "mtime": 1784628863.2571166,
+    "ast_hash": "e68bccee8e9561f9e18f9490906e53dc",
     "semantic_hash": ""
   },
   "src/games/monster-rpg/sim/generatedMapArtifact.ts": {
@@ -1690,18 +1690,18 @@
     "semantic_hash": ""
   },
   "server/authority/playerAuthority.test.ts": {
-    "mtime": 1784627840.888,
-    "ast_hash": "4816f8db44ac4d4901c1e8aea95e3cc2",
+    "mtime": 1784629392.1760938,
+    "ast_hash": "79395df5902695a2ad634a2e42f2b5bb",
     "semantic_hash": ""
   },
   "server/authority/playerAuthority.ts": {
-    "mtime": 1784627778.0955136,
-    "ast_hash": "28565bb02470ecaa6763e60a17e95a7b",
+    "mtime": 1784629404.0067523,
+    "ast_hash": "1ca70c0ff2226c15c9a39b2217296cb8",
     "semantic_hash": ""
   },
   "server/authority/playerRepository.ts": {
-    "mtime": 1784624864.2750113,
-    "ast_hash": "354977d01eab3a5db40a09d818808fba",
+    "mtime": 1784629550.8068676,
+    "ast_hash": "3cb201c053498063312e2e8c5bed2fb5",
     "semantic_hash": ""
   },
   "server/authority/runtime.ts": {
@@ -1730,13 +1730,13 @@
     "semantic_hash": ""
   },
   "server/authority/authenticatedTransfer.test.ts": {
-    "mtime": 1784620867.3078883,
-    "ast_hash": "1677b53fc0f627e9df6aebba74a705e0",
+    "mtime": 1784628494.423074,
+    "ast_hash": "bce89d0ec66bcf8a28ff5914fae8eb5e",
     "semantic_hash": ""
   },
   "server/authority/authenticatedTransfer.ts": {
-    "mtime": 1784623306.227148,
-    "ast_hash": "5bf508d2e0bd386728ef2db726cfe303",
+    "mtime": 1784628512.7916567,
+    "ast_hash": "e6cf97bdb63174b6a41397c2973a500a",
     "semantic_hash": ""
   },
   "server/security/transportSecurity.test.ts": {
@@ -1750,8 +1750,8 @@
     "semantic_hash": ""
   },
   "server/authority/playerRepository.test.ts": {
-    "mtime": 1784625516.9668014,
-    "ast_hash": "dff6c59ce09284ef8e5d75e28779cec4",
+    "mtime": 1784629551.3383512,
+    "ast_hash": "c8d5b29acdb975adf2f9bc4c73145319",
     "semantic_hash": ""
   },
   "server/authority/runtime.test.ts": {
@@ -1760,8 +1760,8 @@
     "semantic_hash": ""
   },
   "server/rooms/canonicalMovement.test.ts": {
-    "mtime": 1784625831.6363297,
-    "ast_hash": "09136eabfe46ae475857004349f0d014",
+    "mtime": 1784629178.3125818,
+    "ast_hash": "80aca7630c1894b1376757d4c0fb81f5",
     "semantic_hash": ""
   },
   "server/rooms/maintenanceMode.test.ts": {

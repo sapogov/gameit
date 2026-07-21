@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { signAuthenticatedTransfer, verifyAuthenticatedTransfer, type AuthenticatedTransferEnvelope } from './authenticatedTransfer';
+import { isAuthenticatedTransferFresh, signAuthenticatedTransfer, verifyAuthenticatedTransfer, type AuthenticatedTransferEnvelope } from './authenticatedTransfer';
 import type { GuestCredentialConfig } from '../auth/guestCredentials';
 import {
   createInitialSave, createPlayerProfile, importSavePayload, isAtVillageHospital, moveCreatureToActiveParty,
@@ -15,7 +15,7 @@ import { type ItemInventory, type ItemStack } from '../../src/games/monster-rpg/
 import { getItemDefinition } from '../../src/games/monster-rpg/sim/items';
 import type { SaveStack } from '../../src/games/monster-rpg/sim';
 import type { AuthorityIntent, AuthoritySnapshot, SaveCommand, SaveCommandResult } from '../../src/games/monster-rpg/network/authorityProtocol';
-import { clone, growthEventHash, validateLedger, type GrowthAuditEvent, type PlayerAggregate, type PlayerAuthorityRepository } from './playerRepository';
+import { clone, growthEventHash, isValidAggregate, validateLedger, type GrowthAuditEvent, type PlayerAggregate, type PlayerAuthorityRepository } from './playerRepository';
 import { CURRENT_BALANCE_VERSION, type Direction } from '../../src/games/monster-rpg/sim';
 
 export interface Principal { sub: string }
@@ -55,7 +55,8 @@ export class PlayerAuthority {
       ? rebindSave(createInitialSave(aggregate.save.profile, simulationContext(context)), principal.sub)
       : reduce(aggregate.save, command.intent, context);
     if (!nextSave) return { status: 'rejected', code: 'REJECTED', snapshot: snapshot(aggregate) };
-    const next: PlayerAggregate = { ...aggregate, revision: aggregate.revision + 1, rosterRevision: command.intent.type === 'resetProgress' && command.intent.confirmed === true ? aggregate.rosterRevision + 1 : rosterChanged(aggregate.save, nextSave) ? aggregate.rosterRevision + 1 : aggregate.rosterRevision, save: nextSave, intentReceipts: { ...aggregate.intentReceipts, [command.intentId]: { payloadHash, revision: aggregate.revision + 1 } } };
+    const reset = command.intent.type === 'resetProgress' && command.intent.confirmed === true;
+    const next: PlayerAggregate = { ...aggregate, revision: aggregate.revision + 1, rosterRevision: reset ? aggregate.rosterRevision + 1 : rosterChanged(aggregate.save, nextSave) ? aggregate.rosterRevision + 1 : aggregate.rosterRevision, activeGrowthStartIndex: reset ? aggregate.progressionEvents.length : aggregate.activeGrowthStartIndex, save: nextSave, intentReceipts: { ...aggregate.intentReceipts, [command.intentId]: { payloadHash, revision: aggregate.revision + 1 } } };
     if (!await this.repository.compareExchange(principal.sub, aggregate.revision, next)) return { status: 'rejected', code: 'STALE_REVISION', snapshot: snapshot((await this.repository.read(principal.sub))!) };
     return { status: 'applied', snapshot: snapshot(next) };
   }
@@ -108,25 +109,31 @@ export class PlayerAuthority {
   async exportAuthenticatedSave(principal: Principal): Promise<AuthenticatedSaveExport | null> {
     const aggregate = await this.repository.read(principal.sub); if (!aggregate) return null;
     if (!this.transferKeys) throw new Error('Authenticated transfer keys are required');
-    return signAuthenticatedTransfer({ playerId: principal.sub, revision: aggregate.revision, rosterRevision: aggregate.rosterRevision, issuedAt: this.now().getTime(), payload: JSON.stringify({ type: 'authority-save-v2', save: aggregate.save, progressionEvents: aggregate.progressionEvents }) }, this.transferKeys);
+    return signAuthenticatedTransfer({ playerId: principal.sub, revision: aggregate.revision, rosterRevision: aggregate.rosterRevision, issuedAt: this.now().getTime(), payload: JSON.stringify({ type: 'authority-save-v2', save: aggregate.save, progressionEvents: aggregate.progressionEvents, activeGrowthStartIndex: aggregate.activeGrowthStartIndex }) }, this.transferKeys);
   }
   async importAuthenticatedSave(principal: Principal, rawEnvelope: unknown): Promise<AuthenticatedImportResult> {
     if (!this.transferKeys) throw new Error('Authenticated transfer keys are required');
     const envelope = verifyAuthenticatedTransfer(rawEnvelope, this.transferKeys);
     if (!envelope) return { ok: false, code: 'INVALID_TRANSFER' };
+    const now = this.now().getTime();
+    if (!isAuthenticatedTransferFresh(envelope, now)) return { ok: false, code: 'INVALID_TRANSFER' };
     if (envelope.playerId !== principal.sub) return { ok: false, code: 'CROSS_PRINCIPAL' };
     const existing = await this.repository.read(principal.sub);
     if (existing) return { ok: false, code: existing.revision >= envelope.revision ? 'REPLAYED_OR_STALE' : 'ALREADY_INITIALIZED' };
     let projected: unknown;
     try { projected = JSON.parse(envelope.payload); } catch { return { ok: false, code: 'INVALID_LEGACY_SAVE' }; }
-    if (!isRecord(projected) || projected.type !== 'authority-save-v2' || !isRecord(projected.save) || !Array.isArray(projected.progressionEvents)) return { ok: false, code: 'INVALID_LEGACY_SAVE' };
+    const rawActiveGrowthStartIndex = isRecord(projected) ? projected.activeGrowthStartIndex : undefined;
+    if (!isRecord(projected) || projected.type !== 'authority-save-v2' || !isRecord(projected.save) || !Array.isArray(projected.progressionEvents) || (rawActiveGrowthStartIndex !== undefined && (typeof rawActiveGrowthStartIndex !== 'number' || !Number.isSafeInteger(rawActiveGrowthStartIndex) || rawActiveGrowthStartIndex < 0 || rawActiveGrowthStartIndex > projected.progressionEvents.length))) return { ok: false, code: 'INVALID_LEGACY_SAVE' };
     if (!validateAuthenticatedOwnershipProjection(projected.save, envelope.playerId)) return { ok: false, code: 'CROSS_PRINCIPAL' };
     const parsed = importSavePayload(JSON.stringify(projected.save));
     if (!parsed.ok) return { ok: false, code: 'INVALID_LEGACY_SAVE' };
     if (!validateAuthenticatedSaveOwnership(parsed.state, envelope.playerId)) return { ok: false, code: 'CROSS_PRINCIPAL' };
     const events = projected.progressionEvents as GrowthAuditEvent[];
     if (!validateLedger(events, principal.sub) || hasUnsealedGrowth(parsed.state, events)) return { ok: false, code: 'INVALID_LEGACY_SAVE' };
-    const created = await this.repository.createIfAbsentWithResult({ ...emptyAggregate(principal.sub, clone(parsed.state)), progressionEvents: events, revision: envelope.revision, rosterRevision: envelope.rosterRevision });
+    const activeGrowthStartIndex = rawActiveGrowthStartIndex ?? 0;
+    const candidate: PlayerAggregate = { ...emptyAggregate(principal.sub, clone(parsed.state)), progressionEvents: events, activeGrowthStartIndex, revision: envelope.revision, rosterRevision: envelope.rosterRevision };
+    if (!isValidAggregate(candidate)) return { ok: false, code: 'INVALID_LEGACY_SAVE' };
+    const created = await this.repository.createIfAbsentWithResult(candidate);
     return created.created ? { ok: true, snapshot: snapshot(created.aggregate) } : { ok: false, code: 'ALREADY_INITIALIZED' };
   }
   /** Alias kept explicit so callers do not confuse this with unsigned legacy import. */
@@ -204,7 +211,7 @@ export class PlayerAuthority {
 /** The export is an authenticated transfer envelope, not a durable backup mechanism. */
 export type AuthenticatedExportEnvelope = AuthenticatedSaveExport;
 
-function emptyAggregate(playerId: string, save: MonsterRpgSaveState): PlayerAggregate { return { playerId, revision: 0, rosterRevision: 0, save, intentReceipts: {}, grantReceipts: {}, progressionEvents: [] }; }
+function emptyAggregate(playerId: string, save: MonsterRpgSaveState): PlayerAggregate { return { playerId, revision: 0, rosterRevision: 0, save, intentReceipts: {}, grantReceipts: {}, progressionEvents: [], activeGrowthStartIndex: 0 }; }
 function snapshot(aggregate: PlayerAggregate): AuthoritySnapshot { return { playerId: aggregate.playerId, revision: aggregate.revision, rosterRevision: aggregate.rosterRevision, save: clone(aggregate.save) }; }
 function hash(value: string) { return createHash('sha256').update(value).digest('hex'); }
 function deepFreeze<T>(value: T): T {

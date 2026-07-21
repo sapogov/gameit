@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { growthEventHash, isValidAggregate, isValidLedgerTransition, ProcessLocalPlayerAuthorityRepository, validateLedger, type GrowthAuditEvent, type PlayerAggregate } from './playerRepository';
+import { createInitialSave, createPlayerProfile } from '../../src/games/monster-rpg/sim';
 
 const genesis = '0'.repeat(64);
 function event(overrides: Partial<GrowthAuditEvent> = {}): GrowthAuditEvent {
@@ -21,7 +22,7 @@ describe('growth audit ledger', () => {
     expect(validateLedger([{ ...first, eventHash: 'f'.repeat(64) }, second], 'player-1', 4)).toBe(false);
     expect(validateLedger([first, { ...second, previousHash: genesis }], 'player-1', 4)).toBe(false);
     expect(validateLedger([second, first], 'player-1', 4)).toBe(false);
-    const aggregate = { playerId: 'player-1', revision: 4, rosterRevision: 0, save: { creatures: { creatures: {} } }, intentReceipts: {}, grantReceipts: {}, progressionEvents: [first, second] } as unknown as PlayerAggregate;
+    const aggregate = { playerId: 'player-1', revision: 4, rosterRevision: 0, save: { creatures: { creatures: {} } }, intentReceipts: {}, grantReceipts: {}, progressionEvents: [first, second], activeGrowthStartIndex: 0 } as unknown as PlayerAggregate;
     expect(isValidLedgerTransition(aggregate, { ...aggregate, revision: 5, progressionEvents: [first] })).toBe(false);
   });
 
@@ -39,17 +40,17 @@ describe('growth audit ledger', () => {
     const aggregate = (events: GrowthAuditEvent[], history: GrowthAuditEvent[]) => ({
       playerId: 'player-1', revision: 3, rosterRevision: 0,
       save: { creatures: { creatures: { 'creature-1': { statGrowth: { events: history } } } } },
-      intentReceipts: {}, grantReceipts: {}, progressionEvents: events
+      intentReceipts: {}, grantReceipts: {}, progressionEvents: events, activeGrowthStartIndex: 0
     }) as unknown as PlayerAggregate;
     const orphan = {
       playerId: 'player-1', revision: 3, rosterRevision: 0,
       save: { creatures: { creatures: {} } },
-      intentReceipts: {}, grantReceipts: {}, progressionEvents: [first]
+      intentReceipts: {}, grantReceipts: {}, progressionEvents: [first], activeGrowthStartIndex: 0
     } as unknown as PlayerAggregate;
     const duplicate = {
       playerId: 'player-1', revision: 3, rosterRevision: 0,
       save: { creatures: { creatures: { 'creature-1': { statGrowth: { events: [first] } }, 'creature-2': { statGrowth: { events: [first] } } } } },
-      intentReceipts: {}, grantReceipts: {}, progressionEvents: [first]
+      intentReceipts: {}, grantReceipts: {}, progressionEvents: [first], activeGrowthStartIndex: 0
     } as unknown as PlayerAggregate;
     expect(isValidAggregate(orphan)).toBe(false);
     expect(isValidAggregate(duplicate)).toBe(false);
@@ -63,15 +64,36 @@ describe('growth audit ledger', () => {
     const aggregate = (record: GrowthAuditEvent, revision: number) => ({
       playerId: 'player-1', revision, rosterRevision: 0,
       save: { creatures: { creatures: { 'creature-1': { statGrowth: { events: [record] } } } } },
-      intentReceipts: {}, grantReceipts: {}, progressionEvents: [record]
+      intentReceipts: {}, grantReceipts: {}, progressionEvents: [record], activeGrowthStartIndex: 0
     }) as unknown as PlayerAggregate;
     expect(isValidAggregate(aggregate(divergent, 4))).toBe(true);
     expect(isValidLedgerTransition(aggregate(first, 3), aggregate(divergent, 4))).toBe(false);
   });
 
+  test('accepts only a full canonical fresh save when reset advances the cursor', () => {
+    const first = event(); const profile = createPlayerProfile('A', 'scout'); profile.playerId = 'player-1';
+    const previousSave = createInitialSave(profile, { now: new Date('2026-07-21T00:00:00.000Z') });
+    previousSave.creatures = { ...previousSave.creatures, activePartyCreatureIds: ['creature-1'], creatures: {
+      'creature-1': { id: 'creature-1', ownerPlayerId: 'player-1', speciesId: 1, level: 2, experience: 100, stats: { hp: 22, attack: 11, defense: 11, speed: 11, stamina: 11 }, attacks: [], hp: 22, maxHp: 22, fainted: false, cooldowns: {}, statGrowth: { model: 'deterministic-default', basis: { level: 1, stats: { hp: 20, attack: 10, defense: 10, speed: 10, stamina: 10 } }, events: [first] } }
+    } };
+    const previous = { playerId: 'player-1', revision: 3, rosterRevision: 0, save: previousSave, intentReceipts: {}, grantReceipts: {}, progressionEvents: [first], activeGrowthStartIndex: 0 };
+    const canonicalSave = createInitialSave(structuredClone(previousSave.profile), { now: new Date('2026-07-22T00:00:00.000Z') });
+    const reset = { ...previous, revision: 4, rosterRevision: 1, activeGrowthStartIndex: 1, save: canonicalSave };
+    expect(isValidLedgerTransition(previous, reset)).toBe(true);
+    const mutated = (mutate: (save: typeof canonicalSave) => void) => { const save = structuredClone(canonicalSave); mutate(save); return { ...reset, save }; };
+    expect(isValidLedgerTransition(previous, mutated((save) => { save.inventory.currencies.magicDust = 1; }))).toBe(false);
+    expect(isValidLedgerTransition(previous, mutated((save) => { save.farms.farms.extra = { id: 'extra' } as never; }))).toBe(false);
+    expect(isValidLedgerTransition(previous, mutated((save) => { save.progression.ownerPlayerId = 'other'; }))).toBe(false);
+    expect(isValidLedgerTransition(previous, mutated((save) => { save.profile.name = 'B'; }))).toBe(false);
+    expect(isValidLedgerTransition({ ...previous, playerId: 'other' }, reset)).toBe(false);
+    expect(isValidLedgerTransition(previous, mutated((save) => { save.updatedAt = 'not-a-date'; }))).toBe(false);
+    expect(isValidLedgerTransition(previous, mutated((save) => { save.updatedAt = '2026-07-22T00:00:00Z'; }))).toBe(false);
+    expect(isValidLedgerTransition(previous, mutated((save) => { (save as unknown as Record<string, unknown>).extra = true; }))).toBe(false);
+  });
+
   test('allows exactly one concurrent CAS writer for a revision', async () => {
     const repository = new ProcessLocalPlayerAuthorityRepository();
-    const initial = { playerId: 'player-1', revision: 0, rosterRevision: 0, save: { creatures: { creatures: {} } }, intentReceipts: {}, grantReceipts: {}, progressionEvents: [] } as unknown as PlayerAggregate;
+    const initial = { playerId: 'player-1', revision: 0, rosterRevision: 0, save: { creatures: { creatures: {} }, activePartyCreatureIds: [] }, intentReceipts: {}, grantReceipts: {}, progressionEvents: [], activeGrowthStartIndex: 0 } as unknown as PlayerAggregate;
     await repository.createIfAbsent(initial);
     const next = { ...initial, revision: 1 };
     const results = await Promise.all([repository.compareExchange('player-1', 0, next), repository.compareExchange('player-1', 0, next)]);

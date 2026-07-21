@@ -240,7 +240,14 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
     this.battleResultCleanups.set(
       battleClaim.battleId,
       onBattleClaimResolved(battleClaim.battleId, (result) => {
-        void playerAuthority.settleBattle({ sub: battleClaim.playerProfile.playerId }, result).finally(() => this.finalizeBattleResult(result));
+        void (async () => {
+          try {
+            const snapshot = await playerAuthority.settleBattle({ sub: battleClaim.playerProfile.playerId }, result);
+            if (snapshot) client.send('authoritySnapshot', snapshot);
+          } finally {
+            this.finalizeBattleResult(result);
+          }
+        })();
       })
     );
 
@@ -315,7 +322,16 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
         const settlement = ownerId && farmId && guardCreatureId
           ? playerAuthority.settleGuardedTheft({ attackerId: battleClaim.playerProfile.playerId, ownerId, farmId, guardCreatureId, result })
           : Promise.resolve(false);
-        void settlement.finally(() => this.finalizeBattleResult(result));
+        void (async () => {
+          try {
+            if (await settlement) {
+              const snapshot = await playerAuthority.snapshot({ sub: battleClaim.playerProfile.playerId });
+              if (snapshot) client.send('authoritySnapshot', snapshot);
+            }
+          } finally {
+            this.finalizeBattleResult(result);
+          }
+        })();
       })
     );
 
@@ -626,8 +642,7 @@ function sanitizeFarm(farm: FarmSaveRecord | undefined): FarmSaveRecord | null {
     !farm.position ||
     typeof farm.position.x !== 'number' ||
     typeof farm.position.y !== 'number' ||
-    typeof farm.guardCreatureId !== 'string' ||
-    !farm.guardCreatureId
+    typeof farm.guardCreatureId !== 'string'
   ) {
     return null;
   }

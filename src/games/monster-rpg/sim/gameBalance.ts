@@ -6,6 +6,12 @@ const creatureTypes = ['verdant', 'ember', 'tide', 'stone', 'gale', 'spark', 'sh
 
 export const CURRENT_BALANCE_VERSION = 2 as const;
 
+/** Frozen vectors used to authenticate historic server growth events. */
+export const AUDIT_BALANCE_CATALOG = Object.freeze({
+  1: Object.freeze({ deterministicDelta: Object.freeze({ hp: 2, attack: 1, defense: 1, speed: 1, stamina: 1 }), randomRange: Object.freeze({ min: 0, max: 6 }) }),
+  2: Object.freeze({ deterministicDelta: Object.freeze({ hp: 2, attack: 1, defense: 1, speed: 1, stamina: 1 }), randomRange: Object.freeze({ min: 0, max: 6 }) })
+});
+
 export interface RewardChanceBalanceEntry {
   readonly id: string;
   readonly chance: number;
