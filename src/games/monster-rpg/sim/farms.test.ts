@@ -68,13 +68,16 @@ describe('Magic Dust Farms', () => {
       position: { mapId: 'home-village' as const, x: 24, y: 17, facing: 'north' as const }
     };
 
-    const collected = collectFacingFarm(adjacent, new Date('2026-06-20T12:05:00.000Z'));
+    const now = new Date('2026-06-20T12:05:00.000Z');
+    const collected = collectFacingFarm(adjacent, now);
 
     expect(collected.ok).toBe(true);
     if (!collected.ok) throw new Error(collected.reason);
     expect(collected.collectedQuantity).toBe(9);
     expect(collected.state.inventory.currencies[MAGIC_DUST_CURRENCY_ID]).toBe(9);
     expect(collected.state.farms.farms[MAGIC_DUST_FARM_ID].storedResources[MAGIC_DUST_CURRENCY_ID]).toBe(0);
+    expect(collected.state.farms.farms[MAGIC_DUST_FARM_ID].lastProductionAt).toBe(now.toISOString());
+    expect(collected.state.updatedAt).toBe(now.toISOString());
   });
 
   it('collects when facing any tile in the 2x2 farm footprint', () => {
@@ -128,7 +131,8 @@ describe('Magic Dust Farms', () => {
       }
     };
 
-    const upgraded = upgradeFarm(stocked, MAGIC_DUST_FARM_ID, new Date('2026-06-20T12:03:00.000Z'));
+    const now = new Date('2026-06-20T12:03:00.000Z');
+    const upgraded = upgradeFarm(stocked, MAGIC_DUST_FARM_ID, now);
 
     expect(upgraded.ok).toBe(true);
     if (!upgraded.ok) throw new Error(upgraded.reason);
@@ -138,6 +142,7 @@ describe('Magic Dust Farms', () => {
     expect(upgraded.farm.storedResources[MAGIC_DUST_CURRENCY_ID]).toBe(7);
     expect(upgraded.state.inventory.currencies[MAGIC_DUST_CURRENCY_ID]).toBe(4);
     expect(upgraded.state.inventory.cards[MAGIC_DUST_FARM_CARD_ID]).toBeUndefined();
+    expect(upgraded.state.updatedAt).toBe(now.toISOString());
   });
 
   it('exposes farm upgrade requirements before confirming', () => {
@@ -175,7 +180,8 @@ describe('Magic Dust Farms', () => {
     );
 
     const rejected = assignFarmGuard(state, MAGIC_DUST_FARM_ID, faintedCreature.id);
-    const assigned = assignFarmGuard(state, MAGIC_DUST_FARM_ID, readyCreature.id);
+    const now = new Date('2026-06-20T12:04:00.000Z');
+    const assigned = assignFarmGuard(state, MAGIC_DUST_FARM_ID, readyCreature.id, now);
 
     expect(rejected.ok).toBe(false);
     if (rejected.ok) throw new Error('Expected fainted guard rejection');
@@ -184,6 +190,7 @@ describe('Magic Dust Farms', () => {
     if (!assigned.ok) throw new Error(assigned.reason);
     expect(assigned.farm.guardCreatureId).toBe(readyCreature.id);
     expect(isFarmGuardActive(assigned.state, assigned.farm)).toBe(true);
+    expect(assigned.state.updatedAt).toBe(now.toISOString());
   });
 
   it('keeps a fainted assigned guard persisted but inactive for theft checks', () => {

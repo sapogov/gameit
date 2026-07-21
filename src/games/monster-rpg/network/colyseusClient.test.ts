@@ -249,7 +249,7 @@ describe.each([
     room.publishDecodedState(harness.decodedState);
     await expect(connectionPromise).resolves.toBeDefined();
     expect(order).toEqual(['published', 'resolved']);
-    expect([...room.messageListenerTypes()].sort()).toEqual([...harness.readyMessageTypes].sort());
+    expect([...room.messageListenerTypes()].sort()).toEqual([...(harness.readyMessageTypes.includes('farmTheftResult') ? ['authoritySnapshot'] : []), ...harness.readyMessageTypes].sort());
   });
 
   test.each([0, undefined, CURRENT_BALANCE_VERSION + 1])('rejects decoded balance version %s without throwing from the signal', async (balanceVersion) => {

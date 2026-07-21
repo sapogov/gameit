@@ -120,7 +120,11 @@ export interface CreatureStatGrowthBasis {
   stats: BaseStatTendencies;
 }
 
-export interface CreatureStatGrowthEvent {
+/**
+ * A simulation-only proposal. It may exist only between battle settlement and
+ * authority sealing; it is deliberately not part of CreatureStatGrowthState.
+ */
+export interface CreatureStatGrowthDraftEvent {
   id: string;
   kind: 'level-up' | 'rebalance';
   level: number;
@@ -129,11 +133,38 @@ export interface CreatureStatGrowthEvent {
   createdAt: string;
 }
 
+/** Immutable server-sealed growth history. Draft growth events never carry these fields. */
+export type GrowthAuditEvent = GrowthAuditLevelUpEvent | GrowthAuditRebalanceEvent;
+export interface GrowthAuditEventBase {
+  v: 1;
+  playerId: string;
+  creatureId: string;
+  grantId: string;
+  balanceVersion: number;
+  levelFrom: number;
+  levelTo: number;
+  deltas: BaseStatTendencies;
+  aggregateRevision: number;
+  createdAt: string;
+  previousHash: string;
+  eventHash: string;
+}
+export interface GrowthAuditLevelUpEvent extends GrowthAuditEventBase {
+  kind: 'level-up';
+  model: StatGrowthModel;
+}
+export interface GrowthAuditRebalanceEvent extends GrowthAuditEventBase {
+  kind: 'rebalance';
+  model: 'rebalance';
+  targetBalanceVersion: number;
+}
+export type GrowthAuditEventHashInput = Omit<GrowthAuditLevelUpEvent, 'eventHash'> | Omit<GrowthAuditRebalanceEvent, 'eventHash'>;
+
 export interface CreatureStatGrowthState {
   /** Model selected for future level-ups; historical events retain their own model. */
   model: StatGrowthModel;
   basis: CreatureStatGrowthBasis;
-  events: CreatureStatGrowthEvent[];
+  events: GrowthAuditEvent[];
 }
 
 export interface CreatureAttackRecord {
@@ -222,6 +253,8 @@ export interface CreatureSaveRecord {
   cooldowns: Record<string, string>;
   /** Historical stat deltas are append-only; omitted only by pre-growth fixtures/legacy records. */
   statGrowth?: CreatureStatGrowthState;
+  /** Transient authority input; repositories reject it before persistence. */
+  pendingGrowthEvents?: CreatureStatGrowthDraftEvent[];
 }
 
 export type BattleKind = 'wild' | 'guard-theft';

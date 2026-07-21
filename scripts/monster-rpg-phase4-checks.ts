@@ -5,7 +5,7 @@ import { BattleRoom } from '../server/rooms/BattleRoom';
 import { AccountRoom } from '../server/rooms/AccountRoom';
 import { LocationRoom } from '../server/rooms/LocationRoom';
 import { issueGuestCredential } from '../server/auth/guestCredentials';
-import { guestCredentialConfig, playerAuthority } from '../server/authority/runtime';
+import { authorityRepository, guestCredentialConfig, playerAuthority } from '../server/authority/runtime';
 import type { AuthorityIntent, AuthoritySnapshot } from '../src/games/monster-rpg/network/authorityProtocol';
 import {
   buildingDefinitions,
@@ -484,6 +484,7 @@ async function joinLocation(
   profile: PlayerProfile,
   transitionId?: string
 ): Promise<SdkRoom> {
+  if (!transitionId) await prepareCanonicalLocation(profile, mapId);
   const room = (await client.joinOrCreate('location', {
     mapId,
     credential: await credentialFor(profile),
@@ -493,6 +494,17 @@ async function joinLocation(
   })) as SdkRoom;
   await waitFor(() => room.state.mapId === mapId, `join ${mapId}`);
   return room;
+}
+
+/** Direct SDK scenarios use server-side repository CAS to place the canonical aggregate at the requested map spawn. */
+async function prepareCanonicalLocation(profile: PlayerProfile, mapId: MapId): Promise<void> {
+  const player = await canonicalPlayerFor(profile);
+  const aggregate = await authorityRepository.read(player.principal.sub);
+  assert.ok(aggregate, `missing canonical aggregate for ${profile.playerId}`);
+  const spawn = getGameMap(mapId).spawn;
+  aggregate.save = { ...aggregate.save, mapId, position: { ...spawn } };
+  assert.equal(await authorityRepository.compareExchange(player.principal.sub, aggregate.revision, aggregate), true, `canonical setup CAS failed for ${profile.playerId}`);
+  await refreshCanonicalSnapshot(player);
 }
 
 /** Issues one credential and prepares the canonical ready party through public authority commands. */

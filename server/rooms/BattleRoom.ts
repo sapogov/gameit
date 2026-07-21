@@ -19,6 +19,7 @@ import {
 import { getBattleClaim, markBattleClaimResolved } from '../battleRegistry';
 import { verifyGuestCredential } from '../auth/guestCredentials';
 import { guestCredentialConfig, guestCredentialTtlSeconds } from '../authority/runtime';
+import { authorityEnabled } from '../authority/runtime';
 import {
   BattleAttackSchema,
   BattleCreatureSchema,
@@ -35,6 +36,7 @@ export class BattleRoom extends Room {
   private playerId = '';
 
   onCreate(options?: Partial<JoinBattleOptions>) {
+    if (!authorityEnabled) throw new ServerError(503, JSON.stringify({ code: 'AUTHORITY_MAINTENANCE' }));
     assertBalanceVersion(options?.balanceVersion);
     const battleId = typeof options?.battleId === 'string' ? options.battleId : '';
     const battleToken = typeof options?.battleToken === 'string' ? options.battleToken : '';

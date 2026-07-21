@@ -34,6 +34,7 @@ export class BalanceVersionMismatchError extends Error {
 type ColyseusRoom = Room<unknown, any>;
 
 interface ConnectionHandlers {
+  onAuthoritySnapshot?: (snapshot: AuthoritySnapshot) => void;
   onRoomState: (state: LocationRoomState) => void;
   onStatus: (status: MultiplayerStatus) => void;
   onTransition: (transition: LocationTransitionMessage) => void;
@@ -75,6 +76,7 @@ export interface AccountConnection {
   bootstrapLegacySave: (payload: string) => Promise<SaveCommandResult>;
   exportAuthenticatedSave: () => Promise<string>;
   importAuthenticatedSave: (payload: string) => Promise<AuthoritySnapshot>;
+  onSnapshot: (listener: (snapshot: AuthoritySnapshot) => void) => () => void;
   leave: () => void;
 }
 
@@ -112,6 +114,7 @@ export async function connectToLocation(
     },
     publishState: handlers.onRoomState,
     attachReadyHandlers: (room) => [
+      room.onMessage('authoritySnapshot', (snapshot: AuthoritySnapshot) => handlers.onAuthoritySnapshot?.(snapshot)),
       room.onMessage('locationTransition', (transition: LocationTransitionMessage) => handlers.onTransition(transition)),
       room.onMessage('wildEncounterClaimed', (message: WildEncounterClaimedMessage) => handlers.onWildEncounterClaimed(message)),
       room.onMessage('wildEncounterClaimRejected', (message: { encounterId: string; reason: string }) => handlers.onWildEncounterClaimRejected(message)),
@@ -160,6 +163,8 @@ export async function connectToAccount(credential?: string): Promise<AccountConn
       transfers.delete(message.requestId);
       message.error ? pendingTransfer.reject(new Error(message.error)) : pendingTransfer.resolve(message.result);
     });
+    const snapshotListeners = new Set<(snapshot: AuthoritySnapshot) => void>();
+    room.onMessage('authoritySnapshot', (snapshot: AuthoritySnapshot) => { snapshotListeners.forEach((listener) => listener(snapshot)); });
     room.onMessage('authorityReady', (message: AccountReady) => {
       if (!message || message.protocolVersion !== 1 || (message.status !== 'created' && message.status !== 'authenticated')) {
         fail(new Error('Unsupported authority protocol'));
@@ -194,6 +199,7 @@ export async function connectToAccount(credential?: string): Promise<AccountConn
             return value as AuthoritySnapshot;
           });
         },
+        onSnapshot(listener) { snapshotListeners.add(listener); return () => snapshotListeners.delete(listener); },
         bootstrapLegacySave(payload) {
           if (closed) return Promise.resolve({ status: 'rejected', code: 'AUTHORITY_REQUIRED' });
           return new Promise((complete) => { pending.push(complete); room.send('importLegacySave', payload); });

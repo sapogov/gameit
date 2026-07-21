@@ -48,6 +48,11 @@ export type SaveBalanceMigrationResult =
 export type SaveBalanceMigrationFailure = Extract<SaveBalanceMigrationResult, { ok: false }>;
 export type SaveLoadResult = { ok: true; state: MonsterRpgSaveState | null } | SaveBalanceMigrationFailure;
 
+export interface SaveBootstrapOptions {
+  now?: Date;
+  rng?: () => number;
+}
+
 export interface MonsterRpgSaveRepository {
   loadProfile: () => PlayerProfile | null;
   loadSave: () => SaveLoadResult;
@@ -103,7 +108,8 @@ export function createPlayerProfile(name: string, avatar: AvatarId): PlayerProfi
   };
 }
 
-export function createInitialSave(profile: PlayerProfile): MonsterRpgSaveState {
+export function createInitialSave(profile: PlayerProfile, options?: SaveBootstrapOptions): MonsterRpgSaveState {
+  const now = options?.now ?? new Date();
   return {
     schemaVersion: MONSTER_RPG_SCHEMA_VERSION,
     balanceVersion: CURRENT_BALANCE_VERSION,
@@ -111,7 +117,7 @@ export function createInitialSave(profile: PlayerProfile): MonsterRpgSaveState {
     position: { ...homeVillageMap.spawn },
     mapId: homeVillageMap.id,
     ...createEmptySaveContainers(profile.playerId, profile.homeVillageId),
-    updatedAt: new Date().toISOString()
+    updatedAt: now.toISOString()
   };
 }
 
@@ -439,6 +445,7 @@ function isValidCreatureRecord(record: unknown, playerId: string): record is Cre
 
   return (
     isNonEmptyString(candidate.id) &&
+    !Object.prototype.hasOwnProperty.call(candidate, 'pendingGrowthEvents') &&
     candidate.ownerPlayerId === playerId &&
     Number.isSafeInteger(candidate.speciesId) &&
     isKnownSpeciesId(candidate.speciesId) &&

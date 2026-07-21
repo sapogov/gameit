@@ -1,5 +1,19 @@
 # Monster RPG Work Summary
 
+## 2026-07-21 - Issue #64 Reviewer Closure v7
+
+- Replaced persisted growth drafts with a closed, versioned, account-bound SHA-256 audit chain; repository create/CAS/import boundaries now reject tampering, truncation, divergent prefixes, duplicate grants/rebalances, orphan history copies, and transient drafts.
+- Routed Account and Location movement through one canonical CAS seam, fenced Location intents by canonical map and monotonic session sequence, rejected mismatched joins, and synchronized authority snapshots so reconnects, exports, and later commands use the latest revision.
+- Added pre-character authenticated recovery states, success-only cleanup of legacy browser save keys, strict read-only authority maintenance mode, and confirmed progress reset that preserves identity and audit receipts while advancing aggregate and roster revisions.
+- Removed Account-room movement and farm-theft commands; movement now requires a Location session, while unguarded theft revalidates canonical map, position, facing, ownership, guard state, revision, and receipts before atomic settlement.
+- Added one required authority mutation context so bootstrap, Account reducers, movement, battle rewards, and theft settlements share one injected server timestamp and RNG stream through all nested simulation operations.
+- Added focused ledger, movement, recovery, reset, maintenance, Account-abuse, deterministic-clock/RNG (including guarded-theft CAS retries), and SDK handoff coverage; the complete suite passes 279 tests and the Phase 4 simulation/SDK check passes.
+
+## 2026-07-21 - Issue #64 Reviewer Repair v6
+
+- Removed free pack and profile-reset intents, added confirmed progress reset, transfer-v2 envelope payloads, strict authority maintenance gating, and canonical authority movement updates.
+- Recovery imports now expect the signed authority-save-v2 payload and browser legacy profile/save keys are removed only after a canonical snapshot is adopted.
+
 ## 2026-07-21 - Issue #64 Authority Cutover Validation (phase 2C)
 
 - Separated aggregate and roster revision tracking in the client so wild and guarded-farm battle claims present the canonical Active Party revision.
@@ -681,6 +695,13 @@
 
 - Start Phase 5 with Creature Foundation: original creature catalog, type/rarity data, inventory, party/storage state, and DOM party/inventory panels.
 - Keep production persistence behind repository interfaces until core gameplay loops are proven.
+
+## 2026-07-21 - Issue #64 v7 Ledger Closure Repair
+
+- Centralized server aggregate ledger validation for create, import, and CAS boundaries: canonical SHA-256 event hashes, genesis/previous links, immutable prefixes, grant/rebalance uniqueness, revision ordering, and exact creature-history projections now fail closed.
+- Added the shared closed growth-audit event union, required authority clock/RNG injection, canonical farm-theft dependency injection, exact reset roster-revision behavior, and the missing Colyseus authority-snapshot listener assertion.
+- Split simulation-only growth drafts from persisted `GrowthAuditEvent` histories. Authority sealing consumes drafts before CAS; repository and save import validation reject any draft-bearing record.
+- Routed Account movement through the same authoritative movement transition used by location rooms, while retaining Account command receipts and CAS revision ownership.
 
 ## 2026-07-20 - Issue #64: Stat-Growth Event Integrity
 

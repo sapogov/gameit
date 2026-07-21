@@ -15,21 +15,24 @@ import { type ItemInventory, type ItemStack } from '../../src/games/monster-rpg/
 import { getItemDefinition } from '../../src/games/monster-rpg/sim/items';
 import type { SaveStack } from '../../src/games/monster-rpg/sim';
 import type { AuthorityIntent, AuthoritySnapshot, SaveCommand, SaveCommandResult } from '../../src/games/monster-rpg/network/authorityProtocol';
-import { clone, type PlayerAggregate, type PlayerAuthorityRepository } from './playerRepository';
+import { clone, growthEventHash, validateLedger, type GrowthAuditEvent, type PlayerAggregate, type PlayerAuthorityRepository } from './playerRepository';
+import { CURRENT_BALANCE_VERSION, type Direction } from '../../src/games/monster-rpg/sim';
 
 export interface Principal { sub: string }
 export interface FrozenParty { playerId: string; rosterRevision: number; creatures: readonly Readonly<CreatureSaveRecord>[] }
 export type AuthenticatedSaveExport = AuthenticatedTransferEnvelope;
 export type AuthenticatedImportResult = { ok: true; snapshot: AuthoritySnapshot } | { ok: false; code: 'INVALID_TRANSFER' | 'CROSS_PRINCIPAL' | 'ALREADY_INITIALIZED' | 'REPLAYED_OR_STALE' | 'INVALID_LEGACY_SAVE' };
+export interface AuthorityMutationContext { readonly transactionAt: Date; readonly rng: () => number }
 
 export class PlayerAuthority {
-  constructor(private readonly repository: PlayerAuthorityRepository, private readonly now: () => Date = () => new Date(), private readonly transferKeys?: GuestCredentialConfig) {}
+  constructor(private readonly repository: PlayerAuthorityRepository, private readonly now: () => Date, private readonly transferKeys: GuestCredentialConfig | undefined, private readonly rng: () => number) {}
   async snapshot(principal: Principal): Promise<AuthoritySnapshot | null> { const aggregate = await this.repository.read(principal.sub); return aggregate && snapshot(aggregate); }
   async findFarm(farmId: string) { return this.repository.findFarm(farmId); }
   async bootstrapProfile(principal: Principal, input: { name: string; avatar: AvatarId }): Promise<AuthoritySnapshot> {
     const profile = createPlayerProfile(input.name, input.avatar);
     profile.playerId = principal.sub;
-    const aggregate = await this.repository.createIfAbsent(emptyAggregate(principal.sub, createInitialSave(profile)));
+    const context = this.mutationContext();
+    const aggregate = await this.repository.createIfAbsent(emptyAggregate(principal.sub, createInitialSave(profile, simulationContext(context))));
     return snapshot(aggregate);
   }
   async importLegacySave(principal: Principal, payload: string): Promise<{ ok: true; snapshot: AuthoritySnapshot } | { ok: false; code: 'ALREADY_INITIALIZED' | 'INVALID_LEGACY_SAVE' }> {
@@ -37,7 +40,8 @@ export class PlayerAuthority {
     const parsed = importSavePayload(payload);
     if (!parsed.ok || Object.values(parsed.ok ? parsed.state.creatures.creatures : {}).some((creature) => creature.statGrowth?.events.length)) return { ok: false, code: 'INVALID_LEGACY_SAVE' };
     const save = rebindSave(parsed.state, principal.sub);
-    const aggregate = await this.repository.createIfAbsent({ ...emptyAggregate(principal.sub, save), legacyImportReceipt: { payloadHash: hash(payload), importedAt: this.now().toISOString() } });
+    const context = this.mutationContext();
+    const aggregate = await this.repository.createIfAbsent({ ...emptyAggregate(principal.sub, save), legacyImportReceipt: { payloadHash: hash(payload), importedAt: context.transactionAt.toISOString() } });
     return aggregate.legacyImportReceipt?.payloadHash === hash(payload) ? { ok: true, snapshot: snapshot(aggregate) } : { ok: false, code: 'ALREADY_INITIALIZED' };
   }
   async execute(principal: Principal, command: SaveCommand): Promise<SaveCommandResult> {
@@ -46,37 +50,57 @@ export class PlayerAuthority {
     const payloadHash = hash(JSON.stringify(command.intent)); const prior = aggregate.intentReceipts[command.intentId];
     if (prior) return prior.payloadHash === payloadHash ? { status: 'duplicate', snapshot: snapshot(aggregate) } : { status: 'rejected', code: 'INTENT_REUSED', snapshot: snapshot(aggregate) };
     if (command.expectedRevision !== aggregate.revision) return { status: 'rejected', code: 'STALE_REVISION', snapshot: snapshot(aggregate) };
-    if (command.intent.type === 'attemptFarmTheft' && typeof command.intent.farmId === 'string') return this.attemptFarmTheft(principal, command, aggregate, payloadHash);
-    const nextSave = reduce(aggregate.save, command.intent);
+    const context = this.mutationContext();
+    const nextSave = command.intent.type === 'resetProgress' && command.intent.confirmed === true
+      ? rebindSave(createInitialSave(aggregate.save.profile, simulationContext(context)), principal.sub)
+      : reduce(aggregate.save, command.intent, context);
     if (!nextSave) return { status: 'rejected', code: 'REJECTED', snapshot: snapshot(aggregate) };
-    const next: PlayerAggregate = { ...aggregate, revision: aggregate.revision + 1, rosterRevision: rosterChanged(aggregate.save, nextSave) ? aggregate.rosterRevision + 1 : aggregate.rosterRevision, save: nextSave, intentReceipts: { ...aggregate.intentReceipts, [command.intentId]: { payloadHash, revision: aggregate.revision + 1 } } };
+    const next: PlayerAggregate = { ...aggregate, revision: aggregate.revision + 1, rosterRevision: command.intent.type === 'resetProgress' && command.intent.confirmed === true ? aggregate.rosterRevision + 1 : rosterChanged(aggregate.save, nextSave) ? aggregate.rosterRevision + 1 : aggregate.rosterRevision, save: nextSave, intentReceipts: { ...aggregate.intentReceipts, [command.intentId]: { payloadHash, revision: aggregate.revision + 1 } } };
     if (!await this.repository.compareExchange(principal.sub, aggregate.revision, next)) return { status: 'rejected', code: 'STALE_REVISION', snapshot: snapshot((await this.repository.read(principal.sub))!) };
     return { status: 'applied', snapshot: snapshot(next) };
   }
-  /** The room validates proximity; this authority method owns all RNG and cross-account writes. */
-  private async attemptFarmTheft(principal: Principal, command: SaveCommand, attacker: PlayerAggregate, payloadHash: string): Promise<SaveCommandResult> {
-    const farmId = command.intent.farmId as string;
-    const found = await this.repository.findFarm(farmId);
-    if (!found || found.playerId === principal.sub) return { status: 'rejected', code: 'REJECTED', snapshot: snapshot(attacker) };
+  /** Canonical location mutation seam; only this method advances location revision. */
+  async applyMovement(principal: Principal, direction: Direction, locationContext?: { mapId: string }): Promise<{ snapshot: AuthoritySnapshot; transition?: { toMapId: string; spawn: unknown } } | null> {
+    const mutationContext = this.mutationContext();
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      const aggregate = await this.repository.read(principal.sub); if (!aggregate || (locationContext && aggregate.save.mapId !== locationContext.mapId)) return null;
+      const transition = movementTransition(aggregate, direction, mutationContext);
+      const changed = JSON.stringify(transition.state.position) !== JSON.stringify(aggregate.save.position);
+      if (!changed) return { snapshot: snapshot(aggregate), ...(transition.transition ? { transition: transition.transition } : {}) };
+      const next = { ...aggregate, revision: aggregate.revision + 1, save: transition.state };
+      if (await this.repository.compareExchange(principal.sub, aggregate.revision, next)) return { snapshot: snapshot(next), ...(transition.transition ? { transition: transition.transition } : {}) };
+    }
+    return null;
+  }
+  /** Location-only settlement: canonical account state, never room or client coordinates, authorizes theft. */
+  async settleUnguardedFarmTheft(input: { principal: Principal; intentId: string; expectedRevision: number; roomMapId: string; farmId: string }): Promise<SaveCommandResult> {
+    const attacker = await this.repository.read(input.principal.sub);
+    if (!attacker) return { status: 'rejected', code: 'AUTHORITY_REQUIRED' };
+    const payloadHash = hash(JSON.stringify({ type: 'locationFarmTheft', farmId: input.farmId, roomMapId: input.roomMapId }));
+    const prior = attacker.intentReceipts[input.intentId];
+    if (prior) return prior.payloadHash === payloadHash ? { status: 'duplicate', snapshot: snapshot(attacker) } : { status: 'rejected', code: 'INTENT_REUSED', snapshot: snapshot(attacker) };
+    if (input.expectedRevision !== attacker.revision) return { status: 'rejected', code: 'STALE_REVISION', snapshot: snapshot(attacker) };
+    const found = await this.repository.findFarm(input.farmId);
+    if (!found || found.playerId === input.principal.sub) return { status: 'rejected', code: 'REJECTED', snapshot: snapshot(attacker) };
     const owner = await this.repository.read(found.playerId);
     if (!owner) return { status: 'rejected', code: 'REJECTED', snapshot: snapshot(attacker) };
-    const farm = owner.save.farms.farms[farmId];
-    if (!farm || farm.ownerPlayerId !== owner.playerId || farm.guardCreatureId) return { status: 'rejected', code: 'REJECTED', snapshot: snapshot(attacker) };
+    const farm = owner.save.farms.farms[input.farmId];
+    if (!farm || farm.ownerPlayerId !== owner.playerId || farm.guardCreatureId || attacker.save.mapId !== input.roomMapId || attacker.save.position.mapId !== input.roomMapId || farm.mapId !== input.roomMapId || farm.position.mapId !== input.roomMapId) return { status: 'rejected', code: 'REJECTED', snapshot: snapshot(attacker) };
     const simulated = clone(attacker.save);
-    simulated.position = { mapId: farm.position.mapId, x: farm.position.x - 1, y: farm.position.y, facing: 'east' };
     simulated.farms = { ...simulated.farms, farms: { ...simulated.farms.farms, [farm.id]: clone(farm) } };
-    const theft = attemptFacingFarmTheft(simulated);
+    const context = this.mutationContext();
+    const theft = attemptFacingFarmTheft(simulated, context.transactionAt, simulationContext(context));
     if (!theft.ok) return { status: 'rejected', code: 'REJECTED', snapshot: snapshot(attacker) };
     const { [farm.id]: _foreignFarm, ...attackerFarms } = theft.state.farms.farms;
     const attackerSave = { ...theft.state, position: attacker.save.position, farms: { ...theft.state.farms, farms: attackerFarms } };
     const attackerNext: PlayerAggregate = {
       ...attacker, revision: attacker.revision + 1, rosterRevision: rosterChanged(attacker.save, attackerSave) ? attacker.rosterRevision + 1 : attacker.rosterRevision,
-      save: attackerSave, intentReceipts: { ...attacker.intentReceipts, [command.intentId]: { payloadHash, revision: attacker.revision + 1 } }
+      save: attackerSave, intentReceipts: { ...attacker.intentReceipts, [input.intentId]: { payloadHash, revision: attacker.revision + 1 } }
     };
     const ownerSave = { ...owner.save, farms: { ...owner.save.farms, farms: { ...owner.save.farms.farms, [farm.id]: theft.farm } } };
     const ownerNext: PlayerAggregate = { ...owner, revision: owner.revision + 1, save: ownerSave };
     if (!await this.repository.compareExchangeMany([{ playerId: attacker.playerId, expectedRevision: attacker.revision, next: attackerNext }, { playerId: owner.playerId, expectedRevision: owner.revision, next: ownerNext }])) {
-      const current = await this.repository.read(principal.sub);
+      const current = await this.repository.read(input.principal.sub);
       return { status: 'rejected', code: 'STALE_REVISION', ...(current ? { snapshot: snapshot(current) } : {}) };
     }
     return { status: 'applied', snapshot: snapshot(attackerNext) };
@@ -84,7 +108,7 @@ export class PlayerAuthority {
   async exportAuthenticatedSave(principal: Principal): Promise<AuthenticatedSaveExport | null> {
     const aggregate = await this.repository.read(principal.sub); if (!aggregate) return null;
     if (!this.transferKeys) throw new Error('Authenticated transfer keys are required');
-    return signAuthenticatedTransfer({ playerId: principal.sub, revision: aggregate.revision, rosterRevision: aggregate.rosterRevision, issuedAt: this.now().getTime(), payload: JSON.stringify(aggregate.save) }, this.transferKeys);
+    return signAuthenticatedTransfer({ playerId: principal.sub, revision: aggregate.revision, rosterRevision: aggregate.rosterRevision, issuedAt: this.now().getTime(), payload: JSON.stringify({ type: 'authority-save-v2', save: aggregate.save, progressionEvents: aggregate.progressionEvents }) }, this.transferKeys);
   }
   async importAuthenticatedSave(principal: Principal, rawEnvelope: unknown): Promise<AuthenticatedImportResult> {
     if (!this.transferKeys) throw new Error('Authenticated transfer keys are required');
@@ -95,11 +119,14 @@ export class PlayerAuthority {
     if (existing) return { ok: false, code: existing.revision >= envelope.revision ? 'REPLAYED_OR_STALE' : 'ALREADY_INITIALIZED' };
     let projected: unknown;
     try { projected = JSON.parse(envelope.payload); } catch { return { ok: false, code: 'INVALID_LEGACY_SAVE' }; }
-    if (!validateAuthenticatedOwnershipProjection(projected, envelope.playerId)) return { ok: false, code: 'CROSS_PRINCIPAL' };
-    const parsed = importSavePayload(envelope.payload);
+    if (!isRecord(projected) || projected.type !== 'authority-save-v2' || !isRecord(projected.save) || !Array.isArray(projected.progressionEvents)) return { ok: false, code: 'INVALID_LEGACY_SAVE' };
+    if (!validateAuthenticatedOwnershipProjection(projected.save, envelope.playerId)) return { ok: false, code: 'CROSS_PRINCIPAL' };
+    const parsed = importSavePayload(JSON.stringify(projected.save));
     if (!parsed.ok) return { ok: false, code: 'INVALID_LEGACY_SAVE' };
     if (!validateAuthenticatedSaveOwnership(parsed.state, envelope.playerId)) return { ok: false, code: 'CROSS_PRINCIPAL' };
-    const created = await this.repository.createIfAbsentWithResult({ ...emptyAggregate(principal.sub, clone(parsed.state)), revision: envelope.revision, rosterRevision: envelope.rosterRevision });
+    const events = projected.progressionEvents as GrowthAuditEvent[];
+    if (!validateLedger(events, principal.sub) || hasUnsealedGrowth(parsed.state, events)) return { ok: false, code: 'INVALID_LEGACY_SAVE' };
+    const created = await this.repository.createIfAbsentWithResult({ ...emptyAggregate(principal.sub, clone(parsed.state)), progressionEvents: events, revision: envelope.revision, rosterRevision: envelope.rosterRevision });
     return created.created ? { ok: true, snapshot: snapshot(created.aggregate) } : { ok: false, code: 'ALREADY_INITIALIZED' };
   }
   /** Alias kept explicit so callers do not confuse this with unsigned legacy import. */
@@ -115,29 +142,36 @@ export class PlayerAuthority {
   }
   /** Applies the simulation-produced terminal result once. Results never come from a client command. */
   async settleBattle(principal: Principal, result: BattleResolution): Promise<AuthoritySnapshot | null> {
+    return this.settleBattleOnce(principal, result);
+  }
+  private async settleBattleOnce(principal: Principal, result: BattleResolution, priorContext?: AuthorityMutationContext): Promise<AuthoritySnapshot | null> {
     const aggregate = await this.repository.read(principal.sub);
     if (!aggregate) return null;
     if (aggregate.grantReceipts[result.battleId] !== undefined) return snapshot(aggregate);
-    const applied = applyBattleRewardsToSave(aggregate.save, result);
+    const context = priorContext ?? this.mutationContext();
+    const applied = applyBattleRewardsToSave(aggregate.save, result, simulationContext(context));
+    const sealed = sealGrowthEvents(aggregate, applied.state, result.battleId, aggregate.revision + 1, context.transactionAt);
     const next: PlayerAggregate = {
       ...aggregate,
       revision: aggregate.revision + 1,
-      rosterRevision: rosterChanged(aggregate.save, applied.state) ? aggregate.rosterRevision + 1 : aggregate.rosterRevision,
-      save: applied.state,
+      rosterRevision: rosterChanged(aggregate.save, sealed.save) ? aggregate.rosterRevision + 1 : aggregate.rosterRevision,
+      save: sealed.save,
       grantReceipts: { ...aggregate.grantReceipts, [result.battleId]: aggregate.revision + 1 }
+      , progressionEvents: sealed.events
     };
-    if (!await this.repository.compareExchange(principal.sub, aggregate.revision, next)) return this.settleBattle(principal, result);
+    if (!await this.repository.compareExchange(principal.sub, aggregate.revision, next)) return this.settleBattleOnce(principal, result, context);
     return snapshot(next);
   }
   /** Three bounded attempts absorb a concurrent save command without risking partial settlement. */
   async settleGuardedTheft(input: { attackerId: string; ownerId: string; farmId: string; guardCreatureId: string; result: BattleResolution }): Promise<boolean> {
+    const context = this.mutationContext();
     for (let attempt = 0; attempt < 3; attempt += 1) {
-      const outcome = await this.settleGuardedTheftOnce(input);
+      const outcome = await this.settleGuardedTheftOnce(input, context);
       if (outcome !== 'race') return outcome;
     }
     return false;
   }
-  private async settleGuardedTheftOnce(input: { attackerId: string; ownerId: string; farmId: string; guardCreatureId: string; result: BattleResolution }): Promise<boolean | 'race'> {
+  private async settleGuardedTheftOnce(input: { attackerId: string; ownerId: string; farmId: string; guardCreatureId: string; result: BattleResolution }, context: AuthorityMutationContext): Promise<boolean | 'race'> {
     const attacker = await this.repository.read(input.attackerId);
     const owner = await this.repository.read(input.ownerId);
     if (!attacker || !owner || attacker.grantReceipts[input.result.battleId] !== undefined) return Boolean(attacker?.grantReceipts[input.result.battleId]);
@@ -148,7 +182,8 @@ export class PlayerAuthority {
     const resolved = resolveGuardedFarmTheft(foreignFarmState, {
       farmId: farm.id, playerCreatureId: input.result.playerCreatureId, playerCreatureHp: input.result.playerCreatureHp,
       playerCreatureFainted: input.result.playerCreatureFainted, guardCreatureHp: input.result.opponentCreatureHp,
-      visitorWon: input.result.outcome === 'defeated'
+      visitorWon: input.result.outcome === 'defeated',
+      now: context.transactionAt
     });
     if (!resolved.ok) return false;
     const attackerSave = resolved.state;
@@ -163,6 +198,7 @@ export class PlayerAuthority {
     const ownerNext: PlayerAggregate = { ...owner, revision: owner.revision + 1, rosterRevision: rosterChanged(owner.save, ownerSave) ? owner.rosterRevision + 1 : owner.rosterRevision, save: ownerSave, grantReceipts: { ...owner.grantReceipts, [input.result.battleId]: owner.revision + 1 } };
     return (await this.repository.compareExchangeMany([{ playerId: attacker.playerId, expectedRevision: attacker.revision, next: attackerNext }, { playerId: owner.playerId, expectedRevision: owner.revision, next: ownerNext }])) ? true : 'race';
   }
+  private mutationContext(): AuthorityMutationContext { return { transactionAt: this.now(), rng: this.rng }; }
 }
 
 /** The export is an authenticated transfer envelope, not a durable backup mechanism. */
@@ -228,40 +264,72 @@ function matchesPresent(value: unknown, key: string, expected: string): boolean 
   return !isRecord(value) || !Object.prototype.hasOwnProperty.call(value, key) || value[key] === expected;
 }
 function isRecord(value: unknown): value is Record<string, unknown> { return Boolean(value) && typeof value === 'object' && !Array.isArray(value); }
-function reduce(save: MonsterRpgSaveState, intent: AuthorityIntent): MonsterRpgSaveState | null {
-  if (intent.type === 'convertCreatureCard' && intent.starter === true) { const result = convertStarterCreatureCards(save); return result.ok ? result.state : null; }
-  if (intent.type === 'createFarm' && intent.starter === true) { const result = buildStarterMagicDustFarm(save); return result.ok ? result.state : null; }
-  if (intent.type === 'completeElderDialog') return completeVillageElderDialog(save);
-  if (intent.type === 'completeOnboarding') return completeVillageElderOnboarding(save);
-  if (intent.type === 'activateMaterialCard' && typeof intent.cardId === 'string') { const result = activateMaterialCard(save, intent.cardId); return result.ok ? result.state : null; }
-  if (intent.type === 'activateBuffCard' && typeof intent.cardId === 'string') { const result = activateBuffCard(save, intent.cardId); return result.ok ? result.state : null; }
-  if (intent.type === 'buildFarmCard' && typeof intent.cardId === 'string') { const result = buildFarmCardViaElder(save, intent.cardId); return result.ok ? result.state : null; }
-  if (intent.type === 'moveCreatureToActiveParty' && typeof intent.creatureId === 'string') { const result = moveCreatureToActiveParty(save, intent.creatureId); return result.ok ? result.state : null; }
-  if (intent.type === 'moveCreatureToStorage' && typeof intent.creatureId === 'string') { const result = moveCreatureToStorage(save, intent.creatureId); return result.ok ? result.state : null; }
-  if (intent.type === 'healAll' && isAtVillageHospital(save)) return healAllCreaturesAtHospital(save);
-  if (intent.type === 'revive' && typeof intent.creatureId === 'string') { const result = useReviveItem(save, intent.creatureId); return result.ok ? result.state : null; }
-  if (intent.type === 'convertCreatureCard' && typeof intent.cardId === 'string') { const result = convertCreatureCardViaElder(save, intent.cardId); return result.ok ? result.state : null; }
-  if (intent.type === 'hatchEgg' && typeof intent.eggId === 'string') { const result = hatchEgg(save, intent.eggId); return result.ok ? result.state : null; }
+function hasUnsealedGrowth(save: MonsterRpgSaveState, events: readonly GrowthAuditEvent[]): boolean {
+  const hashes = new Set(events.map((event) => event.eventHash));
+  return Object.values(save.creatures.creatures).some((creature) => creature.statGrowth?.events.some((event) => !isRecord(event) || typeof event.eventHash !== 'string' || !hashes.has(event.eventHash)));
+}
+function sealGrowthEvents(aggregate: PlayerAggregate, save: MonsterRpgSaveState, battleId: string, revision: number, now: Date): { save: MonsterRpgSaveState; events: GrowthAuditEvent[] } {
+  const events = [...aggregate.progressionEvents]; let previousHash = events.length ? events[events.length - 1].eventHash : '0'.repeat(64);
+  const creatures = { ...save.creatures.creatures };
+  for (const creatureId of save.creatures.activePartyCreatureIds) {
+    const before = aggregate.save.creatures.creatures[creatureId]; const after = creatures[creatureId];
+    if (!before || !after || !after.statGrowth) continue;
+    const drafts = after.pendingGrowthEvents ?? [];
+    const growth = after.statGrowth.events.slice();
+    for (const draft of drafts) {
+      const grantId = `battle:${battleId}:creature:${creatureId}:level:${draft.level}`;
+      const base = { v: 1 as const, playerId: aggregate.playerId, creatureId, balanceVersion: CURRENT_BALANCE_VERSION, levelFrom: draft.kind === 'level-up' ? draft.level - 1 : draft.level, levelTo: draft.level, deltas: draft.deltas, aggregateRevision: revision, createdAt: now.toISOString(), previousHash };
+      const event: GrowthAuditEvent = draft.kind === 'level-up'
+        ? { ...base, kind: 'level-up', grantId, model: draft.model as 'deterministic-default' | 'rarity-weighted-random', eventHash: '' }
+        : { ...base, kind: 'rebalance', grantId: `rebalance:${creatureId}:${CURRENT_BALANCE_VERSION}`, model: 'rebalance', targetBalanceVersion: CURRENT_BALANCE_VERSION, eventHash: '' };
+      event.eventHash = growthHash(event); previousHash = event.eventHash; events.push(event);
+      growth.push(event);
+    }
+    const { pendingGrowthEvents: _drafts, ...sealedCreature } = after;
+    creatures[creatureId] = { ...sealedCreature, statGrowth: { ...after.statGrowth, events: growth } };
+  }
+  return { save: { ...save, creatures: { ...save.creatures, creatures } }, events };
+}
+function growthHash(event: import('../../src/games/monster-rpg/sim').GrowthAuditEventHashInput): string {
+  const fields = [event.v, event.kind, event.playerId, event.creatureId, event.grantId, event.model, event.balanceVersion, event.levelFrom, event.levelTo, event.deltas.hp, event.deltas.attack, event.deltas.defense, event.deltas.speed, event.deltas.stamina, event.aggregateRevision, event.createdAt, event.previousHash, 'targetBalanceVersion' in event ? event.targetBalanceVersion : ''];
+  return growthEventHash(event);
+}
+function reduce(save: MonsterRpgSaveState, intent: AuthorityIntent, context: AuthorityMutationContext): MonsterRpgSaveState | null {
+  const options = simulationContext(context);
+  if (intent.type === 'convertCreatureCard' && intent.starter === true) { const result = convertStarterCreatureCards(save, options); return result.ok ? result.state : null; }
+  if (intent.type === 'createFarm' && intent.starter === true) { const result = buildStarterMagicDustFarm(save, options); return result.ok ? result.state : null; }
+  if (intent.type === 'completeElderDialog') return completeVillageElderDialog(save, options);
+  if (intent.type === 'completeOnboarding') return completeVillageElderOnboarding(save, options);
+  if (intent.type === 'activateMaterialCard' && typeof intent.cardId === 'string') { const result = activateMaterialCard(save, intent.cardId, options); return result.ok ? result.state : null; }
+  if (intent.type === 'activateBuffCard' && typeof intent.cardId === 'string') { const result = activateBuffCard(save, intent.cardId, options); return result.ok ? result.state : null; }
+  if (intent.type === 'buildFarmCard' && typeof intent.cardId === 'string') { const result = buildFarmCardViaElder(save, intent.cardId, options); return result.ok ? result.state : null; }
+  if (intent.type === 'moveCreatureToActiveParty' && typeof intent.creatureId === 'string') { const result = moveCreatureToActiveParty(save, intent.creatureId, options); return result.ok ? result.state : null; }
+  if (intent.type === 'moveCreatureToStorage' && typeof intent.creatureId === 'string') { const result = moveCreatureToStorage(save, intent.creatureId, options); return result.ok ? result.state : null; }
+  if (intent.type === 'healAll' && isAtVillageHospital(save)) return healAllCreaturesAtHospital(save, options);
+  if (intent.type === 'revive' && typeof intent.creatureId === 'string') { const result = useReviveItem(save, intent.creatureId, options); return result.ok ? result.state : null; }
+  if (intent.type === 'convertCreatureCard' && typeof intent.cardId === 'string') { const result = convertCreatureCardViaElder(save, intent.cardId, options); return result.ok ? result.state : null; }
+  if (intent.type === 'hatchEgg' && typeof intent.eggId === 'string') { const result = hatchEgg(save, intent.eggId, options); return result.ok ? result.state : null; }
   if (intent.type === 'claimReward' && typeof intent.sourceId === 'string') {
     const result = claimReward(save.inventory.rewardInbox, toItemInventory(save.inventory.items), save.profile.playerId, intent.sourceId);
-    return result.ok ? { ...save, inventory: { ...save.inventory, items: toSaveStacks(result.inventory, save.profile.playerId), rewardInbox: result.inbox }, updatedAt: new Date().toISOString() } : null;
+    return result.ok ? { ...save, inventory: { ...save.inventory, items: toSaveStacks(result.inventory, save.profile.playerId), rewardInbox: result.inbox }, updatedAt: context.transactionAt.toISOString() } : null;
   }
   if (intent.type === 'discardItem' && typeof intent.stackId === 'string' && typeof intent.quantity === 'number' && intent.confirmed === true) {
     const result = discardItem(toItemInventory(save.inventory.items), intent.stackId, intent.quantity, true);
-    return result.ok ? { ...save, inventory: { ...save.inventory, items: toSaveStacks(result.inventory, save.profile.playerId) }, updatedAt: new Date().toISOString() } : null;
+    return result.ok ? { ...save, inventory: { ...save.inventory, items: toSaveStacks(result.inventory, save.profile.playerId) }, updatedAt: context.transactionAt.toISOString() } : null;
   }
-  if (intent.type === 'stationTravel' && typeof intent.destinationId === 'string') { const result = confirmStationTravel(save, intent.destinationId); return result.ok ? result.state : null; }
-  if (intent.type === 'upgradeFarm' && typeof intent.farmId === 'string') { const result = upgradeFarm(save, intent.farmId); return result.ok ? result.state : null; }
+  if (intent.type === 'stationTravel' && typeof intent.destinationId === 'string') { const result = confirmStationTravel(save, intent.destinationId, options); return result.ok ? result.state : null; }
+  if (intent.type === 'upgradeFarm' && typeof intent.farmId === 'string') { const result = upgradeFarm(save, intent.farmId, context.transactionAt); return result.ok ? result.state : null; }
   if (intent.type === 'setFarmGuard' && typeof intent.farmId === 'string') {
-    const result = typeof intent.creatureId === 'string' ? assignFarmGuard(save, intent.farmId, intent.creatureId) : intent.creatureId === null ? clearFarmGuard(save, intent.farmId) : null;
+    const result = typeof intent.creatureId === 'string' ? assignFarmGuard(save, intent.farmId, intent.creatureId, context.transactionAt) : intent.creatureId === null ? clearFarmGuard(save, intent.farmId, context.transactionAt) : null;
     return result?.ok ? result.state : null;
   }
-  if (intent.type === 'collectFarm') { const result = collectFacingFarm(save); return result.ok ? result.state : null; }
-  if (intent.type === 'move' && (intent.direction === 'north' || intent.direction === 'east' || intent.direction === 'south' || intent.direction === 'west')) {
-    const result = movePlayer(save, { type: 'move', direction: intent.direction }, getGameMap(save.mapId)); return result.state;
-  }
+  if (intent.type === 'collectFarm') { const result = collectFacingFarm(save, context.transactionAt); return result.ok ? result.state : null; }
   return null;
 }
+function movementTransition(aggregate: PlayerAggregate, direction: Direction, context: AuthorityMutationContext) {
+  return movePlayer(aggregate.save, { type: 'move', direction }, getGameMap(aggregate.save.mapId), simulationContext(context));
+}
+function simulationContext(context: AuthorityMutationContext) { return { now: context.transactionAt, rng: context.rng }; }
 function toItemInventory(stacks: Record<string, SaveStack>): ItemInventory {
   const next: Record<string, ItemStack> = {};
   Object.values(stacks).forEach((stack) => { const definition = getItemDefinition(stack.id); if (definition) next[stack.id] = { id: stack.id, itemId: definition.id, quantity: stack.quantity }; });

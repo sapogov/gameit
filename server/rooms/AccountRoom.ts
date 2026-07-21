@@ -1,6 +1,6 @@
 import { Client, Room, ServerError } from 'colyseus';
 import { issueGuestCredential, verifyGuestCredential } from '../auth/guestCredentials';
-import { guestCredentialConfig, guestCredentialTtlSeconds, playerAuthority } from '../authority/runtime';
+import { authorityEnabled, guestCredentialConfig, guestCredentialTtlSeconds, playerAuthority } from '../authority/runtime';
 import { authorityReady, parseCorrelatedAuthorityRequest, parseSaveCommand } from '../../src/games/monster-rpg/network/authorityProtocol';
 import type { AvatarId } from '../../src/games/monster-rpg/sim';
 
@@ -13,14 +13,17 @@ export class AccountRoom extends Room {
 
   onCreate() {
     this.onMessage('bootstrapProfile', async (client, value: unknown) => {
+      if (!authorityEnabled) return client.send('authorityResult', { status: 'rejected', code: 'AUTHORITY_MAINTENANCE' });
       if (!isProfile(value)) return client.send('authorityResult', { status: 'rejected', code: 'INVALID_COMMAND' });
       client.send('authorityReady', authorityReady('authenticated', await playerAuthority.bootstrapProfile({ sub: this.principal }, value)));
     });
     this.onMessage('saveCommand', async (client, value: unknown) => {
+      if (!authorityEnabled) return client.send('authorityResult', { status: 'rejected', code: 'AUTHORITY_MAINTENANCE' });
       const command = parseSaveCommand(value);
       client.send('authorityResult', command ? await playerAuthority.execute({ sub: this.principal }, command) : { status: 'rejected', code: 'INVALID_COMMAND' });
     });
     this.onMessage('importLegacySave', async (client, value: unknown) => {
+      if (!authorityEnabled) return client.send('authorityResult', { status: 'rejected', code: 'AUTHORITY_MAINTENANCE' });
       if (typeof value !== 'string') return client.send('authorityResult', { status: 'rejected', code: 'INVALID_COMMAND' });
       const result = await playerAuthority.importLegacySave({ sub: this.principal }, value);
       client.send('authorityResult', result.ok
@@ -34,6 +37,7 @@ export class AccountRoom extends Room {
       client.send('authenticatedTransferResult', envelope ? { requestId: request.requestId, result: JSON.stringify(envelope) } : { requestId: request.requestId, error: 'AUTHORITY_REQUIRED' });
     });
     this.onMessage('importAuthenticatedSave', async (client, value: unknown) => {
+      if (!authorityEnabled) return client.send('authenticatedTransferResult', { requestId: '', error: 'AUTHORITY_MAINTENANCE' });
       const request = parseCorrelatedAuthorityRequest(value);
       if (!request || typeof request.payload !== 'string') return client.send('authenticatedTransferResult', { requestId: request?.requestId ?? '', error: 'INVALID_COMMAND' });
       const result = await playerAuthority.importAuthenticatedExport({ sub: this.principal }, request.payload);

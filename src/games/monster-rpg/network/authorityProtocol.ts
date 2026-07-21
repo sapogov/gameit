@@ -2,14 +2,13 @@ import type { MonsterRpgSaveState } from '../sim';
 
 export const AUTHORITY_PROTOCOL_VERSION = 1 as const;
 export const MONSTER_RPG_GUEST_CREDENTIAL_KEY = 'gameit.monsterRpg.guestCredential';
-export type AuthorityRejectCode = 'AUTHORITY_REQUIRED' | 'ROSTER_UNAVAILABLE' | 'INVALID_COMMAND' | 'STALE_REVISION' | 'INTENT_REUSED' | 'REJECTED' | 'INVALID_TRANSFER' | 'INVALID_LEGACY_SAVE' | 'CROSS_PRINCIPAL' | 'REPLAYED_OR_STALE' | 'ALREADY_INITIALIZED';
+export type AuthorityRejectCode = 'AUTHORITY_REQUIRED' | 'AUTHORITY_MAINTENANCE' | 'ROSTER_UNAVAILABLE' | 'INVALID_COMMAND' | 'STALE_REVISION' | 'INTENT_REUSED' | 'REJECTED' | 'INVALID_TRANSFER' | 'INVALID_LEGACY_SAVE' | 'CROSS_PRINCIPAL' | 'REPLAYED_OR_STALE' | 'ALREADY_INITIALIZED';
 /** Closed command vocabulary. Payload fields are validated by the matching authority reducer. */
 export type AuthorityIntentType =
-  | 'bootstrapProfile' | 'importLegacySave' | 'openPack' | 'convertCreatureCard' | 'hatchEgg'
+  | 'bootstrapProfile' | 'importLegacySave' | 'convertCreatureCard' | 'hatchEgg'
   | 'moveCreatureToActiveParty' | 'moveCreatureToStorage' | 'healAll' | 'revive'
   | 'createFarm' | 'collectFarm' | 'upgradeFarm' | 'setFarmGuard' | 'claimReward' | 'discardItem'
-  | 'attemptFarmTheft'
-  | 'stationTravel' | 'resetProfile' | 'move' | 'completeElderDialog' | 'completeOnboarding'
+  | 'stationTravel' | 'resetProgress' | 'completeElderDialog' | 'completeOnboarding'
   | 'activateMaterialCard' | 'activateBuffCard' | 'buildFarmCard';
 export type AuthorityIntent = { type: AuthorityIntentType; [key: string]: unknown };
 export interface SaveCommand { intentId: string; expectedRevision: number; intent: AuthorityIntent }
@@ -26,7 +25,7 @@ export function parseSaveCommand(value: unknown): SaveCommand | null {
   return command as SaveCommand;
 }
 
-const intentTypes = new Set<AuthorityIntentType>(['bootstrapProfile', 'importLegacySave', 'openPack', 'convertCreatureCard', 'hatchEgg', 'moveCreatureToActiveParty', 'moveCreatureToStorage', 'healAll', 'revive', 'createFarm', 'collectFarm', 'upgradeFarm', 'setFarmGuard', 'claimReward', 'discardItem', 'attemptFarmTheft', 'stationTravel', 'resetProfile', 'move', 'completeElderDialog', 'completeOnboarding', 'activateMaterialCard', 'activateBuffCard', 'buildFarmCard']);
+const intentTypes = new Set<AuthorityIntentType>(['bootstrapProfile', 'importLegacySave', 'convertCreatureCard', 'hatchEgg', 'moveCreatureToActiveParty', 'moveCreatureToStorage', 'healAll', 'revive', 'createFarm', 'collectFarm', 'upgradeFarm', 'setFarmGuard', 'claimReward', 'discardItem', 'stationTravel', 'resetProgress', 'completeElderDialog', 'completeOnboarding', 'activateMaterialCard', 'activateBuffCard', 'buildFarmCard']);
 
 export function authorityReady(status: 'created' | 'authenticated', snapshot?: AuthoritySnapshot, credential?: string) {
   return { protocolVersion: AUTHORITY_PROTOCOL_VERSION, status, ...(credential ? { credential } : {}), ...(snapshot ? { snapshot } : {}) };

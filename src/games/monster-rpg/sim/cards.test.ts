@@ -49,6 +49,15 @@ describe('Monster RPG cards', () => {
     expect(inventoryCount).toBe(5);
   });
 
+  it('uses supplied card context for timestamps and random draws', () => {
+    const now = new Date('2030-01-02T03:04:05.000Z');
+    const result = openPack(createProfileState('Tess'), { now, rng: () => 0 });
+
+    expect(result.state.updatedAt).toBe(now.toISOString());
+    expect(result.trace.openedAt).toBe(now.toISOString());
+    expect(result.trace.cards.map((card) => card.cardId)).toEqual(Array(5).fill('creature-card:spriglet'));
+  });
+
   it('draws reward-table entries at deterministic rarity and card-type boundaries', () => {
     const table: CardRewardTable = {
       id: 'test-table',
@@ -154,15 +163,19 @@ describe('Monster RPG cards', () => {
 
   it('hatches direct-drop eggs by rolling all four attacks only when the creature is created', () => {
     const start = withMagicDust(createProfileState('Orrin'), 10);
-    const eggResult = createDirectDropEgg(start, 20, { seed: 30 });
+    const eggCreatedAt = new Date('2030-01-02T03:04:05.000Z');
+    const eggResult = createDirectDropEgg(start, 20, { now: eggCreatedAt, rng: () => 0 });
     expect(eggResult.ok).toBe(true);
     if (!eggResult.ok) throw new Error(eggResult.reason);
     const egg = Object.values(eggResult.state.inventory.eggs)[0];
     expect(egg.origin).toBe('direct-drop');
+    expect(egg.createdAt).toBe(eggCreatedAt.toISOString());
+    expect(eggResult.state.updatedAt).toBe(eggCreatedAt.toISOString());
     expect(egg.inheritedAttacks).toBeUndefined();
     expect(getEggDescription(egg, getSpeciesById(egg.speciesId))).toContain('Attacks will be revealed');
 
-    const hatchResult = hatchEgg(eggResult.state, egg.id, { seed: 31 });
+    const hatchedAt = new Date('2030-01-02T03:05:05.000Z');
+    const hatchResult = hatchEgg(eggResult.state, egg.id, { now: hatchedAt, rng: () => 0 });
     expect(hatchResult.ok).toBe(true);
     if (!hatchResult.ok) throw new Error(hatchResult.reason);
     const creature = Object.values(hatchResult.state.creatures.creatures)[0];
@@ -170,6 +183,7 @@ describe('Monster RPG cards', () => {
     expect(new Set(creature.attacks.map((attack) => attack.id)).size).toBe(4);
     expect(hatchResult.state.inventory.eggs[egg.id]).toBeUndefined();
     expect(hatchResult.state.journal.species[String(egg.speciesId)]).toBe('discovered');
+    expect(hatchResult.state.updatedAt).toBe(hatchedAt.toISOString());
   });
 
   it('models creation requirements with Magic Dust scopes for rarity, type, and species', () => {
@@ -196,12 +210,14 @@ describe('Monster RPG cards', () => {
     const start = createProfileState('Nia');
     const stateWithFarmCard = setCardStack(start, farmCard.id, 2);
 
-    const first = buildFarmCardViaElder(stateWithFarmCard, farmCard.id);
+    const now = new Date('2030-01-02T03:04:05.000Z');
+    const first = buildFarmCardViaElder(stateWithFarmCard, farmCard.id, { now });
     expect(first.ok).toBe(true);
     if (!first.ok) throw new Error(first.reason);
     const farmIds = Object.keys(first.state.farms.farms);
     expect(farmIds).toHaveLength(1);
     expect(first.state.farms.farms[farmIds[0]].farmType).toBe(definition.farmType);
+    expect(first.state.farms.farms[farmIds[0]].lastProductionAt).toBe(now.toISOString());
 
     const second = buildFarmCardViaElder(first.state, farmCard.id);
     expect(second.ok).toBe(false);

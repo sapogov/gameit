@@ -54,7 +54,11 @@ export type {
   CreatureSpeciesRecord,
   CreatureStatKey,
   CreatureStatGrowthBasis,
-  CreatureStatGrowthEvent,
+  CreatureStatGrowthDraftEvent,
+  GrowthAuditEvent,
+  GrowthAuditEventHashInput,
+  GrowthAuditLevelUpEvent,
+  GrowthAuditRebalanceEvent,
   CreatureStatGrowthState,
   StatGrowthModel,
   CreatureType,
@@ -177,7 +181,8 @@ export {
   type MonsterRpgSaveRepository,
   type SaveImportResult,
   type SaveBalanceMigrationResult,
-  type SaveLoadResult
+  type SaveLoadResult,
+  type SaveBootstrapOptions
 } from './saveState';
 export {
   STATION_TRAVEL_BASE_COST,
@@ -240,7 +245,7 @@ export {
   drawCardFromRewardTable,
   openPack
 } from './cards';
-export type { CardDefinition, CardRewardTable, CardRewardTableEntry, PackOpenTrace } from './cards';
+export type { CardDefinition, CardMutationOptions, CardRewardTable, CardRewardTableEntry, PackOpenTrace } from './cards';
 export {
   PLAYER_LEVEL_REWARDS,
   PLAYER_LEVEL_THRESHOLDS,
@@ -311,6 +316,7 @@ export {
   rollStats,
   selectCreatureAttacks,
   type CreatureCardDefinitionLike,
+  type CreatureLifecycleOptions,
   type CreatureLifecycleFailureReason,
   type CreatureLifecycleResult
 } from './creatureLifecycle';
@@ -385,6 +391,7 @@ export {
   STARTER_PACK_ONBOARDING_TEXT,
   starterCreatureCards,
   villageElderFlags,
+  type OnboardingOptions,
   type StarterCreatureConversionResult,
   type StarterFarmBuildResult,
   type VillageElderOnboardingStep

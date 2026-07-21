@@ -51,7 +51,7 @@ import {
 import { LocationPlayerSchema, LocationStateSchema, WildEncounterSchema } from '../schema/LocationState';
 import { getGeneratedMapForServer } from '../generatedMapAdapter';
 import { verifyGuestCredential } from '../auth/guestCredentials';
-import { guestCredentialConfig, guestCredentialTtlSeconds, playerAuthority } from '../authority/runtime';
+import { authorityEnabled, guestCredentialConfig, guestCredentialTtlSeconds, playerAuthority } from '../authority/runtime';
 
 const avatarIds = new Set<AvatarId>(['scout', 'ranger', 'keeper']);
 const directions = new Set<Direction>(['north', 'east', 'south', 'west']);
@@ -79,8 +79,11 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
   private encounterTimerVersions = new Map<string, number>();
   private battleResultCleanups = new Map<string, () => void>();
   private finalizedBattleIds = new Set<string>();
+  /** Per-connection monotonic intent fence; it is never client-authoritative state. */
+  private moveSequences = new Map<string, number>();
 
   async onCreate(options?: Partial<JoinLocationOptions>) {
+    if (!authorityEnabled) throw new ServerError(503, JSON.stringify({ code: 'AUTHORITY_MAINTENANCE' }));
     assertBalanceVersion(options?.balanceVersion);
     const advertisedMapSet = generatedMapRegistry.handshake();
     if (options?.mapSetId !== advertisedMapSet.id || options?.mapSetVersion !== advertisedMapSet.version) throw new ServerError(409, 'Generated map-set version mismatch');
@@ -156,46 +159,34 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
     player.battleId = '';
 
     this.state.players.set(client.sessionId, player);
+    this.moveSequences.set(client.sessionId, 0);
     console.log(`[location:${this.mapId}] join ${client.sessionId} ${profile.name}`);
   }
 
   onLeave(client: Client) {
     this.state.players.delete(client.sessionId);
+    this.moveSequences.delete(client.sessionId);
     console.log(`[location:${this.mapId}] leave ${client.sessionId}`);
   }
 
-  private handleMoveIntent(client: Client, payload: MoveIntentMessage) {
-    if (!payload || !directions.has(payload.direction)) return;
+  private async handleMoveIntent(client: Client, payload: MoveIntentMessage) {
+    if (!payload || !directions.has(payload.direction) || !Number.isSafeInteger(payload.sequence) || payload.sequence <= (this.moveSequences.get(client.sessionId) ?? 0)) return;
 
     const player = this.state.players.get(client.sessionId);
     if (!player) return;
     if (player.inBattle) return;
 
-    const map = getGameMap(this.mapId);
-    const profile = schemaToProfile(player);
-    const state: MonsterRpgSaveState = {
-      ...createInitialSave(profile),
-      mapId: map.id,
-      position: {
-        mapId: player.position.mapId,
-        x: player.position.x,
-        y: player.position.y,
-        facing: player.position.facing
-      },
-      updatedAt: new Date().toISOString()
-    };
-    const result = movePlayer(state, { type: 'move', direction: payload.direction }, map);
+    const result = await playerAuthority.applyMovement({ sub: player.profile.id }, payload.direction, { mapId: this.mapId });
+    if (!result) return;
+    this.moveSequences.set(client.sessionId, payload.sequence);
 
     if (result.transition) {
-      const transitionId = createPendingTransition(profile.playerId, result.transition.toMapId, result.transition.spawn);
+      const transitionId = createPendingTransition(player.profile.id, result.transition.toMapId as MapId, result.transition.spawn as WorldPosition);
       client.send('locationTransition', { ...result.transition, transitionId });
-      return;
     }
-
-    player.position.mapId = result.state.position.mapId;
-    player.position.x = result.state.position.x;
-    player.position.y = result.state.position.y;
-    player.position.facing = result.state.position.facing;
+    const position = result.snapshot.save.position;
+    player.position.mapId = position.mapId; player.position.x = position.x; player.position.y = position.y; player.position.facing = position.facing;
+    client.send('authoritySnapshot', result.snapshot);
   }
 
   private async handleClaimWildEncounter(client: Client, payload: ClaimWildEncounterMessage) {
@@ -348,10 +339,12 @@ export class LocationRoom extends Room<{ state: LocationStateSchema; metadata: {
       client.send('farmTheftResult', { status: 'rejected', code: 'REJECTED' });
       return;
     }
-    client.send('farmTheftResult', await playerAuthority.execute({ sub: player.profile.id }, {
+    client.send('farmTheftResult', await playerAuthority.settleUnguardedFarmTheft({
+      principal: { sub: player.profile.id },
       intentId,
       expectedRevision,
-      intent: { type: 'attemptFarmTheft', farmId }
+      roomMapId: this.mapId,
+      farmId
     }));
   }
 
@@ -545,12 +538,25 @@ function resolveJoinPosition(options: JoinLocationOptions | undefined, profile: 
   return { ...map.spawn };
 }
 
-function resolveCanonicalJoinPosition(options: JoinLocationOptions | undefined, canonicalPosition: WorldPosition, profile: PlayerProfile, roomMapId: MapId): WorldPosition {
-  if (options?.transitionId) return consumePendingTransition(options.transitionId, profile.playerId, roomMapId);
+export function resolveCanonicalJoinPosition(options: JoinLocationOptions | undefined, canonicalPosition: WorldPosition, profile: PlayerProfile, roomMapId: MapId): WorldPosition {
+  if (options?.transitionId) {
+    const transitionPosition = consumePendingTransition(options.transitionId, profile.playerId, roomMapId);
+    if (!isSameWorldPosition(canonicalPosition, transitionPosition)) {
+      throw new ServerError(409, 'Canonical transition position mismatch');
+    }
+    return transitionPosition;
+  }
+
+  if (canonicalPosition.mapId !== roomMapId) {
+    throw new ServerError(409, 'Canonical position is bound to a different map');
+  }
+
   const map = getGameMap(roomMapId);
-  if (canonicalPosition.mapId === roomMapId && canEnterTile(map, canonicalPosition.x, canonicalPosition.y)) return { ...canonicalPosition };
-  if (!isValidSpawnPosition(roomMapId, map.spawn) || !canEnterTile(map, map.spawn.x, map.spawn.y)) throw new ServerError(500, 'Invalid room spawn');
-  return { ...map.spawn };
+  if (!canEnterTile(map, canonicalPosition.x, canonicalPosition.y)) {
+    throw new ServerError(500, 'Invalid canonical position');
+  }
+
+  return { ...canonicalPosition };
 }
 
 function schemaToProfile(player: LocationPlayerSchema): PlayerProfile {

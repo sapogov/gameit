@@ -1,4 +1,4 @@
-import type { BaseStatTendencies, CreatureRarity, CreatureSaveRecord, CreatureSpeciesRecord, CreatureStatGrowthEvent, CreatureStatGrowthState, StatGrowthModel } from './types';
+import type { BaseStatTendencies, CreatureRarity, CreatureSaveRecord, CreatureSpeciesRecord, CreatureStatGrowthDraftEvent, CreatureStatGrowthState, GrowthAuditEvent, StatGrowthModel } from './types';
 import { GAME_BALANCE_CONFIG } from './gameBalance';
 
 export interface StatGrowthDependencies { rng: () => number; now: () => Date }
@@ -33,24 +33,25 @@ export function getCreatureLevelForExperience(experience: number): number {
   return Math.max(1, Math.floor(experience / perLevel) + 1);
 }
 
-export function createLevelGrowthEvent(creature: CreatureSaveRecord, level: number, rarity: CreatureRarity, model: StatGrowthModel, rng: () => number, now: () => Date, species?: Pick<CreatureSpeciesRecord, 'baseStats' | 'type'>): CreatureStatGrowthEvent {
+export function createLevelGrowthEvent(creature: CreatureSaveRecord, level: number, rarity: CreatureRarity, model: StatGrowthModel, rng: () => number, now: () => Date, species?: Pick<CreatureSpeciesRecord, 'baseStats' | 'type'>): CreatureStatGrowthDraftEvent {
   if (!isSafePositiveInteger(level) || !models.has(model) || !isValidClock(now)) throw new Error('Invalid stat growth event input');
   const id = `growth:${level}`;
-  if (getGrowth(creature).events.some((event) => event.id === id)) throw new Error(`Duplicate stat growth event ${id}`);
+  if (getGrowth(creature).events.some((event) => growthEventId(event) === id) || creature.pendingGrowthEvents?.some((event) => event.id === id)) throw new Error(`Duplicate stat growth event ${id}`);
   return { id, kind: 'level-up', level, model, deltas: getGrowthDeltas(rarity, model, rng, species), createdAt: now().toISOString() };
 }
 
-export function appendStatGrowth(creature: CreatureSaveRecord, event: CreatureStatGrowthEvent): CreatureSaveRecord {
+export function appendStatGrowth(creature: CreatureSaveRecord, event: CreatureStatGrowthDraftEvent): CreatureSaveRecord {
   const growth = getGrowth(creature);
-  if (growth.events.some((existing) => existing.id === event.id)) return creature;
-  if (!isValidCreatureState(creature) || !isValidGrowthEvent(event, growth, creature.level + 1) || !isCanonicalGrowthEvent(event, growth) ||
+  const pending = creature.pendingGrowthEvents ?? [];
+  if (pending.some((existing) => existing.id === event.id) || growth.events.some((existing) => growthEventId(existing) === event.id)) return creature;
+  if (!isValidCreatureState(creature) || !isValidGrowthEvent(event, growth, creature.level + 1) || !isCanonicalDraftEvent(event) ||
     (event.kind === 'level-up' && event.level !== creature.level + 1) ||
     (event.kind === 'rebalance' && event.level !== creature.level)) throw new Error('Invalid stat growth event');
   const stats = addStats(creature.stats, event.deltas);
   const maxHp = creature.maxHp + event.deltas.hp;
   if (!isValidStats(stats) || !isSafePositiveInteger(maxHp)) throw new Error('Stat growth would produce invalid stats');
   const hp = creature.fainted ? 0 : Math.min(maxHp, creature.hp + Math.max(0, event.deltas.hp));
-  return { ...creature, level: Math.max(creature.level, event.level), stats, maxHp, hp, statGrowth: { ...growth, events: [...growth.events, event] } };
+  return { ...creature, level: Math.max(creature.level, event.level), stats, maxHp, hp, pendingGrowthEvents: [...pending, event], statGrowth: growth };
 }
 
 /** Recomputes deterministic historical level-ups from the active balance config and appends only the required adjustment. */
@@ -63,7 +64,7 @@ export function rebalanceCreatureStats(creature: CreatureSaveRecord, _rarity?: C
   if (statKeys.every((key) => deltas[key] === 0)) return creature;
   const now = options.now ?? (() => new Date());
   if (!isValidClock(now)) return creature;
-  const event: CreatureStatGrowthEvent = { id: `rebalance:${creature.level}:${growth.events.filter((entry) => entry.kind === 'rebalance').length + 1}`, kind: 'rebalance', model: 'rebalance', level: creature.level, deltas, createdAt: now().toISOString() };
+  const event: CreatureStatGrowthDraftEvent = { id: `rebalance:${creature.level}:${growth.events.filter((entry) => entry.kind === 'rebalance').length + (creature.pendingGrowthEvents?.filter((entry) => entry.kind === 'rebalance').length ?? 0) + 1}`, kind: 'rebalance', model: 'rebalance', level: creature.level, deltas, createdAt: now().toISOString() };
   try { return appendStatGrowth(creature, event); } catch { return creature; }
 }
 
@@ -98,7 +99,7 @@ export function isValidStatGrowthState(value: unknown, level: number, stats: Bas
   const growth = value as CreatureStatGrowthState;
   if (growth.basis.level > level || growth.basis.level + growth.events.filter((event) => event.kind === 'level-up').length !== level) return false;
   const replayed = replayStatGrowth(growth);
-  return replayed !== null && sameStats(replayed.stats, stats) && replayed.maxHp === maxHp && growth.events.every((event) => event.level <= level);
+  return replayed !== null && sameStats(replayed.stats, stats) && replayed.maxHp === maxHp && growth.events.every((event) => event.levelTo <= level);
 }
 
 function getGrowth(creature: CreatureSaveRecord): CreatureStatGrowthState { return creature.statGrowth ?? { model: GAME_BALANCE_CONFIG.creatureStatGrowth.model, basis: { level: creature.level, stats: { ...creature.stats } }, events: [] }; }
@@ -107,35 +108,35 @@ function isValidGrowthState(value: unknown): value is CreatureStatGrowthState {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
   const growth = value as CreatureStatGrowthState;
   if (!models.has(growth.model) || !growth.basis || !isSafePositiveInteger(growth.basis.level) || !isValidStats(growth.basis.stats) || !Array.isArray(growth.events)) return false;
-  let expectedLevel = growth.basis.level + 1; let rebalanceNumber = 1; let previousTime = -Infinity; const ids = new Set<string>();
+  let expectedLevel = growth.basis.level + 1; let previousTime = -Infinity; const grants = new Set<string>();
   return growth.events.every((event) => {
-    if (!isValidGrowthEvent(event, { ...growth, events: [] }, Number.MAX_SAFE_INTEGER) || ids.has(event.id)) return false;
+    if (!isCanonicalGrowthEvent(event) || grants.has(event.grantId)) return false;
     const time = Date.parse(event.createdAt); if (time < previousTime) return false;
     if (event.kind === 'level-up') {
-      if (event.level !== expectedLevel || event.id !== `growth:${expectedLevel}` || (event.model === 'deterministic-default' && !sameStats(event.deltas, GAME_BALANCE_CONFIG.creatureStatGrowth.deterministicDelta))) return false;
+      if (event.levelFrom !== expectedLevel - 1 || event.levelTo !== expectedLevel || (event.model === 'deterministic-default' && !sameStats(event.deltas, GAME_BALANCE_CONFIG.creatureStatGrowth.deterministicDelta))) return false;
       expectedLevel += 1;
     } else {
-      if (event.level !== expectedLevel - 1 || event.id !== `rebalance:${event.level}:${rebalanceNumber}`) return false;
-      rebalanceNumber += 1;
+      if (event.levelFrom !== expectedLevel - 1 || event.levelTo !== expectedLevel - 1) return false;
     }
-    ids.add(event.id); previousTime = time; return true;
+    grants.add(event.grantId); previousTime = time; return true;
   });
 }
-function isValidGrowthEvent(event: unknown, growth: CreatureStatGrowthState, maximumLevel: number): event is CreatureStatGrowthEvent {
+function isValidGrowthEvent(event: unknown, _growth: CreatureStatGrowthState, maximumLevel: number): event is CreatureStatGrowthDraftEvent {
   if (!event || typeof event !== 'object' || Array.isArray(event)) return false;
-  const candidate = event as CreatureStatGrowthEvent; const previous = growth.events[growth.events.length - 1];
-  return typeof candidate.id === 'string' && candidate.id.trim().length > 0 && isSafePositiveInteger(candidate.level) && candidate.level <= maximumLevel && isValidStatsDelta(candidate.deltas) && isValidDate(candidate.createdAt) && ((candidate.kind === 'level-up' && models.has(candidate.model as StatGrowthModel)) || (candidate.kind === 'rebalance' && candidate.model === 'rebalance')) && (!previous || (candidate.level >= previous.level && Date.parse(candidate.createdAt) >= Date.parse(previous.createdAt)));
+  const candidate = event as CreatureStatGrowthDraftEvent;
+  return typeof candidate.id === 'string' && candidate.id.trim().length > 0 && isSafePositiveInteger(candidate.level) && candidate.level <= maximumLevel && isValidStatsDelta(candidate.deltas) && isValidDate(candidate.createdAt) && ((candidate.kind === 'level-up' && models.has(candidate.model as StatGrowthModel)) || (candidate.kind === 'rebalance' && candidate.model === 'rebalance'));
 }
-function isCanonicalGrowthEvent(event: CreatureStatGrowthEvent, growth: CreatureStatGrowthState): boolean {
-  const levelUps = growth.events.filter((entry) => entry.kind === 'level-up').length;
+function isCanonicalDraftEvent(event: CreatureStatGrowthDraftEvent): boolean {
   if (event.kind === 'level-up') {
-    const expectedLevel = growth.basis.level + levelUps + 1;
-    return event.level === expectedLevel && event.id === `growth:${expectedLevel}` && (event.model !== 'deterministic-default' || sameStats(event.deltas, GAME_BALANCE_CONFIG.creatureStatGrowth.deterministicDelta));
+    return event.id === `growth:${event.level}` && (event.model !== 'deterministic-default' || sameStats(event.deltas, GAME_BALANCE_CONFIG.creatureStatGrowth.deterministicDelta));
   }
-  const rebalanceNumber = growth.events.filter((entry) => entry.kind === 'rebalance').length + 1;
-  return event.level === growth.basis.level + levelUps && event.id === `rebalance:${event.level}:${rebalanceNumber}`;
+  return event.id.startsWith(`rebalance:${event.level}:`);
 }
-function isValidCreatureState(creature: CreatureSaveRecord): boolean { return isSafePositiveInteger(creature.level) && isSafeNonNegativeInteger(creature.experience) && isValidStats(creature.stats) && isSafePositiveInteger(creature.maxHp) && isSafeNonNegativeInteger(creature.hp) && creature.hp <= creature.maxHp && creature.fainted === (creature.hp === 0) && (!creature.statGrowth || isValidStatGrowthState(creature.statGrowth, creature.level, creature.stats, creature.maxHp)); }
+function isCanonicalGrowthEvent(event: GrowthAuditEvent): boolean {
+  return event.v === 1 && event.levelFrom > 0 && event.levelTo >= event.levelFrom && typeof event.grantId === 'string' && typeof event.eventHash === 'string' && typeof event.previousHash === 'string';
+}
+function growthEventId(event: GrowthAuditEvent): string { return event.kind === 'level-up' ? `growth:${event.levelTo}` : `rebalance:${event.levelTo}:${event.targetBalanceVersion}`; }
+function isValidCreatureState(creature: CreatureSaveRecord): boolean { return isSafePositiveInteger(creature.level) && isSafeNonNegativeInteger(creature.experience) && isValidStats(creature.stats) && isSafePositiveInteger(creature.maxHp) && isSafeNonNegativeInteger(creature.hp) && creature.hp <= creature.maxHp && creature.fainted === (creature.hp === 0) && (!creature.statGrowth || Boolean(creature.pendingGrowthEvents) || isValidStatGrowthState(creature.statGrowth, creature.level, creature.stats, creature.maxHp)); }
 function normalizedRng(rng: () => number): number { let value: unknown; try { value = rng(); } catch { return 0.5; } return typeof value === 'number' && Number.isFinite(value) ? ((value % 1) + 1) % 1 : 0.5; }
 function isValidClock(now: () => Date): boolean { try { return isValidDate(now()?.toISOString()); } catch { return false; } }
 function isValidDate(value: unknown): value is string { return typeof value === 'string' && Number.isFinite(Date.parse(value)); }

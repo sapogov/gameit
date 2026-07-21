@@ -409,6 +409,37 @@ describe('battle simulation', () => {
     expect(Object.values(appliedAgain.state.inventory.eggs)).toHaveLength(1);
   });
 
+  it('settles battle HP, rewards, and growth at one supplied time with deterministic reward RNG', () => {
+    const profile = createPlayerProfile('Settlement Clock', 'scout');
+    const baseCreature = createCreature(profile.playerId, 'settlement-creature', 1, 40, false);
+    const creature = {
+      ...baseCreature,
+      experience: 90,
+      statGrowth: { model: 'rarity-weighted-random' as const, basis: { level: 1, stats: { ...baseCreature.stats } }, events: [] }
+    };
+    const state: MonsterRpgSaveState = {
+      ...createInitialSave(profile),
+      creatures: { ownerPlayerId: profile.playerId, activePartyCreatureIds: [creature.id], storedCreatureIds: [], creatures: { [creature.id]: creature } }
+    };
+    const fixedNow = new Date('2026-07-21T12:34:56.000Z');
+    const result = {
+      battleId: 'battle-settlement-clock', encounterId: 'encounter-settlement-clock', outcome: 'defeated' as const,
+      playerCreatureId: creature.id, playerCreatureHp: 23, playerCreatureFainted: false, rewardGranted: true,
+      rewards: { seed: 88, magicDust: 2, clinks: 3, playerExperience: 10, battlingCreatureExperience: 10, activePartyExperience: 8, materials: [] }
+    };
+
+    const first = applyBattleRewardsToSave(state, result, { now: fixedNow, rng: sequenceRng([0.1, 0.2, 0.3, 0.4, 0.5]) });
+    const second = applyBattleRewardsToSave(state, result, { now: fixedNow, rng: sequenceRng([0.1, 0.2, 0.3, 0.4, 0.5]) });
+    const differentRng = applyBattleRewardsToSave(state, result, { now: fixedNow, rng: sequenceRng([0.9, 0.8, 0.7, 0.6, 0.5]) });
+
+    expect(first.state).toEqual(second.state);
+    expect(first.state.creatures.creatures[creature.id].stats).not.toEqual(differentRng.state.creatures.creatures[creature.id].stats);
+    expect(first.state.updatedAt).toBe(fixedNow.toISOString());
+    expect(first.state.creatures.creatures[creature.id]).toMatchObject({ hp: 23, experience: 100, level: 2 });
+    expect(first.state.inventory.currencies).toMatchObject({ magicDust: 2, clinks: 3 });
+    expect(first.state.creatures.creatures[creature.id].pendingGrowthEvents?.[0]?.createdAt).toBe(fixedNow.toISOString());
+  });
+
   it('does not apply a no-reward receipt or create Clinks', () => {
     const profile = createPlayerProfile('No Reward', 'scout');
     const battling = createCreature(profile.playerId, 'no-reward-creature', 1, 40, false);

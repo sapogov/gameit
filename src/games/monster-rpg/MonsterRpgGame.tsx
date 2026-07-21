@@ -32,6 +32,7 @@ import {
   type MovementResult
 } from './sim';
 import { CharacterCreator } from './ui/CharacterCreator';
+import { clearLegacyBrowserSave, importAuthenticatedRecovery, RecoveryPanel, type RecoveryState } from './recovery';
 import { GameHud } from './ui/GameHud';
 import {
   appendGameLogEntry,
@@ -73,6 +74,7 @@ export function MonsterRpgGame() {
   const multiplayerStatusRef = useRef<MultiplayerStatus>('offline');
   const pendingTransitionRef = useRef<LocationTransitionMessage | null>(null);
   const initialState = useRef(getInitialState());
+  const recoveryPayloadRef = useRef<string | null>(null);
   const [saveState, setSaveState] = useState<MonsterRpgSaveState | null>(initialState.current.state);
   const saveStateRef = useRef<MonsterRpgSaveState | null>(saveState);
   const freeMovementUnlockedRef = useRef(saveState ? isVillageElderDialogComplete(saveState) : false);
@@ -80,6 +82,7 @@ export function MonsterRpgGame() {
   const [roomState, setRoomState] = useState<LocationRoomState | null>(null);
   const [battleState, setBattleState] = useState<BattleRoomState | null>(null);
   const [importStatus, setImportStatus] = useState<string | null>(initialState.current.error);
+  const [recoveryState, setRecoveryState] = useState<RecoveryState>(initialState.current.error ? 'error' : 'idle');
   const [gameLog, setGameLog] = useState(() => createGameLogState(saveState?.profile.playerId ?? null));
   const [packTrace, setPackTrace] = useState<PackOpenTrace | null>(null);
   const [multiplayerStatus, setMultiplayerStatus] = useState<MultiplayerStatus>('offline');
@@ -96,6 +99,7 @@ export function MonsterRpgGame() {
     setSaveState(snapshot.save);
     setLocationMapId(snapshot.save.mapId);
     setImportStatus(null);
+    clearLegacyBrowserSave();
   }, []);
 
   useEffect(() => {
@@ -103,6 +107,7 @@ export function MonsterRpgGame() {
     void import('./network').then(({ connectToAccount }) => connectToAccount(credentialRef.current ?? undefined)).then(async (account) => {
       if (cancelled) { account.leave(); return; }
       accountConnectionRef.current = account;
+      account.onSnapshot(adoptAuthoritySnapshot);
       if (account.ready.credential) {
         credentialRef.current = account.ready.credential;
         saveGuestCredential(account.ready.credential);
@@ -218,7 +223,7 @@ export function MonsterRpgGame() {
       return;
     }
 
-    if (action.type === 'move') submitAuthorityIntent({ type: 'move', direction: action.direction });
+    if (action.type === 'move') recordGameLog('system', 'Movement is unavailable while offline');
   }, [battleState?.status, roomState, submitAuthorityIntent]);
 
   const handleCreateProfile = (name: string, avatar: AvatarId) => {
@@ -242,8 +247,6 @@ export function MonsterRpgGame() {
   const handleFinishVillageElderOnboarding = () => {
     submitAuthorityIntent({ type: 'completeOnboarding' }, 'Onboarding complete');
   };
-
-  const handleOpenPack = () => recordGameLog('system', 'Pack opening is server-authoritative and unavailable here');
 
   const handleDiscardItem = (stackId: string, quantity: number) => { if (window.confirm(`Discard ${quantity} item${quantity === 1 ? '' : 's'}?`)) submitAuthorityIntent({ type: 'discardItem', stackId, quantity, confirmed: true }, 'Item discarded'); };
 
@@ -324,21 +327,28 @@ export function MonsterRpgGame() {
     recordGameLog('system', 'Save exported');
   };
 
-  const handleImportSave = async (file: File) => {
-    const payload = await file.text();
+  const importAuthenticatedPayload = async (payload: string) => {
     const account = accountConnectionRef.current;
-    if (!account) { setImportStatus('Authority connection is unavailable'); return; }
+    if (!account) { setImportStatus('Authority connection is unavailable'); setRecoveryState('error'); return; }
+    setRecoveryState('pending'); setImportStatus('Recovering authenticated progress…');
     let snapshot: AuthoritySnapshot;
-    try { snapshot = await account.importAuthenticatedSave(payload); }
-    catch (error) { recordGameLog('system', `Import failed: ${error instanceof Error ? error.message : 'invalid transfer'}`); return; }
+    try { snapshot = await importAuthenticatedRecovery(account, payload); }
+    catch (error) { const message = `Import failed: ${error instanceof Error ? error.message : 'invalid transfer'}`; setImportStatus(message); setRecoveryState('error'); recordGameLog('system', message); return; }
     adoptAuthoritySnapshot(snapshot);
+    setRecoveryState('success'); setImportStatus('Authenticated progress recovered.');
     setLastMove(null);
     setRoomState(null);
     recordGameLog('system', 'Authenticated save imported');
   };
 
+  const handleImportSave = async (file: File) => {
+    try { recoveryPayloadRef.current = await file.text(); }
+    catch { setImportStatus('Import failed: unable to read file'); setRecoveryState('error'); return; }
+    await importAuthenticatedPayload(recoveryPayloadRef.current);
+  };
+
   const handleReset = () => {
-    submitAuthorityIntent({ type: 'resetProfile' }, 'Profile reset requested');
+    if (window.confirm('Reset progress? Your profile identity and audit history will be retained.')) submitAuthorityIntent({ type: 'resetProgress', confirmed: true }, 'Progress reset');
   };
 
   const handleBattleAttack = (attackId: string) => {
@@ -420,6 +430,7 @@ export function MonsterRpgGame() {
             transitionId: pendingTransition?.transitionId
           },
           {
+            onAuthoritySnapshot: adoptAuthoritySnapshot,
             onRoomState: (nextRoomState) => {
               if (cancelled) return;
 
@@ -599,8 +610,16 @@ export function MonsterRpgGame() {
   }, [recordGameLog]);
 
   if (!saveState) {
-    if (importStatus) return <main className="monster-game-shell"><p role="alert">{importStatus}</p></main>;
-    return <CharacterCreator onCreate={handleCreateProfile} />;
+    return <main className="monster-game-shell">
+      <RecoveryPanel
+        canRetry={recoveryPayloadRef.current !== null}
+        onImport={(file) => { void handleImportSave(file); }}
+        onRetry={() => { if (recoveryPayloadRef.current) void importAuthenticatedPayload(recoveryPayloadRef.current); }}
+        state={recoveryState}
+        status={importStatus}
+      />
+      <CharacterCreator onCreate={handleCreateProfile} />
+    </main>;
   }
 
   const activeMap = getGameMap(locationMapId ?? saveState.mapId);
@@ -625,7 +644,6 @@ export function MonsterRpgGame() {
           battleState={battleState}
           onExport={handleExportSave}
           onImport={handleImportSave}
-          onOpenPack={handleOpenPack}
           onDiscardItem={handleDiscardItem}
           onClaimReward={handleClaimReward}
           onActivateCard={handleActivateCard}

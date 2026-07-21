@@ -21,6 +21,13 @@ beforeEach(() => {
 });
 
 describe('Monster RPG save import and export', () => {
+  test('uses supplied bootstrap time for the persisted save timestamp', () => {
+    const now = new Date('2030-01-02T03:04:05.000Z');
+    const save = createInitialSave(createPlayerProfile('Mira', 'scout'), { now, rng: () => 0.25 });
+
+    expect(save.updatedAt).toBe(now.toISOString());
+  });
+
   test('new saves persist the current balance version and migrate legacy balance v0', () => {
     const save = createInitialSave(createPlayerProfile('Mira', 'scout'));
     expect(save.balanceVersion).toBe(CURRENT_BALANCE_VERSION);

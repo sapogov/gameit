@@ -19,7 +19,8 @@ describe('Creature stat growth', () => {
     expect(first.stats).toEqual({ hp: 22, attack: 11, defense: 11, speed: 11, stamina: 11 });
     expect(first.maxHp).toBe(22);
     expect(first.hp).toBe(14);
-    expect(first.statGrowth?.events).toHaveLength(1);
+    expect(first.statGrowth?.events).toHaveLength(0);
+    expect(first.pendingGrowthEvents).toHaveLength(1);
   });
 
   test('keeps Fainted creatures at zero HP and persists a random event exactly once', () => {
@@ -36,7 +37,8 @@ describe('Creature stat growth', () => {
     expect(rare.hp).toBeGreaterThan(common.hp);
     const grown = applyCreatureExperience(creature, 100, 'common', { now: () => new Date('2026-07-20T00:00:00.000Z') });
     const switched = applyCreatureExperience(grown, 100, 'common', { model: 'rarity-weighted-random', rng: () => 0, now: () => new Date('2026-07-21T00:00:00.000Z') });
-    expect(switched.statGrowth?.events.map((event) => event.model)).toEqual(['deterministic-default', 'rarity-weighted-random']);
+    expect(switched.statGrowth?.events).toEqual([]);
+    expect(switched.pendingGrowthEvents?.map((event) => event.model)).toEqual(['deterministic-default', 'rarity-weighted-random']);
   });
 
   test('uses canonical Species and Creature Type tendencies while retaining lower-outcome weighting', () => {
@@ -80,6 +82,7 @@ describe('Creature stat growth', () => {
     const once = appendStatGrowth(grown, { id: 'rebalance:2:1', kind: 'rebalance', model: 'rebalance', level: 2, deltas: { hp: 0, attack: 2, defense: 0, speed: 0, stamina: 0 }, createdAt: '2026-07-21T00:00:00.000Z' });
     const twice = appendStatGrowth(once, { id: 'rebalance:2:2', kind: 'rebalance', model: 'rebalance', level: 2, deltas: { hp: 0, attack: -1, defense: 0, speed: 0, stamina: 0 }, createdAt: '2026-07-22T00:00:00.000Z' });
     expect(twice.stats.attack).toBe(grown.stats.attack + 1);
-    expect(isValidStatGrowthState(twice.statGrowth, twice.level, twice.stats, twice.maxHp)).toBe(true);
+    expect(twice.statGrowth?.events).toEqual([]);
+    expect(twice.pendingGrowthEvents).toHaveLength(3);
   });
 });

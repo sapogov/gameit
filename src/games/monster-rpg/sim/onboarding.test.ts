@@ -35,7 +35,8 @@ describe('Village Elder onboarding', () => {
 
   it('grants the Starter Pack exactly once and discovers the starter Species', () => {
     const state = createInitialSave(createProfile());
-    const withPack = completeVillageElderDialog(state);
+    const now = new Date('2030-01-02T03:04:05.000Z');
+    const withPack = completeVillageElderDialog(state, { now, rng: () => 0 });
     const repeated = completeVillageElderDialog(withPack);
 
     expect(hasClaimedStarterPack(withPack)).toBe(true);
@@ -52,6 +53,7 @@ describe('Village Elder onboarding', () => {
       expect(repeatedStarterInstance?.speciesId).toBe(card.speciesId);
     });
     expect(withPack.inventory.cards[STARTER_FARM_CARD_ID]?.quantity).toBe(1);
+    expect(withPack.updatedAt).toBe(now.toISOString());
     expect(repeated.inventory.cards[STARTER_FARM_CARD_ID]?.quantity).toBe(1);
   });
 
@@ -100,7 +102,8 @@ describe('Village Elder onboarding', () => {
     const converted = convertStarterCreatureCards(withPack);
     if (!converted.ok) throw new Error(converted.reason);
 
-    const built = buildStarterMagicDustFarm(converted.state);
+    const now = new Date('2030-01-02T03:04:05.000Z');
+    const built = buildStarterMagicDustFarm(converted.state, { now });
     expect(built.ok).toBe(true);
     if (!built.ok) throw new Error(built.reason);
 
@@ -119,6 +122,7 @@ describe('Village Elder onboarding', () => {
       farmType: 'magic-dust',
       level: 1
     });
+    expect(completed.farms.farms[MAGIC_DUST_FARM_ID].lastProductionAt).toBe(now.toISOString());
     expect(completed.inventory.cards[STARTER_FARM_CARD_ID]).toBeUndefined();
     expect(repeatedBuild.ok).toBe(false);
     if (repeatedBuild.ok) throw new Error('Expected repeated build to fail');

@@ -3,6 +3,12 @@ import { createCreatureCardInstance, convertCreatureCardViaElder, MAGIC_DUST_MAT
 import { createFarmSaveRecord } from './farms';
 import { GAME_BALANCE_CONFIG } from './gameBalance';
 
+export interface CardMutationOptions {
+  now?: Date;
+  rng?: () => number;
+  seed?: number;
+}
+
 export const CARD_PACK_SIZE = GAME_BALANCE_CONFIG.chests.cardPackSize;
 export const cardRarities = ['common', 'uncommon', 'rare', 'legendary', 'mythical'] as const;
 export const cardTypes = ['creature', 'farm', 'material', 'buff'] as const;
@@ -273,10 +279,11 @@ export function getFarmCardById(id: string): FarmCardDefinition | undefined {
 
 export function openPack(
   state: MonsterRpgSaveState,
-  options?: { seed?: number; rng?: () => number; rewardTable?: CardRewardTable }
+  options?: CardMutationOptions & { rewardTable?: CardRewardTable }
 ): OpenPackResult {
-  const rng = options?.rng ?? createRng(options?.seed);
-  const now = new Date().toISOString();
+  const now = options?.now ?? new Date();
+  const rng = options?.rng ?? createRng(options?.seed ?? now.getTime());
+  const timestamp = now.toISOString();
   const rewardTable = options?.rewardTable ?? getCardRewardTableForSource('manual-pack');
 
   let cards = state.inventory.cards;
@@ -318,10 +325,10 @@ export function openPack(
         cards,
         creatureCards
       },
-      updatedAt: now
+      updatedAt: timestamp
     },
     trace: {
-      openedAt: now,
+      openedAt: timestamp,
       seed: options?.seed,
       rewardTableId: rewardTable.id,
       cards: cardEntries,
@@ -330,7 +337,7 @@ export function openPack(
   };
 }
 
-export function activateMaterialCard(state: MonsterRpgSaveState, cardId: string): CardActionResult {
+export function activateMaterialCard(state: MonsterRpgSaveState, cardId: string, options?: CardMutationOptions): CardActionResult {
   const definition = getMaterialCardById(cardId);
   if (!definition) return { ok: false, reason: 'unknown-card', state };
 
@@ -339,6 +346,7 @@ export function activateMaterialCard(state: MonsterRpgSaveState, cardId: string)
     return { ok: false, reason: 'missing-card', state };
   }
 
+  const now = options?.now ?? new Date();
   const withCard = consumeCard(state.inventory.cards, cardId, state.profile.playerId);
   const nextState = {
     ...state,
@@ -350,13 +358,13 @@ export function activateMaterialCard(state: MonsterRpgSaveState, cardId: string)
         [definition.materialId]: (state.inventory.currencies[definition.materialId] ?? 0) + definition.materialAmount
       }
     },
-    updatedAt: new Date().toISOString()
+    updatedAt: now.toISOString()
   };
 
   return { ok: true, state: nextState };
 }
 
-export function activateBuffCard(state: MonsterRpgSaveState, cardId: string): CardActionResult {
+export function activateBuffCard(state: MonsterRpgSaveState, cardId: string, options?: CardMutationOptions): CardActionResult {
   const definition = getBuffCardById(cardId);
   if (!definition) return { ok: false, reason: 'unknown-card', state };
 
@@ -377,6 +385,7 @@ export function activateBuffCard(state: MonsterRpgSaveState, cardId: string): Ca
     };
   }
 
+  const now = options?.now ?? new Date();
   const withCard = consumeCard(state.inventory.cards, cardId, state.profile.playerId);
 
   return {
@@ -394,16 +403,17 @@ export function activateBuffCard(state: MonsterRpgSaveState, cardId: string): Ca
           [definition.buffType]: cardId
         }
       },
-      updatedAt: new Date().toISOString()
+      updatedAt: now.toISOString()
     }
   };
 }
 
-export function activateCreatureCardViaElder(state: MonsterRpgSaveState, cardId: string) {
-  return convertCreatureCardViaElder(state, cardId);
+export function activateCreatureCardViaElder(state: MonsterRpgSaveState, cardId: string, options?: CardMutationOptions) {
+  const now = options?.now ?? new Date();
+  return convertCreatureCardViaElder(state, cardId, { ...options, now });
 }
 
-export function buildFarmCardViaElder(state: MonsterRpgSaveState, cardId: string): CardActionResult {
+export function buildFarmCardViaElder(state: MonsterRpgSaveState, cardId: string, options?: CardMutationOptions): CardActionResult {
   const definition = getFarmCardById(cardId);
   if (!definition) return { ok: false, reason: 'wrong-card-type', state };
 
@@ -417,6 +427,7 @@ export function buildFarmCardViaElder(state: MonsterRpgSaveState, cardId: string
     return { ok: false, reason: 'farm-type-locked', state };
   }
 
+  const now = options?.now ?? new Date();
   const farmId = `farm-${cardId}`;
   const withCard = consumeCard(state.inventory.cards, cardId, state.profile.playerId);
 
@@ -436,11 +447,12 @@ export function buildFarmCardViaElder(state: MonsterRpgSaveState, cardId: string
             id: farmId,
             ownerPlayerId: state.profile.playerId,
             farmType: definition.farmType,
-            villageId: state.profile.homeVillageId
+            villageId: state.profile.homeVillageId,
+            now
           })
         }
       },
-      updatedAt: new Date().toISOString()
+      updatedAt: now.toISOString()
     }
   };
 }
