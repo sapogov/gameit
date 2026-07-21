@@ -24,6 +24,7 @@ function emptyAggregate(): PlayerAggregate {
 describe('growth audit ledger', () => {
   test('has a stable SHA-256 golden vector', () => {
     expect(event().eventHash).toBe('a32a8e78a9bc36c45a8cda253e487f4640caf512c92d7e858db89320744f5b95');
+    expect(validateLedger([event({ createdAt: '2026-07-21T00:00:00Z' })], 'player-1', 3)).toBe(false);
   });
 
   test('rejects altered primitives, forged hashes, broken links, reordering, and truncation', () => {
